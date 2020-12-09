@@ -1,0 +1,17 @@
+site_name: The DGS Framework - GraphQL for Spring Boot
+edit_uri: edit
+repo_name: GitHub
+nav:
+  - Introduction: index.md
+  - Getting started: tutorial.md
+  - Testing: query-execution-testing.md
+  - Async data feching: data-loaders.md
+  - Mutations: mutations.md
+  - Code Generation: generating-code-from-schema.md
+  - Advanced:
+    - Data fetching context: advanced/custom-datafetcher-context.md
+
+extra_css:
+  - 'stylesheets/extra.css'
+extra_javascript:
+  - 'js/mermaid.min.js'
