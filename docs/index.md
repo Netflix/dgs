@@ -1,31 +1,54 @@
 
-## What is a DGS (Domain Graph Service)?
+## GraphQL for Spring Boot
 
-A [Domain Graph Service] (DGS) is an individual service that contributes to a [federated]  [GraphQL] schema.
-A [DGS] typically owns a single [entity] and its schema.
-A stand-alone GraphQL service is not a DGS for the purposes of this definition, but for the most part you _can_ use the frameworks discussed in this manual to create stand-alone GraphQL services as well.
+The DGS framework makes implementing a GraphQL server with Spring Boot easy.
+The framework includes features such as: 
 
-Keep in mind that each DGS _must_ act as a standalone GraphQL server, meaning the SDL must define a top level `type Query @extends {}` definition with at least one field defined in it. This particular rule is imposed by the [graphql-java](https://github.com/graphql-java/graphql-java/blob/master/src/main/java/graphql/schema/idl/SchemaGenerator.java#L317) library that the schema registry uses to instantiate an executable schema based off of the IDL.
+* First class support for both Java and Kotlin
+* Annotation based Spring Boot programming model
+* Test framework for writing query tests as unit tests
+* Gradle Code Generation plugin to create types from schema
+* Easy integration with GraphQL Federation
+* Integration with Spring Security
+* GraphQL subscriptions (WebSockets and SSE)
+* File uploads
+* Error handling
+* Many extension points
 
-## What is the DGS framework?
+The framework started in 2019 when Netflix started developing many GraphQL services.
+At the end of 2020 Netflix decided to open source the framework and build a community around it.
+ 
+## Getting started
 
-The DGS framework is a custom framework developed by the devex team to provide an out of the box, easy to use GraphQL solution at Netflix. 
+Jump right in with the [tutorial](tutorial)!
 
-It can be used in conjunction with [federation](../../federation/what-is-federation.md), or by itself, as an easy to use GraphQL server implementation.
+## Q & A
 
-!!!info "Spring Boot is the paved path for Domain Graph Services"
-    DGSs are based on [Spring Boot], which is the [paved path] for services within Netflix. 
-    Other technology stacks are currently not supported.
-    Although good GraphQL support exists for runtimes such as [Node.js], these technologies are not (yet) well-supported within the Netflix ecosystem, and therefore not supported by the Gateway and GraphQL Devex team.
-    
-## Other Tools for DGSes
+### Why start with release version 3.x?
 
-* [**Reggie**](../reggie/index.md): a custom UI that helps DGSes register their endpoints and available, compare schema versions, view entity usage and more.
-* [**DGS Gradle Plugin**](../gradle-plugin.md): A Gradle plugin that allows DGSes to validate and push their schemas. 
+Netflix developed and used the framework over the course of almost two years before open sourcing, which involved many releases.
+After open sourcing the project, we are now using the OSS project internally as well.
+We did have to wipe out the git history, but continued the versioning we were already using.
 
-## Project Information
+### Is it production ready?
 
-The Slack channel for discussion and support for the [DGS] framework is [#studio-edge-devex].
-The source code can be found on [Stash](https://stash.corp.netflix.com/projects/PX/repos/domain-graph-service-java/browse).
+Yes! Netflix has been using the framework for over a year and a half in different parts of our organisation, including at large scale, before it was open sourced.
+We've had many releases adding new features, fixing bugs etc., and it has become a very stable platform.
 
---8<-- "docs/reference_links"
+### Why not just use graphql-java?
+
+The DGS framework is built on top of `graphql-java`.
+Graphql-java is, and should be, lower level building blocks to handle query execution and such.
+The DGS framework makes all this available with a convenient Spring Boot programming model.
+
+### The framework has a lot of Kotlin code, can I use it with Java?
+
+The DGS framework is primarily designed to be used with Java.
+Although it's primarily written in Kotlin, most consumers of the framework are Java.
+Of course, if you are using Kotlin, that works great too.
+
+### Does Netflix run on a fork of the framework?
+
+No, Netflix is using the same OSS components! 
+We do have some extra modules plugged in for distributed tracing, logging, metrics etc, and we have documentation that shows how to implement similar integrations for your own infrastructure.
+
