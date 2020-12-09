@@ -1,5 +1,5 @@
 
-In the [getting started](../tutorial.md) tutorial you’ll learn how to write tests for a data fetcher.
+In the [getting started](../docs/tutorial.md) tutorial you’ll learn how to write tests for a data fetcher.
 This is useful for the developer of the data fetcher. 
 However, what should you do if a UI developer wants to test against your schema? 
 How do they test against a stable set of data?
@@ -34,7 +34,7 @@ The value in the `Map` is whatever mock data you want to return for this key.
 
 ### Example
 
-Create a `MockProvider` that provides mock data for the `hello` field you created in the getting started [tutorial](../tutorial.md):
+Create a `MockProvider` that provides mock data for the `hello` field you created in the getting started [tutorial](../docs/tutorial.md):
 
 ```java
 @Component
