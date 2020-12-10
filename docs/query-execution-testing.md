@@ -1,8 +1,8 @@
-The [DGS] framework allows you to write lightweight tests that partially bootstrap the framework, just enough to run queries.
+The DGS framework allows you to write lightweight tests that partially bootstrap the framework, just enough to run queries.
 
 ### Example
 
-Create some tests for the `hello` query that you created in the [Tutorial](../dgs-framework/tutorial.md).
+Create some tests for the `hello` query that you created in the [Tutorial](tutorial.md).
 
 Before writing tests, you need to add JUnit to the [Gradle] configuration.
 This example uses JUnit 5:
@@ -72,10 +72,10 @@ That should be an easy fix, and demonstrates how easy it is to write useful test
 In the examples shown previously, we handcrafted the query string. 
 This is simple enough for queries that are straightforward. 
 However, constructing longer query strings can be tedious. 
-For this, we can use the [GraphQLQueryRequest](../../clients/java-client.md) to build the graphql request in combination with the [code generation](../dgs-framework/generating-code-from-schema.md) plugin to generate the classes needed to use the request builder. 
+For this, we can use the [GraphQLQueryRequest](./java-client.md) to build the graphql request in combination with the [code generation](./generating-code-from-schema.md) plugin to generate the classes needed to use the request builder. 
 This provides a convenient type-safe way to build your queries.
 
-To set up code generation to generate the required classes to use for building your queries, follow the instructions [here](https://manuals.netflix.net/view/dgs/mkdocs/master/client/#type-safe-query-api).
+To set up code generation to generate the required classes to use for building your queries, follow the instructions [here](./java-client.md#type-safe-query-api).
 
 You will also need to add `com.netflix.graphql.dgs:graphql-dgs-client:latest.release` dependency to build.gradle.  
 
@@ -126,7 +126,7 @@ void scriptShouldIncludeTitle() throws IOException {
 }
 ```
 
-The `GraphQLQueryRequest` is available as part of the [graphql-client module](/clients/java-client.md) and is used to build the query string, and wrap the response respectively. You can also refer to the GraphQLClient JavaDoc for more details on the list of supported methods.
+The `GraphQLQueryRequest` is available as part of the [graphql-client module](./java-client.md) and is used to build the query string, and wrap the response respectively. You can also refer to the GraphQLClient JavaDoc for more details on the list of supported methods.
 
 ## Mocking External Service Calls in Tests
 

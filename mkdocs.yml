@@ -2,19 +2,20 @@ site_name: The DGS Framework
 edit_uri: edit
 repo_name: GitHub
 nav:
-  - Introduction: index.md
-  - Getting Started: tutorial.md
-  - Testing: query-execution-testing.md
-  - Async Data Fetching: data-loaders.md
-  - Mutations: mutations.md
-  - Code Generation: generating-code-from-schema.md
-  - Advanced:
-    - Data Fetching Context: advanced/custom-datafetcher-context.md
-    - Custom Extensions: advanced/customizing.md
-    - Error Handling: advanced/error-handling.md
-    - File Uploads: advanced/file-uploads.md
-    - Subscriptions: advanced/subscriptions.md
-    - Type Resolvers for Abstract Types: advanced/type-resolvers-for-abstract-types.md
+    - Home: index.md
+    - Getting Started: tutorial.md
+    - Testing: query-execution-testing.md
+    - Async Data Fetching: data-loaders.md
+    - Mutations: mutations.md
+    - Code Generation: generating-code-from-schema.md
+    - Java GraphQL Client: java-client.md
+    - Advanced:
+      - Data Fetching Context: advanced/custom-datafetcher-context.md
+      - Custom Extensions: advanced/customizing.md
+      - Error Handling: advanced/error-handling.md
+      - File Uploads: advanced/file-uploads.md
+      - Subscriptions: advanced/subscriptions.md
+      - Type Resolvers for Abstract Types: advanced/type-resolvers-for-abstract-types.md
 
 extra_css:
   - 'stylesheets/extra.css'
