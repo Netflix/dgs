@@ -2,7 +2,7 @@
 Each data fetcher in [GraphQL] Java has a context.
 A data fetcher gets access to its context by calling [`DataFetchingEnvironment.getContext()`](https://javadoc.io/doc/com.graphql-java/graphql-java/12.0/graphql/schema/DataFetchingEnvironment.html#getContext--).
 This is a common mechanism to pass request context to data fetchers and data loaders.
-The [DGS] framework has its own [`DgsContext`](https://stash.corp.netflix.com/projects/PX/repos/domain-graph-service-java/browse/graphql-dgs/src/main/kotlin/com/netflix/graphql/dgs/context/DgsContext.kt) implementation, which is used<!-- http://go/pv --> for log instrumentation among other things.
+The [DGS] framework has its own [`DgsContext`](https://github.com/Netflix/dgs-framework/blob/master/graphql-dgs/src/main/kotlin/com/netflix/graphql/dgs/context/DgsContext.kt) implementation, which is used<!-- http://go/pv --> for log instrumentation among other things.
 It is designed<!-- http://go/pv --> in such a way that you can extend it with your own custom context.
 
 To create a custom context, implement a Spring bean of type `DgsCustomContextBuilder`.

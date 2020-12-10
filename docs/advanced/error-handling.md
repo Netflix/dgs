@@ -4,7 +4,8 @@ A field with an error is set to null, and an error is added to the `errors` bloc
 
 An error typically contains the following fields:
 
-| **field**                | **type**         | **description** |
+
+| field                    | type             | description |
 | ------------------------ | ---------------- | --------------- |
 | `message` (non-nullable) | `String!`        | a string description of the error intended for the developer as a guide to understand and correct the error |
 | `locations`              | `[Location]`     | an array of code locations, where each location is a map with the keys `line` and `column`, both natural numbers starting from 1 that describe the beginning of an associated syntax element |
@@ -13,7 +14,7 @@ An error typically contains the following fields:
 
 At Netflix we have a specification available for GraphQL errors.
 This specification lists types of errors, and specifies how these errors map to certain GraphQL errors.
-The specification can be found [here](https://manuals.netflix.net/view/graphql/mkdocs/master/best-practices/errors/).
+The specification can be found [here](./graphql-error-spec.md).
 
 The DGS framework has an exception handler out-of-the-box that works according to the specification.
 This exception handler handles exceptions from data fetchers.

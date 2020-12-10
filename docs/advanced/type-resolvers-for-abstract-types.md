@@ -46,9 +46,12 @@ public class MovieDataFetcher {
 The GraphQL runtime needs to know that a Java instance of `ActionMovie` represents the `ActionMovie` GraphQL type.
 This mapping is the responsibility of a `TypeResolver`.
 
-!!!info
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
+Tip:
     If your Java type names and GraphQL type names are the same, the DGS framework creates a `TypeResolver` automatically. 
     No code needs to be added!
+</div>
+    
     
 
 ## Registering a Type Resolver
@@ -76,10 +79,6 @@ public String resolveMovie(Movie movie) {
 
 You can add the `@DgsTypeResolver` annotation to any `@DgsComponent` class.
 This means you can either keep the type resolver in the same class as the data fetcher responsible for returning the data for this type, or you can create a separate class for it.
-
-## Example Code
-
-The complete example used above can be found [in `MovieDataFetcher.java` from the graphql-dgs-example-shared project](https://stash.corp.netflix.com/projects/PX/repos/domain-graph-service-java/browse/graphql-dgs-example-shared/src/main/java/com/netflix/graphql/dgs/example/shared/datafetcher/MovieDataFetcher.java).
 
 --8<-- "docs/reference_links"
 
