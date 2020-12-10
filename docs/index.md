@@ -20,7 +20,7 @@ At the end of 2020 Netflix decided to open source the framework and build a comm
  
 ## Getting started
 
-Jump right in with the [tutorial](tutorial)!
+Jump right in with the getting started [guide](getting-started)!
 
 ## Q & A
 
