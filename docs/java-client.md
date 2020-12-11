@@ -10,9 +10,9 @@ The client has two components, each usable by itself, or in combination together
 The GraphQL client wraps any HTTP client and provides easy parsing of GraphQL responses.
 The client can be used against any GraphQL endpoint (it doesn't have to be implemented with the DGS framework),
 but provides extra conveniences for parsing Gateway and DGS responses.
-This includes support for the [Errors Spec](https://manuals.netflix.net/view/studioedge/mkdocs/master/best-practices/errors/).
+This includes support for the [Errors Spec](advanced/graphql-error-spec).
 
-To use the client, add the `com.netflix.graphql.dgs:graphql-dgs-client:latest.release` dependency to `build.gradle` and create an instance of `DefaultGraphQLClient`.
+To use the client, create an instance of `DefaultGraphQLClient`.
 
 ```java
 GraphQLClient client = new DefaultGraphQLClient(url);
@@ -20,10 +20,6 @@ GraphQLClient client = new DefaultGraphQLClient(url);
 
 The `url` is the server url of the endpoint you want to call.
 This url will be passed down to the callback discussed below.
-
-!!!info
-    Note that for NIWS clients there typically is no url, because the endpoint is configured through properties.
-    Just pass an empty string in this case.
 
 Using the `GraphQLClient` a query can be executed.
 The `executeQuery` method has three arguments:
@@ -33,17 +29,16 @@ The `executeQuery` method has three arguments:
 3. An instance of `RequestExecutor`, typically provided as a lambda.
 
 Because of the large number HTTP clients in use within Netflix, the GraphQLClient is decoupled from any particular HTTP client implementation.
-Any HTTP client (RestTemplate, RestClient, NIWS, OkHTTP, ....) can be used.
+Any HTTP client (RestTemplate, RestClient, OkHTTP, ....) can be used.
 The developer is responsible for making the actual HTTP call by implementing a `RequestExecutor`.
 `RequestExecutor` receives the `url`, a map of `headers` and the request `body` as parameters, and should return an instance of `HttpResponse`.
 Based on the HTTP response the GraphQLClient parses the response and provides easy access to data and errors.
-The example below uses `RestTemplate` with Metatron.
+The example below uses `RestTemplate`.
 
 ```
-@Metatron("mountainprojectdgs")
 private RestTemplate dgsRestTemplate;
 
-private static final String URL = "https://mountainprojectdgs.cluster.us-east-1.test.cloud.netflix.net:8443/graphql";
+private static final String URL = "http://someserver/graphql";
 
 private static final String QUERY = "{\n" +
             "  ticks(first: %d, after:%d){\n" +
@@ -107,10 +102,10 @@ Refer to the `GrqphQLClient` JavaDoc for the complete list of supported methods.
 ### Errors
 
 The GraphQLClient checks both for HTTP level errors (based on the response status code) and the `errors` block in a GraphQL response.
-The GraphQLClient is compatible with the [Errors Spec](https://manuals.netflix.net/view/studioedge/mkdocs/master/best-practices/errors/) used by the Gateway and DGS, and makes it easy to extract error information such as the ErrorType.
+The GraphQLClient is compatible with the [Errors Spec](advanced/graphql-error-spec.md) used by the Gateway and DGS, and makes it easy to extract error information such as the ErrorType.
 
 For example, for following GraphQL response the GraphQLClient lets you easily get the ErrorType and ErrorDetail fields.
-Note that the `ErrorType` is an enum as specified by the [Errors Spec](https://manuals.netflix.net/view/studioedge/mkdocs/master/best-practices/errors/).
+Note that the `ErrorType` is an enum as specified by the [Errors Spec](advanced/graphql-error-spec).
 
 ```graphql
 {
@@ -166,46 +161,7 @@ generateJava{
 Code will be generated on build.
 The generated code is in `build/generated`.
 
-NOTE: Make sure the codegen plugin is the first plugin on the build script class path. One of the grpc plugins pulls in an old version of ANTLR.
-
-If you want to generate a client for another DGS/GraphQL service you'll need to pull the service's schema somehow.
-If the service is a DGS registered in Reggie, the DGS schema tools can be used.
-
-```groovy
-buildscript {
-    dependencies {
-        classpath 'netflix.studioregistry:netflix.studioregistry.schema-tools:latest.release'
-        classpath 'netflix:graphql-dgs-codegen-gradle:latest.release'
-    }
-}
-
-apply plugin: 'netflix.studioregistry.schema-tools'
-apply plugin: 'codegen-gradle-plugin'
-
-
-pullSchema {
-    dgsName = 'mountainprojectdgs'
-    env = 'test'
-    variant = "integration"
-    schemaPath = "${buildDir}/graphql-schemas/mountainproject.graphqls"
-}
-
-generateJava{
-    schemaPaths = ["${buildDir}/graphql-schemas"]
-    packageName = 'com.netflix.mountainprojectdgsclient.generated' // The package name to use to generate sources
-    typeMapping = ["LocalDate": "java.lang.String"]
-    generateClient = true
-}
-
-generateJava.dependsOn("pullSchema")
-```
-
-With the configuration above, the schema will be pulled from Reggie into the build directory, and code will be generated from that schema.
-This is great to assure that the generated code stays in sync with the schema.
-If the service is a stand-alone DGS, or not a DGS at all, you will have to manually copy the schema to your project and keep it in sync.
-
 With codegen configured correctly, a builder style API will be generated when building the project.
-
 Using the same query example as above, the query can be build using the generated builder API.
 
 ```
