@@ -15,22 +15,21 @@ Open the project in an IDE (Intellij recommended).
 
 Add the `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` dependency to your Gradle or Maven configuration.
 
-Gradle
-```groovy
-dependencies {
+=== "Gradle"
+    ```groovy
+    dependencies {
     api "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:latest.release"
-}
-```
-
-Maven
-```xml
-<dependency>
-    <groupId>com.netflix.graphql.dgs</groupId>
-    <artifactId>graphql-dgs-spring-boot-starter</artifactId>
-    <!-- Make sure to set the latest framework version! -->
-    <version>${dgs.framework.version}</version>
-</dependency>
-```
+    }
+    ```
+=== "Maven"
+    ```xml
+    <dependency>
+        <groupId>com.netflix.graphql.dgs</groupId>
+        <artifactId>graphql-dgs-spring-boot-starter</artifactId>
+        <!-- Make sure to set the latest framework version! -->
+        <version>${dgs.framework.version}</version>
+    </dependency>
+    ```
 
 ## Creating a Schema
 
@@ -56,71 +55,70 @@ This schema allows querying for a list of shows, optionally filtering by title.
 Data fetchers are responsible for returning data for a query.
 Create two new classes `example.ShowsDataFetcher` and `Show` and add the following code.
 
-Java
-```java
-@DgsComponent
-public class ShowsDatafetcher {
-
-    private final List<Show> shows = List.of(
-            new Show("Stranger Things", 2016),
-            new Show("Ozark", 2017),
-            new Show("The Crown", 2016),
-            new Show("Dead to Me", 2019),
-            new Show("Orange is the New Black", 2013)
-    );
-
-    @DgsData(parentType = "Query", field = "shows")
-    public List<Show> shows(@InputArgument("titleFilter") String titleFilter) {
-        if(titleFilter == null) {
-            return shows;
-        }
-
-        return shows.stream().filter(s -> s.getTitle().contains(titleFilter)).collect(Collectors.toList());
-    }
-}
-
-public class Show {
-    private final String title;
-    private final Integer releaseYear   ;
-
-    public Show(String title, Integer releaseYear) {
-        this.title = title;
-        this.releaseYear = releaseYear;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Integer getReleaseYear() {
-        return releaseYear;
-    }
-}
-```
-
-Kotlin
-```kotlin
-@DgsComponent
-class ShowsDataFetcher {
-    private val shows = listOf(
-        Show("Stranger Things", 2016),
-        Show("Ozark", 2017),
-        Show("The Crown", 2016),
-        Show("Dead to Me", 2019),
-        Show("Orange is the New Black", 2013))
-
-    @DgsData(parentType = "Query", field = "shows")
-    fun shows(@InputArgument("titleFilter") titleFilter : String?): List<Show> {
-        return if(titleFilter != null) {
-            shows.filter { it.title.contains(titleFilter) }
-        } else {
-            shows
+=== "Java"
+    ```java
+    @DgsComponent
+    public class ShowsDatafetcher {
+    
+        private final List<Show> shows = List.of(
+                new Show("Stranger Things", 2016),
+                new Show("Ozark", 2017),
+                new Show("The Crown", 2016),
+                new Show("Dead to Me", 2019),
+                new Show("Orange is the New Black", 2013)
+        );
+    
+        @DgsData(parentType = "Query", field = "shows")
+        public List<Show> shows(@InputArgument("titleFilter") String titleFilter) {
+            if(titleFilter == null) {
+                return shows;
+            }
+    
+            return shows.stream().filter(s -> s.getTitle().contains(titleFilter)).collect(Collectors.toList());
         }
     }
-
-    data class Show(val title: String, val releaseYear: Int)
-}
-```
+    
+    public class Show {
+        private final String title;
+        private final Integer releaseYear   ;
+    
+        public Show(String title, Integer releaseYear) {
+            this.title = title;
+            this.releaseYear = releaseYear;
+        }
+    
+        public String getTitle() {
+            return title;
+        }
+    
+        public Integer getReleaseYear() {
+            return releaseYear;
+        }
+    }
+    ```
+=== "Kotlin"
+    ```kotlin
+    @DgsComponent
+    class ShowsDataFetcher {
+        private val shows = listOf(
+            Show("Stranger Things", 2016),
+            Show("Ozark", 2017),
+            Show("The Crown", 2016),
+            Show("Dead to Me", 2019),
+            Show("Orange is the New Black", 2013))
+    
+        @DgsData(parentType = "Query", field = "shows")
+        fun shows(@InputArgument("titleFilter") titleFilter : String?): List<Show> {
+            return if(titleFilter != null) {
+                shows.filter { it.title.contains(titleFilter) }
+            } else {
+                shows
+            }
+        }
+    
+        data class Show(val title: String, val releaseYear: Int)
+    }
+    ```
 
 That's all the code needed, the application is ready to be tested!
 
