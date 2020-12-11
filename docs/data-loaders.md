@@ -2,7 +2,7 @@ Data loaders solve the N+1 problem while loading data.
 
 ## The N+1 Problem Explained
 Say you query for a list of movies, and each movie includes some data about the director of the movie.
-Also assume that the Movie and Director [entities] are owned by two different services.
+Also assume that the Movie and Director entities are owned by two different services.
 In a naïve implementation, to load 50 movies, you would have to call the Director service 50 times: once for each movie.
 This totals 51 queries: one query to get the list of movies, and 50 queries to get the director data for each movie.
 This obviously wouldn’t perform very well.
@@ -139,10 +139,10 @@ public class DirectorDataFetcher {
 }
 ```
 
-!!!tip
-    The same works if you have `@DgsDataLoader` defined as a lambda instead of on a class as shown [here](data-loaders.md#provide-as-lambda).
-    If you have multiple `@DgsDataLoader` lambdas defined as fields in the same class, you won't be able to use this feature. 
-    It is recommended that you use `getDataLoader()` with the loader name passed as a string in such cases.
+
+The same works if you have `@DgsDataLoader` defined as a lambda instead of on a class as shown [here](data-loaders.md#provide-as-lambda).
+If you have multiple `@DgsDataLoader` lambdas defined as fields in the same class, you won't be able to use this feature. 
+It is recommended that you use `getDataLoader()` with the loader name passed as a string in such cases.
 
 Note that there is no logic present about how batching works exactly; this is all handled by the framework!
 The framework will recognize that many directors need to be loaded when many movies are loaded, batch up all the calls to the data loader, and call the data loader with a list of IDs instead of a single ID.

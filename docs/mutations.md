@@ -37,7 +37,7 @@ Note that the code above retrieves the input data for the Mutation by calling th
 
 In the example above the input was two standard scalar types.
 You can also use complex types, and you should define these as `input` types in your schema.
-An `input` type is almost the same as a `type` in [GraphQL], but with [some extra rules](https://graphql.org/learn/schema/#input-types).
+An `input` type is almost the same as a `type` in GraphQL, but with [some extra rules](https://graphql.org/learn/schema/#input-types).
 
 According to the GraphQL specification an input type should<!-- http://go/should --> always be passed<!-- http://go/pv --> to the data fetcher as a `Map`.
 This means the `DataFetchingEnvironment.getArgument` for an input type is a `Map`, and not the Java/Kotlin representation that you might have.

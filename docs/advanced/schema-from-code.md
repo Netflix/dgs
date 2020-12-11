@@ -1,5 +1,5 @@
-Use a schema-first approach for [GraphQL] in most cases.
-Most [DGS]s have a schema file and use the declarative, annotation based, programming model to create data fetchers and such.
+Use a schema-first approach for GraphQL in most cases.
+Most DGSs have a schema file and use the declarative, annotation based, programming model to create data fetchers and such.
 
 ## Creating a Schema from Code during Startup
 
@@ -54,14 +54,6 @@ public class ExtraCodeRegistry {
 
 Note how this example calls a method of the `DgsDataFetcherFactory` to create the data fetcher. 
 By using this factory, the data fetcher gets all the extra features that DGS data fetchers have, such as tracing.
-
-## Generating a Schema from Java or Kotlin Classes
-
-An alternative way to start from code is to convert the classes from your existing Java or Kotlin code into GraphQL schemas with the [GraphQL Schema Generator](https://docs.google.com/presentation/d/1nGf5-gbzet63_z0sGBvhVQAtO_F4A2ZgSsUnfjFmYnE).
-This tool is good enough to generate an initial schema that conforms to your classes, but you will then need to manually go through the generated schema and improve or correct it.
-REST or [gRPC] entities do not always map well to GraphQL types:
-
-* [graphql-code-to-schema Installation and Use Instructions](https://stash.corp.netflix.com/projects/CMENG/repos/graphql-code-to-schema/browse/README.md)
 
 --8<-- "docs/reference_links"
 
