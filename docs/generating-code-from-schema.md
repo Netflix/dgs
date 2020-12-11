@@ -1,4 +1,4 @@
-The [DGS] Code Generation plugin generates code during your project’s build process based on your Domain Graph Service’s [GraphQL] schema file.
+The DGS Code Generation plugin generates code during your project’s build process based on your Domain Graph Service’s GraphQL schema file.
 The plugin generates the following:
 
 * Data types for types, input types, enums and interfaces.
@@ -25,7 +25,7 @@ generateJava{
 }
 ```
 
-The plugin adds a `generateJava` [Gradle] task that runs as part of your project’s build.
+The plugin adds a `generateJava` Gradle task that runs as part of your project’s build.
 `generateJava` generates the code in the project’s `build/generated` directory.
 This folder is automatically added to the project's classpath.
 Types are available as part of the package specified by the <code><var>packageName</var>.types</code>, where you specify the value of <var>packageName</var> as a configuration in your `build.gradle` file.
@@ -33,9 +33,11 @@ Please ensure that your project’s sources refer to the generated code using<!-
 
 `generateJava` generates the data fetchers and places them in `build/generated-examples`.
 
-!!!note 
-    `generateJava` does *not* add the data fetchers that it generates to your project’s sources.
-    These fetchers serve mainly as a basic boilerplate code that require further implementation from you.
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
+ NOTE: generateJava does NOT add the data fetchers that it generates to your project’s sources.
+ These fetchers serve mainly as a basic boilerplate code that require further implementation from you.
+</div> 
+   
 
 You can exclude parts of the schema from code-generation by placing them in a different schema directory that is not specified<!-- http://go/pv --> as part of the `schemaPaths` for the plugin.
  
@@ -62,13 +64,6 @@ generateJava{
 The code generator can also create client API classes.
 You can use these classes to query data from a GraphQL endpoint using Java. 
 Java GraphQL clients are useful for server-to-server communication and testing. 
-
-!!!note
-    Remember that although server-to-server GraphQL is possible, gRPC is a better choice in most cases. 
-
-!!!note
-    A DGS behind the Studio Edge Gateway should never have to call another DGS behind the gateway directly. 
-    Use federation instead!
 
 Code generation creates a <code><var>field-name</var>GraphQLQuery</code> for each Query and Mutation field. 
 The <code>\*GraphQLQuery</code> query class contains fields for each parameter of the field. 
@@ -145,9 +140,6 @@ type TickEdge {
 A `GraphQLQueryRequest` can be serialized<!-- http://go/pv --> to JSON and sent<!-- http://go/pv --> to a GraphQL endpoint.
 The following example uses RestTemplate with Metatron.
 
-!!!caution
-    Don’t forget to set up security groups in Spinnaker!
-
 ```java
 @Metatron("spinnaker-app-name-goes-here")
 private RestTemplate dgsRestTemplate;
@@ -170,53 +162,6 @@ JsonNode node = dgsRestTemplate.exchange(URL, HttpMethod.POST, httpEntity(mapper
 //Convert to the response type
 TicksConnection ticks = mapper.convertValue(node, TicksConnection.class);
 ```
-  
-## Setting up Client API Code Generation for an external schema
-
-To set up client API code generation, first get the server’s schema.
-If the server’s schema is registered to [Reggie], use the `pullSchema` Gradle task to accomplish this.
-This task pulls the latest schema on each build, and thereby makes sure your client is always using an up-to-date schema.
-To use `pullSchema`, add the following to your `build.gradle`:
-
-```groovy
-buildscript {
-   dependencies{
-      classpath 'netflix.studioregistry:netflix.studioregistry.schema-tools:latest.release'
-   }
-}
-
-apply plugin: 'netflix.studioregistry.schema-tools'
-
-pullSchema {
-    dgsName = 'your-dgs-spinnaker-name'
-    env = 'test'
-    variant = "integration"
-    schemaPath = "${buildDir}/graphql-schemas/schema.graphqls"
-}
-``` 
-
-If the server’s schema is *not* in Reggie, however, you’ll need to find another way to copy the schema into your client project, and to make sure it stays up-to-date.
-
-When you have put the schema file in place, configure code generation by adding the following to your `build.gradle`:
-
-```groovy
-buildscript {
-    dependencies {
-        classpath 'netflix:graphql-dgs-codegen-gradle:latest.release'
-    }
-}
-
-apply plugin: 'codegen-gradle-plugin'
-
-generateJava{
-    schemaPaths = ["${buildDir}/graphql-schemas"]
-    packageName = 'com.netflix.mydgs.generated' // The package name to use to generate sources
-    generateClient = true
-}
-
-//If you are using the pullSchema task to bring in the server schema
-generateJava.dependsOn("pullSchema")
-``` 
 
 --8<-- "docs/reference_links"
 
