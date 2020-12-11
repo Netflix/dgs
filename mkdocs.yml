@@ -10,7 +10,6 @@ nav:
   - Async Data Fetching: data-loaders.md
   - Error Handling: advanced/error-handling.md
   - Advanced:
-    - Mutations: mutations.md
     - Java GraphQL Client: java-client.md
     - Custom Extensions: advanced/customizing.md
     - File Uploads: advanced/file-uploads.md
@@ -22,3 +21,11 @@ extra_css:
   - 'stylesheets/extra.css'
 extra_javascript:
   - 'js/mermaid.min.js'
+
+theme:
+  name: material
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed
