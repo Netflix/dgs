@@ -1,8 +1,6 @@
-[Federation](../../federation/what-is-federation.md) allows you to extend or reference existing types in a graph. 
+[Federation](https://www.apollographql.com/docs/federation/) allows you to extend or reference existing types in a graph. 
 Your DGS fulfills a part of the query based on the schema that is owned by your DGS, while the gateway is responsible for fetching data from other DGSs. 
 
-!!!tip "There is more federation documentation available"
-    * Look at the [Federation example app](../../federation/what-is-federation.md#testing-federated-entities), including testing. A tutorial style walkthrough of this example is available [here](../../federation/dgs-federation-example.md).
     
 ### Testing Federated Queries without the Gateway
 You can test federated queries for your DGS in isolation by replicating the format of the query that the gateway would send to your DGS. 
@@ -41,7 +39,7 @@ Normally, the gateway would send an [_entities](https://www.apollographql.com/do
 ```
 The `representations` input is a variable map containing the `__typename` field set to `Movie` and `movieId` set to a value, e.g., `12345`.
 
-You can now set up a [Query Executor](query-execution-testing.md) test by either manually constructing the query, or you can generate the federated query using the `Entities Query Builder API` available through [client code generation](../../clients/java-client.md#type-safe-query-api).
+You can now set up a [Query Executor](../query-execution-testing.md) test by either manually constructing the query, or you can generate the federated query using the `Entities Query Builder API` available through [client code generation](../java-client.md#type-safe-query-api).
 
 
 Here is an example of a test that uses a manually constructed `_entities` query for `Movie`:
@@ -69,10 +67,10 @@ Here is an example of a test that uses a manually constructed `_entities` query 
 ```
 
 #### Using the Entities Query Builder API
-Alternatively, you can generate the federated query by using [EntitiesGraphQLQuery](../../clients/java-client.md#building-federated-queries) to build the graphql request in combination with the [code generation](../dgs-framework/generating-code-from-schema.md) plugin to generate the classes needed to use the request builder. 
+Alternatively, you can generate the federated query by using [EntitiesGraphQLQuery](../java-client.md#building-federated-queries) to build the graphql request in combination with the [code generation](../generating-code-from-schema.md) plugin to generate the classes needed to use the request builder. 
 This provides a convenient type-safe way to build your queries.
 
-To set up code generation to generate the required classes to use for building your queries, follow the instructions [here](../../clients/java-client.md#type-safe-query-api).
+To set up code generation to generate the required classes to use for building your queries, follow the instructions [here](../java-client.md#type-safe-query-api).
 
 You will also need to add `com.netflix.graphql.dgs:graphql-dgs-client:latest.release` dependency to build.gradle.  
 
@@ -106,16 +104,5 @@ This set up is shown here:
 Check out this [video](https://drive.google.com/file/d/1aOrvqAj7CQjRYd2YN4Yxq1ypKccJ_oxE/view?usp=sharing) for a demo on how to configure and write the above test.
 
 <center><iframe src="https://drive.google.com/file/d/1aOrvqAj7CQjRYd2YN4Yxq1ypKccJ_oxE/preview" width="800" height="450"></iframe></center>
-
-
-For a complete example of federation, please check out [these docs](../../federation/dgs-federation-example.md).
-
-### Testing Federated Queries with the Gateway and Other DGSs
-For a complete federated query test, you will need the gateway to talk to other DGSs as well for hydrating all the data for the response. 
-You can do this by configuring your local gateway to talk to your DGS 
-on the `local` host, while communicating with other deployed DGSs in the test environment. 
-The gateway fetches your local DGS schema via introspection, and the remainder of the graph from DGSs deployed in test. 
-Now you can run the same query against the gateway and verify the entire response.
-The setup is described [here](../workflow/test.md).   
 
 --8<-- "docs/reference_links"
