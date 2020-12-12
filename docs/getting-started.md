@@ -1,6 +1,6 @@
 ## Create a new Spring Boot application
 
-The DGS framework is based on Spring Boot, so get started by create a new Spring Boot application.
+The DGS framework is based on Spring Boot, so get started by creating a new Spring Boot application if you don't have one already.
 The Spring Initializr is an easy way to do so.
 You can use either Gradle or Maven, Java 8 or newer or use Kotlin.
 We do recommend Gradle because we have a really cool [code generation plugin](generating-code-from-schema) for it!
