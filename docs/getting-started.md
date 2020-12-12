@@ -3,7 +3,7 @@
 The DGS framework is based on Spring Boot, so get started by creating a new Spring Boot application if you don't have one already.
 The Spring Initializr is an easy way to do so.
 You can use either Gradle or Maven, Java 8 or newer or use Kotlin.
-We do recommend Gradle because we have a really cool [code generation plugin](generating-code-from-schema) for it!
+We do recommend Gradle because we have a really cool [code generation plugin](../generating-code-from-schema) for it!
 
 The only Spring dependency needed is Spring Web.
 
@@ -147,5 +147,5 @@ You could now connect a UI to your backend as well, for example using [React and
 
 Now that you have a first GraphQL service running, we recommend improving this further by doing the following:
 
-* Use the [Gradle CodeGen plugin](/generating-code-from-schema) - this will generate the data types for you.
-* Write [query tests](/query-execution-testing) in JUnit
+* Use the [Gradle CodeGen plugin](../generating-code-from-schema) - this will generate the data types for you.
+* Write [query tests](../query-execution-testing) in JUnit
