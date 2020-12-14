@@ -8,7 +8,7 @@ This allows a developer to plug in certain aspects to the framework, or to compl
 The [`DgsAutoConfiguration`](https://github.com/Netflix/dgs-framework/blob/master/graphql-dgs-spring-boot-oss-autoconfigure/src/main/kotlin/com/netflix/graphql/dgs/autoconfig/DgsAutoConfiguration.kt) class is responsible for auto configuration.
 The framework defines each component with the following annotations:
 
-```java
+```
 @Bean
 @ConditionalOnMissingBean
 ```
