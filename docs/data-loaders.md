@@ -183,10 +183,12 @@ For example, if a list of movies is loaded<!-- http://go/pv -->, and some movies
 !!!info "Caching is Disabled by Default in DGS 1"
     Version 1 of the DGS framework disables caching by default, but you can switch it on in the `@DgsDataLoader` annotation:
 
-        @DgsDataLoader(name = "directors", caching=true)
-        class DirectorsBatchLoader implements BatchLoader<String, Director> {}
+```java
+@DgsDataLoader(name = "directors", caching=true)
+class DirectorsBatchLoader implements BatchLoader<String, Director> {}
+```
 
-    You do not need to make this change in version 2 of the DGS framework, because that version enables caching by default.
+You do not need to make this change in version 2 of the DGS framework, because that version enables caching by default.
 
 ## Batch Size
 

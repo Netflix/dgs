@@ -96,7 +96,7 @@ class RatingInput {
 }
 ```
 
-## Input arguments as data fetchter method parameters
+## Input arguments as data fetcher method parameters
 The framework makes it easier to get input arguments.
 You can specify arguments as method parameters of a data fetcher.
 
