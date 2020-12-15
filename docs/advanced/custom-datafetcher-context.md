@@ -51,5 +51,4 @@ public class ExampleLoaderWithContext implements BatchLoaderWithContext<String, 
 }
 ```
 
---8<-- "docs/reference_links"
 

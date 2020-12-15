@@ -16,5 +16,4 @@ The framework defines each component with the following annotations:
 This means that if you provide your own bean of the same type, the framework will use your instance instead of creating the default one.
 This way, you can customize any of the components created by the framework.
 
---8<-- "docs/reference_links"
 

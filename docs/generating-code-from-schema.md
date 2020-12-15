@@ -163,5 +163,4 @@ JsonNode node = dgsRestTemplate.exchange(URL, HttpMethod.POST, httpEntity(mapper
 TicksConnection ticks = mapper.convertValue(node, TicksConnection.class);
 ```
 
---8<-- "docs/reference_links"
 

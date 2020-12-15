@@ -117,5 +117,4 @@ The following table shows the available `ErrorType` `enum` values:
 <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
 The HTTP analogs are only rough mappings that are given here to provide a quick conceptual explanation of the semantics of the error by showing their analogs in the HTTP specification.
 </div>
---8<-- "docs/reference_links"
 

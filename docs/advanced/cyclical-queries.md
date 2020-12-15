@@ -15,5 +15,4 @@ maxQueryDepthInstrumentation() {
 }
 ```
 
---8<-- "docs/reference_links"
 

@@ -140,5 +140,4 @@ However, make sure its<!-- "its" is ambiguous here --> fields are either `var` o
 data class RatingInput(var title: String, var stars: Int)
 ```
 
---8<-- "docs/reference_links"
 

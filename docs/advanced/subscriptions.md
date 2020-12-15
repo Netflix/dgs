@@ -41,5 +41,4 @@ implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-aut
 Apollo client supports WebSockets through a [link](https://www.apollographql.com/docs/link/links/ws/).
 Typically you want to configure Apollo Client with both an HTTP link and a WS link, and [split](https://www.apollographql.com/docs/link/composition/#directional-composition) between them based on the query type.
  
---8<-- "docs/reference_links"
 

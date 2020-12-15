@@ -203,5 +203,4 @@ Data loaders are wired up<!-- http://go/pv --> to only span a single request.
 This is what most use cases require.
 Spanning<!-- http://go/pv --> multiple requests can introduce difficult-to-debug issues.
 
---8<-- "docs/reference_links"
 

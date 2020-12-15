@@ -111,5 +111,4 @@ function MultipartScriptUpload() {
   );
 }
 ```
---8<-- "docs/reference_links"
 

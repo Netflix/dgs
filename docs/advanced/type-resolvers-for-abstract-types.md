@@ -80,5 +80,4 @@ public String resolveMovie(Movie movie) {
 You can add the `@DgsTypeResolver` annotation to any `@DgsComponent` class.
 This means you can either keep the type resolver in the same class as the data fetcher responsible for returning the data for this type, or you can create a separate class for it.
 
---8<-- "docs/reference_links"
 

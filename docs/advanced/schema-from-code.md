@@ -55,5 +55,4 @@ public class ExtraCodeRegistry {
 Note how this example calls a method of the `DgsDataFetcherFactory` to create the data fetcher. 
 By using this factory, the data fetcher gets all the extra features that DGS data fetchers have, such as tracing.
 
---8<-- "docs/reference_links"
 
