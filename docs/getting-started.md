@@ -21,6 +21,12 @@ Add the `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` dependency to 
     api "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:latest.release"
     }
     ```
+=== "Gradle Kotlin"
+    ```kotlin
+    dependencies {
+        api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:3.0.10")
+    }
+    ```
 === "Maven"
     ```xml
     <dependency>
