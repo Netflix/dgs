@@ -2,9 +2,7 @@ The DGS framework allows you to write lightweight tests that partially bootstrap
 
 ### Example
 
-Create some tests for the `hello` query that you created in the [Tutorial](tutorial.md).
-
-Before writing tests, make sure that JUnit if enabled.
+Before writing tests, make sure that JUnit is enabled.
 If you created a project with Spring Initializr this configuration should already be there.
 
 === "Gradle"
