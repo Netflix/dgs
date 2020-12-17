@@ -19,7 +19,7 @@ nav:
     - Federated Testing: advanced/federated-testing.md
     - Generating Schema from Code: advanced/schema-from-code.md
     - Adding Custom Scalars: scalars.md
-    - Mocking: mocking.md
+    - Mocking: advanced/mocking.md
     - React Example: https://github.com/Netflix/dgs-framework/tree/master/graphql-dgs-example-java
       
 extra_css:
