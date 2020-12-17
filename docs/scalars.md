@@ -37,9 +37,3 @@ public class DateTimeScalar implements Coercing<LocalDateTime, String> {
 ```graphql
 scalar DateTime
 ```
-
-## Shared Scalars and Types
-The Studio Edge team is designing a set of common shared scalars and types for Studio Edge.
-See [Schema Best Practices: Custom Scalars](http://manuals.netflix.net/view/studioedge/mkdocs/master/best-practices/#custom-scalars) at the Studio Edge documentation for more details.
-
-

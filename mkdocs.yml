@@ -11,14 +11,14 @@ nav:
   - Error Handling: advanced/error-handling.md
   - Advanced:
     - Java GraphQL Client: java-client.md
-    - Custom Extensions: advanced/customizing.md
     - Security:  advanced/security.md
     - File Uploads: advanced/file-uploads.md
     - Subscriptions: advanced/subscriptions.md
-    - Type Resolvers for Abstract Types: advanced/type-resolvers-for-abstract-types.md
+    - Interfaces and Unions: advanced/type-resolvers-for-abstract-types.md
     - Data Fetching Context: advanced/custom-datafetcher-context.md
     - Federated Testing: advanced/federated-testing.md
     - Generating Schema from Code: advanced/schema-from-code.md
+    - Adding Custom Scalars: scalars.md
       
 extra_css:
   - 'stylesheets/extra.css'
