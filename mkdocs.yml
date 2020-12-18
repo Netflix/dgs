@@ -32,7 +32,9 @@ theme:
   name: material
   custom_dir: dgs_theme
   favicon: images/favicon.png
-  logo: images/logo--white.svg
+  logo: images/logo--blue.svg
+  icon:
+    repo: octicons/mark-github-16
 markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
