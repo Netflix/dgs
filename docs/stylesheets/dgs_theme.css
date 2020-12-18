@@ -1,0 +1,5 @@
+.md-header-nav__button.md-logo img,
+.md-header-nav__button.md-logo svg {
+  height: 28px;
+  width: auto;
+}
