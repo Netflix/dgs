@@ -1,0 +1,22 @@
+.dgs-header {
+  padding-bottom: 4.5rem;
+  padding-top: 4.5rem;
+}
+
+.md-header-nav__button.dgs-logo img,
+.md-header-nav__button.dgs-logo svg {
+  height: 3.5rem;
+}
+
+.dgs-header .md-search__inner {
+  padding: 1.5rem;
+}
+
+@media screen and (min-width: 60em) {
+  .md-search__output {
+    top: 4rem;
+  }
+  [data-md-toggle=search]:checked~.md-header .md-search__output {
+    width: calc(100% - 3rem);
+  }
+}
