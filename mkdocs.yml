@@ -29,6 +29,8 @@ extra_javascript:
 
 theme:
   name: material
+  favicon: images/favicon.png
+  logo: images/logo--white.svg
 markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
