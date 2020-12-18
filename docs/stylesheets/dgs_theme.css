@@ -66,8 +66,35 @@ html.theme--light {
 }
 
 
+
 /*
-  style application ===================
+  elements ===================
+*/
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+
+/*
+  typesetting ===================
+*/
+
+.md-typeset h1 {
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+.md-typeset h2 {
+  color: var(--text-color--secondary);
+  font-weight: 700;
+}
+
+
+/*
+  utilities ===================
 */
 
 .sr-only {
@@ -80,26 +107,48 @@ html.theme--light {
 }
 
 
-body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-}
-
-.md-typeset h1 {
-  color: var(--text-color);
-  font-weight: 700;
-}
-
-.md-typeset h2 {
-  color: var(--text-color--secondary);
-  font-weight: 700;
-}
+/*
+  header ===================
+*/
 
 .dgs-header {
   background-color: var(--background-color);
   height: auto;
   padding-bottom: 1rem;
   padding-top: 1rem;
+}
+.dgs-header-nav {
+  justify-content: center;
+}
+.dgs-header-nav__button,
+.md-source {
+  /* display: inline-block; */
+  font-size: .8rem;
+  font-weight: bold;
+}
+
+.dgs-logo,
+.dgs-header-nav__start,
+.dgs-header-nav__source {
+  align-items: center;
+  display: inline-flex;
+}
+.dgs-header-nav__source {
+  max-width: none;
+  padding-right: 2rem;
+  padding-top: .7em;
+  width: auto;
+}
+@media screen and (min-width: 1600px) {
+  .dgs-header-nav__source {
+    padding-top: .65em;
+  }
+}
+
+
+.md-source__repository {
+  max-width: none;
+  width: auto;
 }
 .md-header-nav__button.dgs-logo img,
 .md-header-nav__button.dgs-logo svg {
