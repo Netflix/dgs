@@ -28,5 +28,41 @@
 
 
 /*
-  typesetting ===================
+  home content ===================
 */
+
+.home__section {
+  width: 100%;
+}
+.home__section.md-grid {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media screen and (min-width: 30em) {
+  .home__section.md-grid {
+    padding-left: 1.3rem;
+    padding-right: 1.3rem;
+  }
+}
+@media screen and (min-width: 60em) {
+  .home__section.md-grid {
+    padding-left: 1.4rem;
+    padding-right: 1.4rem;
+  }
+}
+
+.home__section--hero {
+
+}
+
+.hero__title {
+  font-size: 2.5rem;
+  max-width: 7.5em;
+}
+
+.hero__subtitle {
+  color: var(--text-color--secondary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  max-width: 17em;
+}

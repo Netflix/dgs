@@ -7,11 +7,12 @@
   --background-color--light: #f1f1f1;
 
   --brand-color: #4969E4;
+  --brand-color__text--dark: #6989fa;
 
   --header-link__color--dark: #fff;
-  --header-link__color--hover--dark: #4969E4;
+  --header-link__color--hover--dark: var(--brand-color__text--dark);
   --header-link__color--light: #292929;
-  --header-link__color--hover--light: #4969E4;
+  --header-link__color--hover--light: var(--brand-color);
 
 
   --input__bg-color--dark: #444;
@@ -21,6 +22,8 @@
   --input__placeholder-color--light: rgba(0,0,0,0.6);
   --input__text-color--light: #161616;
 
+  --link-color--dark: #6FB34D;
+  --link-color--light: #4F932D;
 
   --text-color--dark: #e0e0e0;
   --text-color--secondary--dark: #a0a0a0;
@@ -28,15 +31,19 @@
   --text-color--light: #292929;
   --text-color--secondary--light: #606060;
   --text-color--tertiary--light: #808080;
+
+  --transition-timing: 250ms;
 }
 
 html {
   --background-color: var(--background-color--dark);
+  --brand-color__text: var(--brand-color__text--dark);
   --header-link__color: var(--header-link__color--dark);
   --header-link__color--hover: var(--header-link__color--hover--dark);
   --input__bg-color: var(--input__bg-color--dark);
   --input__placeholder-color: var(--input__placeholder-color-dark);
   --input__text-color: var(--input__text-color--dark);
+  --link-color: var(--link-color--dark);
   --text-color: var(--text-color--dark);
   --text-color--secondary: var(--text-color--secondary--dark);
   --text-color--tertiary: var(--text-color--tertiary--dark);
@@ -44,11 +51,13 @@ html {
 
 html.theme--light {
   --background-color: var(--background-color--light);
+  --brand-color__text: var(--brand-color);
   --header-link__color: var(--header-link__color--light);
   --header-link__color--hover: var(--header-link__color--hover--light);
   --input__bg-color: var(--input__bg-color--light);
   --input__placeholder-color: var(--input__placeholder-color--light);
   --input__text-color: var(--input__text-color--light);
+  --link-color: var(--link-color--light);
   --text-color: var(--text-color--light);
   --text-color--secondary: var(--text-color--secondary--light);
   --text-color--tertiary: var(--text-color--tertiary--light);
@@ -57,11 +66,13 @@ html.theme--light {
 @media (prefers-color-scheme: light) {
   html {
     --background-color: var(--background-color--light);
+    --brand-color__text: var(--brand-color);
     --header-link__color: var(--header-link__color--light);
     --header-link__color--hover: var(--header-link__color--hover--light);
     --input__bg-color: var(--input__bg-color--light);
     --input__placeholder-color: var(--input__placeholder-color--light);
     --input__text-color: var(--input__text-color--light);
+    --link-color: var(--link-color--light);
     --text-color: var(--text-color--light);
     --text-color--secondary: var(--text-color--secondary--light);
     --text-color--tertiary: var(--text-color--tertiary--light);
@@ -69,11 +80,13 @@ html.theme--light {
 
   html.theme--dark {
     --background-color: var(--background-color--dark);
+    --brand-color__text: var(--brand-color__text--dark);
     --header-link__color: var(--header-link__color--dark);
     --header-link__color--hover: var(--header-link__color--hover--dark);
     --input__bg-color: var(--input__bg-color--dark);
     --input__placeholder-color: var(--input__placeholder-color-dark);
     --input__text-color: var(--input__text-color--dark);
+    --link-color: var(--link-color--dark);
     --text-color: var(--text-color--dark);
     --text-color--secondary: var(--text-color--secondary--dark);
     --text-color--tertiary: var(--text-color--tertiary--dark);
@@ -96,6 +109,15 @@ body {
 /*
   typesetting ===================
 */
+
+.md-typeset a {
+  border-bottom: 2px dotted;
+  color: var(--link-color);
+}
+.md-typeset a:hover,
+.md-typeset a:focus {
+  border-bottom: 2px solid;
+}
 
 .md-typeset h1 {
   color: var(--text-color);
@@ -140,6 +162,26 @@ body {
   color: var(--header-link__color);
   font-size: .8rem;
   font-weight: bold;
+}
+
+/* .dgs-header-nav__button,
+.dgs-header-nav__button>*,
+.md-source,
+.md-source>* {
+  transition: color var(--transition-timing);
+} */
+
+.md-header-nav__button:focus,
+.md-header-nav__button:focus *,
+.md-header-nav__button:hover,
+.md-header-nav__button:hover *,
+.md-source:focus,
+.md-source:focus *,
+.md-source:hover,
+.md-source:hover * {
+  color: var(--header-link__color--hover);
+  fill: var(--header-link__color--hover);
+  opacity: 1;
 }
 
 .dgs-logo,
@@ -200,7 +242,6 @@ body {
 .md-icon svg {
   fill: var(--text-color);
 }
-
 .md-search__input~.md-search__icon svg {
   fill: var(--input__placeholder-color--dark);
 }
@@ -231,4 +272,24 @@ body {
   .md-search__output {
     top: 3rem;
   }
+}
+
+
+/*
+  header ===================
+*/
+
+.icon--inline {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+
+/*
+  links & sidenav ===================
+*/
+
+.md-nav__item .md-nav__link--active {
+  color: var(--brand-color__text);
+  font-weight: 700;
 }
