@@ -1,4 +1,4 @@
-site_name: The DGS Framework
+site_name: DGS Framework
 edit_uri: edit
 repo_name: GitHub
 nav:
@@ -21,7 +21,7 @@ nav:
     - Adding Custom Scalars: scalars.md
     - Mocking: advanced/mocking.md
     - React Example: https://github.com/Netflix/dgs-framework/tree/master/graphql-dgs-example-java
-      
+
 extra_css:
   - 'stylesheets/extra.css'
   - 'stylesheets/dgs_theme.css'
