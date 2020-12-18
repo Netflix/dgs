@@ -1,5 +1,108 @@
-.md-header-nav__button.md-logo img,
-.md-header-nav__button.md-logo svg {
-  height: 28px;
+/*
+  define variables ===================
+*/
+
+:root {
+  --background-color--dark: #292929;
+  --background-color--light: #f1f1f1;
+
+  --brand-color: #4969E4;
+
+  --input__bg-color--dark: #444;
+  --input__placeholder-color-dark: rgba(255,255,255,0.6);
+  --input__text-color--dark: #fff;
+  --input__bg-color--light: #e8e8e8;
+  --input__placeholder-color--light: rgba(0,0,0,0.6);
+  --input__text-color--light: #161616;
+
+  --text-color--dark: #e0e0e0;
+  --text-color--secondary--dark: #a0a0a0;
+  --text-color--tertiary--dark: #808080;
+  --text-color--light: #292929;
+  --text-color--secondary--light: #606060;
+  --text-color--tertiary--light: #808080;
+}
+
+html {
+  --background-color: var(--background-color--dark);
+  --input__bg-color: var(--input__bg-color--dark);
+  --input__placeholder-color: var(--input__placeholder-color-dark);
+  --input__text-color: var(--input__text-color--dark);
+  --text-color: var(--text-color--dark);
+  --text-color--secondary: var(--text-color--secondary--dark);
+  --text-color--tertiary: var(--text-color--tertiary--dark);
+}
+
+html.theme--light {
+  --background-color: var(--background-color--light);
+  --input__bg-color: var(--input__bg-color--light);
+  --input__placeholder-color: var(--input__placeholder-color--light);
+  --input__text-color: var(--input__text-color--light);
+  --text-color: var(--text-color--light);
+  --text-color--secondary: var(--text-color--secondary--light);
+  --text-color--tertiary: var(--text-color--tertiary--light);
+}
+
+@media (prefers-color-scheme: light) {
+  html {
+    --background-color: var(--background-color--light);
+    --input__bg-color: var(--input__bg-color--light);
+    --input__placeholder-color: var(--input__placeholder-color--light);
+    --input__text-color: var(--input__text-color--light);
+    --text-color: var(--text-color--light);
+    --text-color--secondary: var(--text-color--secondary--light);
+    --text-color--tertiary: var(--text-color--tertiary--light);
+  }
+
+  html.theme--dark {
+    --background-color: var(--background-color--dark);
+    --input__bg-color: var(--input__bg-color--dark);
+    --input__placeholder-color: var(--input__placeholder-color-dark);
+    --input__text-color: var(--input__text-color--dark);
+    --text-color: var(--text-color--dark);
+    --text-color--secondary: var(--text-color--secondary--dark);
+    --text-color--tertiary: var(--text-color--tertiary--dark);
+  }
+}
+
+
+/*
+  style application ===================
+*/
+
+.sr-only {
+  height: 1px;
+  left: -10000px;
+  overflow: hidden;
+  position: absolute;
+  top: auto;
+  width: 1px;
+}
+
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.md-typeset h1 {
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+.md-typeset h2 {
+  color: var(--text-color--secondary);
+  font-weight: 700;
+}
+
+.dgs-header {
+  background-color: var(--background-color);
+  height: auto;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+.md-header-nav__button.dgs-logo img,
+.md-header-nav__button.dgs-logo svg {
+  height: 2rem;
   width: auto;
 }
