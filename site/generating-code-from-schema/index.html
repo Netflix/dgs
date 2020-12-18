@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Code Generation - The DGS Framework</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="../stylesheets/extra.css" rel="stylesheet">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">The DGS Framework</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../tutorial/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../query-execution-testing/" class="nav-link">Testing</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../data-loaders/" class="nav-link">Async Data Fetching</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../mutations/" class="nav-link">Mutations</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Code Generation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../java-client/" class="nav-link">Java GraphQL Client</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Advanced <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../advanced/custom-datafetcher-context/" class="dropdown-item">Data Fetching Context</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/customizing/" class="dropdown-item">Custom Extensions</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/error-handling/" class="dropdown-item">Error Handling</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/file-uploads/" class="dropdown-item">File Uploads</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/subscriptions/" class="dropdown-item">Subscriptions</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/type-resolvers-for-abstract-types/" class="dropdown-item">Type Resolvers for Abstract Types</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../mutations/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../java-client/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/edit/generating-code-from-schema.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#quick-start" class="nav-link">Quick Start</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#generating-client-apis" class="nav-link">Generating Client APIs</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#sending-a-query" class="nav-link">Sending a Query</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#setting-up-client-api-code-generation-for-an-external-schema" class="nav-link">Setting up Client API Code Generation for an external schema</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>The [DGS] Code Generation plugin generates code during your project’s build process based on your Domain Graph Service’s [GraphQL] schema file.
+The plugin generates the following:</p>
+<ul>
+<li>Data types for types, input types, enums and interfaces.</li>
+<li>A <code>DgsConstants</code> class containing the names of types and fields</li>
+<li>Example data fetchers</li>
+<li>A type safe query API that represents your queries</li>
+</ul>
+<h2 id="quick-start">Quick Start</h2>
+<p>To apply the plugin, update your project’s <code>build.gradle</code> file to include the following:</p>
+<pre><code class="language-groovy">buildscript {
+   dependencies{
+      classpath 'netflix:graphql-dgs-codegen-gradle:latest.release'
+   }
+}
+
+apply plugin: 'codegen-gradle-plugin'
+
+generateJava{
+   schemaPaths = [&quot;${projectDir}/src/main/resources/schema&quot;] // List of directories containing schema files
+   packageName = 'com.example.packagename' // The package name to use to generate sources
+   generateClient = true // Enable generating the type safe query API
+}
+</code></pre>
+<p>The plugin adds a <code>generateJava</code> [Gradle] task that runs as part of your project’s build.
+<code>generateJava</code> generates the code in the project’s <code>build/generated</code> directory.
+This folder is automatically added to the project's classpath.
+Types are available as part of the package specified by the <code><var>packageName</var>.types</code>, where you specify the value of <var>packageName</var> as a configuration in your <code>build.gradle</code> file.
+Please ensure that your project’s sources refer to the generated code using<!-- http://go/pv http://go/use --> the specified package name.</p>
+<p><code>generateJava</code> generates the data fetchers and places them in <code>build/generated-examples</code>.</p>
+<p>!!!note 
+    <code>generateJava</code> does <em>not</em> add the data fetchers that it generates to your project’s sources.
+    These fetchers serve mainly as a basic boilerplate code that require further implementation from you.</p>
+<p>You can exclude parts of the schema from code-generation by placing them in a different schema directory that is not specified<!-- http://go/pv --> as part of the <code>schemaPaths</code> for the plugin.</p>
+<h3 id="mapping-existing-types">Mapping existing types</h3>
+<p>Codegen tries to generate a type for each type it finds in the schema, with a few exceptions.</p>
+<ol>
+<li>Basic scalar types - are mapped to corresponding Java/Kotlin types (String, Integer etc.)</li>
+<li>Data and time types - are mapped to corresponding <code>java.time</code> classes</li>
+<li>PageInfo and RelayPageInfo - are mapped to <code>graphql.relay</code> classes</li>
+<li>Types mapped with a <code>typeMapping</code> configuration</li>
+</ol>
+<p>When you have existing classes that you want to use instead of generating a class for a certain type, you can configure the plugin to do so using a <code>typeMapping</code>.
+The <code>typeMapping</code> configuration is a <code>Map</code> where each key is a GraphQL type and each value is a fully qualified Java/Kotlin type.</p>
+<pre><code class="language-groovy">generateJava{
+   typeMapping = [&quot;MyGraphQLType&quot;: &quot;com.mypackage.MyJavaType&quot;]
+}
+</code></pre>
+<h2 id="generating-client-apis">Generating Client APIs</h2>
+<p>The code generator can also create client API classes.
+You can use these classes to query data from a GraphQL endpoint using Java. 
+Java GraphQL clients are useful for server-to-server communication and testing. </p>
+<p>!!!note
+    Remember that although server-to-server GraphQL is possible, gRPC is a better choice in most cases. </p>
+<p>!!!note
+    A DGS behind the Studio Edge Gateway should never have to call another DGS behind the gateway directly. 
+    Use federation instead!</p>
+<p>Code generation creates a <code><var>field-name</var>GraphQLQuery</code> for each Query and Mutation field. 
+The <code>*GraphQLQuery</code> query class contains fields for each parameter of the field. 
+For each type returned by a Query or Mutation, code generation creates a <code>*Projection</code>. 
+A projection is a builder class that specifies which fields get returned. </p>
+<p>The following is an example usage of a generated API:</p>
+<pre><code class="language-java">GraphQLQueryRequest graphQLQueryRequest =
+        new GraphQLQueryRequest(
+            new TicksGraphQLQuery.Builder()
+                .first(first)
+                .after(after)
+                .build(),
+            new TicksConnectionProjection()
+                .edges()
+                    .node()
+                        .date()
+                        .route()
+                            .name()
+                            .votes()
+                                .starRating()
+                                .parent()
+                            .grade());
+
+</code></pre>
+<p>This API was generated based on the following schema.
+The <code>edges</code> and <code>node</code> types are because the schema uses pagination.
+The API allows for a fluent style of writing queries, with almost the same feel of writing the query as a String, but with the added benefit of code completion and type safety.</p>
+<pre><code class="language-graphql">type Query @extends {
+    ticks(first: Int, after: Int, allowCached: Boolean): TicksConnection
+}
+
+type Tick {
+    id: ID
+    route: Route
+    date: LocalDate
+    userStars: Int
+    userRating: String
+    leadStyle: LeadStyle
+    comments: String
+}
+
+type Votes {
+    starRating: Float
+    nrOfVotes: Int
+}
+
+type Route {
+    routeId: ID
+    name: String
+    grade: String
+    style: Style
+    pitches: Int
+    votes: Votes
+    location: [String]
+}
+
+type TicksConnection {
+    edges: [TickEdge]
+}
+
+type TickEdge {
+    cursor: String!
+    node: Tick
+}
+</code></pre>
+<h2 id="sending-a-query">Sending a Query</h2>
+<p>A <code>GraphQLQueryRequest</code> can be serialized<!-- http://go/pv --> to JSON and sent<!-- http://go/pv --> to a GraphQL endpoint.
+The following example uses RestTemplate with Metatron.</p>
+<p>!!!caution
+    Don’t forget to set up security groups in Spinnaker!</p>
+<pre><code class="language-java">@Metatron(&quot;spinnaker-app-name-goes-here&quot;)
+private RestTemplate dgsRestTemplate;
+private ObjectMapper mapper = new ObjectMapper();
+
+private static HttpEntity&lt;String&gt; httpEntity(String request) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    return new HttpEntity&lt;&gt;(request, headers);
+}
+
+Map&lt;String, String&gt; request = Collections.singletonMap(&quot;query&quot;, graphQLQueryRequest.serialize());
+
+// Invoke REST call, and get the &quot;ticks&quot; from data.
+JsonNode node = dgsRestTemplate.exchange(URL, HttpMethod.POST, httpEntity(mapper.writeValueAsString(request)),
+        new ParameterizedTypeReference&lt;JsonNode&gt;() {
+        }).getBody().get(&quot;data&quot;).get(&quot;ticks&quot;);
+
+//Convert to the response type
+TicksConnection ticks = mapper.convertValue(node, TicksConnection.class);
+</code></pre>
+<h2 id="setting-up-client-api-code-generation-for-an-external-schema">Setting up Client API Code Generation for an external schema</h2>
+<p>To set up client API code generation, first get the server’s schema.
+If the server’s schema is registered to [Reggie], use the <code>pullSchema</code> Gradle task to accomplish this.
+This task pulls the latest schema on each build, and thereby makes sure your client is always using an up-to-date schema.
+To use <code>pullSchema</code>, add the following to your <code>build.gradle</code>:</p>
+<pre><code class="language-groovy">buildscript {
+   dependencies{
+      classpath 'netflix.studioregistry:netflix.studioregistry.schema-tools:latest.release'
+   }
+}
+
+apply plugin: 'netflix.studioregistry.schema-tools'
+
+pullSchema {
+    dgsName = 'your-dgs-spinnaker-name'
+    env = 'test'
+    variant = &quot;integration&quot;
+    schemaPath = &quot;${buildDir}/graphql-schemas/schema.graphqls&quot;
+}
+</code></pre>
+<p>If the server’s schema is <em>not</em> in Reggie, however, you’ll need to find another way to copy the schema into your client project, and to make sure it stays up-to-date.</p>
+<p>When you have put the schema file in place, configure code generation by adding the following to your <code>build.gradle</code>:</p>
+<pre><code class="language-groovy">buildscript {
+    dependencies {
+        classpath 'netflix:graphql-dgs-codegen-gradle:latest.release'
+    }
+}
+
+apply plugin: 'codegen-gradle-plugin'
+
+generateJava{
+    schemaPaths = [&quot;${buildDir}/graphql-schemas&quot;]
+    packageName = 'com.netflix.mydgs.generated' // The package name to use to generate sources
+    generateClient = true
+}
+
+//If you are using the pullSchema task to bring in the server schema
+generateJava.dependsOn(&quot;pullSchema&quot;)
+</code></pre>
+<p>--8&lt;-- "docs/reference_links"</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../js/mermaid.min.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

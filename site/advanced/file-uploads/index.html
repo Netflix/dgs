@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>File Uploads - The DGS Framework</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="../../stylesheets/extra.css" rel="stylesheet">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">The DGS Framework</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../tutorial/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../query-execution-testing/" class="nav-link">Testing</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../data-loaders/" class="nav-link">Async Data Fetching</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../mutations/" class="nav-link">Mutations</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../generating-code-from-schema/" class="nav-link">Code Generation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../java-client/" class="nav-link">Java GraphQL Client</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Advanced <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../custom-datafetcher-context/" class="dropdown-item">Data Fetching Context</a>
+</li>
+                                    
+<li>
+    <a href="../customizing/" class="dropdown-item">Custom Extensions</a>
+</li>
+                                    
+<li>
+    <a href="../error-handling/" class="dropdown-item">Error Handling</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active">File Uploads</a>
+</li>
+                                    
+<li>
+    <a href="../subscriptions/" class="dropdown-item">Subscriptions</a>
+</li>
+                                    
+<li>
+    <a href="../type-resolvers-for-abstract-types/" class="dropdown-item">Type Resolvers for Abstract Types</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../error-handling/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../subscriptions/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/edit/advanced/file-uploads.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#multipart-file-upload" class="nav-link">Multipart File Upload</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#uploading-and-downloading-files-using-presigned-urls" class="nav-link">Uploading and Downloading Files Using Presigned URLs</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>Studio Edge has a variety of client applications that perform file uploads of scripts, images, and other resources through [DGS]es.
+In [GraphQL], you model a file upload operation as a GraphQL mutation request from a client to your DGS.</p>
+<p>The following sections describe how you implement file uploads and downloads.
+You use one of the following two approaches, depending on whether the file upload query goes directly to your DGS from a client, or it goes to your DGS through the [gateway]:</p>
+<ul>
+<li>multipart upload requests for file transfers direct to DGS (not through the gateway)</li>
+<li>pre-signed URLs generated by your DGS for file transfer queries that are part of the [federated] graph</li>
+</ul>
+<p>!!!tip
+    For more context on file uploads and best practices, see <a href="https://www.apollographql.com/blog/apollo-server-file-upload-best-practices-1e7f24cdc050">Apollo Server File Upload Best Practices</a> by Khalil Stemmler from <em>Apollo Blog</em>.</p>
+<h2 id="multipart-file-upload">Multipart File Upload</h2>
+<p>A multipart request is an HTTP request that contains multiple parts in a single request: the mutation query, file data, JSON objects, and whatever else you like.
+You can use Apollo’s upload client, or even a simple cURL, to send along a stream of file data using a multipart request that you model in your schema as a Mutation.</p>
+<p><img alt="File uploads with multipart" src="../../../img/file-upload-multipart.png#center" /></p>
+<p>!!!info
+    See <a href="https://github.com/jaydenseric/graphql-multipart-request-spec">GraphQL multipart request specification</a> for the specification of a multipart <code>POST</code> request for uploading files using GraphQL mutations.</p>
+<p>The DGS framework supports the <code>Upload</code> scalar with which you can specify files in your mutation query as a <code>MultipartFile</code>.
+When you send a multipart request for file upload, the framework processes each part and assembles the final GraphQL query that it hands to your data fetcher for further processing.</p>
+<p>Here is an example of a Mutation query that uploads a file to your DGS:</p>
+<pre><code class="language-graphql">&quot;&quot;&quot; For uploads using multi-part POST only. DO NOT include in federated scheme registered with gateway!!&quot;&quot;&quot;
+scalar Upload
+
+extend type Mutation  {
+    uploadScriptWithMultipartPOST(input: Upload!): Boolean
+}
+</code></pre>
+<p>Note that you need to declare the <code>Upload</code> scalar in your schema, although the implementation is provided by the DGS framework.
+Also, if you register the graph that your DGS implements with the gateway, you must exclude the file upload parts of the schema (the <code>Upload</code> scalar and your Mutation query) from the schema that you publish to the [schema registry].
+You can do this by separating those parts of the schema into a separate schema file and by not adding that file to your list of schema files to publish when you configure your <a href="https://manuals.netflix.net/view/studioedge/mkdocs/master/workflow/update/#tools-for-schema-updates">schema validation plugin</a>.</p>
+<p>In your DGS, add a data fetcher to handle this as a <code>MultipartFile</code> as shown here:</p>
+<pre><code class="language-java">@DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = &quot;uploadScriptWithMultipartPOST&quot;)
+    public boolean uploadScript(DataFetchingEnvironment dfe) throws IOException {
+        // NOTE: Cannot use @InputArgument  or Object Mapper to convert to class, because MultipartFile cannot be
+        // deserialized
+        MultipartFile file = dfe.getArgument(&quot;input&quot;);
+        String content = new String(file.getBytes());
+        return ! content.isEmpty();
+    }
+
+</code></pre>
+<p>Note that you will not be able to use a Jackson object mapper to deserialize a type that contains a <code>MultipartFile</code>, so you will need to explicitly get the file argument from your input.</p>
+<p>On your client, you can use <code>apollo-upload-client</code> to send your Mutation query as a multipart <code>POST</code> request with file data.
+Here’s how you configure your link:</p>
+<pre><code class="language-javascript">import { createUploadLink } from 'apollo-upload-client'
+
+const uploadLink = createUploadLink({ uri: uri })
+
+const authedClient = authLink &amp;&amp; new ApolloClient({
+        link: uploadLink)),
+        cache: new InMemoryCache()
+})
+</code></pre>
+<p>Once you set this up, set up your Mutation query and the pass the file that the user selected as a variable:</p>
+<pre><code class="language-javascript">// query for file uploads using multipart post
+const UploadScriptMultipartMutation_gql = gql`
+  mutation uploadScriptWithMultipartPOST($input: Upload!) {
+    uploadScriptWithMultipartPOST(input: $input)
+  }
+`;
+
+function MultipartScriptUpload() {
+  const [
+    uploadScriptMultipartMutation,
+    {
+      loading: mutationLoading,
+      error: mutationError,
+      data: mutationData,
+    },
+  ] = useMutation(UploadScriptMultipartMutation_gql);
+  const [scriptMultipartInput, setScriptMultipartInput] = useState&lt;any&gt;();
+
+  const onSubmitScriptMultipart = () =&gt; {
+    const fileInput = scriptMultipartInput.files[0];
+    uploadScriptMultipartMutation({
+      variables: { input: fileInput },
+    });
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h3&gt; Upload script using multipart HTTP POST&lt;/h3&gt;
+      &lt;form
+        onSubmit={e =&gt; {
+          e.preventDefault();
+          onSubmitScriptMultipart();
+        }}&gt;
+        &lt;label&gt;
+          &lt;input
+            type=&quot;file&quot;
+            ref={ref =&gt; {
+              setScriptMultipartInput(ref!);
+            }}
+          /&gt;
+        &lt;/label&gt;
+        &lt;br /&gt;
+        &lt;br /&gt;
+        &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+<p>For a complete example, see <a href="https://stash.corp.netflix.com/projects/PX/repos/file-uploads-example-ui/browse/src/lib/components/ScriptUploadMultipartPOST.tsx"><code>ScriptUploadMultipartPOST.tsx</code></a> from the <code>file-uploads-example-ui</code> project.</p>
+<p>!!!caution "Important"
+    This mechanism is not supported by the Studio Edge Gateway and you should use it only for uploading files directly to the DGS from the client.
+    To do this, you must configure your DGS so that your client can talk to it through [Wall-E].</p>
+<h2 id="uploading-and-downloading-files-using-presigned-urls">Uploading and Downloading Files Using Presigned URLs</h2>
+<p>When you implement file mutation queries that will be part of the federated graph, we recommend that you use pre-signed URLs.
+A pre-signed URL is an authenticated URL that your DGS can generate and return to the client, based on filename, sender, etc.
+The client uses this URL to upload files to, or download files from, the file storage service directly.
+This avoids streaming data through the gateway, and is the preferred method to avoid affecting the performance of the gateway.</p>
+<p><img alt="File uploads with presigned URLS" src="../../../img/file-upload-presigned.png" /></p>
+<p>The pre-signed URL flow follows this sequence:</p>
+<ol>
+<li>The client sends to the DGS a Mutation query that specifies the file name.
+   This query may or may not contain additional metadata to be handled by the DGS. </li>
+<li>The DGS authorizes the query based on the DGS [AuthZ] policies.
+   It requests a signed token from a file storage service (e.g., Baggins) based on the requestor’s email and the file name.</li>
+<li>The DGS responds to the client with the presigned URL (represented as a <code>PresignedUrlResponse</code> which is available as a common type).</li>
+<li>The client uploads or downloads files to the file storage service by using the URL in the response. </li>
+<li>The DGS can asynchronously monitor the status of the file upload operation.</li>
+<li>Once the upload is complete, the DGS can operate on additional metadata, and/or download the file for post-processing once the upload is complete.</li>
+</ol>
+<p>At this point, the client can send additional metadata if it did not do so already as part of the initial request.
+The client can also query the DGS to determine the success of the operation using a separate status update query specifying the <code>uploadID</code>, if one is returned by the DGS.</p>
+<p>To maintain consistency across clients, implement the following interface for the response containing pre-signed URLs:</p>
+<pre><code class="language-graphql">&quot;&quot;&quot;
+Representation of a response to a request for file upload or download containing a URL.
+&quot;&quot;&quot;
+interface PresignedUrlResponse {
+    &quot;&quot;&quot;
+    A pre-signed file URL for uploads and downloads generated using a backend service.
+    &quot;&quot;&quot;
+    url: String
+    &quot;&quot;&quot;
+    The custom headers that need to be set by the client in the upload/download request.
+    &quot;&quot;&quot;
+    headers: [Header]
+    &quot;&quot;&quot;
+    The method, e.g., POST, to use for uploading or downloading files using the URL.
+    &quot;&quot;&quot;
+    method: String
+}
+
+&quot;&quot;&quot;
+Representation of an HTTP request header with name of the header and the value.
+&quot;&quot;&quot;
+type Header {
+    &quot;&quot;&quot;
+    The name of the header.
+    &quot;&quot;&quot;
+    name: String
+    &quot;&quot;&quot;
+    The value of the header.
+    &quot;&quot;&quot;
+    value: String
+}
+</code></pre>
+<p>This interface is  available in common types library, so you  only need to add an implementation in your application.</p>
+<p>The following sections describe the preferred way to use pre-signed URLs with a sample DGS and React application.
+For file storage, we recommend using <a href="https://docs.google.com/document/d/1GroN4CMUrt8KaHV99a5SdOfLuKnAx6H0C7K5IWLKMj8/edit#heading=h.esicatn7ril0">Baggins</a>, which is a Netflix-maintained file storage service that provides encryption on top of S3.</p>
+<p>!!!tip
+    For more information on Baggins, see the <a href="https://docs.google.com/presentation/d/14GVxjm8UMpRxLRmb1hukj8fW5sHbdXNYKVyDGAXlAeE/edit#slide=id.g5c27786c0b_1_342">Baggins Architecture</a> slide deck.</p>
+<p>You can use Baggins for the paved-path experience, or you can choose any other file storage service such as Google Drive to suit your needs.</p>
+<p>!!!note
+    None of these design choices are built in to the DGS framework, so you can implement a solution based on your application’s requirements.  </p>
+<h3 id="set-up-baggins">Set up Baggins</h3>
+<p>First, set up your keyspace (S3 bucket) where your files will be stored in Baggins for your application.
+You can contact the Baggins team (<a href="https://slack.com/app_redirect?channel=mce-baggins">#mce-baggins</a>) to help you with the setup.
+You will need a [Gandalf] policy that specifies access policies.
+We<!-- http://go/we --> recommend that this policy be the same as your DGS Gandalf policy.
+The default DGS policy provides access to all Netflix employees.</p>
+<p>Next, configure your Baggins client.
+The example illustrated here uses the Baggins [gRPC] client to request for signed URLs.
+Add the following dependency to your <code>build.gradle</code>:</p>
+<pre><code class="language-groovy">// Baggins gRPC client
+compile 'com.netflix.baggins:baggins-client-grpc-spring:latest.release'
+compile 'com.netflix.spring:spring-boot-netflix-grpc-client-annotation:latest.release'
+</code></pre>
+<p>You can use the gRPC client to request pre-signed URLs, as shown for example in <a href="https://stash.corp.netflix.com/projects/PX/repos/file-uploads-example-dgs/browse/src/main/java/com/netflix/fileuploadsexampledgs/service/BagginsService.java"><code>BagginsService.java</code></a> from the <code>file-uploads-example-dgs</code> project.</p>
+<h3 id="sample-schema">Sample Schema</h3>
+<p>Next, set up the schema as shown below by modeling file uploads as a Mutation query with some metadata.</p>
+<pre><code class="language-graphql">type Mutation @extends {
+    uploadScriptWithPresignedUrl(input: UploadScriptRequestInput): PresignedUrlResponse
+}
+
+input UploadScriptRequestInput {
+    name: String
+    description: String
+    filePath: String
+    fileSize: Int
+}
+
+type UploadScriptResponse implements PresignedUrlResponse {
+    url: String
+    headers: [Header]
+    method: String
+    uploadId: ID
+}
+</code></pre>
+<h3 id="set-up-a-resolver">Set up a resolver</h3>
+<p>You will also need to set up a type resolver for the <code>PresignedUrlResponse</code> interface that you have implemented. 
+Here is an example:</p>
+<pre><code class="language-java">@DgsTypeResolver(name = &quot;PresignedUrlResponse&quot;)
+    public String resolvePresignedUrlResponse(PresignedUrlResponse response) {
+        if (response instanceof UploadScriptResponse) {
+            return &quot;UploadScriptResponse&quot;;
+        } else {
+            throw new RuntimeException(&quot;Invalid type: &quot; + response.getClass().getName() + &quot; found in PresignedUrlResponseResolver&quot;);
+        }
+    }
+</code></pre>
+<h3 id="dgs-data-fetcher">DGS Data Fetcher</h3>
+<p>Your data fetcher in your DGS handles the above Mutation query by generating or requesting a pre-signed URL from Baggins, as shown here:</p>
+<pre><code class="language-java">    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = &quot;uploadScriptWithPresignedUrl&quot;)
+    public UploadScriptResponse uploadScript(@InputArgument(&quot;input&quot;) UploadScriptRequestInput uploadRequest, DataFetchingEnvironment dataFetchingEnvironment) throws IOException {
+        BagginsService.GetTokenResponse response = bagginsService.getSignedUploadUrl(uploadRequest.getFilePath());
+        CompletableFuture&lt;Void&gt; future = CompletableFuture.runAsync(() -&gt; {
+            long timeout = 600000;
+            long startTime = System.currentTimeMillis();
+            long elapsed = startTime;
+            boolean status = false;
+            while (!status &amp;&amp; elapsed - startTime &lt; timeout) {
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                status = bagginsService.checkFileUploadStatus(response.keyname);
+                elapsed = System.currentTimeMillis() - startTime;
+            }
+            if (elapsed - startTime &gt;= timeout) {
+                logger.error(&quot;Encountered a timeout waiting for file %s to upload&quot;, response.keyname);
+            }
+
+            // You can perform your post upload actions at this point - e.g., download the file for post processing
+            // or process meta data
+            try {
+                bagginsService.downloadFile(response.keyname);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Integer fileSize = uploadRequest.getFileSize();
+        PresignedUrlResponse.Header header1 = new PresignedUrlResponse.Header();
+        header1.setName(&quot;Content-Type&quot;);
+        header1.setValue(&quot;application/octet-stream&quot;);
+        PresignedUrlResponse.Header header2 = new PresignedUrlResponse.Header();
+        header2.setName(&quot;x-baggins-upload-file-length&quot;);
+        header2.setValue(fileSize.toString());
+        List&lt;PresignedUrlResponse.Header&gt; headers =
+                new ArrayList&lt;&gt;(Arrays.asList(header1, header2));
+
+        return new UploadScriptResponse( response.token, headers, &quot;POST&quot;, response.keyname);
+    }
+
+</code></pre>
+<p>To ensure consistency from a client perspective for file uploads and downloads, we<!-- http://go/we --> recommend the following:</p>
+<ol>
+<li>Set up a <code>CompletableFuture</code> to poll on the status of the file upload by the client.
+   Upon completion, carry out any post-processing, such as updating metadata or downloading the file for validation, etc.</li>
+<li>The client can check the status of the mutation operation (including metadata updates, etc.) via a separate status query.</li>
+<li>The input arguments can contain the header-specific information, such as the file size in case of using Baggins.
+   The client can set these headers without having to know about the details of the file storage service.
+   From the client perspective it is a URL to upload the file to, and any additional information (such as the headers and HTTP method to use) are opaque to the client.</li>
+</ol>
+<h3 id="client-example">Client Example</h3>
+<p>In your client application, set up your Mutation query to request a pre-signed URL from the DGS.
+The client can use this URL to upload files directly to Baggins.
+After file uploads complete, the client can issue a subsequent query to the DGS if the client needs to check on the status of the mutation operation.
+For simple use cases, the client could just fire and forget.
+Such a second status query can be useful to the client in scenarios involving post-processing of the file by the DGS, such as validation of the file, or updating metadata in another service, e.g. <code>Amsterdam</code>.</p>
+<p>Here is an example client implementation showing the set up of queries in the UI application:</p>
+<pre><code class="language-javascript">// query for file uploads using pre-signed urls
+const PresignedUrlDetails_gql = gql`
+  fragment PresignedUrlDetails on PresignedUrlResponse {
+    url
+    headers {
+      name
+      value
+    }
+    method
+  }
+`;
+const UploadScriptRequestMutation_gql = gql`
+  mutation uploadScriptWithPresignedUrl(
+    $input: UploadScriptRequestInput
+  ) {
+    uploadScriptWithPresignedUrl(input: $input) {
+      ...PresignedUrlDetails
+    }
+  }
+  ${PresignedUrlDetails_gql}
+`;
+
+function ScriptUploadWithPresignedURL() {
+  const [
+    scriptUpload,
+    {
+      loading: mutationLoading,
+      error: mutationError,
+      data: mutationData,
+    },
+  ] = useMutation(UploadScriptRequestMutation_gql);
+  const [scriptInput, setScriptInput] = useState&lt;HTMLInputElement&gt;();
+
+  type Header = {
+    name: string;
+    value: string;
+  };
+
+  const uploadToUrl = (
+    url: string,
+    headers: [Header],
+    method: string,
+    id: string,
+    fileElement: HTMLInputElement
+  ) =&gt; {
+    if (
+      fileElement.type !== 'file' &amp;&amp;
+      fileElement.files!.length &lt;= 0
+    ) {
+      console.log('Incorrect type of file input');
+      return false;
+    }
+
+    const requestHeaders: HeadersInit = new Headers();
+    headers.forEach(iter =&gt; {
+      requestHeaders.set(iter.name, iter.value);
+    });
+    fetch(url, {
+      method: method,
+      headers: requestHeaders,
+      body: fileElement.files![0],
+    })
+      .then(result =&gt; {
+        console.log(`Response from baggins ${result}`);
+      })
+      .catch(error =&gt; {
+        alert(`ERROR ${JSON.stringify(error)}`);
+        console.log(`Received error ${JSON.stringify(error)}`);
+      });
+  };
+
+  useEffect(() =&gt; {
+    if (mutationData) {
+      uploadToUrl(
+        mutationData.uploadScriptWithPresignedUrl.url,
+        mutationData.uploadScriptWithPresignedUrl.headers,
+        mutationData.uploadScriptWithPresignedUrl.method,
+        mutationData.uploadScriptWithPresignedUrl.uploadId,
+        scriptInput!
+      );
+    }
+  }, [mutationData, scriptInput]);
+
+  const onSubmitScriptPresigned = () =&gt; {
+    const path = `${scriptInput!.files![0].name}`;
+    const size = scriptInput!.files![0].size;
+    scriptUpload({
+      variables: {
+        input: {
+          name: 'kavitha',
+          description: 'script upload',
+          filePath: path,
+          fileSize: size,
+        },
+      },
+    });
+  };
+}
+</code></pre>
+<p>The complete example is available in <a href="https://stash.corp.netflix.com/projects/PX/repos/file-uploads-example-ui/browse/src/lib/components/ScriptUploadWithPresignedURL.tsx"><code>ScriptUploadWithPresignedURL.tsx</code></a> from the <code>file-uploads-example-ui</code> project.</p>
+<p>--8&lt;-- "docs/reference_links"</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../js/mermaid.min.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

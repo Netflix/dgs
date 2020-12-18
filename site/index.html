@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>The DGS Framework</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="stylesheets/extra.css" rel="stylesheet">
+
+        <script src="js/jquery-1.10.2.min.js" defer></script>
+        <script src="js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">The DGS Framework</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem active">
+                                <a href="." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="tutorial/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="query-execution-testing/" class="nav-link">Testing</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="data-loaders/" class="nav-link">Async Data Fetching</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="mutations/" class="nav-link">Mutations</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="generating-code-from-schema/" class="nav-link">Code Generation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="java-client/" class="nav-link">Java GraphQL Client</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Advanced <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="advanced/custom-datafetcher-context/" class="dropdown-item">Data Fetching Context</a>
+</li>
+                                    
+<li>
+    <a href="advanced/customizing/" class="dropdown-item">Custom Extensions</a>
+</li>
+                                    
+<li>
+    <a href="advanced/error-handling/" class="dropdown-item">Error Handling</a>
+</li>
+                                    
+<li>
+    <a href="advanced/file-uploads/" class="dropdown-item">File Uploads</a>
+</li>
+                                    
+<li>
+    <a href="advanced/subscriptions/" class="dropdown-item">Subscriptions</a>
+</li>
+                                    
+<li>
+    <a href="advanced/type-resolvers-for-abstract-types/" class="dropdown-item">Type Resolvers for Abstract Types</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" class="nav-link disabled">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="tutorial/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/edit/index.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#graphql-for-spring-boot" class="nav-link">GraphQL for Spring Boot</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#getting-started" class="nav-link">Getting started</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#q-a" class="nav-link">Q &amp; A</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="graphql-for-spring-boot">GraphQL for Spring Boot</h2>
+<p>The DGS framework makes implementing a GraphQL server with Spring Boot easy.
+The framework includes features such as: </p>
+<ul>
+<li>First class support for both Java and Kotlin</li>
+<li>Annotation based Spring Boot programming model</li>
+<li>Test framework for writing query tests as unit tests</li>
+<li>Gradle Code Generation plugin to create types from schema</li>
+<li>Easy integration with GraphQL Federation</li>
+<li>Integration with Spring Security</li>
+<li>GraphQL subscriptions (WebSockets and SSE)</li>
+<li>File uploads</li>
+<li>Error handling</li>
+<li>Many extension points</li>
+</ul>
+<p>The framework started in 2019 when Netflix started developing many GraphQL services.
+At the end of 2020 Netflix decided to open source the framework and build a community around it.</p>
+<h2 id="getting-started">Getting started</h2>
+<p>Jump right in with the <a href="tutorial">tutorial</a>!</p>
+<h2 id="q-a">Q &amp; A</h2>
+<h3 id="why-start-with-release-version-3x">Why start with release version 3.x?</h3>
+<p>Netflix developed and used the framework over the course of almost two years before open sourcing, which involved many releases.
+After open sourcing the project, we are now using the OSS project internally as well.
+We did have to wipe out the git history, but continued the versioning we were already using.</p>
+<h3 id="is-it-production-ready">Is it production ready?</h3>
+<p>Yes! Netflix has been using the framework for over a year and a half in different parts of our organisation, including at large scale, before it was open sourced.
+We've had many releases adding new features, fixing bugs etc., and it has become a very stable platform.</p>
+<h3 id="why-not-just-use-graphql-java">Why not just use graphql-java?</h3>
+<p>The DGS framework is built on top of <code>graphql-java</code>.
+Graphql-java is, and should be, lower level building blocks to handle query execution and such.
+The DGS framework makes all this available with a convenient Spring Boot programming model.</p>
+<h3 id="the-framework-has-a-lot-of-kotlin-code-can-i-use-it-with-java">The framework has a lot of Kotlin code, can I use it with Java?</h3>
+<p>The DGS framework is primarily designed to be used with Java.
+Although it's primarily written in Kotlin, most consumers of the framework are Java.
+Of course, if you are using Kotlin, that works great too.</p>
+<h3 id="does-netflix-run-on-a-fork-of-the-framework">Does Netflix run on a fork of the framework?</h3>
+<p>No, Netflix is using the same OSS components! 
+We do have some extra modules plugged in for distributed tracing, logging, metrics etc, and we have documentation that shows how to implement similar integrations for your own infrastructure.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js" defer></script>
+        <script src="js/mermaid.min.js" defer></script>
+        <script src="search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.1.2
+Build Date UTC : 2020-12-10 02:26:37.810554+00:00
+-->

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Async Data Fetching - The DGS Framework</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="../stylesheets/extra.css" rel="stylesheet">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">The DGS Framework</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../tutorial/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../query-execution-testing/" class="nav-link">Testing</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Async Data Fetching</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../mutations/" class="nav-link">Mutations</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../generating-code-from-schema/" class="nav-link">Code Generation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../java-client/" class="nav-link">Java GraphQL Client</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Advanced <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../advanced/custom-datafetcher-context/" class="dropdown-item">Data Fetching Context</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/customizing/" class="dropdown-item">Custom Extensions</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/error-handling/" class="dropdown-item">Error Handling</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/file-uploads/" class="dropdown-item">File Uploads</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/subscriptions/" class="dropdown-item">Subscriptions</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/type-resolvers-for-abstract-types/" class="dropdown-item">Type Resolvers for Abstract Types</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../query-execution-testing/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../mutations/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/edit/data-loaders.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#the-n1-problem-explained" class="nav-link">The N+1 Problem Explained</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#what-if-my-service-doesnt-support-loading-in-batches" class="nav-link">What If My Service Doesn’t Support Loading in Batches?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#implementing-a-data-loader" class="nav-link">Implementing a Data Loader</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#provide-as-lambda" class="nav-link">Provide as Lambda</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#mappedbatchloader" class="nav-link">MappedBatchLoader</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#using-a-data-loader" class="nav-link">Using a Data Loader</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#using-spring-features-such-as-ssocallerresolver-inside-a-completablefuture" class="nav-link">Using Spring Features such as SsoCallerResolver inside a CompletableFuture</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#caching" class="nav-link">Caching</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#batch-size" class="nav-link">Batch Size</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#data-loader-scope" class="nav-link">Data Loader Scope</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>Data loaders solve the N+1 problem while loading data.</p>
+<h2 id="the-n1-problem-explained">The N+1 Problem Explained</h2>
+<p>Say you query for a list of movies, and each movie includes some data about the director of the movie.
+Also assume that the Movie and Director [entities] are owned by two different services.
+In a naïve implementation, to load 50 movies, you would have to call the Director service 50 times: once for each movie.
+This totals 51 queries: one query to get the list of movies, and 50 queries to get the director data for each movie.
+This obviously wouldn’t perform very well.</p>
+<p>It would be much more efficient to create a list of directors to load, and load all of them at once in a single call.
+This first of all <em>must be supported by the Director service</em>, because that service needs to provide a way to load a list of Directors.
+The data fetchers in the Movie service need to be smart as well, to take care of batching the requests to the Directors service.</p>
+<p>This is where data loaders come in.</p>
+<h2 id="what-if-my-service-doesnt-support-loading-in-batches">What If My Service Doesn’t Support Loading in Batches?</h2>
+<p>What if (in this example) <code>DirectorServiceClient</code> doesn’t provide a method to load a list of directors?
+What if it only provides a method to load a single director by ID?
+The same problem applies to REST services as well: what if there’s no endpoint to load multiple directors?
+Similarly, to load from a database directly, you must write a query to load multiple directors.
+If such methods are unavailable, the providing service needs to fix this!</p>
+<h2 id="implementing-a-data-loader">Implementing a Data Loader</h2>
+<p>The easiest way for you to register a data loader is for you to create a class that implements the <code>org.dataloader.BatchLoader</code> or <code>org.dataloader.MappedBatchLoader</code> interface.
+This interface is parameterized; it requires a type for the key and result of the <code>BatchLoader</code>.
+For example, if the identifiers for a Director are of type <code>String</code>, you could have a <code>org.dataloader.BatchLoader&lt;String, Director&gt;</code>.
+You must annotate the class with <code>@DgsDataLoader</code> so that the framework will register the data loader it represents.</p>
+<p>In order to implement the <code>BatchLoader</code> interface you must implement a <code>CompletionStage&lt;List&lt;V&gt;&gt; load(List&lt;K&gt; keys)</code> method.</p>
+<p>The following example is a data loader that loads data from an imaginary Director service:</p>
+<pre><code class="language-java">package com.netflix.graphql.dgs.example.dataLoader;
+
+import com.netflix.graphql.dgs.DgsDataLoader;
+import org.dataloader.BatchLoader;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
+
+@DgsDataLoader(name = &quot;directors&quot;)
+public class DirectorsDataLoader implements BatchLoader&lt;String, Director&gt; {
+
+    @Autowired
+    DirectorServiceClient directorServiceClient;
+
+    @Override
+    public CompletionStage&lt;List&lt;Director&gt;&gt; load(List&lt;String&gt; keys) {
+        return CompletableFuture.supplyAsync(() -&gt; directorServiceClient.loadDirectors(keys));
+    }
+}
+</code></pre>
+<p>The data loader is responsible for loading data for a given list of keys.
+In this example, it just passes on the list of keys to the backend that owns <code>Director</code> (this could for example be a [gRPC] service).
+However, you might also write such a service so that it loads data from a database.
+Although this example registers a data loader, nobody will use that data loader until you implement a data fetcher that uses it.</p>
+<h2 id="provide-as-lambda">Provide as Lambda</h2>
+<p>Because <code>BatchLoader</code> is a functional interface (an interface with only a single method), you can also provide it as a lambda expression.
+Technically this is exactly the same as providing a class; it’s really just another way of writing it:</p>
+<pre><code class="language-java">@DgsComponent
+public class ExampleBatchLoaderFromField {
+    @DgsDataLoader(name = &quot;directors&quot;)
+    public BatchLoader&lt;String, Director&gt; directorBatchLoader = keys -&gt; CompletableFuture.supplyAsync(() -&gt; directorServiceClient.loadDirectors(keys));
+}
+</code></pre>
+<h2 id="mappedbatchloader">MappedBatchLoader</h2>
+<p>The <code>BatchLoader</code> interface creates a <code>List</code> of values for a <code>List</code> of keys.
+You can also use the <code>MappedBatchLoader</code> which creates a <code>Map</code> of key/values for a <code>Set</code> of values.
+The latter is a better choice if you do not expect all keys to have a value.
+You register a <code>MappedBatchLoader</code> in the same way as you register a <code>BatchLoader</code>:</p>
+<pre><code class="language-java">@DgsDataLoader(name = &quot;directors&quot;)
+public class DirectorsDataLoader implements MappedBatchLoader&lt;String, Director&gt; {
+
+    @Autowired
+    DirectorServiceClient directorServiceClient;
+
+    @Override
+    public CompletionStage&lt;Map&lt;String, Director&gt;&gt; load(Set&lt;String&gt; keys) {
+        return CompletableFuture.supplyAsync(() -&gt; directorServiceClient.loadDirectors(keys));
+    }
+}
+</code></pre>
+<h2 id="using-a-data-loader">Using a Data Loader</h2>
+<p>The following is an example of a data fetcher that uses a data loader:</p>
+<pre><code class="language-java">@DgsComponent
+public class DirectorDataFetcher {
+
+    @DgsData(parentType = &quot;Movie&quot;, field = &quot;director&quot;)
+    public CompletableFuture&lt;Director&gt; director(DataFetchingEnvironment dfe) {
+
+        DataLoader&lt;String, Director&gt; dataLoader = dfe.getDataLoader(&quot;directors&quot;);
+        String id = dfe.getArgument(&quot;directorId&quot;);
+
+        return dataLoader.load(id);
+    }
+}
+</code></pre>
+<p>The code above is mostly just a regular data fetcher.
+However, instead of actually loading the data from another service or database, it uses the data loader to do so.
+You can retrieve a data loader from the <code>DataFetchingEnvironment</code> with its <code>getDataLoader()</code> method. 
+This requires  you to pass the name of the data loader as a string. 
+The other change to the data fetcher is that it returns a <code>CompletableFuture</code> instead of the actual type you’re loading.
+This enables the framework to do work asynchronously, and is a requirement for batching<!-- http://go/pv -->.  </p>
+<h3 id="using-the-dgsdatafetchingenvironment">Using the DgsDataFetchingEnvironment</h3>
+<p>You can also get the data loader in a type-safe way by using our custom <code>DgsDataFetchingEnvironment</code>, which is an enhanced version of <code>DataFetchingEnvironment</code> in <code>graphql-java</code>, and provides <code>getDataLoader()</code> using the classname. </p>
+<pre><code class="language-java">@DgsComponent
+public class DirectorDataFetcher {
+
+    @DgsData(parentType = &quot;Movie&quot;, field = &quot;director&quot;)
+    public CompletableFuture&lt;Director&gt; director(DgsDataFetchingEnvironment dfe) {
+
+        DataLoader&lt;String, Director&gt; dataLoader = dfe.getDataLoader(DirectorsDataLoader.class);
+        String id = dfe.getArgument(&quot;directorId&quot;);
+
+        return dataLoader.load(id);
+    }
+}
+</code></pre>
+<p>!!!tip
+    The same works if you have <code>@DgsDataLoader</code> defined as a lambda instead of on a class as shown <a href="./#provide-as-lambda">here</a>.
+    If you have multiple <code>@DgsDataLoader</code> lambdas defined as fields in the same class, you won't be able to use this feature. 
+    It is recommended that you use <code>getDataLoader()</code> with the loader name passed as a string in such cases.</p>
+<p>Note that there is no logic present about how batching works exactly; this is all handled by the framework!
+The framework will recognize that many directors need to be loaded when many movies are loaded, batch up all the calls to the data loader, and call the data loader with a list of IDs instead of a single ID.
+The data loader implemented above already knows how to handle a list of IDs, and that way it avoids the N+1 problem.</p>
+<h2 id="using-spring-features-such-as-ssocallerresolver-inside-a-completablefuture">Using Spring Features such as SsoCallerResolver inside a CompletableFuture</h2>
+<p>When you write async data fetchers, the code will run on worker threads.
+Spring internally stores some context, for example to make the SsoCallerResolver work, on the thread context however.
+This context wouldn’t be available inside code running on a different thread, which makes features such as SsoCallerResolver not work.</p>
+<p>Spring Boot has a solution for this: it manages a thread pool that <em>does</em> have this context carry over.
+You can inject this solution in the following way:</p>
+<pre><code class="language-java">@Autowired
+@DefaultExecutor
+private Executor executor;
+</code></pre>
+<p>You must pass in the executor as the second argument of the <code>supplyAsync()</code> method which<!-- which == the executor? the method? the argument? --> is typically used<!-- http://go/pv --> to make data fetchers asynchronous.</p>
+<pre><code class="language-java">@DgsData(parentType = &quot;Query&quot;, field = &quot;list_things&quot;)
+public CompletableFuture&lt;List&lt;Thing&gt;&gt; resolve(DataFetchingEnvironment environment) {
+ return CompletableFuture.supplyAsync(() -&gt; {
+    return myService.getThings();            
+}, executor);
+</code></pre>
+<h2 id="caching">Caching</h2>
+<p>Batching is the most important aspect of preventing N+1 problems.
+Data loaders also support caching, however.
+If the same key is loaded<!-- http://go/pv --> multiple times, it will only be loaded<!-- http://go/pv --> once.
+For example, if a list of movies is loaded<!-- http://go/pv -->, and some movies are directed by the same director, the director data will only be retrieved<!-- http://go/pv --> once.</p>
+<p>!!!info "Caching is Disabled by Default in DGS 1"
+    Version 1 of the DGS framework disables caching by default, but you can switch it on in the <code>@DgsDataLoader</code> annotation:</p>
+<pre><code>    @DgsDataLoader(name = "directors", caching=true)
+    class DirectorsBatchLoader implements BatchLoader&lt;String, Director&gt; {}
+
+You do not need to make this change in version 2 of the DGS framework, because that version enables caching by default.
+</code></pre>
+<h2 id="batch-size">Batch Size</h2>
+<p>Sometimes it’s possible to load<!-- http://go/pv --> multiple items at once, but to a certain limit.
+When loading<!-- http://go/pv --> from a database for example, an <code>IN</code> query could be used<!-- http://go/pv http://go/use -->, but maybe with the limitation of a maximum number of IDs to provide.
+The <code>@DgsDataLoader</code> has a <code>maxBatchSize</code> annotation that you can use to configure this behavior.
+By default it<!-- "it" is ambiguous here --> does not specify a maximum batch size.</p>
+<h2 id="data-loader-scope">Data Loader Scope</h2>
+<p>Data loaders are wired up<!-- http://go/pv --> to only span a single request.
+This is what most use cases require.
+Spanning<!-- http://go/pv --> multiple requests can introduce difficult-to-debug issues.</p>
+<p>--8&lt;-- "docs/reference_links"</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../js/mermaid.min.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

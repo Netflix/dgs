@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Testing - The DGS Framework</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="../stylesheets/extra.css" rel="stylesheet">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">The DGS Framework</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../tutorial/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Testing</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../data-loaders/" class="nav-link">Async Data Fetching</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../mutations/" class="nav-link">Mutations</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../generating-code-from-schema/" class="nav-link">Code Generation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../java-client/" class="nav-link">Java GraphQL Client</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Advanced <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../advanced/custom-datafetcher-context/" class="dropdown-item">Data Fetching Context</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/customizing/" class="dropdown-item">Custom Extensions</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/error-handling/" class="dropdown-item">Error Handling</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/file-uploads/" class="dropdown-item">File Uploads</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/subscriptions/" class="dropdown-item">Subscriptions</a>
+</li>
+                                    
+<li>
+    <a href="../advanced/type-resolvers-for-abstract-types/" class="dropdown-item">Type Resolvers for Abstract Types</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../tutorial/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../data-loaders/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/edit/query-execution-testing.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            
+            <li class="nav-item" data-level="2"><a href="#building-graphql-queries-for-tests" class="nav-link">Building GraphQL Queries for Tests</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#mocking-external-service-calls-in-tests" class="nav-link">Mocking External Service Calls in Tests</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#testing-exceptions" class="nav-link">Testing Exceptions</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>The DGS framework allows you to write lightweight tests that partially bootstrap the framework, just enough to run queries.</p>
+<h3 id="example">Example</h3>
+<p>Create some tests for the <code>hello</code> query that you created in the <a href="../tutorial/">Tutorial</a>.</p>
+<p>Before writing tests, you need to add JUnit to the [Gradle] configuration.
+This example uses JUnit 5:</p>
+<pre><code class="language-groovy">testImplementation(&quot;org.junit.jupiter:junit-jupiter-api:5.5.1&quot;)
+testRuntimeOnly(&quot;org.junit.jupiter:junit-jupiter-engine:5.5.1&quot;)
+testCompile 'com.netflix.spring:spring-boot-netflix-starter-test'
+</code></pre>
+<p>Create a test class with the following contents:</p>
+<pre><code class="language-java">import com.netflix.graphql.dgs.DgsQueryExecutor;
+import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(classes = {HelloDataFetcher.class, DgsAutoConfiguration.class},
+                // The following line disables DGS reload behavior in tests
+                properties = {&quot;dgs.reload=false&quot;})
+class HelloDataFetcherTest {
+
+    @Autowired
+    DgsQueryExecutor queryExecutor;
+
+    @Test
+    void helloShouldIncludeName() {
+        String message = queryExecutor.executeAndExtractJsonPath(&quot;{hello(name: \&quot;DGS\&quot;)}&quot;, &quot;data.hello&quot;);
+        assertThat(message).isEqualTo(&quot;hello, DGS!&quot;);
+    }
+
+    @Test
+    void helloShouldWorkWithoutName() {
+        String message = queryExecutor.executeAndExtractJsonPath(&quot;{hello}&quot;, &quot;data.hello&quot;);
+        assertThat(message).isEqualTo(&quot;hello, stranger!&quot;);
+    }
+
+    @Test
+    void helloShouldIncludeNameWithVariables() {
+        String message = queryExecutor.executeAndExtractJsonPath(&quot;query Hello($name: String) { hello(name: $name)}&quot;, &quot;data.hello&quot;, Maps.newHashMap(&quot;name&quot;, &quot;DGS&quot;));
+        assertThat(message).isEqualTo(&quot;hello, DGS!&quot;);
+    }
+}
+</code></pre>
+<p>The <code>@SpringBootTest</code> annotation makes this a Spring test.
+If you do not specify <code>classes</code> explicitly, Spring will start all components on the classpath.
+This includes not only your code, but also the full Netflix ecosystem.
+That really slows down tests, and most components aren’t necessary for testing!
+It’s much better to explicitly list the classes that you need for this test.
+In this case that’s just <code>HelloDataFetcher.class</code> and <code>DgsAutoConfiguration.class</code>.
+<code>HelloDataFetcher</code> is obviously your code, and <code>DgsAutoConfiguration</code> starts the DGS-related components.</p>
+<p>To run queries, inject <code>DgsQueryExecutor</code> in the test.
+This interface has several methods to execute a query and get back the result.
+It executes the exact same code as a query on the <code>/graphql</code> endpoint would, but you won’t have to deal with HTTP in your tests.
+The <code>DgsQueryExecutor</code> methods accept JSON paths, so that the methods can easily extract just the data from the response that you’re interested in.
+The JSON paths are supported by the open source <a href="https://github.com/json-path/JsonPath">JsonPath library</a>.</p>
+<p>Run the tests from your IDE, and you’ll find that one of them is failing, because an empty name is not handled very nicely.
+That should be an easy fix, and demonstrates how easy it is to write useful tests.</p>
+<h2 id="building-graphql-queries-for-tests">Building GraphQL Queries for Tests</h2>
+<p>In the examples shown previously, we handcrafted the query string. 
+This is simple enough for queries that are straightforward. 
+However, constructing longer query strings can be tedious. 
+For this, we can use the <a href="../java-client/">GraphQLQueryRequest</a> to build the graphql request in combination with the <a href="../generating-code-from-schema/">code generation</a> plugin to generate the classes needed to use the request builder. 
+This provides a convenient type-safe way to build your queries.</p>
+<p>To set up code generation to generate the required classes to use for building your queries, follow the instructions <a href="../java-client/#type-safe-query-api">here</a>.</p>
+<p>You will also need to add <code>com.netflix.graphql.dgs:graphql-dgs-client:latest.release</code> dependency to build.gradle.  </p>
+<p>Now we can write a test that uses <code>GraphQLQueryRequest</code> to build the query and extract the response using <code>GraphQLResponse</code> for data fetchers for the following schema:</p>
+<pre><code class="language-graphql">type Query @extends {
+    movieScript(movieId: ID): Movie
+}
+
+type Movie @key(fields: &quot;movieId&quot;) @extends {
+    movieId: ID!
+    script: MovieScript
+}
+
+type MovieScript  {
+    title: String
+    director: String
+    actors: [Actor]
+}
+
+type Actor {
+    name: String
+    gender: String
+    age: Int
+}
+</code></pre>
+<p>The code generation plugin will generate the required POJOs, in addition to <code>MovieScriptGraphQLQuery</code> and a <code>MovieScriptProjection</code>.
+The <code>MovieScriptGraphQLQuery</code> has a builder to represent the query with input types. The <code>MovieScriptProjection</code> lets you specify the fields you want in the response.</p>
+<p>You can now set up your test like this:</p>
+<pre><code class="language-java">@Test
+void scriptShouldIncludeTitle() throws IOException {
+    GraphQLQueryRequest graphQLQueryRequest =
+            new GraphQLQueryRequest(
+                    new MovieScriptGraphQLQuery.Builder()
+                            .movieId(&quot;111888999&quot;)
+                            .build(),
+                    new MovieScriptProjectionRoot().script().title().actors().name().age().parent().director()
+            );
+    // This generates &quot;query {movieScript(movieId: &quot;111888999&quot;){ script { title actors { name age } director } } }&quot;
+    String query = graphQLQueryRequest.serialize();
+
+    DocumentContext context = queryExecutor.executeAndGetDocumentContext(query);
+    GraphQLResponse response = new GraphQLResponse(context.jsonString());
+    Movie movie = response.extractValueAsObject(&quot;data.movieScript&quot;, Movie.class);
+    assertThat(movie.getScript().getTitle()).isEqualTo(&quot;Top Secret&quot;);
+}
+</code></pre>
+<p>The <code>GraphQLQueryRequest</code> is available as part of the <a href="../java-client/">graphql-client module</a> and is used to build the query string, and wrap the response respectively. You can also refer to the GraphQLClient JavaDoc for more details on the list of supported methods.</p>
+<h2 id="mocking-external-service-calls-in-tests">Mocking External Service Calls in Tests</h2>
+<p>It’s not uncommon for a data fetcher to talk to external systems: either a database or a remote service.
+If it does so within a test, this adds two problems:</p>
+<ol>
+<li>It adds latency; your tests are going to run slower when they make a lot of external calls.</li>
+<li>It adds flakiness: Did your code introduce a bug, or did something go wrong in the external system?</li>
+</ol>
+<p>In many cases it’s better to mock these external services.
+Spring already has good support for doing so with the <a href="https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/mock/mockito/MockBean.html">@Mockbean</a> annotation, which you can leverage in your [DGS] tests.</p>
+<h3 id="example_1">Example</h3>
+<p>Introduce a fictional service client <code>GreeterService</code> to the project (in the real world this could be a [gRPC] client):</p>
+<pre><code class="language-java">public interface GreeterService {
+    String randomGreeting(String name);
+}
+
+@Component
+public class FakeGreeterServiceImpl implements GreeterService {
+    @Override
+    public String randomGreeting(String name) {
+        throw new RuntimeException(&quot;This is not a real client!&quot;);
+    }
+}
+</code></pre>
+<p>The hello data fetcher should use this new <code>GreeterService</code>:</p>
+<pre><code class="language-java">@DgsComponent
+public class HelloDataFetcher {
+    @Autowired
+    GreeterService greeterService;
+
+    @DgsData(parentType = &quot;Query&quot;, key = &quot;hello&quot;)
+    public String hello(DataFetchingEnvironment dfe) {
+
+        String name = dfe.getArgument(&quot;name&quot;);
+
+        return greeterService.randomGreeting(name);
+    }
+}
+</code></pre>
+<p>All tests now fail, since the <code>FakeGreeterServiceImpl</code> isn’t included in the <code>classes</code> definition of <code>@SpringBootTest</code>. 
+If you include it, the tests fail with the <code>RuntimeException</code> that’s thrown from the <code>randomGreeting()</code> method.
+To add a mock to make the tests work again, add the following code to the test:</p>
+<pre><code class="language-java">@MockBean
+GreeterService greeterService;
+
+@Before
+void setup() {
+    when(greeterService.randomGreeting(anyString())).thenAnswer(invocation -&gt; &quot;Mocked greeting, &quot; + invocation.getArgument(0));
+}
+</code></pre>
+<h2 id="testing-exceptions">Testing Exceptions</h2>
+<p>The tests you wrote so far are mostly happy paths.
+Failure scenarios are also easy to test.
+Try a query with two fields that both return an error:</p>
+<pre><code class="language-java">@Test
+void getQueryWithMultipleExceptions() {
+    try {
+        queryExecutor.executeAndExtractJsonPath(&quot;{withRuntimeException, withGraphqlException}&quot;, &quot;data.greeting&quot;);
+        fail(&quot;Exception should have been thrown&quot;);
+    } catch(QueryException ex) {
+        assertThat(ex.getErrors().get(0).getMessage()).isEqualTo(&quot;java.lang.RuntimeException: That's broken!&quot;);
+        assertThat(ex.getErrors().get(1).getMessage()).isEqualTo(&quot;graphql.GraphQLException: that's not going to work!&quot;);
+        assertThat(ex.getMessage()).isEqualTo(&quot;java.lang.RuntimeException: That's broken!, graphql.GraphQLException: that's not going to work!&quot;);
+        assertThat(ex.getErrors().size()).isEqualTo(2);
+    }
+}
+</code></pre>
+<p>When an error happens while executing<!-- http://go/pv --> the query, the errors are wrapped<!-- http://go/pv --> and thrown<!-- http://go/pv --> in a <code>QueryException</code>.
+This allows you to easily inspect the error.
+The <code>message</code> of the <code>QueryException</code> is the concatenation of all the errors.
+The <code>getErrors()</code> method gives access to the individual errors for further inspection. </p>
+<p>--8&lt;-- "docs/reference_links"</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../js/mermaid.min.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

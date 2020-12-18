@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Data Fetching Context - The DGS Framework</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="../../stylesheets/extra.css" rel="stylesheet">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">The DGS Framework</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../tutorial/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../query-execution-testing/" class="nav-link">Testing</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../data-loaders/" class="nav-link">Async Data Fetching</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../mutations/" class="nav-link">Mutations</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../generating-code-from-schema/" class="nav-link">Code Generation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../java-client/" class="nav-link">Java GraphQL Client</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Advanced <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="./" class="dropdown-item active">Data Fetching Context</a>
+</li>
+                                    
+<li>
+    <a href="../customizing/" class="dropdown-item">Custom Extensions</a>
+</li>
+                                    
+<li>
+    <a href="../error-handling/" class="dropdown-item">Error Handling</a>
+</li>
+                                    
+<li>
+    <a href="../file-uploads/" class="dropdown-item">File Uploads</a>
+</li>
+                                    
+<li>
+    <a href="../subscriptions/" class="dropdown-item">Subscriptions</a>
+</li>
+                                    
+<li>
+    <a href="../type-resolvers-for-abstract-types/" class="dropdown-item">Type Resolvers for Abstract Types</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../../java-client/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../customizing/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/edit/advanced/custom-datafetcher-context.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>Each data fetcher in [GraphQL] Java has a context.
+A data fetcher gets access to its context by calling <a href="https://javadoc.io/doc/com.graphql-java/graphql-java/12.0/graphql/schema/DataFetchingEnvironment.html#getContext--"><code>DataFetchingEnvironment.getContext()</code></a>.
+This is a common mechanism to pass request context to data fetchers and data loaders.
+The [DGS] framework has its own <a href="https://stash.corp.netflix.com/projects/PX/repos/domain-graph-service-java/browse/graphql-dgs/src/main/kotlin/com/netflix/graphql/dgs/context/DgsContext.kt"><code>DgsContext</code></a> implementation, which is used<!-- http://go/pv --> for log instrumentation among other things.
+It is designed<!-- http://go/pv --> in such a way that you can extend it with your own custom context.</p>
+<p>To create a custom context, implement a Spring bean of type <code>DgsCustomContextBuilder</code>.
+Write the <code>build()</code> method so that it creates an instance of the type that represents your custom context object:</p>
+<pre><code class="language-java">@Component
+public class MyContextBuilder implements DgsCustomContextBuilder&lt;MyContext&gt; {
+    @Override
+    public MyContext build() {
+        return new MyContext();
+    }
+}
+
+public class MyContext {
+    private final String customState = &quot;Custom state!&quot;;
+
+    public String getCustomState() {
+        return customState;
+    }
+}
+</code></pre>
+<p>A data fetcher can now retrieve the context by calling the <code>getCustomContext()</code> method:</p>
+<pre><code class="language-java">@DgsData(parentType = &quot;Query&quot;, field = &quot;withContext&quot;)
+public String withContext(DataFetchingEnvironment dfe) {
+    MyContext customContext = DgsContext.getCustomContext(dfe);
+    return customContext.getCustomState();
+}
+</code></pre>
+<p>Similarly it<!-- "it" is ambiguous here --> can be used<!-- http://go/pv --> in a DataLoader.</p>
+<pre><code class="language-java">@DgsDataLoader(name = &quot;exampleLoaderWithContext&quot;)
+public class ExampleLoaderWithContext implements BatchLoaderWithContext&lt;String, String&gt; {
+    @Override
+    public CompletionStage&lt;List&lt;String&gt;&gt; load(List&lt;String&gt; keys, BatchLoaderEnvironment environment) {
+
+        MyContext context = DgsContext.getCustomContext(environment);
+
+        return CompletableFuture.supplyAsync(() -&gt; keys.stream().map(key -&gt; context.getCustomState() + &quot; &quot; + key).collect(Collectors.toList()));
+    }
+}
+</code></pre>
+<p>--8&lt;-- "docs/reference_links"</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../js/mermaid.min.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

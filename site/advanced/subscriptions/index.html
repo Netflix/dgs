@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Subscriptions - The DGS Framework</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="../../stylesheets/extra.css" rel="stylesheet">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">The DGS Framework</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../tutorial/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../query-execution-testing/" class="nav-link">Testing</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../data-loaders/" class="nav-link">Async Data Fetching</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../mutations/" class="nav-link">Mutations</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../generating-code-from-schema/" class="nav-link">Code Generation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../java-client/" class="nav-link">Java GraphQL Client</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Advanced <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../custom-datafetcher-context/" class="dropdown-item">Data Fetching Context</a>
+</li>
+                                    
+<li>
+    <a href="../customizing/" class="dropdown-item">Custom Extensions</a>
+</li>
+                                    
+<li>
+    <a href="../error-handling/" class="dropdown-item">Error Handling</a>
+</li>
+                                    
+<li>
+    <a href="../file-uploads/" class="dropdown-item">File Uploads</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active">Subscriptions</a>
+</li>
+                                    
+<li>
+    <a href="../type-resolvers-for-abstract-types/" class="dropdown-item">Type Resolvers for Abstract Types</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../file-uploads/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../type-resolvers-for-abstract-types/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/edit/advanced/subscriptions.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#the-server-side-programming-model" class="nav-link">The Server Side Programming Model</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#websockets" class="nav-link">WebSockets</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#sse" class="nav-link">SSE</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#studio-edge-gateway" class="nav-link">Studio Edge Gateway</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>[GraphQL] Subscriptions are used<!-- http://go/pv http://go/use --> to receive updates for a query from the server over time.
+A common example is sending<!-- http://go/pv --> update notifications from the server.</p>
+<p>Regular GraphQL queries use<!-- http://go/use --> a simple (HTTP) request/response to execute a query.
+For subscriptions a connection is kept open.
+Depending on how a DGS is deployed<!-- http://go/pv -->, there are different options to set<!-- http://go/pv --> this up.
+The programming model for a DGS developer is the same regardless of the transport protocol, but the correct transport has to be selected<!-- http://go/pv --> to successfully run within Netflix infrastructure.</p>
+<p>The following choices are available:</p>
+<ul>
+<li>WebSockets (no [Wall-E] support, internal tooling only)</li>
+<li>SSE (Wall-E supported, apps outside VPN supported)</li>
+<li>[Federated] Gateway (for DGSs behind the federated gateway) </li>
+</ul>
+<h2 id="the-server-side-programming-model">The Server Side Programming Model</h2>
+<p>In the DGS framework a Subscription is implemented<!-- http://go/pv --> as a data fetcher with the <code>@DgsData</code> annotation.
+The difference with a normal data fetcher is that a subscription <em>must return a <code>org.reactivestreams.Publisher</code></em>.</p>
+<pre><code class="language-java">import reactor.core.publisher.Flux;
+import org.reactivestreams.Publisher;
+⋮
+
+@DgsData(parentType = &quot;Subscription&quot;, field = &quot;stocks&quot;)
+public Publisher&lt;Stock&gt; stocks() {
+    return Flux.interval(Duration.ofSeconds(1)).map({ t -&gt; Tick(t.toString()) })
+}
+</code></pre>
+<p>The <code>Publisher</code> interface is from Reactive Streams.
+Flux is the default implementation for Spring.</p>
+<p>A complete example can be found <a href="https://stash.corp.netflix.com/projects/PX/repos/dgs-demo-minimal/browse/src/main/kotlin/mountainproject/graphql/datafetchers/SubscriptionDatafetcher.kt">in <code>SubscriptionDatafetcher.kt</code> from dgs-demo-minimal</a>.</p>
+<p>Next, a transport implementation must be chosen<!-- http://go/pv -->, which depends on how your app is deployed<!-- http://go/pv -->.</p>
+<h2 id="websockets">WebSockets</h2>
+<p>The most common transport protocol for Subscriptions in the GraphQL community is WebSockets.<br />
+Apollo defines a <a href="https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md">sub-protocol</a>, which is supported by client libraries and implemented by the DGS framework.
+However, WebSockets are problematic for proxies, including Wall-E.
+<em>If your backend is behind Wall-E, WebSockets are not supported<!-- http://go/pv -->.</em></p>
+<p>WebSockets work great if your DGS is for an internal tool, where the UI (which can be hosted<!-- http://go/pv --> on <a href="https://manuals.netflix.net/view/cloudgateway/mkdocs/master/treasure/overview/">Treasure</a>) connects to the backend directly using Eureka DNS.
+To enable WebSockets support, add the following module to your <code>build.gradle</code>:</p>
+<pre><code class="language-groovy">implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure:latest.release'
+</code></pre>
+<p>Apollo client supports WebSockets through a <a href="https://www.apollographql.com/docs/link/links/ws/">link</a>.
+Typically you want to configure Apollo Client with both an HTTP link and a WS link, and <a href="https://www.apollographql.com/docs/link/composition/#directional-composition">split</a> between them based on the query type.</p>
+<h2 id="sse">SSE</h2>
+<p>Server Send Events are the right choice if your backend is proxied by Wall-E.</p>
+<p>To enable SSE support, add the following module to your <code>build.gradle</code>:</p>
+<pre><code class="language-groovy">implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-sse-autoconfigure:latest.release'
+</code></pre>
+<p>An internal TypeScript module, <a href="https://stash.corp.netflix.com/projects/PX/repos/nflx-subscriptions-transport-sse/browse">nflx-subscriptions-transport-sse</a>, supports Apollo Link.
+This module reimplements an (unmaintained) open source <a href="https://github.com/CodeCommission/subscriptions-transport-sse">library</a>.
+The reimplementation was required to support Wall-E.</p>
+<p>From a client-side perspective the usage<!-- http://go/use --> is the same as for the WebSocket implementation, just with a different module:</p>
+<pre><code class="language-typescript">import { SubscriptionClient, SSELink} from 'nflx-subscriptions-transport-sse'
+
+const sseClient = new SubscriptionClient(SUBSCRIPTION_ENDPOINT);
+const sseLink = new SSELink(sseClient);
+const authedClient = authLink &amp;&amp; new ApolloClient({
+    link: authLink.concat(split((operation) =&gt; {
+        return operation.operationName === &quot;TicksWatch&quot;}, sseLink, httpLink)),
+    cache: new InMemoryCache()
+})
+</code></pre>
+<h2 id="studio-edge-gateway">Studio Edge Gateway</h2>
+<p>Studio Edge Gateway supports GraphQL subscriptions.
+A client sets up a WSS or SSE connection with the gateway, and the gateway uses a <a href="https://stash.corp.netflix.com/projects/STE/repos/studio-gateway/browse/docs/subscriptions.md">proprietary protocol</a> based on callbacks with the DGS.</p>
+<p><img alt="Gateway Subscriptions architecture" src="../../../img/gateway-subscriptions.png" /></p>
+<p>Note that you don't deal with this protocol directly as a DGS developer, the framework takes care of this!
+To enable gateway subscriptions, add the following module to your <code>build.gradle</code>:</p>
+<pre><code class="language-groovy">implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-gateway-autoconfigure:latest.release'
+</code></pre>
+<p>The programming model for the DGS developer is exactly the same as described above for SSE/WebSockets, using the Publisher interface with Flux.
+The gateway supports both SSE and WebSockets from clients using the client libraries discussed above.</p>
+<p>!!!info "Note on gateway subscriptions"
+    There are currently a few caveats when using subscriptions through a gateway.</p>
+<pre><code>1) Don’t deliver sensitive data through a subscription connection. If you need to deliver sensitive data, the subscription event can trigger the UI to make a followup query.
+
+2) The subscription can’t return a federated type. The same DGS must provide the entire event payload.
+
+3) Expected volume should be &lt;1000 concurrent connections
+</code></pre>
+<p>--8&lt;-- "docs/reference_links"</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../js/mermaid.min.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

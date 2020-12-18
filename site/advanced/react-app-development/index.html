@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>React app development - The DGS Framework</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="../../stylesheets/extra.css" rel="stylesheet">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">The DGS Framework</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../tutorial/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../query-execution-testing/" class="nav-link">Testing</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../data-loaders/" class="nav-link">Async Data Fetching</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../mutations/" class="nav-link">Mutations</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../generating-code-from-schema/" class="nav-link">Code Generation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../java-client/" class="nav-link">Java GraphQL Client</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Advanced <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../custom-datafetcher-context/" class="dropdown-item">Data Fetching Context</a>
+</li>
+                                    
+<li>
+    <a href="../customizing/" class="dropdown-item">Custom Extensions</a>
+</li>
+                                    
+<li>
+    <a href="../error-handling/" class="dropdown-item">Error Handling</a>
+</li>
+                                    
+<li>
+    <a href="../file-uploads/" class="dropdown-item">File Uploads</a>
+</li>
+                                    
+<li>
+    <a href="../subscriptions/" class="dropdown-item">Subscriptions</a>
+</li>
+                                    
+<li>
+    <a href="../type-resolvers-for-abstract-types/" class="dropdown-item">Type Resolvers for Abstract Types</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="/edit/advanced/react-app-development.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#test-and-production" class="nav-link">Test and Production</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#local-development" class="nav-link">Local Development</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>[Spring Boot] at Netflix supports serving<!-- http://go/pv --> static assets with [Meechum] integration<!-- http://go/pv --> out-of-the-box.
+The [DGS] framework leverages this mechanism and so you can use<!-- http://go/use --> it to host web apps, if you need to do this in addition to implementing a [GraphQL] API.
+The following sections describe how to set up a create-react-app for test, production, and local development.</p>
+<h2 id="test-and-production">Test and Production</h2>
+<p>The DGS, by default, will serve any static assets in <code>resources/public</code>.
+If your app and the DGS reside in the same repository, one approach is for you to integrate the steps for building your app and copying them<!-- "them" is ambiguous here --> to <code>resources/public</code> within your Rocket CI script:</p>
+<pre><code class="language-shell">cd ./react-app-dir &amp;&amp; newt exec yarn run build &amp;&amp; cd ..
+cp -r ./react-app-dir/build/ src/main/resources/public
+</code></pre>
+<p>After you deploy the DGS you can access your deployed app on port 8443.
+Note that this does not require the app to set up the authorization header to access the <code>/graphql</code> endpoint, since Spring Boot apps are already integrated with Meechum.</p>
+<p>!!!note
+    If you choose to use a different backend for serving static assets, you will need to set up <a href="http://manuals.netflix.net/view/meechum/mkdocs/master/">Meechum authentication</a> in your React app. </p>
+<h2 id="local-development">Local Development</h2>
+<p>If you want to run your react app locally by executing <code>yarn start</code> or <code>npm start</code>, and you want to avoid building and copying the app to <code>/resources/public</code>, you will need to explictly set up Meechum authentication.</p>
+<p>On the DGS, you will need a CORS filter that allows requests from a host that is different from your DGS:</p>
+<pre><code class="language-java">@Configuration
+public class LocalHostSecurityConfig {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LocalHostSecurityConfig.class);
+
+    @Bean
+    public FilterRegistrationBean corsFilter() {
+        LOGGER.info(&quot;Setting up custom CORS&quot;);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin(&quot;http://localhost:3000&quot;); // yarn start
+        config.addAllowedOrigin(&quot;https://localhost:8444&quot;); // meego
+        config.addAllowedHeader(&quot;Accept&quot;);
+        config.addAllowedHeader(&quot;Content-Type&quot;);
+        config.addAllowedHeader(&quot;X-Requested-With&quot;);
+        config.addAllowedHeader(&quot;Authorization&quot;);
+        config.addAllowedMethod(&quot;GET&quot;);
+        config.addAllowedMethod(&quot;POST&quot;);
+        config.addAllowedMethod(&quot;OPTIONS&quot;);
+        source.registerCorsConfiguration(&quot;/**&quot;, config);
+        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+        return bean;
+    }
+}
+</code></pre>
+<p>On the client side, you will need to set up the following:</p>
+<ul>
+<li>
+<p>Add <code>meechum-user-lib-js</code> as a dependency by setting up your <code>.npmrc</code> or <code>.yarnc</code> with <code>registry = https://repo.test.netflix.net/artifactory/api/npm/npm-netflix</code>.</p>
+</li>
+<li>
+<p>Use the following snippet to set up Meechum authentication in your app:</p>
+<pre><code> await MeechumUser.initialize(
+   '/meechum',
+   900,
+   () =&gt; console.warn('Warning: Meechum session timed out'),
+   () =&gt; console.error(`Error: Refreshing meechum token failed`));
+ const token = Meechum.getUserToken();
+</code></pre>
+<p>You can now use<!-- http://go/use --> the token and can set that<!-- "that" is ambiguous here --> in your authorization header for the request to <code>/graphql</code> endpoint.</p>
+</li>
+<li>
+<p>Run <a href="https://manuals.netflix.net/view/meechum/mkdocs/master/container/meego-proxy/">meego</a>.
+  This will proxy your request to your local node server.
+  For example:</p>
+<pre><code>meego -listenPort 8444 -proxyTarget http://localhost:3000 -clientId yourEdwardPolicyClientId -clientSecret yourEdwardPolicyClientSecret
+</code></pre>
+</li>
+<li>
+<p>You can now start your react app by executing <code>yarn start</code> or <code>npm start</code> as usual.
+  Your app can make requests to the <code>/graphql</code> endpoint on the DGS.</p>
+</li>
+</ul>
+<p>This allows the developer to update the UI without having to restart the DGS each time, in cases where the DGS also serves static assets.</p>
+<p>--8&lt;-- "docs/reference_links"</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../js/mermaid.min.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
