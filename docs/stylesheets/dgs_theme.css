@@ -8,12 +8,19 @@
 
   --brand-color: #4969E4;
 
+  --header-link__color--dark: #fff;
+  --header-link__color--hover--dark: #4969E4;
+  --header-link__color--light: #292929;
+  --header-link__color--hover--light: #4969E4;
+
+
   --input__bg-color--dark: #444;
-  --input__placeholder-color-dark: rgba(255,255,255,0.6);
+  --input__placeholder-color--dark: rgba(255,255,255,0.6);
   --input__text-color--dark: #fff;
   --input__bg-color--light: #e8e8e8;
   --input__placeholder-color--light: rgba(0,0,0,0.6);
   --input__text-color--light: #161616;
+
 
   --text-color--dark: #e0e0e0;
   --text-color--secondary--dark: #a0a0a0;
@@ -25,6 +32,8 @@
 
 html {
   --background-color: var(--background-color--dark);
+  --header-link__color: var(--header-link__color--dark);
+  --header-link__color--hover: var(--header-link__color--hover--dark);
   --input__bg-color: var(--input__bg-color--dark);
   --input__placeholder-color: var(--input__placeholder-color-dark);
   --input__text-color: var(--input__text-color--dark);
@@ -35,6 +44,8 @@ html {
 
 html.theme--light {
   --background-color: var(--background-color--light);
+  --header-link__color: var(--header-link__color--light);
+  --header-link__color--hover: var(--header-link__color--hover--light);
   --input__bg-color: var(--input__bg-color--light);
   --input__placeholder-color: var(--input__placeholder-color--light);
   --input__text-color: var(--input__text-color--light);
@@ -46,6 +57,8 @@ html.theme--light {
 @media (prefers-color-scheme: light) {
   html {
     --background-color: var(--background-color--light);
+    --header-link__color: var(--header-link__color--light);
+    --header-link__color--hover: var(--header-link__color--hover--light);
     --input__bg-color: var(--input__bg-color--light);
     --input__placeholder-color: var(--input__placeholder-color--light);
     --input__text-color: var(--input__text-color--light);
@@ -56,6 +69,8 @@ html.theme--light {
 
   html.theme--dark {
     --background-color: var(--background-color--dark);
+    --header-link__color: var(--header-link__color--dark);
+    --header-link__color--hover: var(--header-link__color--hover--dark);
     --input__bg-color: var(--input__bg-color--dark);
     --input__placeholder-color: var(--input__placeholder-color-dark);
     --input__text-color: var(--input__text-color--dark);
@@ -122,7 +137,7 @@ body {
 }
 .dgs-header-nav__button,
 .md-source {
-  /* display: inline-block; */
+  color: var(--header-link__color);
   font-size: .8rem;
   font-weight: bold;
 }
@@ -186,17 +201,20 @@ body {
   fill: var(--text-color);
 }
 
+.md-search__input~.md-search__icon svg {
+  fill: var(--input__placeholder-color--dark);
+}
 
 [data-md-toggle=search]:checked~.dgs-header .md-search__input {
   background-color: rgba(255, 255, 255, 0.1);
-  color: var(--input__text-color);
+  color: var(--input__text-color--dark);
 }
 [data-md-toggle=search]:checked~.md-header .md-search__input+.md-search__icon,
 [data-md-toggle=search]:checked~.md-header .md-search__input::placeholder {
-  color: var(--input__placeholder-color);
+  color: var(--input__placeholder-color--dark);
 }
 [data-md-toggle=search]:checked~.md-header .md-search__input~.md-search__icon svg {
-  fill: var(--input__placeholder-color);
+  fill: var(--input__placeholder-color--dark);
 }
 
 @media screen and (max-width: 59.9375em) {
