@@ -30,6 +30,7 @@ extra_javascript:
 
 theme:
   name: material
+  custom_dir: dgs_theme
   favicon: images/favicon.png
   logo: images/logo--white.svg
 markdown_extensions:
