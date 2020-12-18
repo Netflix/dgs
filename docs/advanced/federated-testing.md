@@ -39,7 +39,7 @@ Normally, the gateway would send an [_entities](https://www.apollographql.com/do
 ```
 The `representations` input is a variable map containing the `__typename` field set to `Movie` and `movieId` set to a value, e.g., `12345`.
 
-You can now set up a [Query Executor](../query-execution-testing.md) test by either manually constructing the query, or you can generate the federated query using the `Entities Query Builder API` available through [client code generation](../java-client.md#type-safe-query-api).
+You can now set up a [Query Executor](../query-execution-testing.md) test by either manually constructing the query, or you can generate the federated query using the `Entities Query Builder API` available through [client code generation](java-client.md#type-safe-query-api).
 
 
 Here is an example of a test that uses a manually constructed `_entities` query for `Movie`:
@@ -67,10 +67,10 @@ Here is an example of a test that uses a manually constructed `_entities` query 
 ```
 
 #### Using the Entities Query Builder API
-Alternatively, you can generate the federated query by using [EntitiesGraphQLQuery](../java-client.md#building-federated-queries) to build the graphql request in combination with the [code generation](../generating-code-from-schema.md) plugin to generate the classes needed to use the request builder. 
+Alternatively, you can generate the federated query by using [EntitiesGraphQLQuery](java-client.md#building-federated-queries) to build the graphql request in combination with the [code generation](../generating-code-from-schema.md) plugin to generate the classes needed to use the request builder. 
 This provides a convenient type-safe way to build your queries.
 
-To set up code generation to generate the required classes to use for building your queries, follow the instructions [here](../java-client.md#type-safe-query-api).
+To set up code generation to generate the required classes to use for building your queries, follow the instructions [here](java-client.md#type-safe-query-api).
 
 You will also need to add `com.netflix.graphql.dgs:graphql-dgs-client:latest.release` dependency to build.gradle.  
 
