@@ -512,6 +512,17 @@ a[title="Edit this page"] {
 
 
 /*
+  code ===================
+*/
+
+/* .md-typeset code {
+  background-color: var(--code__background-color);
+  color: var(--code__text-color);
+}
+*/
+
+
+/*
   footer ===================
 */
 
