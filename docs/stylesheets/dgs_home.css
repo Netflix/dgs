@@ -87,3 +87,38 @@
 .hero__link svg {
   fill: var(--link-color);
 }
+
+
+/*
+  code examples ===================
+*/
+
+.md-typeset .dgs-example-code {
+  background-color: var(--code__background-color);
+  border-radius: .25rem;
+  box-shadow: 0 2px 30px var(--code__shadow-color);
+  display: inline-block;
+  margin-left: .5rem;
+  margin-top: -1.6rem;
+  padding: 1.75rem 1.25rem 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.md-typeset .dgs-example-pre {
+  color: var(--code__text-color);
+  margin: 0;
+}
+
+.md-typeset .dgs-example-pre .comment {
+  color: var(--code__comment-color);
+}
+
+.md-typeset .dgs-example-pre .highlight {
+  color: var(--code__highlight-color);
+}
+
+.benefit__heading {
+  position: relative;
+  z-index: 10;
+}

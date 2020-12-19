@@ -7,7 +7,7 @@
   --background-color--light: #f1f1f1;
 
   --background-color__accent--dark: #2b2b2b;
-  --background-color__accent--light: #efefef;
+  --background-color__accent--light: #ececec;
 
   --brand-color: #4969E4;
   --brand-color__text--dark: #6989fa;
@@ -42,6 +42,19 @@
   --text-color--secondary--light: #606060;
   --text-color--tertiary--light: #808080;
 
+  --code__background-color--dark: #363636;
+  --code__border-color--dark: #333333;
+  --code__shadow-color--dark: rgba(0,0,0,.15);
+  --code__text-color--dark: var(--text-color--secondary--dark);
+  --code__comment-color--dark: var(--text-color--tertiary--dark);
+  --code__highlight-color--dark: #FF44D6;
+  --code__background-color--light: #f5f5f5;
+  --code__border-color--light: #e5e5e5;
+  --code__shadow-color--light: rgba(0,0,0,.05);
+  --code__text-color--light: var(--text-color--secondary--light);
+  --code__comment-color--light: var(--text-color--tertiary--light);
+  --code__highlight-color--light: #FF44D6;
+
   --transition-timing: 250ms;
 }
 
@@ -49,6 +62,12 @@ html {
   --background-color: var(--background-color--dark);
   --background-color__accent: var(--background-color__accent--dark);
   --brand-color__text: var(--brand-color__text--dark);
+  --code__background-color: var(--code__background-color--dark);
+  --code__border-color: var(--code__border-color--dark);
+  --code__shadow-color: var(--code__shadow-color--dark);
+  --code__text-color: var(--code__text-color--dark);
+  --code__comment-color: var(--code__comment-color--dark);
+  --code__highlight-color: var(--code__highlight-color--dark);
   --header-link__color: var(--header-link__color--dark);
   --header-link__color--hover: var(--header-link__color--hover--dark);
   --input__bg-color: var(--input__bg-color--dark);
@@ -67,6 +86,12 @@ html.theme--light {
   --background-color: var(--background-color--light);
   --background-color__accent: var(--background-color__accent--light);
   --brand-color__text: var(--brand-color);
+  --code__background-color: var(--code__background-color--light);
+  --code__border-color: var(--code__border-color--light);
+  --code__shadow-color: var(--code__shadow-color--light);
+  --code__text-color: var(--code__text-color--light);
+  --code__comment-color: var(--code__comment-color--light);
+  --code__highlight-color: var(--code__highlight-color--light);
   --header-link__color: var(--header-link__color--light);
   --header-link__color--hover: var(--header-link__color--hover--light);
   --input__bg-color: var(--input__bg-color--light);
@@ -86,6 +111,12 @@ html.theme--light {
     --background-color: var(--background-color--light);
     --background-color__accent: var(--background-color__accent--light);
     --brand-color__text: var(--brand-color);
+    --code__background-color: var(--code__background-color--light);
+    --code__border-color: var(--code__border-color--light);
+    --code__shadow-color: var(--code__shadow-color--light);
+    --code__text-color: var(--code__text-color--light);
+    --code__comment-color: var(--code__comment-color--light);
+    --code__highlight-color: var(--code__highlight-color--light);
     --header-link__color: var(--header-link__color--light);
     --header-link__color--hover: var(--header-link__color--hover--light);
     --input__bg-color: var(--input__bg-color--light);
@@ -104,6 +135,12 @@ html.theme--light {
     --background-color: var(--background-color--dark);
     --background-color__accent: var(--background-color__accent--dark);
     --brand-color__text: var(--brand-color__text--dark);
+    --code__background-color: var(--code__background-color--dark);
+    --code__border-color: var(--code__border-color--dark);
+    --code__shadow-color: var(--code__shadow-color--dark);
+    --code__text-color: var(--code__text-color--dark);
+    --code__comment-color: var(--code__comment-color--dark);
+    --code__highlight-color: var(--code__highlight-color--dark);
     --header-link__color: var(--header-link__color--dark);
     --header-link__color--hover: var(--header-link__color--hover--dark);
     --input__bg-color: var(--input__bg-color--dark);
@@ -129,6 +166,7 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-size: 1rem;
+  padding-bottom: 4rem;
 }
 
 
@@ -223,7 +261,7 @@ body {
   height: auto;
   padding-bottom: 1rem;
   padding-top: 1rem;
-  z-index: 2;
+  z-index: 10;
 }
 .md-container {
   z-index: 2;
@@ -389,8 +427,3 @@ a[title="Edit this page"] {
   border-bottom-color: var(--tab-selected__color);
   color: var(--tab-selected__color);
 }
-
-
-/*
-  code blocks ===================
-*/
