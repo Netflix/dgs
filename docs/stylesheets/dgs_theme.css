@@ -362,6 +362,7 @@ body {
   border-radius: 3rem;
   padding: .5rem;
   position: relative;
+  z-index: 1;
 }
 .dgs-header .md-search__inner::after {
   background: var(--brand-color);
@@ -386,14 +387,14 @@ body {
 
 [data-md-toggle=search]:checked~.dgs-header .md-search__input {
   background-color: var(--input-search__bg-color--focus);
-  color: var(--input__text-color--dark);
+  color: var(--input__text-color);
 }
 [data-md-toggle=search]:checked~.md-header .md-search__input+.md-search__icon,
 [data-md-toggle=search]:checked~.md-header .md-search__input::placeholder {
   color: var(--input__placeholder-color--dark);
 }
 [data-md-toggle=search]:checked~.md-header .md-search__input~.md-search__icon svg {
-  fill: var(--input__placeholder-color--dark);
+  fill: var(--brand-color);
 }
 
 @media screen and (max-width: 59.9375em) {
