@@ -7,7 +7,9 @@
   --background-color--light: #f1f1f1;
 
   --background-color__accent--dark: #2b2b2b;
+  --background-color__accent--heavy--dark: #232323;
   --background-color__accent--light: #ececec;
+  --background-color__accent--heavy--light: #e0e0e0;
 
   --brand-color: #4969E4;
   --brand-color__text--dark: #6989fa;
@@ -27,7 +29,7 @@
   --input-search__bg-color--hover--dark: rgba(0,0,0, 0.4);
   --input-search__bg-color--focus--dark: rgba(0,0,0, 0.5);
   --input-search__bg-color--hover--light: rgba(255, 255, 255, 0.2);
-  --input-search__bg-color--focus--light: rgba(255, 255, 255, 0.7);
+  --input-search__bg-color--focus--light: rgba(255, 255, 255, 0.9);
 
   --link-color--dark: #6FB34D;
   --link-color--hover--dark: var(--brand-color__text--dark);
@@ -65,6 +67,7 @@
 html {
   --background-color: var(--background-color--dark);
   --background-color__accent: var(--background-color__accent--dark);
+  --background-color__accent--heavy: var(--background-color__accent--heavy--dark);
   --brand-color__text: var(--brand-color__text--dark);
   --code__background-color: var(--code__background-color--dark);
   --code__border-color: var(--code__border-color--dark);
@@ -91,6 +94,7 @@ html {
 html.theme--light {
   --background-color: var(--background-color--light);
   --background-color__accent: var(--background-color__accent--light);
+  --background-color__accent--heavy: var(--background-color__accent--heavy--light);
   --brand-color__text: var(--brand-color);
   --code__background-color: var(--code__background-color--light);
   --code__border-color: var(--code__border-color--light);
@@ -119,6 +123,7 @@ html.theme--light {
   html {
     --background-color: var(--background-color--light);
     --background-color__accent: var(--background-color__accent--light);
+    --background-color__accent--heavy: var(--background-color__accent--heavy--light);
     --brand-color__text: var(--brand-color);
     --code__background-color: var(--code__background-color--light);
     --code__border-color: var(--code__border-color--light);
@@ -145,6 +150,7 @@ html.theme--light {
   html.theme--dark {
     --background-color: var(--background-color--dark);
     --background-color__accent: var(--background-color__accent--dark);
+    --background-color__accent--heavy: var(--background-color__accent--heavy--dark);
     --brand-color__text: var(--brand-color__text--dark);
     --code__background-color: var(--code__background-color--dark);
     --code__border-color: var(--code__border-color--dark);
@@ -398,6 +404,30 @@ body {
 
 .dgs-header .md-search__input {
   border-radius: 1rem !important;
+}
+
+.dgs-header .md-search__scrollwrap {
+  background-color: var(--background-color);
+}
+.dgs-header .md-search-result {
+  color: var(--text-color);
+}
+.dgs-header .md-search-result__teaser {
+  color: var(--text-color--secondary);
+}
+.dgs-header .md-search-result__icon {
+  color: var(--text-color--tertiary);
+  opacity: .6;
+}
+.dgs-header .md-search-result__meta {
+  background-color: var(--background-color__accent--heavy);
+  color: var(--text-color--secondary);
+}
+.md-search-result__link:focus,
+.md-search-result__link:hover,
+.md-search-result__more summary:focus,
+.md-search-result__more summary:hover {
+  background-color: var(--background-color__accent--heavy);
 }
 
 .md-icon svg {
