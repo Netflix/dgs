@@ -38,7 +38,9 @@ theme:
   icon:
     repo: octicons/mark-github-16
 markdown_extensions:
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      linenums: true
+      linenums_style: pymdownx-inline
   - pymdownx.superfences
   - pymdownx.inlinehilite
   - pymdownx.tabbed
