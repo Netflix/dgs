@@ -188,7 +188,7 @@
 }
 .cta a:hover,
 .cta a:focus {
-  background-color: var(--link-color--hover);
+  background-color: var(--brand-color);
 }
 
 .cta a svg {
