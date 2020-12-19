@@ -26,7 +26,14 @@
   --input__text-color--light: #161616;
 
   --link-color--dark: #6FB34D;
+  --link-color--hover--dark: var(--brand-color__text--dark);
   --link-color--light: #4F932D;
+  --link-color--hover--light: var(--brand-color);
+
+  --tab-selected__color--dark: var(--brand-color__text--dark);
+  --tab-selected__color--light: var(--brand-color);
+  --tab-unselected__color--dark: var(--text-color--secondary--dark);
+  --tab-unselected__color--light: var(--text-color--secondary--light);
 
   --text-color--dark: #e0e0e0;
   --text-color--secondary--dark: #a0a0a0;
@@ -48,6 +55,9 @@ html {
   --input__placeholder-color: var(--input__placeholder-color-dark);
   --input__text-color: var(--input__text-color--dark);
   --link-color: var(--link-color--dark);
+  --link-color--hover: var(--link-color--hover--dark);
+  --tab-selected__color: var(--tab-selected__color--dark);
+  --tab-unselected__color: var(--tab-unselected__color--dark);
   --text-color: var(--text-color--dark);
   --text-color--secondary: var(--text-color--secondary--dark);
   --text-color--tertiary: var(--text-color--tertiary--dark);
@@ -63,6 +73,9 @@ html.theme--light {
   --input__placeholder-color: var(--input__placeholder-color--light);
   --input__text-color: var(--input__text-color--light);
   --link-color: var(--link-color--light);
+  --link-color--hover: var(--link-color--hover--light);
+  --tab-selected__color: var(--tab-selected__color--light);
+  --tab-unselected__color: var(--tab-unselected__color--light);
   --text-color: var(--text-color--light);
   --text-color--secondary: var(--text-color--secondary--light);
   --text-color--tertiary: var(--text-color--tertiary--light);
@@ -79,6 +92,9 @@ html.theme--light {
     --input__placeholder-color: var(--input__placeholder-color--light);
     --input__text-color: var(--input__text-color--light);
     --link-color: var(--link-color--light);
+    --link-color--hover: var(--link-color--hover--light);
+    --tab-selected__color: var(--tab-selected__color--light);
+    --tab-unselected__color: var(--tab-unselected__color--light);
     --text-color: var(--text-color--light);
     --text-color--secondary: var(--text-color--secondary--light);
     --text-color--tertiary: var(--text-color--tertiary--light);
@@ -94,6 +110,9 @@ html.theme--light {
     --input__placeholder-color: var(--input__placeholder-color-dark);
     --input__text-color: var(--input__text-color--dark);
     --link-color: var(--link-color--dark);
+    --link-color--hover: var(--link-color--hover--dark);
+    --tab-selected__color: var(--tab-selected__color--dark);
+    --tab-unselected__color: var(--tab-unselected__color--dark);
     --text-color: var(--text-color--dark);
     --text-color--secondary: var(--text-color--secondary--dark);
     --text-color--tertiary: var(--text-color--tertiary--dark);
@@ -114,13 +133,26 @@ body {
 
 
 /*
-  typesetting ===================
+  elements controlled by .md-typeset ===================
 */
 
 .md-typeset a {
   border-bottom: 2px dotted;
   color: var(--link-color);
 }
+.md-typeset a:hover,
+.md-typeset a:focus {
+  border-bottom: 2px dotted;
+  color: var(--link-color--hover);
+}
+.md-typeset a svg {
+  fill: var(--link-color);
+}
+.md-typeset a:hover svg,
+.md-typeset a:focus svg {
+  fill: var(--link-color--hover);
+}
+
 .md-typeset a:hover,
 .md-typeset a:focus {
   border-bottom: 2px solid;
@@ -132,7 +164,7 @@ body {
 }
 
 .md-typeset h2 {
-  color: var(--text-color--secondary);
+  color: var(--text-color);
   font-weight: 700;
 }
 
@@ -323,7 +355,11 @@ body {
 
 .icon--inline {
   display: inline-block;
-  vertical-align: bottom;
+  vertical-align: text-bottom;
+}
+.icon--inline svg {
+  height: 1.2em;
+  width: 1.2em;
 }
 
 
@@ -335,3 +371,26 @@ body {
   color: var(--brand-color__text);
   font-weight: 700;
 }
+
+a[title="Edit this page"] {
+  display: none;
+}
+
+
+/*
+  tabs ===================
+*/
+
+
+.md-typeset .tabbed-set>label {
+  color: var(--tab-unselected__color);
+}
+.md-typeset .tabbed-set>input:checked+label {
+  border-bottom-color: var(--tab-selected__color);
+  color: var(--tab-selected__color);
+}
+
+
+/*
+  code blocks ===================
+*/
