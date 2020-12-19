@@ -175,3 +175,15 @@
 .cta a svg {
   fill: #fff !important;
 }
+
+/*
+  footer ===================
+*/
+
+.home__footer {
+  color: var(--text-color--tertiary);
+  font-size: .7rem;
+}
+.home__footer-inner {
+  padding: 6rem 1rem;
+}
