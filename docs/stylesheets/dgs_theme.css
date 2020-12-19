@@ -372,7 +372,7 @@ body {
 .dgs-header .md-search__inner {
   padding: .5rem;
   position: relative;
-  z-index: 1;
+  z-index: 11;
 }
 .dgs-header .md-search__inner::after {
   background: var(--brand-color);
@@ -408,6 +408,7 @@ body {
 
 .dgs-header .md-search__scrollwrap {
   background-color: var(--background-color);
+  width: 100% !important;
 }
 .dgs-header .md-search-result {
   color: var(--text-color);
