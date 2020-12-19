@@ -304,6 +304,7 @@ body {
 }
 
 .dgs-header-nav__text--lower {
+  animation: md-source__facts--done 250ms ease-in;
   display: block;
   font-size: .55rem;
   font-weight: 700;
@@ -313,6 +314,10 @@ body {
   overflow: hidden;
   padding: 0;
 }
+.dgs-header-nav__text--lower time {
+  animation: md-source__fact--done 400ms ease-out;
+}
+
 
 .md-header-nav__button:focus,
 .md-header-nav__button:focus *,
