@@ -6,6 +6,9 @@
   --background-color--dark: #292929;
   --background-color--light: #f1f1f1;
 
+  --background-color__accent--dark: #2b2b2b;
+  --background-color__accent--light: #efefef;
+
   --brand-color: #4969E4;
   --brand-color__text--dark: #6989fa;
 
@@ -37,6 +40,7 @@
 
 html {
   --background-color: var(--background-color--dark);
+  --background-color__accent: var(--background-color__accent--dark);
   --brand-color__text: var(--brand-color__text--dark);
   --header-link__color: var(--header-link__color--dark);
   --header-link__color--hover: var(--header-link__color--hover--dark);
@@ -51,6 +55,7 @@ html {
 
 html.theme--light {
   --background-color: var(--background-color--light);
+  --background-color__accent: var(--background-color__accent--light);
   --brand-color__text: var(--brand-color);
   --header-link__color: var(--header-link__color--light);
   --header-link__color--hover: var(--header-link__color--hover--light);
@@ -66,6 +71,7 @@ html.theme--light {
 @media (prefers-color-scheme: light) {
   html {
     --background-color: var(--background-color--light);
+    --background-color__accent: var(--background-color__accent--light);
     --brand-color__text: var(--brand-color);
     --header-link__color: var(--header-link__color--light);
     --header-link__color--hover: var(--header-link__color--hover--light);
@@ -80,6 +86,7 @@ html.theme--light {
 
   html.theme--dark {
     --background-color: var(--background-color--dark);
+    --background-color__accent: var(--background-color__accent--dark);
     --brand-color__text: var(--brand-color__text--dark);
     --header-link__color: var(--header-link__color--dark);
     --header-link__color--hover: var(--header-link__color--hover--dark);
@@ -134,6 +141,11 @@ body {
   utilities ===================
 */
 
+[data-no-interact] {
+  cursor: default;
+  pointer-events: none;
+}
+
 .sr-only {
   height: 1px;
   left: -10000px;
@@ -144,15 +156,45 @@ body {
 }
 
 
+
 /*
   header ===================
 */
 
+.sash {
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
+.sash::after {
+  background-color: var(--background-color__accent);
+  content: '';
+  height: 100vh;
+  left: 50%;
+  position: absolute;
+  top: 0;
+  transform: skew(30deg, 0) translateX(-112%);
+  width: 22rem;
+  z-index: -1;
+}
+@media screen and (min-width: 2000px) {
+  .sash::after {
+    transform: skew(30deg, 0) translateX(-120%);
+  }
+}
+
 .dgs-header {
-  background-color: var(--background-color);
+  background-color: transparent;
   height: auto;
   padding-bottom: 1rem;
   padding-top: 1rem;
+  z-index: 2;
+}
+.md-container {
+  z-index: 2;
 }
 .dgs-header-nav {
   justify-content: center;

@@ -2,6 +2,16 @@
   header ===================
 */
 
+.sash::after {
+  transform: skew(30deg, 0) translateX(-85%);
+  width: 42rem;
+}
+@media screen and (min-width: 2000px) {
+  .sash::after {
+    transform: skew(30deg, 0) translateX(-90%);
+  }
+}
+
 
 .dgs-header {
   padding-bottom: 4.5rem;
