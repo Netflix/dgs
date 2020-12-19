@@ -72,7 +72,10 @@
     </div>
 
     <div class="dgs-header-nav__start">
-      <a class="md-header-nav__button dgs-header-nav__button dgs-getting-started" href="/getting-started/">Guides & Docs</a>
+      <a class="md-header-nav__button dgs-header-nav__button dgs-getting-started" href="/getting-started/">
+        <span class="dgs-header-nav__text--upper">Guides & Docs</span>
+        <span class="dgs-header-nav__text--lower">Last updated {{ build_date_utc.strftime('%Y-%m-%d') }}</span>
+      </a>
     </div>
 
     <!-- Repository containing source -->

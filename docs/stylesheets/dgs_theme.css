@@ -14,10 +14,10 @@
   --brand-color: #4969E4;
   --brand-color__text--dark: #6989fa;
 
-  --header-link__color--dark: #fff;
-  --header-link__color--hover--dark: var(--brand-color__text--dark);
-  --header-link__color--light: #292929;
-  --header-link__color--hover--light: var(--brand-color);
+  --header-link__color--dark: var(--brand-color__text--dark);
+  --header-link__color--hover--dark: #fff;
+  --header-link__color--light: var(--brand-color);
+  --header-link__color--hover--light: #292929;
 
   --input__bg-color--dark: #444;
   --input__placeholder-color--dark: rgba(255,255,255,0.6);
@@ -292,18 +292,27 @@ body {
   position: relative;
 }
 .dgs-header-nav__button,
-.md-source {
+.md-source,
+.md-source * {
   color: var(--header-link__color);
+  fill: var(--header-link__color);
+}
+.dgs-header-nav__button,
+.md-source {
   font-size: .8rem;
   font-weight: bold;
 }
 
-/* .dgs-header-nav__button,
-.dgs-header-nav__button>*,
-.md-source,
-.md-source>* {
-  transition: color var(--transition-timing);
-} */
+.dgs-header-nav__text--lower {
+  display: block;
+  font-size: .55rem;
+  font-weight: 700;
+  list-style-type: none;
+  margin: 0;
+  opacity: .75;
+  overflow: hidden;
+  padding: 0;
+}
 
 .md-header-nav__button:focus,
 .md-header-nav__button:focus *,
@@ -323,17 +332,18 @@ body {
 .dgs-header-nav__source {
   align-items: center;
   display: inline-flex;
+  padding-top: .4em;
   transition: opacity var(--transition-timing);
 }
 .dgs-header-nav__source {
   max-width: none;
   padding-right: 2rem;
-  padding-top: .7em;
   width: auto;
 }
 @media screen and (min-width: 1600px) {
+  .dgs-header-nav__start,
   .dgs-header-nav__source {
-    padding-top: .65em;
+    padding-top: .35em;
   }
 }
 [data-md-toggle=search]:checked~.dgs-header .dgs-header-nav__start,
