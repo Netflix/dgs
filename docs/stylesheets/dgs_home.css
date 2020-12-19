@@ -130,7 +130,48 @@
   color: var(--code__highlight-color);
 }
 
+.benefit {
+  padding-right: 3rem;
+}
 .benefit__heading {
   position: relative;
   z-index: 10;
+}
+
+
+/*
+  CTA midway ===================
+*/
+
+.cta {
+  margin: 5rem 0 5rem -1.5rem;
+}
+.cta__inner {
+  background-color: var(--brand-color);
+  border-radius: 3rem;
+  padding: 1.5rem;
+  position: relative;
+}
+.cta__inner::after {
+  background-color: inherit;
+  bottom: 0;
+  content: '';
+  left: calc(100% - 3rem);
+  position: absolute;
+  top: 0;
+  width: 100vw;
+}
+
+.cta a {
+  border-bottom-color: transparent;
+  color: #fff !important;
+  display: inline-block;
+  font-weight: bold;
+}
+.cta a:hover,
+.cta a:focus {
+  border-bottom-style: dashed;
+}
+.cta a svg {
+  fill: #fff !important;
 }
