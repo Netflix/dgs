@@ -116,8 +116,8 @@ public boolean <span class="highlight">uploadScript(DataFetchingEnvironment dfe)
 <span class="highlight">public class ExampleCustomFederation implements DgsFederationResolver</span> {
     @Override
     public DataFetcher&lt;Object&gt; entitiesFetcher() {
-        // In this example, if "Movie" is the type name,
-        // entitiesFetcher() creates and returns a new Movie instance.
+        <span class="comment">// In this example, if "Movie" is the type name,</span>
+        <span class="comment">// entitiesFetcher() creates and returns a new Movie instance.</span>
         return  env -> env.&lt;List&lt;Map&lt;String, Object&gt;&gt;g&gt;etArgument(_Entity.argumentName)
             .stream()
             .map(values -> {
