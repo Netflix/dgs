@@ -140,7 +140,41 @@ public boolean <span class="highlight">uploadScript(DataFetchingEnvironment dfe)
   </aside>
 
 
+  <h1>Q&amp;A</h1>
 
+  <div class="faq">
+    <h2 class="faq__question">How did this project begin?</h2>
+    <p class="faq__answer">The DGS framework project started at Netflix in 2019 as internal teams
+      began developing multiple GraphQL services. As 2020 wrapped up, Netflix
+      decided to open source the framework and build a community around it.</p>
+  </div>
+
+  <div class="faq">
+    <h2 class="faq__question">Is it production ready?</h2>
+    <p class="faq__answer">Yes! Netflix has been using the framework for over a year and a half in different parts of our organisation, including at large scale, before it was open sourced. We've had many releases adding new features, fixing bugs etc., and it has become a very stable platform.</p>
+  </div>
+
+  <div class="faq">
+    <h2 class="faq__question">Why not just use graphql-java?</h2>
+    <p class="faq__answer">The DGS framework is built on top of graphql-java. Graphql-java is, and should be, lower level building blocks to handle query execution and such. The DGS framework makes all this available with a convenient Spring Boot programming model.</p>
+  </div>
+
+  <div class="faq">
+    <h2 class="faq__question">The framework has a lot of Kotlin code, can I use it with Java?</h2>
+    <p class="faq__answer">The DGS framework is primarily designed to be used with Java. Although it's primarily written in Kotlin, most consumers of the framework are Java. Of course, if you are using Kotlin, that works great too.</p>
+  </div>
+
+  <div class="faq">
+    <h2 class="faq__question">Does Netflix run on a fork of the framework?</h2>
+    <p class="faq__answer">No, Netflix is using the same OSS components! We do have some extra modules plugged in for distributed tracing, logging, metrics etc, and we have documentation that shows how to implement similar integrations for your own infrastructure.</p>
+  </div>
+
+  <div class="faq">
+    <h2 class="faq__question">Why start with release version 3.x?</h2>
+    <p class="faq__answer">Netflix developed and used the framework over the course of almost two years before open sourcing, which involved many releases. After open sourcing the project, we are now using the OSS project internally as well. We did have to wipe out the git history, but continued the versioning we were already using.</p>
+  </div>
+
+{% endblock %}
 
 
 {% block footer %}

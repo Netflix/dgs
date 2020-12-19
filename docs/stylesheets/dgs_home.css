@@ -176,6 +176,20 @@
   fill: #fff !important;
 }
 
+
+/*
+  FAQ ===================
+*/
+
+.faq__question {
+  color: var(--brand-color) !important;
+  max-width: 18em;
+}
+.faq__answer {
+  max-width: 38em;
+}
+
+
 /*
   footer ===================
 */
