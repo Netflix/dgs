@@ -1,13 +1,101 @@
+It is common in GraphQL to support error reporting by adding an `errors` block to a response.
+Responses can contain both data and errors, for example when some fields where resolved successfully, but other fields had errors.
+A field with an error is set to null, and an error is added to the `errors` block.
+
+The DGS framework has an exception handler out-of-the-box that works according to the specification described in the `Error Specification` section on this page.
+This exception handler handles exceptions from data fetchers.
+Any `RuntimeException` is translated to a `GraphQLError` of type `INTERNAL`.
+For some specific exception types, a more specific GraphQL error type is used.
+
+| **Exception type** | **GraphQL error type** | **description** |
+| ------------------------ | ---------------- | --------------- |
+| `AccessDeniedException` | `PERMISSION_DENIED` | When a `@Secured` check fails |
+| `DgsEntityNotFoundException` | `NOT_FOUND` | Thrown by the developer when a requested entity (e.g. based on query parameters) isn't found |
+
+Mapping custom exceptions
+-----
+
+It can be useful to map application specific exceptions to meaningful exceptions back to the client.
+You can do this by registering a `DataFetcherExceptionHandler`.
+Make sure to either extend or delegate to the `DefaultDataFetcherExceptionHandler` class, this is the default exception handler of the framework.
+If you don't extend/delegate to this class, you lose the framework's built-in exception handler.
+
+The following is an example of a custom exception handler implementation.
+
+```java
+@Component
+public class CustomDataFetchingExceptionHandler implements DataFetcherExceptionHandler {
+    private final DefaultDataFetcherExceptionHandler defaultHandler = new DefaultDataFetcherExceptionHandler();
+
+    @Override
+    public DataFetcherExceptionHandlerResult onException(DataFetcherExceptionHandlerParameters handlerParameters) {
+        if(handlerParameters.getException() instanceof MyException) {
+            Map<String, Object> debugInfo = new HashMap<>();
+            debugInfo.put("somefield", "somevalue");
+
+            GraphQLError graphqlError = TypedGraphQLError.INTERNAL.message("This custom thing went wrong!")
+                    .debugInfo(debugInfo)
+                    .path(handlerParameters.getPath()).build();
+            return DataFetcherExceptionHandlerResult.newResult()
+                    .error(graphqlError)
+                    .build();
+        } else {
+            return defaultHandler.onException(handlerParameters);
+        }
+    }
+}
+```
+
+The following data fetcher throws `MyException`.
+
+```java
+@DgsComponent
+public class HelloDataFetcher {
+    @DgsData(parentType = "Query", field = "hello")
+    @DgsEnableDataFetcherInstrumentation(false)
+    public String hello(DataFetchingEnvironment dfe) {
+
+        throw new MyException();
+    }
+}
+```
+
+Querying the `hello` field results in the following response.
+
+```json
+{
+  "errors": [
+    {
+      "message": "This custom thing went wrong!",
+      "locations": [],
+      "path": [
+        "hello"
+      ],
+      "extensions": {
+        "errorType": "INTERNAL",
+        "debugInfo": {
+          "somefield": "somevalue"
+        }
+      }
+    }
+  ],
+  "data": {
+    "hello": null
+  }
+}
+```
+
+# Error specification
 There are two families of errors we typically encounter for GraphQL:
 
 1. **Comprehensive Errors.**
-    These are unexpected errors and do not represent a condition that the end user can be expected to fix.
-    Errors of this sort are generally applicable to many types and fields.
-    Such errors appear in the `errors` array in the GraphQL response.
+   These are unexpected errors and do not represent a condition that the end user can be expected to fix.
+   Errors of this sort are generally applicable to many types and fields.
+   Such errors appear in the `errors` array in the GraphQL response.
 1. **Errors as Data.**
-    These are errors that are informative to the end user (for example: “this title is not available in your country” or “your account has been suspended”).
-    Errors of this sort are typically specific to a particular use case and apply only to certain fields or to a certain subset of fields.
-    These errors are part of the GraphQL schema.
+   These are errors that are informative to the end user (for example: “this title is not available in your country” or “your account has been suspended”).
+   Errors of this sort are typically specific to a particular use case and apply only to certain fields or to a certain subset of fields.
+   These errors are part of the GraphQL schema.
 
 ## The GraphQLError Interface
 
@@ -113,7 +201,7 @@ The following table shows the available `ErrorType` `enum` values:
 | `UNAUTHENTICATED`     | This indicates that the request does not have valid authentication credentials but the route requires authentication. | 401 Unauthorized |
 | `UNAVAILABLE`         | This indicates that the service is currently unavailable. This is most likely a transient condition, which can be corrected by retrying with a backoff. | 503 Unavailable |
 | `UNKNOWN`             | This error may be returned, for example, when an error code received from another address space belongs to an error space that is not known in this address space. Errors raised by APIs that do not return enough error information may also be converted to this error. If a client sees an `errorType` that is not known to it, it will be interpreted as `UNKNOWN`. Unknown errors *must not* trigger any special behavior. They *may* be treated by an implementation as being equivalent to `INTERNAL`. | 520 Unknown Error |
-    
+
 <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
 The HTTP analogs are only rough mappings that are given here to provide a quick conceptual explanation of the semantics of the error by showing their analogs in the HTTP specification.
 </div>

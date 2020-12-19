@@ -9,13 +9,14 @@ nav:
   - Mutations: mutations.md
   - Code Generation: generating-code-from-schema.md
   - Async Data Fetching: data-loaders.md
-  - Error Handling: advanced/error-handling.md
+  - Error Handling: error-handling.md
   - Advanced:
-    - Java GraphQL Client: java-client.md
+    - Java GraphQL Client: advanced/java-client.md
     - Security:  advanced/security.md
     - File Uploads: advanced/file-uploads.md
     - Subscriptions: advanced/subscriptions.md
     - Interfaces and Unions: advanced/type-resolvers-for-abstract-types.md
+    - Instrumentation (Tracing, Metrics): advanced/instrumentation.md
     - Data Fetching Context: advanced/custom-datafetcher-context.md
     - Federated Testing: advanced/federated-testing.md
     - Generating Schema from Code: advanced/schema-from-code.md

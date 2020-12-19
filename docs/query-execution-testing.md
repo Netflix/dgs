@@ -111,10 +111,10 @@ You can run the tests from the IDE, or from Gradle/Maven, just like any JUnit te
 In the examples shown previously, we handcrafted the query string. 
 This is simple enough for queries that are small and straightforward. 
 However, constructing longer query strings can be tedious, specially in Java without support for multi-line Strings.
-For this, we can use the [GraphQLQueryRequest](./java-client.md) to build the graphql request in combination with the [code generation](./generating-code-from-schema.md) plugin to generate the classes needed to use the request builder. 
+For this, we can use the [GraphQLQueryRequest](advanced/java-client.md) to build the graphql request in combination with the [code generation](./generating-code-from-schema.md) plugin to generate the classes needed to use the request builder. 
 This provides a convenient type-safe way to build your queries.
 
-To set up code generation to generate the required classes to use for building your queries, follow the instructions [here](./java-client.md#type-safe-query-api).
+To set up code generation to generate the required classes to use for building your queries, follow the instructions [here](advanced/java-client.md#type-safe-query-api).
 
 Now we can write a test that uses `GraphQLQueryRequest` to build the query and extract the response using `GraphQLResponse`.
 
@@ -146,7 +146,7 @@ Now we can write a test that uses `GraphQLQueryRequest` to build the query and e
     }
     ```
 
-The `GraphQLQueryRequest` is available as part of the [graphql-client module](./java-client.md) and is used to build the query string, and wrap the response respectively. 
+The `GraphQLQueryRequest` is available as part of the [graphql-client module](advanced/java-client.md) and is used to build the query string, and wrap the response respectively. 
 You can also refer to the GraphQLClient JavaDoc for more details on the list of supported methods.
 
 ## Mocking External Service Calls in Tests

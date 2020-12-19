@@ -10,13 +10,21 @@ The plugin generates the following:
 
 To apply the plugin, update your project’s `build.gradle` file to include the following:
 ```groovy
+// Using plugins DSL
+plugins {
+	id "com.netflix.dgs.codegen" version "4.0.10"
+}
+```
+
+Alternatively, you can set up classpath dependencies in your buildscript:
+```groovy
 buildscript {
    dependencies{
-      classpath 'netflix:graphql-dgs-codegen-gradle:latest.release'
+      classpath 'com.netflix.graphql.dgs.codegen:graphql-dgs-codegen-gradle:latest.release'
    }
 }
 
-apply plugin: 'codegen-gradle-plugin'
+apply plugin: 'com.netflix.dgs.codegen'
 
 generateJava{
    schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
