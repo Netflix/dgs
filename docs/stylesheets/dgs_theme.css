@@ -357,9 +357,13 @@ body {
   position: absolute;
   right: 0;
 }
-.dgs-header .md-search__inner {
+.dgs-header .md-search__inner,
+.dgs-header .post-search-decoration,
+.dgs-header .post-search-decoration::after {
   background: var(--brand-color);
   border-radius: 3rem;
+}
+.dgs-header .md-search__inner {
   padding: .5rem;
   position: relative;
   z-index: 1;
@@ -372,6 +376,24 @@ body {
   position: absolute;
   top: 0;
   width: 100vw;
+}
+
+.dgs-header .post-search-decoration,
+.dgs-header .post-search-decoration::after {
+  height: 2.8rem;
+  position: absolute;
+  width: 50vw;
+  z-index: 10;
+}
+.dgs-header .post-search-decoration {
+  left: calc(100% + 3rem);
+  top: 5.8rem;
+}
+.dgs-header .post-search-decoration::after {
+  content: '';
+  display: block;
+  left: 3rem;
+  top: 5.9rem;
 }
 
 .dgs-header .md-search__input {

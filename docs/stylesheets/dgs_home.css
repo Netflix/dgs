@@ -36,6 +36,24 @@
   }
 }
 
+.dgs-header .post-search-decoration,
+.dgs-header .post-search-decoration::after {
+  height: 4.8rem;
+  position: absolute;
+  width: 50vw;
+  z-index: 10;
+}
+.dgs-header .post-search-decoration {
+  left: calc(100% - 7.5rem);
+  top: 9.6rem;
+}
+.dgs-header .post-search-decoration::after {
+  content: '';
+  display: block;
+  left: 4.5rem;
+  top: 9.6rem;
+}
+
 
 /*
   hero ===================
