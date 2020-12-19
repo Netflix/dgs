@@ -387,13 +387,13 @@ body {
 }
 .dgs-header .post-search-decoration {
   left: calc(100% + 3rem);
-  top: 5.8rem;
+  top: 4.6rem;
 }
 .dgs-header .post-search-decoration::after {
   content: '';
   display: block;
   left: 3rem;
-  top: 5.9rem;
+  top: 4.4rem;
 }
 
 .dgs-header .md-search__input {
@@ -472,11 +472,19 @@ a[title="Edit this page"] {
   tabs ===================
 */
 
-
 .md-typeset .tabbed-set>label {
   color: var(--tab-unselected__color);
 }
 .md-typeset .tabbed-set>input:checked+label {
   border-bottom-color: var(--tab-selected__color);
   color: var(--tab-selected__color);
+}
+
+
+/*
+  footer ===================
+*/
+
+.md-footer {
+  margin-top: 6rem;
 }
