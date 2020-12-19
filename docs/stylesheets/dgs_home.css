@@ -61,18 +61,31 @@
   }
 }
 
-.home__section--hero {
 
-}
-
-.hero__title {
+.md-typeset .hero__title {
   font-size: 2.5rem;
+  margin-bottom: 1rem;
   max-width: 7.5em;
 }
 
-.hero__subtitle {
+.md-typeset .hero__subtitle {
   color: var(--text-color--secondary);
   font-size: 1.5rem;
   font-weight: 700;
+  line-height: 1.4;
   max-width: 17em;
+}
+
+.hero__link {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.hero__link .icon--inline {
+  margin-left: -.1em;
+}
+.hero__link svg {
+  fill: var(--link-color);
 }
