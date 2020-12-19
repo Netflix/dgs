@@ -38,24 +38,22 @@
 
 
 /*
-  home content ===================
+  hero ===================
 */
 
-.home__section {
-  width: 100%;
-}
-.home__section.md-grid {
+.hero {
   padding-left: 1rem;
   padding-right: 1rem;
+  width: 100%;
 }
 @media screen and (min-width: 30em) {
-  .home__section.md-grid {
+  .hero {
     padding-left: 1.3rem;
     padding-right: 1.3rem;
   }
 }
 @media screen and (min-width: 60em) {
-  .home__section.md-grid {
+  .hero {
     padding-left: 1.4rem;
     padding-right: 1.4rem;
   }
