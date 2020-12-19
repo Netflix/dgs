@@ -12,7 +12,7 @@
   --background-color__accent--heavy--light: #e0e0e0;
 
   --brand-color: #4969E4;
-  --brand-color__text--dark: #6989fa;
+  --brand-color__text--dark: #6989ff;
 
   --header-link__color--dark: var(--brand-color__text--dark);
   --header-link__color--hover--dark: #fff;
