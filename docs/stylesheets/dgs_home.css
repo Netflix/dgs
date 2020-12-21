@@ -206,7 +206,7 @@
 }
 
 .cta a {
-  background-color: var(--link-color);
+  background-color: var(--text-color);
   border-bottom: 0 !important;
   border-radius: 3rem;
   color: #fff !important;
@@ -233,6 +233,30 @@
 
 .cta a svg {
   fill: #fff !important;
+}
+
+.cta .post-cta-decoration,
+.cta .post-cta-decoration::after {
+  background: inherit;
+  border-radius: 3rem;
+}
+
+.cta .post-cta-decoration,
+.cta .post-cta-decoration::after {
+  height: 4rem;
+  position: absolute;
+  width: 50vw;
+  z-index: 10;
+}
+.cta .post-cta-decoration {
+  left: calc(100% - 3rem);
+  top: 7rem;
+}
+.cta .post-cta-decoration::after {
+  content: '';
+  display: block;
+  left: 4rem;
+  top: 7rem;
 }
 
 
