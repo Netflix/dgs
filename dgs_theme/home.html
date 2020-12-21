@@ -24,111 +24,154 @@
   <div class="benefit benefit--codegen">
     <h2 class="benefit__heading benefit__heading--codegen">Create types from schemas with code generation</h2>
 
-    <code class="dgs-example-code">
-      <pre class="dgs-example-pre">generateJava {
-  schemaPaths = ["${projectDir}/src/main/resources/schema"]
-  packageName = 'com.example.packagename'
+    <a class="example">
+      <code class="dgs-example-code">
+        <pre class="dgs-example-pre">generateJava {
+    schemaPaths = ["${projectDir}/src/main/resources/schema"]
+    packageName = 'com.example.packagename'
 
-  <span class="highlight">generateClient = true</span> <span class="comment">// Enable typesafe query API generation</span>
-}</pre>
-    </code>
+    <span class="highlight">generateClient = true</span> <span class="comment">// Enable typesafe query API generation</span>
+  }</pre>
+      </code>
+
+      <div class="example__link" href="/generating-code-from-schema/">
+        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+        <span class="example__link-label">Explore codegen</span>
+      </div>
+    </a>
   </div>
 
   <div class="benefit benefit--annotation">
     <h2 class="benefit__heading benefit__heading--annotation">Annotation-based Spring Boot programming model</h2>
 
-    <code class="dgs-example-code">
-      <pre class="dgs-example-pre">
-<span class="highlight">@DgsComponent</span>
-public class MovieDataFetcher {
+    <a class="example">
+      <code class="dgs-example-code">
+        <pre class="dgs-example-pre">
+  <span class="highlight">@DgsComponent</span>
+  public class MovieDataFetcher {
 
-  <span class="highlight">@DgsData(parentType = "Query", field = "movies")</span>
-    public List<Movie> movies() {
-        return Lists.newArrayList()</pre>
-    </code>
+    <span class="highlight">@DgsData(parentType = "Query", field = "movies")</span>
+      public List<Movie> movies() {
+          return Lists.newArrayList()</pre>
+      </code>
+
+      <div class="example__link" href="/getting-started/#implement-a-data-fetcher">
+        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+        <span class="example__link-label">Implement a Data Fetcher</span>
+      </div>
+    </a>
   </div>
 
   <div class="benefit benefit--testing">
     <h2 class="benefit__heading benefit__heading--testing">Write query tests as unit tests</h2>
 
-    <code class="dgs-example-code">
-      <pre class="dgs-example-pre">
-import com.netflix.graphql.dgs.DgsQueryExecutor
-import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
+    <a class="example">
+      <code class="dgs-example-code">
+        <pre class="dgs-example-pre">
+  import com.netflix.graphql.dgs.DgsQueryExecutor
+  import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration
+  import org.assertj.core.api.Assertions.assertThat
+  import org.junit.jupiter.api.Test
+  import org.springframework.beans.factory.annotation.Autowired
+  import org.springframework.boot.test.context.SpringBootTest
 
-<span class="highlight">@SpringBootTest(classes = [DgsAutoConfiguration::class, ShowsDataFetcher::class])</span>
-class ShowsDataFetcherTest {
+  <span class="highlight">@SpringBootTest(classes = [DgsAutoConfiguration::class, ShowsDataFetcher::class])</span>
+  class ShowsDataFetcherTest {
 
-    @Autowired
-    lateinit var dgsQueryExecutor: DgsQueryExecutor
+      @Autowired
+      lateinit var dgsQueryExecutor: DgsQueryExecutor
 
-    <span class="highlight">@Test</span>
-    fun shows() {
-        val titles : List<String> = dgsQueryExecutor.executeAndExtractJsonPath("""
-            {
-                shows {
-                    title
-                    releaseYear
-                }
-            }
-        """.trimIndent(), "data.shows[*].title")
+      <span class="highlight">@Test</span>
+      fun shows() {
+          val titles : List<String> = dgsQueryExecutor.executeAndExtractJsonPath("""
+              {
+                  shows {
+                      title
+                      releaseYear
+                  }
+              }
+          """.trimIndent(), "data.shows[*].title")
 
-        assertThat(titles).contains("Ozark")
-    }
-}</pre>
-    </code>
+          assertThat(titles).contains("Ozark")
+      }
+  }</pre>
+      </code>
+
+      <div class="example__link" href="/query-execution-testing/">
+        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+        <span class="example__link-label">Test your queries</span>
+      </div>
+    </a>
   </div>
 
   <div class="benefit benefit--subscriptions">
     <h2 class="benefit__heading benefit__heading--subscriptions">GraphQL subscriptions over WebSockets or SSE</h2>
 
-    <code class="dgs-example-code">
-      <pre class="dgs-example-pre">
-implementation 'com.netflix.graphql.dgs:<span class="highlight">graphql-dgs-subscriptions-gateway-autoconfigure</span>:latest.release'
-</pre>
-    </code>
+    <a class="example">
+      <code class="dgs-example-code">
+        <pre class="dgs-example-pre">
+  implementation 'com.netflix.graphql.dgs:<span class="highlight">graphql-dgs-subscriptions-gateway-autoconfigure</span>:latest.release'
+  </pre>
+      </code>
+
+      <div class="example__link" href="/advanced/subscriptions/">
+        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+        <span class="example__link-label">Provide subscriptions</span>
+      </div>
+    </a>
   </div>
+
 
   <div class="benefit benefit--uploads">
     <h2 class="benefit__heading benefit__heading--uploads">File uploads via GraphQL</h2>
 
-    <code class="dgs-example-code">
-      <pre class="dgs-example-pre">
-@DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, <span class="highlight">field = "uploadScriptWithMultipartPOST"</span>)
-public boolean <span class="highlight">uploadScript(DataFetchingEnvironment dfe)</span> throws IOException {
-    MultipartFile file = dfe.getArgument("input");
-    String content = new String(file.getBytes());
-    return ! content.isEmpty();
-}</pre>
-    </code>
+    <a class="example">
+      <code class="dgs-example-code">
+        <pre class="dgs-example-pre">
+  @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, <span class="highlight">field = "uploadScriptWithMultipartPOST"</span>)
+  public boolean <span class="highlight">uploadScript(DataFetchingEnvironment dfe)</span> throws IOException {
+      MultipartFile file = dfe.getArgument("input");
+      String content = new String(file.getBytes());
+      return ! content.isEmpty();
+  }</pre>
+      </code>
+
+      <div class="example__link" href="/advanced/file-uploads/">
+        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+        <span class="example__link-label">Upload files</span>
+      </div>
+    </a>
   </div>
 
   <div class="benefit benefit--federation">
     <h2 class="benefit__heading benefit__heading--federation">Easy integration with GraphQL Federation</h2>
 
-    <code class="dgs-example-code">
-      <pre class="dgs-example-pre">
-@Component
-<span class="highlight">public class ExampleCustomFederation implements DgsFederationResolver</span> {
-    @Override
-    public DataFetcher&lt;Object&gt; entitiesFetcher() {
-        <span class="comment">// In this example, if "Movie" is the type name,</span>
-        <span class="comment">// entitiesFetcher() creates and returns a new Movie instance.</span>
-        return  env -> env.&lt;List&lt;Map&lt;String, Object&gt;&gt;g&gt;etArgument(_Entity.argumentName)
-            .stream()
-            .map(values -> {
-                if ("Movie".equals(values.get("__typename"))) {
-                    return new Movie.Builder().movieId((Integer) values.get("id")).build();
-                }
-                return null;
-            }).collect(Collectors.toList());
-    }
-}</pre>
-    </code>
+    <a class="example">
+      <code class="dgs-example-code">
+        <pre class="dgs-example-pre">
+  @Component
+  <span class="highlight">public class ExampleCustomFederation implements DgsFederationResolver</span> {
+      @Override
+      public DataFetcher&lt;Object&gt; entitiesFetcher() {
+          <span class="comment">// In this example, if "Movie" is the type name,</span>
+          <span class="comment">// entitiesFetcher() creates and returns a new Movie instance.</span>
+          return  env -> env.&lt;List&lt;Map&lt;String, Object&gt;&gt;g&gt;etArgument(_Entity.argumentName)
+              .stream()
+              .map(values -> {
+                  if ("Movie".equals(values.get("__typename"))) {
+                      return new Movie.Builder().movieId((Integer) values.get("id")).build();
+                  }
+                  return null;
+              }).collect(Collectors.toList());
+      }
+  }</pre>
+      </code>
+
+      <div class="example__link" href="/advanced/federated-testing/">
+        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+        <span class="example__link-label">Federate multiple graphs</span>
+      </div>
+    </a>
   </div>
 
 

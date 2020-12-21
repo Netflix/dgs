@@ -32,8 +32,10 @@
   --input-search__bg-color--focus--light: rgba(255, 255, 255, 0.9);
 
   --link-color--dark: #6FB34D;
+  --link-color--subtle--dark: rgba(100,100,100,.4);
   --link-color--hover--dark: var(--brand-color__text--dark);
   --link-color--light: #4F932D;
+  --link-color--subtle--light: rgba(50,50,50,.2);
   --link-color--hover--light: var(--brand-color);
 
   --tab-selected__color--dark: var(--brand-color__text--dark);
@@ -83,6 +85,7 @@ html {
   --input-search__bg-color--hover: var(--input-search__bg-color--hover--dark);
   --input-search__bg-color--focus: var(--input-search__bg-color--focus--dark);
   --link-color: var(--link-color--dark);
+  --link-color--subtle: var(--link-color--subtle--dark);
   --link-color--hover: var(--link-color--hover--dark);
   --tab-selected__color: var(--tab-selected__color--dark);
   --tab-unselected__color: var(--tab-unselected__color--dark);
@@ -110,7 +113,7 @@ html.theme--light {
   --input-search__bg-color--hover: var(--input-search__bg-color--hover--light);
   --input-search__bg-color--focus: var(--input-search__bg-color--focus--light);
   --link-color: var(--link-color--light);
-  --link-color: var(--link-color--light);
+  --link-color--subtle: var(--link-color--subtle--light);
   --link-color--hover: var(--link-color--hover--light);
   --tab-selected__color: var(--tab-selected__color--light);
   --tab-unselected__color: var(--tab-unselected__color--light);
@@ -139,6 +142,7 @@ html.theme--light {
     --input-search__bg-color--hover: var(--input-search__bg-color--hover--light);
     --input-search__bg-color--focus: var(--input-search__bg-color--focus--light);
     --link-color: var(--link-color--light);
+    --link-color--subtle: var(--link-color--subtle--light);
     --link-color--hover: var(--link-color--hover--light);
     --tab-selected__color: var(--tab-selected__color--light);
     --tab-unselected__color: var(--tab-unselected__color--light);
@@ -166,6 +170,7 @@ html.theme--light {
     --input-search__bg-color--hover: var(--input-search__bg-color--hover--dark);
     --input-search__bg-color--focus: var(--input-search__bg-color--focus--dark);
     --link-color: var(--link-color--dark);
+    --link-color--subtle: var(--link-color--subtle--dark);
     --link-color--hover: var(--link-color--hover--dark);
     --tab-selected__color: var(--tab-selected__color--dark);
     --tab-unselected__color: var(--tab-unselected__color--dark);
