@@ -44,11 +44,6 @@
       {% include "partials/logo.html" %}
     </a>
 
-    <!-- Button to open drawer -->
-    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__drawer">
-      {% include ".icons/material/menu" ~ ".svg" %}
-    </label>
-
     <!-- Header title -->
     <div class="md-header-nav__title dgs-header-nav__title" data-md-component="header-title">
       {% if config.site_name == page.title %}
@@ -86,6 +81,11 @@
         {% include "partials/source.html" %}
       </div>
     {% endif %}
+
+    <!-- Button to open drawer -->
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__drawer">
+      {% include ".icons/material/menu" ~ ".svg" %}
+    </label>
 
     <!-- Button to open search dialogue -->
     {% if "search" in config["plugins"] %}
