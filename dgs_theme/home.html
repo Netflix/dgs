@@ -24,7 +24,7 @@
   <div class="benefit benefit--codegen">
     <h2 class="benefit__heading benefit__heading--codegen">Create types from schemas with code generation</h2>
 
-    <a class="example">
+    <a class="example" href="/generating-code-from-schema/">
       <code class="dgs-example-code">
         <pre class="dgs-example-pre">generateJava {
     schemaPaths = ["${projectDir}/src/main/resources/schema"]
@@ -34,7 +34,7 @@
   }</pre>
       </code>
 
-      <div class="example__link" href="/generating-code-from-schema/">
+      <div class="example__link">
         <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
         <span class="example__link-label">Explore codegen</span>
       </div>
@@ -44,7 +44,7 @@
   <div class="benefit benefit--annotation">
     <h2 class="benefit__heading benefit__heading--annotation">Annotation-based Spring Boot programming model</h2>
 
-    <a class="example">
+    <a class="example" href="/getting-started/#implement-a-data-fetcher">
       <code class="dgs-example-code">
         <pre class="dgs-example-pre">
   <span class="highlight">@DgsComponent</span>
@@ -55,7 +55,7 @@
           return Lists.newArrayList()</pre>
       </code>
 
-      <div class="example__link" href="/getting-started/#implement-a-data-fetcher">
+      <div class="example__link">
         <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
         <span class="example__link-label">Implement a Data Fetcher</span>
       </div>
@@ -65,7 +65,7 @@
   <div class="benefit benefit--testing">
     <h2 class="benefit__heading benefit__heading--testing">Write query tests as unit tests</h2>
 
-    <a class="example">
+    <a class="example" href="/query-execution-testing/">
       <code class="dgs-example-code">
         <pre class="dgs-example-pre">
   import com.netflix.graphql.dgs.DgsQueryExecutor
@@ -97,7 +97,7 @@
   }</pre>
       </code>
 
-      <div class="example__link" href="/query-execution-testing/">
+      <div class="example__link">
         <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
         <span class="example__link-label">Test your queries</span>
       </div>
@@ -107,14 +107,14 @@
   <div class="benefit benefit--subscriptions">
     <h2 class="benefit__heading benefit__heading--subscriptions">GraphQL subscriptions over WebSockets or SSE</h2>
 
-    <a class="example">
+    <a class="example" href="/advanced/subscriptions/">
       <code class="dgs-example-code">
         <pre class="dgs-example-pre">
   implementation 'com.netflix.graphql.dgs:<span class="highlight">graphql-dgs-subscriptions-gateway-autoconfigure</span>:latest.release'
   </pre>
       </code>
 
-      <div class="example__link" href="/advanced/subscriptions/">
+      <div class="example__link">
         <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
         <span class="example__link-label">Provide subscriptions</span>
       </div>
@@ -125,7 +125,7 @@
   <div class="benefit benefit--uploads">
     <h2 class="benefit__heading benefit__heading--uploads">File uploads via GraphQL</h2>
 
-    <a class="example">
+    <a class="example" href="/advanced/file-uploads/">
       <code class="dgs-example-code">
         <pre class="dgs-example-pre">
   @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, <span class="highlight">field = "uploadScriptWithMultipartPOST"</span>)
@@ -136,7 +136,7 @@
   }</pre>
       </code>
 
-      <div class="example__link" href="/advanced/file-uploads/">
+      <div class="example__link">
         <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
         <span class="example__link-label">Upload files</span>
       </div>
@@ -146,7 +146,7 @@
   <div class="benefit benefit--federation">
     <h2 class="benefit__heading benefit__heading--federation">Easy integration with GraphQL Federation</h2>
 
-    <a class="example">
+    <a class="example" href="/advanced/federated-testing/">
       <code class="dgs-example-code">
         <pre class="dgs-example-pre">
   @Component
@@ -167,7 +167,7 @@
   }</pre>
       </code>
 
-      <div class="example__link" href="/advanced/federated-testing/">
+      <div class="example__link">
         <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
         <span class="example__link-label">Federate multiple graphs</span>
       </div>
