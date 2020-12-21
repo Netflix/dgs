@@ -46,9 +46,11 @@
   --text-color--dark: #e0e0e0;
   --text-color--secondary--dark: #a0a0a0;
   --text-color--tertiary--dark: #808080;
+  --text-color--reverse--dark: #292929;
   --text-color--light: #292929;
   --text-color--secondary--light: #606060;
   --text-color--tertiary--light: #808080;
+  --text-color--reverse--light: #e0e0e0;
 
   --code__background-color--dark: rgba(50,50,50,.7);
   --code__background-color--inline--dark: rgba(70,70,70,.7);
@@ -95,6 +97,7 @@ html {
   --text-color: var(--text-color--dark);
   --text-color--secondary: var(--text-color--secondary--dark);
   --text-color--tertiary: var(--text-color--tertiary--dark);
+  --text-color--reverse: var(--text-color--reverse--dark);
 }
 
 html.theme--light {
@@ -124,6 +127,7 @@ html.theme--light {
   --text-color: var(--text-color--light);
   --text-color--secondary: var(--text-color--secondary--light);
   --text-color--tertiary: var(--text-color--tertiary--light);
+  --text-color--reverse: var(--text-color--reverse--light);
 }
 
 @media (prefers-color-scheme: light) {
@@ -154,6 +158,7 @@ html.theme--light {
     --text-color: var(--text-color--light);
     --text-color--secondary: var(--text-color--secondary--light);
     --text-color--tertiary: var(--text-color--tertiary--light);
+    --text-color--reverse: var(--text-color--reverse--light);
   }
 
   html.theme--dark {
@@ -183,6 +188,7 @@ html.theme--light {
     --text-color: var(--text-color--dark);
     --text-color--secondary: var(--text-color--secondary--dark);
     --text-color--tertiary: var(--text-color--tertiary--dark);
+    --text-color--reverse: var(--text-color--reverse--dark);
   }
 }
 
