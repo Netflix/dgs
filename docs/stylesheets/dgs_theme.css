@@ -51,12 +51,14 @@
   --text-color--tertiary--light: #808080;
 
   --code__background-color--dark: rgba(50,50,50,.7);
+  --code__background-color--inline--dark: rgba(70,70,70,.7);
   --code__border-color--dark: #333333;
   --code__shadow-color--dark: rgba(0,0,0,.15);
   --code__text-color--dark: var(--text-color--secondary--dark);
   --code__comment-color--dark: var(--text-color--tertiary--dark);
   --code__highlight-color--dark: #FF44D6;
   --code__background-color--light: rgba(255,255,255,0.6);
+  --code__background-color--inline--light: rgba(210,210,210,0.6);
   --code__border-color--light: #e5e5e5;
   --code__shadow-color--light: rgba(0,0,0,.05);
   --code__text-color--light: var(--text-color--secondary--light);
@@ -72,6 +74,7 @@ html {
   --background-color__accent--heavy: var(--background-color__accent--heavy--dark);
   --brand-color__text: var(--brand-color__text--dark);
   --code__background-color: var(--code__background-color--dark);
+  --code__background-color--inline: var(--code__background-color--inline--dark);
   --code__border-color: var(--code__border-color--dark);
   --code__shadow-color: var(--code__shadow-color--dark);
   --code__text-color: var(--code__text-color--dark);
@@ -100,6 +103,7 @@ html.theme--light {
   --background-color__accent--heavy: var(--background-color__accent--heavy--light);
   --brand-color__text: var(--brand-color);
   --code__background-color: var(--code__background-color--light);
+  --code__background-color--inline: var(--code__background-color--inline--light);
   --code__border-color: var(--code__border-color--light);
   --code__shadow-color: var(--code__shadow-color--light);
   --code__text-color: var(--code__text-color--light);
@@ -129,6 +133,7 @@ html.theme--light {
     --background-color__accent--heavy: var(--background-color__accent--heavy--light);
     --brand-color__text: var(--brand-color);
     --code__background-color: var(--code__background-color--light);
+    --code__background-color--inline: var(--code__background-color--inline--light);
     --code__border-color: var(--code__border-color--light);
     --code__shadow-color: var(--code__shadow-color--light);
     --code__text-color: var(--code__text-color--light);
@@ -157,6 +162,7 @@ html.theme--light {
     --background-color__accent--heavy: var(--background-color__accent--heavy--dark);
     --brand-color__text: var(--brand-color__text--dark);
     --code__background-color: var(--code__background-color--dark);
+    --code__background-color--inline: var(--code__background-color--inline--dark);
     --code__border-color: var(--code__border-color--dark);
     --code__shadow-color: var(--code__shadow-color--dark);
     --code__text-color: var(--code__text-color--dark);
@@ -539,11 +545,16 @@ a[title="Edit this page"] {
   code ===================
 */
 
-/* .md-typeset code {
+.md-typeset code {
+  background-color: var(--code__background-color--inline);
+  color: var(--code__highlight-color);
+}
+
+.md-typeset pre code {
   background-color: var(--code__background-color);
   color: var(--code__text-color);
 }
-*/
+
 
 
 /*
