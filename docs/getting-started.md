@@ -18,7 +18,7 @@ Add the `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` dependency to 
 === "Gradle"
     ```groovy
     dependencies {
-    api "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:latest.release"
+        api "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:latest.release"
     }
     ```
 === "Gradle Kotlin"
@@ -45,7 +45,7 @@ Create a schema file in: `src/main/resources/schema/schema.graphqls`.
 
 ```graphql
 type Query {
-    shows(titleFilter: String): [Show]    
+    shows(titleFilter: String): [Show]
 }
 
 type Show {
@@ -65,7 +65,7 @@ Create two new classes `example.ShowsDataFetcher` and `Show` and add the followi
     ```java
     @DgsComponent
     public class ShowsDatafetcher {
-    
+
         private final List<Show> shows = List.of(
                 new Show("Stranger Things", 2016),
                 new Show("Ozark", 2017),
@@ -73,30 +73,30 @@ Create two new classes `example.ShowsDataFetcher` and `Show` and add the followi
                 new Show("Dead to Me", 2019),
                 new Show("Orange is the New Black", 2013)
         );
-    
+
         @DgsData(parentType = "Query", field = "shows")
         public List<Show> shows(@InputArgument("titleFilter") String titleFilter) {
             if(titleFilter == null) {
                 return shows;
             }
-    
+
             return shows.stream().filter(s -> s.getTitle().contains(titleFilter)).collect(Collectors.toList());
         }
     }
-    
+
     public class Show {
         private final String title;
         private final Integer releaseYear   ;
-    
+
         public Show(String title, Integer releaseYear) {
             this.title = title;
             this.releaseYear = releaseYear;
         }
-    
+
         public String getTitle() {
             return title;
         }
-    
+
         public Integer getReleaseYear() {
             return releaseYear;
         }
@@ -112,7 +112,7 @@ Create two new classes `example.ShowsDataFetcher` and `Show` and add the followi
             Show("The Crown", 2016),
             Show("Dead to Me", 2019),
             Show("Orange is the New Black", 2013))
-    
+
         @DgsData(parentType = "Query", field = "shows")
         fun shows(@InputArgument("titleFilter") titleFilter : String?): List<Show> {
             return if(titleFilter != null) {
@@ -121,7 +121,7 @@ Create two new classes `example.ShowsDataFetcher` and `Show` and add the followi
                 shows
             }
         }
-    
+
         data class Show(val title: String, val releaseYear: Int)
     }
     ```
