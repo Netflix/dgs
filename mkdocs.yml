@@ -32,6 +32,8 @@ extra_javascript:
 
 theme:
   name: material
+  palette:
+    scheme: preference
   custom_dir: dgs_theme
   favicon: images/favicon.png
   logo: images/logo--blue.svg
