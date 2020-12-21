@@ -20,7 +20,13 @@
 
 .md-header-nav__button.dgs-logo img,
 .md-header-nav__button.dgs-logo svg {
-  height: 3.5rem;
+  height: 3rem;
+}
+@media screen and (min-width: 60em) {
+  .md-header-nav__button.dgs-logo img,
+  .md-header-nav__button.dgs-logo svg {
+    height: 3.5rem;
+  }
 }
 
 .dgs-header .md-search__inner {
@@ -38,20 +44,39 @@
 
 .dgs-header .post-search-decoration,
 .dgs-header .post-search-decoration::after {
-  height: 4.8rem;
+  height: 4rem;
   position: absolute;
   width: 50vw;
   z-index: 10;
 }
 .dgs-header .post-search-decoration {
-  left: calc(100% - 7.5rem);
-  top: 8rem;
+  left: calc(100% - 8.5rem);
+  top: 7rem;
 }
 .dgs-header .post-search-decoration::after {
   content: '';
   display: block;
-  left: 4.5rem;
-  top: 8rem;
+  left: 4rem;
+  top: 6.5rem;
+}
+
+.dgs-header-nav__button[for="__search"] svg {
+  margin: 1rem;
+}
+
+@media screen and (min-width: 60em) {
+  .dgs-header .post-search-decoration,
+  .dgs-header .post-search-decoration::after {
+    height: 4.8rem;
+  }
+  .dgs-header .post-search-decoration {
+    left: calc(100% - 7.5rem);
+    top: 8rem;
+  }
+  .dgs-header .post-search-decoration::after {
+    left: 4rem;
+    top: 8rem;
+  }
 }
 
 
@@ -209,7 +234,7 @@
   background-color: var(--text-color);
   border-bottom: 0 !important;
   border-radius: 3rem;
-  color: #fff !important;
+  color: var(--text-color--reverse) !important;
   display: block;
   font-weight: bold;
   line-height: 1.3;
@@ -232,7 +257,7 @@
 }
 
 .cta a svg {
-  fill: #fff !important;
+  fill: var(--text-color--reverse) !important;
 }
 
 .cta .post-cta-decoration,
