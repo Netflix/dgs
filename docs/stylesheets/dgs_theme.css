@@ -695,3 +695,8 @@ a[title="Edit this page"] {
 .md-footer {
   margin-top: 6rem;
 }
+
+.md-footer-nav__inner {
+  padding-bottom: 3rem;
+  padding-top: 3rem;
+}
