@@ -43,16 +43,16 @@
   --tab-unselected__color--dark: var(--text-color--secondary--dark);
   --tab-unselected__color--light: var(--text-color--secondary--light);
 
-  --text-color--dark: #e0e0e0;
-  --text-color--secondary--dark: #a0a0a0;
-  --text-color--tertiary--dark: #808080;
+  --text-color--dark: rgba(255,255,255,.9);
+  --text-color--secondary--dark: rgba(205,210,225,.6);
+  --text-color--tertiary--dark: rgba(165,170,190,.6);
   --text-color--reverse--dark: var(--background-color--dark);
   --text-color--light: #292929;
   --text-color--secondary--light: #606060;
   --text-color--tertiary--light: #808080;
   --text-color--reverse--light: var(--background-color--light);
 
-  --code__background-color--dark: rgba(50,52,64,.8);
+  --code__background-color--dark: rgba(50,52,66,.8);
   --code__background-color--inline--dark: rgba(70,70,70,.7);
   --code__border-color--dark: #333333;
   --code__number-background--dark: #31343F;
