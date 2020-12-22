@@ -14,8 +14,8 @@
 
 
 .dgs-header {
-  padding-bottom: 4.5rem;
-  padding-top: 4.5rem;
+  padding-bottom: calc(2rem + 4vw);
+  padding-top: calc(2rem + 4vw);
 }
 
 .md-header-nav__button.dgs-logo img,
