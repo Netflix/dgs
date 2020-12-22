@@ -1,6 +1,7 @@
-site_name: The DGS Framework
+site_name: DGS Framework
 edit_uri: edit
 repo_name: GitHub
+repo_url: https://github.com/netflix/dgs-framework
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
@@ -22,16 +23,26 @@ nav:
     - Adding Custom Scalars: scalars.md
     - Mocking: advanced/mocking.md
     - React Example: https://github.com/Netflix/dgs-framework/tree/master/graphql-dgs-example-java
-      
+
 extra_css:
   - 'stylesheets/extra.css'
+  - 'stylesheets/dgs_theme.css'
 extra_javascript:
   - 'js/mermaid.min.js'
 
 theme:
   name: material
+  palette:
+    scheme: preference
+  custom_dir: dgs_theme
+  favicon: images/favicon.png
+  logo: images/logo--blue.svg
+  icon:
+    repo: octicons/mark-github-16
 markdown_extensions:
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      linenums: true
+      linenums_style: pymdownx-inline
   - pymdownx.superfences
   - pymdownx.inlinehilite
   - pymdownx.tabbed
