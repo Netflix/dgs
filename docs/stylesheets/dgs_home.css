@@ -14,15 +14,20 @@
 
 
 .dgs-header {
-  padding-bottom: calc(2rem + 4vw);
-  padding-top: calc(2rem + 4vw);
+  padding-bottom: calc(1rem + 4vw);
+  padding-top: calc(1rem + 4vw);
 }
 
 .md-header-nav__button.dgs-logo img,
 .md-header-nav__button.dgs-logo svg {
-  height: 3rem;
+  height: 2rem;
 }
+
 @media screen and (min-width: 60em) {
+  .dgs-header {
+    padding-bottom: calc(2rem + 4vw);
+    padding-top: calc(2rem + 4vw);
+  }
   .md-header-nav__button.dgs-logo img,
   .md-header-nav__button.dgs-logo svg {
     height: 3.5rem;
@@ -90,7 +95,7 @@
 }
 @media screen and (min-width: 30em) {
   .hero {
-    padding-left: 1.3rem;
+    padding-left: 1.8rem;
     padding-right: 1.3rem;
   }
 }
@@ -146,11 +151,6 @@
 
 .md-content {
   max-width: 100%;
-}
-@media screen and (max-width: 76.1875em) {
-  .md-content__inner {
-    margin: 0;
-  }
 }
 
 
@@ -219,7 +219,12 @@
 */
 
 .cta {
-  margin: 5rem 0 5rem -1.5rem;
+  margin: 5rem 0;
+}
+@media screen and (min-width: 60em) {
+  .cta {
+    margin-left: -1.5rem;
+  }
 }
 
 .cta a {
