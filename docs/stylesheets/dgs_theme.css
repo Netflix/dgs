@@ -208,6 +208,7 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-size: 1rem;
+  overflow-x: hidden;
 }
 
 
@@ -239,14 +240,23 @@ body {
 
 .md-typeset h1 {
   color: var(--text-color);
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
 .md-typeset h2 {
   color: var(--text-color);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
+}
+
+@media screen and (min-width: 60em) {
+  .md-typeset h1 {
+    font-size: 2.5rem;
+  }
+  .md-typeset h2 {
+    font-size: 1.5rem;
+  }
 }
 
 
