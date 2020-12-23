@@ -43,7 +43,7 @@
   --tab-unselected__color--dark: var(--text-color--secondary--dark);
   --tab-unselected__color--light: var(--text-color--secondary--light);
 
-  --text-color--dark: rgba(255,255,255,.9);
+  --text-color--dark: #EAEAEB;
   --text-color--secondary--dark: rgba(205,210,225,.6);
   --text-color--tertiary--dark: rgba(165,170,190,.6);
   --text-color--reverse--dark: var(--background-color--dark);
