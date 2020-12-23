@@ -208,7 +208,6 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-size: 1rem;
-  overflow-x: hidden;
 }
 
 
@@ -471,6 +470,7 @@ body {
   width: 100vw;
 }
 
+
 .dgs-header .post-search-decoration,
 .dgs-header .post-search-decoration::after {
   height: 2rem;
@@ -484,6 +484,7 @@ body {
     height: 2.8rem;
   }
 }
+
 .dgs-header .post-search-decoration {
   display: none;
   left: calc(100% + 3rem);
