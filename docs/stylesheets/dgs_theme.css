@@ -509,7 +509,7 @@ body {
 }
 
 .dgs-header .md-search__input {
-  border-radius: 1rem !important;
+  border-radius: 2rem !important;
 }
 
 .dgs-header .md-search__scrollwrap {
