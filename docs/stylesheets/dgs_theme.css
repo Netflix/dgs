@@ -208,6 +208,7 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-size: 1rem;
+  overflow-x: hidden;
 }
 
 
@@ -313,9 +314,11 @@ body {
   height: auto;
   padding-bottom: 1rem;
   padding-top: 1rem;
+  position: relative;
   z-index: 10;
 }
 .md-container {
+  overflow: hidden;
   z-index: 2;
 }
 .dgs-header-nav {
