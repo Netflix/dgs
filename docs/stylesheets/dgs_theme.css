@@ -713,6 +713,11 @@ a[title="Edit this page"] {
   font-weight: 400;
 }
 
+@media screen and (max-width: 44.9375em) {
+  .md-typeset>.codehilite, .md-typeset>.highlight {
+    margin-right: 1px; /* enough to cancel collapsing */
+  }
+}
 
 
 /*
