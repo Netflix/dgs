@@ -499,7 +499,14 @@ body {
   left: 3rem;
   top: 4.4rem;
 }
+.dgs-header {
+  overflow: hidden;
+}
+
 @media screen and (min-width: 700px) {
+  .dgs-header {
+    overflow: visible;
+  }
   .dgs-header .post-search-decoration {
     display: block;
   }
