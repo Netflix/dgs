@@ -286,6 +286,7 @@ body {
 
 .sash {
   bottom: 0;
+  display: none;
   left: 0;
   position: fixed;
   right: 0;
@@ -302,6 +303,11 @@ body {
   transform: skew(30deg, 0) translateX(-112%);
   width: 22rem;
   z-index: -1;
+}
+@media screen and (min-width: 60em) {
+  .sash {
+    display: block;
+  }
 }
 @media screen and (min-width: 2000px) {
   .sash::after {
