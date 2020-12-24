@@ -649,6 +649,12 @@ a[title="Edit this page"] {
   display: none;
 }
 
+[data-md-toggle=drawer]:checked~.md-container .hero,
+[data-md-toggle=drawer]:checked~.md-container .md-content {
+  opacity: .3;
+  /* pointer-events: none; */
+}
+
 @media screen and (max-width: 76.1875em) {
   [data-md-toggle=drawer]:checked~.md-overlay {
     z-index: 2;

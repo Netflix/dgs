@@ -15,7 +15,7 @@
 
 .dgs-header {
   padding-bottom: calc(1rem + 4vw);
-  padding-top: calc(1rem + 4vw);
+  padding-top: 2rem;
 }
 
 .md-header-nav__button.dgs-logo img,
@@ -26,11 +26,17 @@
 @media screen and (min-width: 60em) {
   .dgs-header {
     padding-bottom: calc(2rem + 4vw);
-    padding-top: calc(2rem + 4vw);
+    /* padding-top: calc(2rem + 4vw); */
   }
   .md-header-nav__button.dgs-logo img,
   .md-header-nav__button.dgs-logo svg {
     height: 3.5rem;
+  }
+}
+
+@media screen and (min-width: 76.25em) {
+  .dgs-header {
+    padding-top: calc(2rem + 4vw);
   }
 }
 
@@ -146,13 +152,19 @@
 
 
 /*
-  content ===================
+  content & sidebar ===================
 */
 
 .md-content {
   max-width: 100%;
+  z-index: 1;
 }
 
+@media screen and (min-width: 76.25em) {
+  .md-sidebar {
+    display: none;
+  }
+}
 
 /*
   code examples ===================
