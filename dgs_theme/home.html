@@ -20,46 +20,32 @@
 
 
 {% block content %}
-
-  <div class="benefit benefit--codegen">
-    <h2 class="benefit__heading benefit__heading--codegen">Create types from schemas with code generation</h2>
-
-    <a class="example" href="generating-code-from-schema/">
-      <code class="dgs-example-code">
-        <pre class="dgs-example-pre">generateJava {
-    schemaPaths = ["${projectDir}/src/main/resources/schema"]
-    packageName = 'com.example.packagename'
-
-    <span class="highlight">generateClient = true</span> <span class="comment">// Enable typesafe query API generation</span>
-  }</pre>
-      </code>
-
-      <div class="example__link">
-        <span class="example__link-label">Explore codegen</span>
-        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
-      </div>
-    </a>
-  </div>
-
   <div class="benefit benefit--annotation">
-    <h2 class="benefit__heading benefit__heading--annotation">Annotation-based Spring Boot programming model</h2>
+      <h2 class="benefit__heading benefit__heading--annotation">Annotation-based Spring Boot programming model</h2>
 
-    <a class="example" href="getting-started/#implement-a-data-fetcher">
-      <code class="dgs-example-code">
-        <pre class="dgs-example-pre">
-  <span class="highlight">@DgsComponent</span>
-  public class MovieDataFetcher {
+      <a class="example" href="getting-started/#implement-a-data-fetcher">
+          <code class="dgs-example-code">
+          <pre class="dgs-example-pre">
+    <span class="highlight">@DgsComponent</span>
+    public class ShowsDataFetcher {
 
-    <span class="highlight">@DgsData(parentType = "Query", field = "movies")</span>
-      public List<Movie> movies() {
-          return Lists.newArrayList()</pre>
-      </code>
+      <span class="highlight">@DgsData(parentType = "Query", field = "shows")</span>
+      public List<Show> shows(@InputArgument("titleFilter") String titleFilter) {
+        if(titleFilter == null) {
+          return shows;
+        }
 
-      <div class="example__link">
-        <span class="example__link-label">Implement a Data Fetcher</span>
-        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
-      </div>
-    </a>
+        return shows.stream()
+            .filter(s -> s.getTitle().contains(titleFilter))
+            .collect(Collectors.toList());
+      }</pre>
+          </code>
+
+          <div class="example__link">
+              <span class="example__link-label">Implement a Data Fetcher</span>
+              <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+          </div>
+      </a>
   </div>
 
   <div class="benefit benefit--testing">
@@ -68,37 +54,49 @@
     <a class="example" href="query-execution-testing/">
       <code class="dgs-example-code">
         <pre class="dgs-example-pre">
-  import com.netflix.graphql.dgs.DgsQueryExecutor
-  import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration
-  import org.assertj.core.api.Assertions.assertThat
-  import org.junit.jupiter.api.Test
-  import org.springframework.beans.factory.annotation.Autowired
-  import org.springframework.boot.test.context.SpringBootTest
-
-  <span class="highlight">@SpringBootTest(classes = [DgsAutoConfiguration::class, ShowsDataFetcher::class])</span>
-  class ShowsDataFetcherTest {
+  <span class="highlight">@SpringBootTest(classes = {DgsAutoConfiguration.class, ShowsDatafetcher.class})</span>
+  class ShowsDatafetcherTest {
 
       @Autowired
-      lateinit var dgsQueryExecutor: DgsQueryExecutor
+      DgsQueryExecutor dgsQueryExecutor;
 
       <span class="highlight">@Test</span>
-      fun shows() {
-          val titles : List<String> = dgsQueryExecutor.executeAndExtractJsonPath("""
-              {
-                  shows {
-                      title
-                      releaseYear
-                  }
-              }
-          """.trimIndent(), "data.shows[*].title")
+      void shows() {
+        List<String> titles = dgsQueryExecutor.executeAndExtractJsonPath(
+                " { shows { title releaseYear }}",
+                "data.shows[*].title");
 
-          assertThat(titles).contains("Ozark")
-      }
+        assertThat(titles).contains("Ozark");
+    }
   }</pre>
       </code>
 
       <div class="example__link">
         <span class="example__link-label">Test your queries</span>
+        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="benefit benefit--codegen">
+    <h2 class="benefit__heading benefit__heading--codegen">Create types from schemas with code generation</h2>
+
+    <a class="example" href="generating-code-from-schema/">
+      <code class="dgs-example-code">
+        <pre class="dgs-example-pre">@DgsData(parentType = <span class="highlight">DgsConstants.QUERY_TYPE</span>, field = <span class="highlight">DgsConstants.SHOW.TYPE_NAME</span>)
+    public List<Show> shows() {
+        return List.of(
+          <span class="highlight">Show.newBuilder()
+                  .title("Ozark")
+                  .releaseYear(2017)
+            .build()</span>
+        );
+    }
+    </pre>
+      </code>
+
+      <div class="example__link">
+        <span class="example__link-label">Explore codegen</span>
         <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
       </div>
     </a>
@@ -110,7 +108,10 @@
     <a class="example" href="advanced/subscriptions/">
       <code class="dgs-example-code">
         <pre class="dgs-example-pre">
-  implementation 'com.netflix.graphql.dgs:<span class="highlight">graphql-dgs-subscriptions-gateway-autoconfigure</span>:latest.release'
+  @DgsData(parentType = "Subscription", field = "stocks")
+  public Publisher<Stock> stocks() {
+    return Flux.interval(Duration.ofSeconds(1)).map({ t -> Tick(t.toString()) })
+  }
   </pre>
       </code>
 
@@ -149,22 +150,30 @@
     <a class="example" href="advanced/federated-testing/">
       <code class="dgs-example-code">
         <pre class="dgs-example-pre">
-  @Component
-  <span class="highlight">public class ExampleCustomFederation implements DgsFederationResolver</span> {
-      @Override
-      public DataFetcher&lt;Object&gt; entitiesFetcher() {
-          <span class="comment">// In this example, if "Movie" is the type name,</span>
-          <span class="comment">// entitiesFetcher() creates and returns a new Movie instance.</span>
-          return  env -> env.&lt;List&lt;Map&lt;String, Object&gt;&gt;g&gt;etArgument(_Entity.argumentName)
-              .stream()
-              .map(values -> {
-                  if ("Movie".equals(values.get("__typename"))) {
-                      return new Movie.Builder().movieId((Integer) values.get("id")).build();
-                  }
-                  return null;
-              }).collect(Collectors.toList());
-      }
-  }</pre>
+    type Show <span class="highlight">@key(fields: "id") @extends</span> {
+     id: ID @external
+     reviews: [Review]
+    }
+
+    type Review {
+     starRating: Int
+    }
+      </pre></code>
+
+      <code class="dgs-example-code">
+        <pre class="dgs-example-pre">
+
+    <span class="highlight">@DgsEntityFetcher(name = "Show")</span>
+    public Show showEntity(Map<String, Object> values) {
+        return new Show(values.get("id"));
+    }
+
+    <span class="highlight">@DgsData(parentType = "Show", field = "reviews")</span>
+    public List<Review> reviews(DataFetchingEnvironment dfe) {
+      Show show = dfe.getSource();
+      return reviewService.getReviews(show.getId());
+    }
+        </pre>
       </code>
 
       <div class="example__link">
