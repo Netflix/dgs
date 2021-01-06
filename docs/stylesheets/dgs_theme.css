@@ -341,6 +341,9 @@ body {
   overflow: hidden;
   z-index: 2;
 }
+.md-content {
+  overflow: visible;
+}
 .dgs-header-nav {
   align-items: center;
   justify-content: center;
