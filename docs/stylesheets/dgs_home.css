@@ -229,6 +229,7 @@
 
 .md-typeset .dgs-example-pre .highlight {
   color: var(--code__highlight-color);
+  white-space: pre;
 }
 .md-typeset a:hover .dgs-example-pre .highlight,
 .md-typeset a:focus .dgs-example-pre .highlight {
