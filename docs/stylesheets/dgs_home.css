@@ -15,7 +15,7 @@
 
 .dgs-header {
   padding-bottom: calc(1rem + 4vw);
-  padding-top: 2rem;
+  padding-top: calc(1rem + 1vw);
 }
 
 .md-header-nav__button.dgs-logo img,
@@ -23,20 +23,29 @@
   height: 2rem;
 }
 
+@media screen and (min-width: 30em) {
+  .dgs-header {
+    padding-top: calc(1rem + 2vw);
+  }
+}
+
 @media screen and (min-width: 60em) {
   .dgs-header {
     padding-bottom: calc(2rem + 4vw);
-    /* padding-top: calc(2rem + 4vw); */
   }
   .md-header-nav__button.dgs-logo img,
   .md-header-nav__button.dgs-logo svg {
-    height: 3.5rem;
+    height: 2.75rem;
   }
 }
 
 @media screen and (min-width: 76.25em) {
   .dgs-header {
     padding-top: calc(2rem + 4vw);
+  }
+  .md-header-nav__button.dgs-logo img,
+  .md-header-nav__button.dgs-logo svg {
+    height: 3.5rem;
   }
 }
 
@@ -95,6 +104,7 @@
 */
 
 .hero {
+  padding-bottom: 5vw;
   padding-left: 1rem;
   padding-right: 1rem;
   width: 100%;
@@ -227,6 +237,7 @@
 
 .md-typeset .benefit__heading {
   margin-bottom: -1rem;
+  margin-top: 0;
   position: relative;
   transition: all var(--transition-timing);
   z-index: 10;
@@ -243,8 +254,10 @@
   cursor: pointer;
   display: inline-flex;
   flex-direction: column;
+  margin-bottom: 10vw;
   max-width: 100%;
 }
+
 @media screen and (min-width: 60em) {
   .md-typeset a.example {
     margin-bottom: 5vw;
