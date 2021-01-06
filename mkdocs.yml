@@ -26,7 +26,7 @@ nav:
 
 extra_css:
   - 'stylesheets/extra.css'
-  - 'stylesheets/dgs_theme.css?v=3.0.2'
+  - 'stylesheets/dgs_theme.css?v=3.0.3'
 extra_javascript:
   - 'js/mermaid.min.js'
 
