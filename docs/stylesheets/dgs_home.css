@@ -229,14 +229,16 @@
 }
 
 .md-typeset .dgs-example-pre .highlight {
-  color: var(--code__highlight-color);
+  color: var(--link-color);
+  transition: all var(--transition-timing);
 }
 .md-typeset a:hover .dgs-example-pre .highlight,
 .md-typeset a:focus .dgs-example-pre .highlight {
-  color: var(--link-color--hover);
+  color: var(--code__highlight-color);
 }
 
 .md-typeset .benefit__heading {
+  color: var(--link-color);
   margin-bottom: -1rem;
   margin-top: 0;
   position: relative;
@@ -246,7 +248,7 @@
 
 .md-typeset a:hover .benefit__heading,
 .md-typeset a:focus .benefit__heading {
-  color: var(--link-color--hover) !important;
+  color: var(--link-color--hover);
 }
 
 .md-typeset a.example {
@@ -351,11 +353,10 @@
 */
 
 .faq__question {
-  color: var(--brand-color) !important;
-  max-width: 18em;
+  max-width: 20em;
 }
 .faq__answer {
-  max-width: 38em;
+  max-width: 40em;
 }
 
 
