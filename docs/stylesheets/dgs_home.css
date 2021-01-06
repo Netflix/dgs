@@ -116,7 +116,7 @@
 .md-typeset .hero__title {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  max-width: 7.5em;
+  max-width: 9.5em;
 }
 
 .md-typeset .hero__subtitle {
@@ -136,18 +136,27 @@
   }
 }
 
-.hero__link {
+.md-typeset a.hero__link {
+  background-color: var(--brand-color);
+  border: 0;
+  border-radius: 1rem;
+  color: var(--cta__text-color);
   display: inline-block;
   font-size: .7rem;
   font-weight: 600;
   letter-spacing: .05em;
+  padding: .5rem 1rem;
   text-transform: uppercase;
 }
-.hero__link .icon--inline {
+.md-typeset a.hero__link:hover,
+.md-typeset a.hero__link:focus {
+  background-color: var(--link-color--hover--dark);
+}
+.md-typeset a.hero__link .icon--inline {
   margin-left: -.1em;
 }
-.hero__link svg {
-  fill: var(--link-color);
+.md-typeset a.hero__link svg {
+  fill: var(--cta__text-color);
 }
 
 
@@ -207,14 +216,20 @@
 .md-typeset .benefit__heading {
   margin-bottom: -1rem;
   position: relative;
+  transition: all var(--transition-timing);
   z-index: 10;
+}
+
+.md-typeset a:hover .benefit__heading,
+.md-typeset a:focus .benefit__heading {
+  color: var(--link-color--hover) !important;
 }
 
 .md-typeset a.example {
   align-items: flex-start;
   border-bottom: 0 !important;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
 }
 .md-typeset .example__link {

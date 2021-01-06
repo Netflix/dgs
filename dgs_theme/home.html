@@ -21,10 +21,10 @@
 
 {% block content %}
   <div class="benefit benefit--annotation">
+    <a class="example" href="getting-started/#implement-a-data-fetcher">
       <h2 class="benefit__heading benefit__heading--annotation">Annotation-based Spring Boot programming model</h2>
 
-      <a class="example" href="getting-started/#implement-a-data-fetcher">
-          <code class="dgs-example-code">
+        <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 <span class="highlight">@DgsComponent</span>
 public class ShowsDataFetcher {
@@ -39,19 +39,19 @@ public class ShowsDataFetcher {
             .filter(s -> s.getTitle().contains(titleFilter))
             .collect(Collectors.toList());
     }</pre>
-          </code>
+      </code>
 
-          <div class="example__link">
-              <span class="example__link-label">Implement a Data Fetcher</span>
-              <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
-          </div>
-      </a>
+      <div class="example__link">
+          <span class="example__link-label">Implement a Data Fetcher</span>
+          <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+      </div>
+    </a>
   </div>
 
   <div class="benefit benefit--testing">
-    <h2 class="benefit__heading benefit__heading--testing">Write query tests as unit tests</h2>
-
     <a class="example" href="query-execution-testing/">
+      <h2 class="benefit__heading benefit__heading--testing">Write query tests as unit tests</h2>
+
       <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 <span class="highlight">@SpringBootTest(classes = {DgsAutoConfiguration.class, ShowsDatafetcher.class})</span>
@@ -79,9 +79,9 @@ class ShowsDatafetcherTest {
   </div>
 
   <div class="benefit benefit--codegen">
-    <h2 class="benefit__heading benefit__heading--codegen">Create types from schemas with code generation</h2>
-
     <a class="example" href="generating-code-from-schema/">
+      <h2 class="benefit__heading benefit__heading--codegen">Create types from schemas with code generation</h2>
+
       <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 @DgsData(parentType = <span class="highlight">DgsConstants.QUERY_TYPE</span>, field = <span class="highlight">DgsConstants.SHOW.TYPE_NAME</span>)
@@ -103,9 +103,9 @@ public List&lt;Show&gt; shows() {
   </div>
 
   <div class="benefit benefit--subscriptions">
-    <h2 class="benefit__heading benefit__heading--subscriptions">GraphQL subscriptions over WebSockets or SSE</h2>
-
     <a class="example" href="advanced/subscriptions/">
+      <h2 class="benefit__heading benefit__heading--subscriptions">GraphQL subscriptions over WebSockets or SSE</h2>
+
       <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 @DgsData(<span class="highlight">parentType = "Subscription"</span>, field = "stocks")
@@ -123,9 +123,9 @@ public Publisher<Stock> stocks() {
 
 
   <div class="benefit benefit--uploads">
-    <h2 class="benefit__heading benefit__heading--uploads">File uploads via GraphQL</h2>
-
     <a class="example" href="advanced/file-uploads/">
+      <h2 class="benefit__heading benefit__heading--uploads">File uploads via GraphQL</h2>
+
       <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, <span class="highlight">field = "uploadScriptWithMultipartPOST"</span>)
@@ -144,9 +144,9 @@ public boolean <span class="highlight">uploadScript(DataFetchingEnvironment dfe)
   </div>
 
   <div class="benefit benefit--federation">
-    <h2 class="benefit__heading benefit__heading--federation">Easy integration with GraphQL Federation</h2>
-
     <a class="example" href="advanced/federated-testing/">
+      <h2 class="benefit__heading benefit__heading--federation">Easy integration with GraphQL Federation</h2>
+
       <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 type Show <span class="highlight">@key(fields: "id") @extends</span> {
