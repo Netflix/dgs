@@ -6,7 +6,7 @@
 
 
 {% block extrahead %}
-  <link rel="stylesheet" href="stylesheets/dgs_home.css?v=3.0.6" />
+  <link rel="stylesheet" href="stylesheets/dgs_home.css?v=3.0.7" />
 {% endblock %}
 
 
@@ -20,165 +20,153 @@
 
 
 {% block content %}
-  <div class="benefit benefit--annotation">
-    <a class="example" href="getting-started/#implement-a-data-fetcher">
-      <h2 class="benefit__heading benefit__heading--annotation">Annotation-based Spring Boot programming model</h2>
+  <a class="example" href="getting-started/#implement-a-data-fetcher">
+    <h2 class="benefit__heading benefit__heading--annotation">Annotation-based Spring Boot programming model</h2>
 
-        <code class="dgs-example-code">
+      <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 <span class="highlight">@DgsComponent</span>
 public class ShowsDataFetcher {
 
-    <span class="highlight">@DgsData(parentType = "Query", field = "shows")</span>
-    public List&lt;Show&gt; shows(@InputArgument("titleFilter") String titleFilter) {
-        if(titleFilter == null) {
-            return shows;
-        }
+  <span class="highlight">@DgsData(parentType = "Query", field = "shows")</span>
+  public List&lt;Show&gt; shows(@InputArgument("titleFilter") String titleFilter) {
+      if(titleFilter == null) {
+          return shows;
+      }
 
-        return shows.stream()
-            .filter(s -> s.getTitle().contains(titleFilter))
-            .collect(Collectors.toList());
-    }</pre>
-      </code>
+      return shows.stream()
+          .filter(s -> s.getTitle().contains(titleFilter))
+          .collect(Collectors.toList());
+  }</pre>
+    </code>
 
-      <div class="example__link">
-          <span class="example__link-label">Implement a Data Fetcher</span>
-          <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
-      </div>
-    </a>
-  </div>
+    <div class="example__link">
+        <span class="example__link-label">Implement a Data Fetcher</span>
+        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+    </div>
+  </a>
 
-  <div class="benefit benefit--testing">
-    <a class="example" href="query-execution-testing/">
-      <h2 class="benefit__heading benefit__heading--testing">Write query tests as unit tests</h2>
+  <a class="example" href="query-execution-testing/">
+    <h2 class="benefit__heading benefit__heading--testing">Write query tests as unit tests</h2>
 
-      <code class="dgs-example-code">
+    <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 <span class="highlight">@SpringBootTest(classes = {DgsAutoConfiguration.class, ShowsDatafetcher.class})</span>
 class ShowsDatafetcherTest {
 
-    @Autowired
-    DgsQueryExecutor dgsQueryExecutor;
+  @Autowired
+  DgsQueryExecutor dgsQueryExecutor;
 
-    <span class="highlight">@Test</span>
-    void shows() {
-        List&lt;String&gt; titles = dgsQueryExecutor.executeAndExtractJsonPath(
-            " { shows { title releaseYear }}",
-            "data.shows[*].title");
+  <span class="highlight">@Test</span>
+  void shows() {
+      List&lt;String&gt; titles = dgsQueryExecutor.executeAndExtractJsonPath(
+          " { shows { title releaseYear }}",
+          "data.shows[*].title");
 
-        assertThat(titles).contains("Ozark");
-    }
+      assertThat(titles).contains("Ozark");
+  }
 }</pre>
-      </code>
+    </code>
 
-      <div class="example__link">
-        <span class="example__link-label">Test your queries</span>
-        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
-      </div>
-    </a>
-  </div>
+    <div class="example__link">
+      <span class="example__link-label">Test your queries</span>
+      <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+    </div>
+  </a>
 
-  <div class="benefit benefit--codegen">
-    <a class="example" href="generating-code-from-schema/">
-      <h2 class="benefit__heading benefit__heading--codegen">Create types from schemas with code generation</h2>
+  <a class="example" href="generating-code-from-schema/">
+    <h2 class="benefit__heading benefit__heading--codegen">Create types from schemas with code generation</h2>
 
-      <code class="dgs-example-code">
+    <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 @DgsData(parentType = <span class="highlight">DgsConstants.QUERY_TYPE</span>, field = <span class="highlight">DgsConstants.SHOW.TYPE_NAME</span>)
 public List&lt;Show&gt; shows() {
-    return List.of(
-      <span class="highlight">Show.newBuilder()
-          .title("Ozark")
-          .releaseYear(2017)
-          .build()</span>
-    );
+  return List.of(
+    <span class="highlight">Show.newBuilder()
+        .title("Ozark")
+        .releaseYear(2017)
+        .build()</span>
+  );
 }</pre>
-      </code>
+    </code>
 
-      <div class="example__link">
-        <span class="example__link-label">Explore codegen</span>
-        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
-      </div>
-    </a>
-  </div>
+    <div class="example__link">
+      <span class="example__link-label">Explore codegen</span>
+      <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+    </div>
+  </a>
 
-  <div class="benefit benefit--subscriptions">
-    <a class="example" href="advanced/subscriptions/">
-      <h2 class="benefit__heading benefit__heading--subscriptions">GraphQL subscriptions over WebSockets or SSE</h2>
+  <a class="example" href="advanced/subscriptions/">
+    <h2 class="benefit__heading benefit__heading--subscriptions">GraphQL subscriptions over WebSockets or SSE</h2>
 
-      <code class="dgs-example-code">
+    <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 @DgsData(<span class="highlight">parentType = "Subscription"</span>, field = "stocks")
 public Publisher<Stock> stocks() {
-    return Flux.interval(Duration.ofSeconds(1)).map({ t -> Tick(t.toString()) })
+  return Flux.interval(Duration.ofSeconds(1)).map({ t -> Tick(t.toString()) })
 }</pre>
-      </code>
+    </code>
 
-      <div class="example__link">
-        <span class="example__link-label">Provide subscriptions</span>
-        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
-      </div>
-    </a>
-  </div>
+    <div class="example__link">
+      <span class="example__link-label">Provide subscriptions</span>
+      <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+    </div>
+  </a>
 
+  <a class="example" href="advanced/file-uploads/">
+    <h2 class="benefit__heading benefit__heading--uploads">File uploads via GraphQL</h2>
 
-  <div class="benefit benefit--uploads">
-    <a class="example" href="advanced/file-uploads/">
-      <h2 class="benefit__heading benefit__heading--uploads">File uploads via GraphQL</h2>
-
-      <code class="dgs-example-code">
+    <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, <span class="highlight">field = "uploadScriptWithMultipartPOST"</span>)
 public boolean <span class="highlight">uploadScript(DataFetchingEnvironment dfe)</span> throws IOException {
-    MultipartFile file = dfe.getArgument("input");
-    String content = new String(file.getBytes());
-    return ! content.isEmpty();
+  MultipartFile file = dfe.getArgument("input");
+  String content = new String(file.getBytes());
+  return ! content.isEmpty();
 }</pre>
-      </code>
+    </code>
 
-      <div class="example__link">
-        <span class="example__link-label">Upload files</span>
-        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
-      </div>
-    </a>
-  </div>
+    <div class="example__link">
+      <span class="example__link-label">Upload files</span>
+      <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+    </div>
+  </a>
 
-  <div class="benefit benefit--federation">
-    <a class="example" href="advanced/federated-testing/">
-      <h2 class="benefit__heading benefit__heading--federation">Easy integration with GraphQL Federation</h2>
+  <a class="example" href="advanced/federated-testing/">
+    <h2 class="benefit__heading benefit__heading--federation">Easy integration with GraphQL Federation</h2>
 
-      <code class="dgs-example-code">
+    <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 type Show <span class="highlight">@key(fields: "id") @extends</span> {
-  id: ID <span class="highlight">@external</span>
-  reviews: [Review]
+id: ID <span class="highlight">@external</span>
+reviews: [Review]
 }
 
 type Review {
-  starRating: Int
+starRating: Int
 }</pre>
-      </code>
+    </code>
 
-      <code class="dgs-example-code">
+    <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 <span class="highlight">@DgsEntityFetcher(name = "Show")</span>
 public Show showEntity(Map<String, Object> values) {
-    return new Show(values.get("id"));
+  return new Show(values.get("id"));
 }
 
 <span class="highlight">@DgsData(parentType = "Show", field = "reviews")</span>
 public List&lt;Review&gt; reviews(DataFetchingEnvironment dfe) {
-    Show show = dfe.getSource();
-    return reviewService.getReviews(show.getId());
+  Show show = dfe.getSource();
+  return reviewService.getReviews(show.getId());
 }</pre>
-      </code>
+    </code>
 
-      <div class="example__link">
-        <span class="example__link-label">Federate multiple graphs</span>
-        <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
-      </div>
-    </a>
-  </div>
+    <div class="example__link">
+      <span class="example__link-label">Federate multiple graphs</span>
+      <span class="md-icon icon--inline">{% include ".icons/octicons/chevron-right-16.svg" %}</span>
+    </div>
+  </a>
+
 
 
 
