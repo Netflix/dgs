@@ -14,6 +14,12 @@
   --brand-color: #4969E4;
   --brand-color__text--dark: #6989ff;
 
+  --cta__background-color--dark: #000;
+  --cta__text-color--dark: #fff;
+  --cta__background-color--light: #292929;
+  --cta__text-color--light: #fff;
+
+
   --header-link__color--dark: var(--brand-color__text--dark);
   --header-link__color--hover--dark: #fff;
   --header-link__color--light: var(--brand-color);
@@ -77,6 +83,8 @@ html {
   --background-color__accent: var(--background-color__accent--dark);
   --background-color__accent--heavy: var(--background-color__accent--heavy--dark);
   --brand-color__text: var(--brand-color__text--dark);
+  --cta__background-color: var(--cta__background-color--dark);
+  --cta__text-color: var(--cta__text-color--dark);
   --code__background-color: var(--code__background-color--dark);
   --code__background-color--inline: var(--code__background-color--inline--dark);
   --code__border-color: var(--code__border-color--dark);
@@ -108,6 +116,8 @@ html.theme--light {
   --background-color__accent: var(--background-color__accent--light);
   --background-color__accent--heavy: var(--background-color__accent--heavy--light);
   --brand-color__text: var(--brand-color);
+  --cta__background-color: var(--cta__background-color--light);
+  --cta__text-color: var(--cta__text-color--light);
   --code__background-color: var(--code__background-color--light);
   --code__background-color--inline: var(--code__background-color--inline--light);
   --code__border-color: var(--code__border-color--light);
@@ -140,6 +150,8 @@ html.theme--light {
     --background-color__accent: var(--background-color__accent--light);
     --background-color__accent--heavy: var(--background-color__accent--heavy--light);
     --brand-color__text: var(--brand-color);
+    --cta__background-color: var(--cta__background-color--light);
+    --cta__text-color: var(--cta__text-color--light);
     --code__background-color: var(--code__background-color--light);
     --code__background-color--inline: var(--code__background-color--inline--light);
     --code__border-color: var(--code__border-color--light);
@@ -171,6 +183,8 @@ html.theme--light {
     --background-color__accent: var(--background-color__accent--dark);
     --background-color__accent--heavy: var(--background-color__accent--heavy--dark);
     --brand-color__text: var(--brand-color__text--dark);
+    --cta__background-color: var(--cta__background-color--dark);
+    --cta__text-color: var(--cta__text-color--dark);
     --code__background-color: var(--code__background-color--dark);
     --code__background-color--inline: var(--code__background-color--inline--dark);
     --code__border-color: var(--code__border-color--dark);

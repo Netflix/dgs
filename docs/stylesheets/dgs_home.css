@@ -243,10 +243,10 @@
 }
 
 .cta a {
-  background-color: var(--text-color);
+  background-color: var(--cta__background-color);
   border-bottom: 0 !important;
   border-radius: 3rem;
-  color: var(--text-color--reverse) !important;
+  color: var(--cta__text-color) !important;
   display: block;
   font-weight: bold;
   line-height: 1.3;
@@ -269,7 +269,7 @@
 }
 
 .cta a svg {
-  fill: var(--text-color--reverse) !important;
+  fill: var(--cta__text-color) !important;
 }
 
 .cta .post-cta-decoration,
