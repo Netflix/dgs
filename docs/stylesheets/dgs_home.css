@@ -101,14 +101,19 @@
 }
 @media screen and (min-width: 30em) {
   .hero {
-    padding-left: 1.8rem;
+    padding-left: 1rem;
     padding-right: 1.3rem;
   }
 }
 @media screen and (min-width: 60em) {
   .hero {
-    padding-left: 1.4rem;
+    padding-left: 1.8rem;
     padding-right: 1.4rem;
+  }
+}
+@media screen and (min-width: 76.25em) {
+  .hero {
+    padding-left: 1.4rem;
   }
 }
 

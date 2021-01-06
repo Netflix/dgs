@@ -655,6 +655,12 @@ body {
   content area ===================
 */
 
+@media screen and (max-width: 59.99em) {
+  .md-content__inner {
+    margin-left: 0;
+  }
+}
+
 @media screen and (max-width: 76.1875em) {
   .md-main__inner {
     padding-left: 1rem;
