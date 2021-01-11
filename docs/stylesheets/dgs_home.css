@@ -232,10 +232,6 @@
   color: var(--link-color);
   transition: all var(--transition-timing);
 }
-.md-typeset a:hover .dgs-example-pre .highlight,
-.md-typeset a:focus .dgs-example-pre .highlight {
-  color: var(--code__highlight-color);
-}
 
 .md-typeset .benefit__heading {
   color: var(--link-color);
@@ -244,11 +240,6 @@
   position: relative;
   transition: all var(--transition-timing);
   z-index: 10;
-}
-
-.md-typeset a:hover .benefit__heading,
-.md-typeset a:focus .benefit__heading {
-  color: var(--link-color--hover);
 }
 
 .md-typeset a.example {
@@ -269,6 +260,7 @@
 
 .md-typeset .example__link {
   border-bottom: 2px dotted;
+  color: var(--text-color--tertiary);
   font-size: .7rem;
   font-weight: 600;
   letter-spacing: .05em;
@@ -276,6 +268,20 @@
   position: relative;
   text-transform: uppercase;
   white-space: nowrap;
+}
+.md-typeset .example__link svg {
+  fill: var(--text-color--tertiary);
+}
+
+.md-typeset a:hover .benefit__heading,
+.md-typeset a:hover .example__link,
+.md-typeset a:focus .benefit__heading,
+.md-typeset a:focus .example__link {
+  color: var(--link-color--hover);
+}
+.md-typeset a:hover .example__link svg,
+.md-typeset a:focus .example__link svg {
+  fill: var(--link-color--hover);
 }
 
 
