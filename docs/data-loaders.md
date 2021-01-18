@@ -151,8 +151,8 @@ The data loader implemented above already knows how to handle a list of IDs, and
 ## Using Spring Features such as SsoCallerResolver inside a CompletableFuture
 
 When you write async data fetchers, the code will run on worker threads.
-Spring internally stores some context, for example to make the SsoCallerResolver work, on the thread context however.
-This context wouldn’t be available inside code running on a different thread, which makes features such as SsoCallerResolver not work.
+Spring internally stores some context on the local thread context. 
+This context wouldn’t be available inside code running on a different thread.
 
 Spring Boot has a solution for this: it manages a thread pool that *does* have this context carry over.
 You can inject this solution in the following way:
