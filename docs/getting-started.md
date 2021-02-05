@@ -17,14 +17,24 @@ Add the `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` dependency to 
 
 === "Gradle"
     ```groovy
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
     dependencies {
-        api "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:latest.release"
+        implementation "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:latest.release"
     }
     ```
 === "Gradle Kotlin"
     ```kotlin
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
     dependencies {
-        api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:3.0.10")
+        implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:3.0.10")
     }
     ```
 === "Maven"
@@ -35,7 +45,45 @@ Add the `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` dependency to 
         <!-- Make sure to set the latest framework version! -->
         <version>${dgs.framework.version}</version>
     </dependency>
+
+    <!-- Enable bintray in settings.xml -->
+    <settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd'
+    xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+    
+    
+        <profiles>
+            <profile>
+                <repositories>
+                    <repository>
+                        <snapshots>
+                            <enabled>false</enabled>
+                        </snapshots>
+                        <id>central</id>
+                        <name>bintray</name>
+                        <url>https://jcenter.bintray.com</url>
+                    </repository>
+                </repositories>
+                <pluginRepositories>
+                    <pluginRepository>
+                        <snapshots>
+                            <enabled>false</enabled>
+                        </snapshots>
+                        <id>central</id>
+                        <name>bintray-plugins</name>
+                        <url>https://jcenter.bintray.com</url>
+                    </pluginRepository>
+                </pluginRepositories>
+                <id>bintray</id>
+            </profile>
+        </profiles>
+        <activeProfiles>
+            <activeProfile>bintray</activeProfile>
+        </activeProfiles>
+    </settings>
     ```
+
+Note that the jcenter configuration is only needed for the [Apollo Federation on the JVM](https://github.com/apollographql/federation-jvm) library, which is currently only available on JCenter.
+They are working on publication to Maven Central.
 
 ## Creating a Schema
 
