@@ -227,8 +227,9 @@ Let's try to mock this service in the test!
     ```java
     @SpringBootTest(classes = {DgsAutoConfiguration.class, ShowsDataFetcher.class})
     public class ShowsDataFetcherTests {
-    @Autowired
-    DgsQueryExecutor dgsQueryExecutor;
+
+        @Autowired
+        DgsQueryExecutor dgsQueryExecutor;
     
         @MockBean
         ShowsService showsService;
