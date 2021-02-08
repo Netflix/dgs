@@ -75,7 +75,7 @@ Java GraphQL clients are useful for server-to-server communication and testing.
 
 Code generation creates a <code><var>field-name</var>GraphQLQuery</code> for each Query and Mutation field. 
 The <code>\*GraphQLQuery</code> query class contains fields for each parameter of the field. 
-For each type returned by a Query or Mutation, code generation creates a <code>\*Projection</code>. 
+For each type returned by a Query or Mutation, code generation creates a <code>\*ProjectionRoot</code>. 
 A projection is a builder class that specifies which fields get returned. 
 
 The following is an example usage of a generated API:
