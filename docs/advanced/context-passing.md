@@ -59,7 +59,10 @@ This example is the easiest and most common scenario, but only possible if the `
 No showdId - Use an internal type
 ----
 
-Sometimes you don't want to expose the `showId` field in the schema.
+Sometimes you don't want to expose the `showId` field in the schema, or our types are not set up to carry this field for other reasons.
+For example, for 1:1 and N:1 it's not that common to model the relationship as a key in the Java model.
+Whatever the reason is, the scenario we look at here is that we don't have the `showId` available on `Show`.
+
 If we remove `showId` from the schema and use codegen, the generated `Show` type will not have `showId` field either.
 Not having the `showId` field makes loading reviews a bit more complicated, because now we can't get the `showId` from the `Show` type using `getSource()`.
 
