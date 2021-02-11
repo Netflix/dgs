@@ -25,7 +25,10 @@ buildscript {
 }
 
 apply plugin: 'com.netflix.dgs.codegen'
+```
 
+Next, you need to add the task configuration as shown here:
+```groovy
 generateJava{
    schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
    packageName = 'com.example.packagename' // The package name to use to generate sources
