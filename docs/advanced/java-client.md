@@ -10,7 +10,7 @@ The client has two components, each usable by itself, or in combination together
 The GraphQL client wraps any HTTP client and provides easy parsing of GraphQL responses.
 The client can be used against any GraphQL endpoint (it doesn't have to be implemented with the DGS framework),
 but provides extra conveniences for parsing Gateway and DGS responses.
-This includes support for the [Errors Spec](../error-handling).
+This includes support for the [Errors Spec](/error-handling).
 
 To use the client, create an instance of `DefaultGraphQLClient`.
 
@@ -102,10 +102,10 @@ Refer to the `GrqphQLClient` JavaDoc for the complete list of supported methods.
 ### Errors
 
 The GraphQLClient checks both for HTTP level errors (based on the response status code) and the `errors` block in a GraphQL response.
-The GraphQLClient is compatible with the [Errors Spec](graphql-error-spec.md) used by the Gateway and DGS, and makes it easy to extract error information such as the ErrorType.
+The GraphQLClient is compatible with the [Errors Spec](/error-handling) used by the Gateway and DGS, and makes it easy to extract error information such as the ErrorType.
 
 For example, for following GraphQL response the GraphQLClient lets you easily get the ErrorType and ErrorDetail fields.
-Note that the `ErrorType` is an enum as specified by the [Errors Spec](advanced/graphql-error-spec).
+Note that the `ErrorType` is an enum as specified by the [Errors Spec](/error-handling).
 
 ```graphql
 {
