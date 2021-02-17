@@ -178,8 +178,8 @@ That's all the code needed, the application is ready to be tested!
 
 ## Using @InputArgument
 You may have noticed the use of `@InputArgument` to extract the input arguments from your data fetching environment.
-This should work for most scenarios as shown above, such as `String`, `Integer`, input objects, custom scalars and lists.
-If you have a list of input object types, however, you will also need to specify the collection type for proper deserialization as shown below:
+This should work for most input types, such as `String`, `Integer`, custom scalars, and input objects. 
+
 
 === "Java"
     ```java
@@ -192,6 +192,12 @@ If you have a list of input object types, however, you will also need to specify
             return Objects.requireNonNullElseGet(reviews, List::of);
         }
 
+    ```
+
+The above is applicable for most list types representing scalars or custom scalars, such as, `List<Integer>`, `List<String>`, `List<DateTime>` etc. However, if you have a list of input object types, you will also need to specify the collection type for proper deserialization as shown below:
+
+=== "Java"
+    ```java
         @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.AddReviews)
         public List<Review> addReviews(@InputArgument(value = "reviews", collectionType=SubmittedReview.class) List<SubmittedReview>    reviewsInput) {
             reviewsService.saveReviews(reviewsInput);
