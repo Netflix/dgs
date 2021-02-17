@@ -176,6 +176,33 @@ Create two new classes `example.ShowsDataFetcher` and `Show` and add the followi
 
 That's all the code needed, the application is ready to be tested!
 
+## Using @InputArgument
+You may have noticed the use of `@InputArgument` to extract the input arguments from your data fetching environment.
+This should work for most scenarios as shown above, such as `String`, `Integer`, input objects, custom scalars and lists.
+If you have a list of input object types, however, you will also need to specify the collection type for proper deserialization as shown below:
+
+=== "Java"
+    ```java
+        @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.AddReview)
+        public List<Review> addReview(@InputArgument("review")SubmittedReview reviewInput) {
+            reviewsService.saveReview(reviewInput);
+
+            List<Review> reviews = reviewsService.reviewsForShow(reviewInput.getShowId());
+
+            return Objects.requireNonNullElseGet(reviews, List::of);
+        }
+
+        @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.AddReviews)
+        public List<Review> addReviews(@InputArgument(value = "reviews", collectionType=SubmittedReview.class) List<SubmittedReview>    reviewsInput) {
+            reviewsService.saveReviews(reviewsInput);
+
+            List<Integer> showIds = reviewsInput.stream().map( review -> review.getShowId() ).collect(Collectors.toList());
+            Map<Integer, List<Review>> reviews = reviewsService.reviewsForShows(showIds);
+
+            return new ArrayList(reviews.values());
+    }
+    ```
+
 ## Test the app with GraphiQL
 
 Start the application and open a browser to http://localhost:8080/graphiql.
