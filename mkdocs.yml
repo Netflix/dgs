@@ -13,6 +13,7 @@ nav:
   - Error Handling: error-handling.md
   - Advanced:
     - Nested data fetchers: advanced/context-passing.md
+    - Hot reloading schemas: advanced/schema-reloading.md
     - Java GraphQL Client: advanced/java-client.md
     - Security:  advanced/security.md
     - File Uploads: advanced/file-uploads.md
@@ -21,7 +22,7 @@ nav:
     - Instrumentation (Tracing, Metrics): advanced/instrumentation.md
     - Data Fetching Context: advanced/custom-datafetcher-context.md
     - Federated Testing: advanced/federated-testing.md
-    - Generating Schema from Code: advanced/schema-from-code.md
+    - Dynamic schemas: advanced/dynamic-schemas.md
     - Adding Custom Scalars: scalars.md
     - Mocking: advanced/mocking.md
     - React Example: https://github.com/Netflix/dgs-framework/tree/master/graphql-dgs-example-java
