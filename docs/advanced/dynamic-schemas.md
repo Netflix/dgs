@@ -10,7 +10,8 @@ Use the `@DgsTypeDefinitionFactory` on methods inside a `@DgsComponent` class to
 The `TypeDefinitionFactory` is part of the [graphql-java](https://www.graphql-java.com) API.
 You use a `TypeDefinitionFactory` to programmatically define a schema.
 
-Note that you can mix static schema files with one or more `DgsTypeDefinitionFactory` methods. The result is a schema with all the registered types merged.
+*Note that you can mix static schema files with one or more `DgsTypeDefinitionFactory` methods.*
+The result is a schema with all the registered types merged.
 This way, you can primarily use a schema-first workflow while falling back to `@DgsTypeDefinitionFactory` to add some dynamic parts to the schema.
 
 The following is an example of a `DgsTypeDefinitionFactory`.
