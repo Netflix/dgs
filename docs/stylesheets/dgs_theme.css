@@ -436,6 +436,12 @@ body {
   width: auto;
 }
 
+@media screen and (min-width: 76.25em) {
+  .md-header-nav__source {
+    margin-left: 1.4rem;
+  }
+}
+
 @media screen and (max-width: 59.9375em) {
   .md-nav__source {
     background-color: var(--brand-color);
@@ -476,6 +482,15 @@ body {
 .md-source__repository {
   max-width: none;
   width: auto;
+}
+.md-header-nav__button {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin: .2rem;
+  padding: .4rem;
+  cursor: pointer;
+  transition: opacity 250ms;
 }
 .md-header-nav__button.dgs-logo img,
 .md-header-nav__button.dgs-logo svg {
