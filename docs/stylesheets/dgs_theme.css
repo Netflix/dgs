@@ -344,6 +344,7 @@ body {
 }
 .dgs-header-nav {
   align-items: center;
+  display: flex;
   justify-content: center;
   padding-right: 4rem;
   position: relative;
@@ -364,10 +365,26 @@ body {
   padding-right: 1.5rem;
 }
 
+@media screen and (min-width: 60em) {
+  .md-header-nav__button[for=__search] {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 76.1875em) {
   .md-nav--primary .md-nav__title[for=__drawer] {
     background-color: transparent;
   }
+}
+
+@media screen and (min-width: 76.25em) {
+  .md-header-nav__button[for=__drawer] {
+    display: none;
+  }
+}
+
+.dgs-header-nav__text--upper {
+  font-weight: bold;
 }
 
 .dgs-header-nav__text--lower {
@@ -385,6 +402,12 @@ body {
   animation: md-source__fact--done 400ms ease-out;
 }
 
+.md-header-nav__title {
+  flex-grow: 1;
+  padding: 0 1rem;
+  font-size: .9rem;
+  line-height: 2.4rem;
+}
 
 .md-header-nav__button:focus,
 .md-header-nav__button:focus *,
@@ -399,9 +422,6 @@ body {
   opacity: 1;
 }
 
-.dgs-logo {
-  display: block !important;
-}
 .dgs-logo,
 .dgs-header-nav__start,
 .dgs-header-nav__source {
@@ -472,6 +492,7 @@ body {
 .dgs-header .md-search {
   position: absolute;
   right: 0;
+  top: 0;
 }
 .dgs-header .md-search__inner,
 .dgs-header .post-search-decoration,
