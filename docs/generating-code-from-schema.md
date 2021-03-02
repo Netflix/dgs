@@ -152,6 +152,30 @@ type TickEdge {
 }
 ```
 
+### Generating Query APIs for external services
+
+Generating a Query API like above is very useful for testing your own DGS.
+The same type of API can also be useful when interacting with another GraphQL service, where your code is a client of that service.
+This is typically done using the [DGS Client](https://netflix.github.io/dgs/advanced/java-client/).
+
+When you use code generation both for your own schema, and an internal schema, you might want different code generation configuration for both.
+The recommendation is to create a separate module in your project containing the schema of the external service and the codegen configuration to just generate a Query API.
+The following is example configuration that _only_ generates a Query API.
+
+```groovy
+generateJava {
+    schemaPaths = ["${projectDir}/composed-schema.graphqls"]
+    packageName = "some.other.service"
+    generateClient = true
+    generateDataTypes = false
+    skipEntityQueries = true
+    includeQueries = ["hello"]
+    includeMutations = [""]
+    shortProjectionNames = true
+    maxProjectionDepth = 2
+}
+```
+
 # Configuring code generation
 
 Code generation has many configuration switches. 
@@ -178,6 +202,7 @@ The following table shows the Gradle configuration options, but the same options
 | skipEntityQueries | Disable generating Entity queries for federated types | false |
 | shortProjectionNames | Shorten class names of projection types. These types are not visible to the developer. | false |
 | maxProjectionDepth | Maximum projection depth to generate. Useful for (federated) schemas with very deep nesting | 10 |
+
 
 
 
