@@ -190,7 +190,7 @@ The following table shows the Gradle configuration options, but the same options
 | schemaPaths  | List of files/directories containing schemas | src/main/resources/schema |
 | packageName | Base package name of generated code | |
 | subPackageNameClient | Sub package name for generated Query API | client |
-| subPackageNameDatafetchers | Sub package name for generated data fetchers | datafetcheres |
+| subPackageNameDatafetchers | Sub package name for generated data fetchers | datafetchers |
 | subPackageNameTypes | Sub package name for generated data types | types |
 | language | Either `java` or `kotlin` | Autodetected from project |
 | typeMapping | A Map where each key is a GraphQL type, and the value the FQN of a Java class |  |
