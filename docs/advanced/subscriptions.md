@@ -25,11 +25,12 @@ The `Publisher` interface is from Reactive Streams.
 Flux is the default implementation for Spring.
 
 A complete example can be found [in `SubscriptionDatafetcher.java`](https://github.com/Netflix/dgs-framework/blob/master/graphql-dgs-example-java/src/main/java/com/netflix/graphql/dgs/example/datafetcher/SubscriptionDataFetcher.java).
-
 Next, a transport implementation must be chosen<!-- http://go/pv -->, which depends on how your app is deployed<!-- http://go/pv -->.
 
 ## WebSockets
 
+The subscription endpoint is on `/subscriptions`. 
+Normal GraphQL queries can be sent to `/graphql`, while subscription requests go to `/subscriptions`.
 The most common transport protocol for Subscriptions in the GraphQL community is WebSockets.  
 Apollo defines a [sub-protocol](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md), which is supported by client libraries and implemented by the DGS framework.
 To enable WebSockets support, add the following module to your `build.gradle`:
@@ -39,6 +40,7 @@ implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-aut
 ```
 
 Apollo client supports WebSockets through a [link](https://www.apollographql.com/docs/link/links/ws/).
-Typically you want to configure Apollo Client with both an HTTP link and a WS link, and [split](https://www.apollographql.com/docs/link/composition/#directional-composition) between them based on the query type.
- 
+Typically, you want to configure Apollo Client with both an HTTP link and a WS link, and [split](https://www.apollographql.com/docs/link/composition/#directional-composition) between them based on the query type.
+
+
 
