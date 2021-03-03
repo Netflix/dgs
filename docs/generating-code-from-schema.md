@@ -65,7 +65,7 @@ You can exclude parts of the schema from code-generation by placing them in a di
 Codegen tries to generate a type for each type it finds in the schema, with a few exceptions.
 
 1. Basic scalar types - are mapped to corresponding Java/Kotlin types (String, Integer etc.)
-2. Data and time types - are mapped to corresponding `java.time` classes
+2. Date and time types - are mapped to corresponding `java.time` classes
 3. PageInfo and RelayPageInfo - are mapped to `graphql.relay` classes
 4. Types mapped with a `typeMapping` configuration
 
