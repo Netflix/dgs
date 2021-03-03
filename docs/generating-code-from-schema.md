@@ -15,7 +15,7 @@ To apply the plugin, update your project’s `build.gradle` file to include the 
 ```groovy
 // Using plugins DSL
 plugins {
-	id "com.netflix.dgs.codegen" version "4.2.0"
+	id "com.netflix.dgs.codegen" version "[REPLACE_WITH_CODEGEN_PLUGIN_VERSION]"
 }
 ```
 
@@ -23,7 +23,7 @@ Alternatively, you can set up classpath dependencies in your buildscript:
 ```groovy
 buildscript {
    dependencies{
-      classpath 'com.netflix.graphql.dgs.codegen:graphql-dgs-codegen-gradle:4.2.0'
+      classpath 'com.netflix.graphql.dgs.codegen:graphql-dgs-codegen-gradle:[REPLACE_WITH_CODEGEN_PLUGIN_VERSION]'
    }
 }
 
@@ -38,6 +38,10 @@ generateJava{
    generateClient = true // Enable generating the type safe query API
 }
 ```
+
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
+ NOTE: Please use the latest version of the plugin, available <a href="https://github.com/Netflix/dgs-codegen/releases">here</a>
+</div>    
 
 The plugin adds a `generateJava` Gradle task that runs as part of your project’s build.
 `generateJava` generates the code in the project’s `build/generated` directory.

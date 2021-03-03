@@ -14,6 +14,7 @@ Open the project in an IDE (Intellij recommended).
 ## Adding the [DGS] Framework Dependency
 
 Add the `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` dependency to your Gradle or Maven configuration.
+dgs version: 
 
 === "Gradle"
     ```groovy
@@ -34,7 +35,7 @@ Add the `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` dependency to 
     }
 
     dependencies {
-        implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:3.0.10")
+        implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:latest.release")
     }
     ```
 === "Maven"
