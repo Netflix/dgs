@@ -20,7 +20,6 @@ dgs version:
     ```groovy
     repositories {
         mavenCentral()
-        jcenter()
     }
 
     dependencies {
@@ -31,7 +30,6 @@ dgs version:
     ```kotlin
     repositories {
         mavenCentral()
-        jcenter()
     }
 
     dependencies {
@@ -46,45 +44,11 @@ dgs version:
         <!-- Make sure to set the latest framework version! -->
         <version>${dgs.framework.version}</version>
     </dependency>
-
-    <!-- Enable bintray in settings.xml -->
-    <settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd'
-    xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
-    
-    
-        <profiles>
-            <profile>
-                <repositories>
-                    <repository>
-                        <snapshots>
-                            <enabled>false</enabled>
-                        </snapshots>
-                        <id>central</id>
-                        <name>bintray</name>
-                        <url>https://jcenter.bintray.com</url>
-                    </repository>
-                </repositories>
-                <pluginRepositories>
-                    <pluginRepository>
-                        <snapshots>
-                            <enabled>false</enabled>
-                        </snapshots>
-                        <id>central</id>
-                        <name>bintray-plugins</name>
-                        <url>https://jcenter.bintray.com</url>
-                    </pluginRepository>
-                </pluginRepositories>
-                <id>bintray</id>
-            </profile>
-        </profiles>
-        <activeProfiles>
-            <activeProfile>bintray</activeProfile>
-        </activeProfiles>
-    </settings>
     ```
 
-Note that the jcenter configuration is only needed for the [Apollo Federation on the JVM](https://github.com/apollographql/federation-jvm) library, which is currently only available on JCenter.
-They are working on publication to Maven Central.
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
+ NOTE: The DGS Framework requires Kotlin 1.4, and does not work with Kotlin 1.3. Older Spring Boot versions may bring in Kotlin 1.3.
+</div>  
 
 ## Creating a Schema
 
