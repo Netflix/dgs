@@ -135,7 +135,7 @@ Studio Edge defines `TypedError` as follows:
 | -------------------------- | ------------- | --------------- |
 | `errorType` (non-nullable) | `ErrorType!`  | an enumerated error code that is meant as a fairly coarse characterization of an error, sufficient for client-side branching logic |
 | `errorDetail`              | `ErrorDetail` | an enumeration that provides more detail about the error, including its specific cause (the elements of this enumeration are subject to change and are not documented here) |
-| `origin`                   | `String`      | the name of the source that issued the error (for instance the name of a backend service, [DGS], gateway, client library, or client app) |
+| `origin`                   | `String`      | the name of the source that issued the error (for instance the name of a backend service, DGS, gateway, client library, or client app) |
 | `debugInfo`                | `DebugInfo`   | if the request included a flag indicating that it wanted debug information, this field contains that additional information (such as a stack trace or additional reporting from an upstream service) |
 | `debugUri`                 | `String`      | the URI of a page that contains additional information that may be helpful in debugging the error (this could be a generic page for errors of this sort, or a specific page about the particular error instance) |
 

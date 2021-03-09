@@ -2,7 +2,7 @@
      See the last line of several pages in this guide.
      If you change the definitions in this file, the changes apply automatically to every file that imports these definitions. -->
 [AWS]:                           javascript:void(0); "Amazon Web Services"
-[DGS]:                           http://go/dgs       "(Domain Graph Service) The method by which service owners expose the entity or entities they intend to incorporate into the federated Content Engineering Graph."
+DGS:                           http://go/dgs       "(Domain Graph Service) The method by which service owners expose the entity or entities they intend to incorporate into the federated Content Engineering Graph."
 [Domain Graph Service]:          http://go/dgs       "A Domain Graph Service is the method by which service owners expose the entity or entities they intend to incorporate into the federated Content Engineering Graph."
 [Domain Graph Services]:         http://go/dgs       "A Domain Graph Service is the method by which service owners expose the entity or entities they intend to incorporate into the federated Content Engineering Graph."
 [introspect]:                    https://graphql.org/learn/introspection/ "Introspection is a method of querying a GraphQL schema for information about the schema itself."

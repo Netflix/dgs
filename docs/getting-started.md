@@ -11,7 +11,7 @@ The only Spring dependency needed is Spring Web.
 
 Open the project in an IDE (Intellij recommended).
 
-## Adding the [DGS] Framework Dependency
+## Adding the DGS Framework Dependency
 
 Add the `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` dependency to your Gradle or Maven configuration.
 dgs version: 
