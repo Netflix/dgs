@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 
 @DgsDataLoader(name = "directors")
 public class DirectorsDataLoader implements BatchLoader<String, Director> {
-    
+
     @Autowired
     DirectorServiceClient directorServiceClient;
 
@@ -108,7 +108,7 @@ public class DirectorDataFetcher {
 
         DataLoader<String, Director> dataLoader = dfe.getDataLoader("directors");
         String id = dfe.getArgument("directorId");
-        
+
         return dataLoader.load(id);
     }
 }
@@ -116,14 +116,14 @@ public class DirectorDataFetcher {
 
 The code above is mostly just a regular data fetcher.
 However, instead of actually loading the data from another service or database, it uses the data loader to do so.
-You can retrieve a data loader from the `DataFetchingEnvironment` with its `getDataLoader()` method. 
-This requires  you to pass the name of the data loader as a string. 
+You can retrieve a data loader from the `DataFetchingEnvironment` with its `getDataLoader()` method.
+This requires  you to pass the name of the data loader as a string.
 The other change to the data fetcher is that it returns a `CompletableFuture` instead of the actual type you’re loading.
 This enables the framework to do work asynchronously, and is a requirement for batching<!-- http://go/pv -->.  
 
 ### Using the DgsDataFetchingEnvironment
-You can also get the data loader in a type-safe way by using our custom `DgsDataFetchingEnvironment`, which is an enhanced version of `DataFetchingEnvironment` in `graphql-java`, and provides `getDataLoader()` using the classname. 
- 
+You can also get the data loader in a type-safe way by using our custom `DgsDataFetchingEnvironment`, which is an enhanced version of `DataFetchingEnvironment` in `graphql-java`, and provides `getDataLoader()` using the classname.
+
 ```java
 @DgsComponent
 public class DirectorDataFetcher {
@@ -133,7 +133,7 @@ public class DirectorDataFetcher {
 
         DataLoader<String, Director> dataLoader = dfe.getDataLoader(DirectorsDataLoader.class);
         String id = dfe.getArgument("directorId");
-        
+
         return dataLoader.load(id);
     }
 }
@@ -141,18 +141,19 @@ public class DirectorDataFetcher {
 
 
 The same works if you have `@DgsDataLoader` defined as a lambda instead of on a class as shown [here](data-loaders.md#provide-as-lambda).
-If you have multiple `@DgsDataLoader` lambdas defined as fields in the same class, you won't be able to use this feature. 
+If you have multiple `@DgsDataLoader` lambdas defined as fields in the same class, you won't be able to use this feature.
 It is recommended that you use `getDataLoader()` with the loader name passed as a string in such cases.
 
 Note that there is no logic present about how batching works exactly; this is all handled by the framework!
 The framework will recognize that many directors need to be loaded when many movies are loaded, batch up all the calls to the data loader, and call the data loader with a list of IDs instead of a single ID.
 The data loader implemented above already knows how to handle a list of IDs, and that way it avoids the N+1 problem.
 
-## Using Spring Features such as SsoCallerResolver inside a CompletableFuture
+## Using Spring Features such as SecurityContextHolder inside a CompletableFuture
 
 When you write async data fetchers, the code will run on worker threads.
-Spring internally stores some context, for example to make the SsoCallerResolver work, on the thread context however.
-This context wouldn’t be available inside code running on a different thread, which makes features such as SsoCallerResolver not work.
+Spring internally stores some context, for example to make the SecurityContextHolder work, on the thread context however.
+This context wouldn’t be available inside code running on a different thread, which makes fetching the Principal associated
+with the request not work.
 
 Spring Boot has a solution for this: it manages a thread pool that *does* have this context carry over.
 You can inject this solution in the following way:
@@ -202,5 +203,3 @@ By default it<!-- "it" is ambiguous here --> does not specify a maximum batch si
 Data loaders are wired up<!-- http://go/pv --> to only span a single request.
 This is what most use cases require.
 Spanning<!-- http://go/pv --> multiple requests can introduce difficult-to-debug issues.
-
-
