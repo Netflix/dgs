@@ -11,7 +11,7 @@ The only Spring dependency needed is Spring Web.
 
 Open the project in an IDE (Intellij recommended).
 
-## Adding the [DGS] Framework Dependency
+## Adding the DGS Framework Dependency
 
 Add the `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` dependency to your Gradle or Maven configuration.
 dgs version: 
@@ -199,5 +199,7 @@ You could now connect a UI to your backend as well, for example using [React and
 
 Now that you have a first GraphQL service running, we recommend improving this further by doing the following:
 
+* Learn more about [datafetchers](../datafetching)
 * Use the [Gradle CodeGen plugin](../generating-code-from-schema) - this will generate the data types for you.
 * Write [query tests](../query-execution-testing) in JUnit
+* Look at [example projects](../examples)

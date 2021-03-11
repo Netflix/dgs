@@ -7,12 +7,12 @@ There are two primary reasons to do so:
 
 An argument can be made that this type of mock data should live in the UI code.
 It’s for their tests after all.
-However, by pulling it into the [DGS], the owners of the data can provide test data that can be used by many teams.
+However, by pulling it into the DGS, the owners of the data can provide test data that can be used by many teams.
 The two approaches are also not mutually exclusive.
 
 ## [GraphQL] Mocking
 
-The library in the [DGS] framework supports:
+The library in the DGS framework supports:
 
 1. returning static data from mocks
 2. returning generated data for simple types (like String fields)

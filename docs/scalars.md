@@ -1,5 +1,5 @@
 
-It is easy to add a custom scalar type in the [DGS] framework:
+It is easy to add a custom scalar type in the DGS framework:
 Create a class that implements the `graphql.schema.Coercing` interface and annotate it with the `@DgsScalar` annotation.
 Also make sure the scalar type is defined in your [GraphQL] schema!
 
