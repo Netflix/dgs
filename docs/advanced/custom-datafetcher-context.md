@@ -36,7 +36,7 @@ public String withContext(DataFetchingEnvironment dfe) {
 }
 ```
 
-Similarly it<!-- "it" is ambiguous here --> can be used<!-- http://go/pv --> in a DataLoader.
+Similarly, custom context can be used in a DataLoader.
 
 ```java
 @DgsDataLoader(name = "exampleLoaderWithContext")

@@ -199,5 +199,7 @@ You could now connect a UI to your backend as well, for example using [React and
 
 Now that you have a first GraphQL service running, we recommend improving this further by doing the following:
 
+* Learn more about [datafetchers](../datafetching)
 * Use the [Gradle CodeGen plugin](../generating-code-from-schema) - this will generate the data types for you.
 * Write [query tests](../query-execution-testing) in JUnit
+* Look at [example projects](../examples)
