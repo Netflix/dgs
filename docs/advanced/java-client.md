@@ -86,7 +86,7 @@ public List<TicksConnection> getData() {
 ```
 
 The `GraphQLClient` provides methods to parse and retrieve data and errors in a variety of ways.
-Refer to the `GrqphQLClient` JavaDoc for the complete list of supported methods.
+Refer to the `GraphQLClient` JavaDoc for the complete list of supported methods.
 
                                                                                                                  
 | method  | description  | example | 
