@@ -69,7 +69,7 @@ List<Show> shows() {
 }
 
 @DgsData(parentType = "Show", field = "actors")
-List<Actor> actors(DgsDataFetchtingEnvironment dfe) {
+List<Actor> actors(DgsDataFetchingEnvironment dfe) {
 
    Show show = dfe.getSource();
    actorsService.forShow(show.getId());
