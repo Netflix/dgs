@@ -43,4 +43,3 @@ public class HelloMockProvider implements MockProvider {
 ```
 
 If you run the application again and test the `hello` query, you will see that it now returns the mock data.
-This is useful while a data fetcher isn’t implemented yet, but the true power comes from enabling<!-- http://go/pv --> the mocks remotely.
