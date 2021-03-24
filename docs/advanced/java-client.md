@@ -80,7 +80,7 @@ public List<TicksConnection> getData() {
         return new HttpResponse(exchange.getStatusCodeValue(), exchange.getBody());
     }); 
 
-    TicksConnection ticks = graphQLResponse.extractValueAsObject("ticks", TicksConnection.class);
+    TicksConnection ticks = response.extractValueAsObject("ticks", TicksConnection.class);
     return ticks;
 }
 ```
