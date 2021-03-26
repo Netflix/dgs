@@ -4,17 +4,17 @@ That said, there are scenarios where generating the schema from another source, 
 
 ## Creating a schema from code
 
-Create a schema from code by using the `@DgsTypeDefinitionFactory` annotation.
-Use the `@DgsTypeDefinitionFactory` on methods inside a `@DgsComponent` class to provide a `TypeDefinitionFactory`.
+Create a schema from code by using the `@DgsTypeDefinitionRegistry` annotation.
+Use the `@DgsTypeDefinitionRegistry` on methods inside a `@DgsComponent` class to provide a `TypeDefinitionRegistry`.
 
-The `TypeDefinitionFactory` is part of the [graphql-java](https://www.graphql-java.com) API.
-You use a `TypeDefinitionFactory` to programmatically define a schema.
+The `TypeDefinitionRegistry` is part of the [graphql-java](https://www.graphql-java.com) API.
+You use a `TypeDefinitionRegistry` to programmatically define a schema.
 
-*Note that you can mix static schema files with one or more `DgsTypeDefinitionFactory` methods.*
+*Note that you can mix static schema files with one or more `DgsTypeDefinitionRegistry` methods.*
 The result is a schema with all the registered types merged.
-This way, you can primarily use a schema-first workflow while falling back to `@DgsTypeDefinitionFactory` to add some dynamic parts to the schema.
+This way, you can primarily use a schema-first workflow while falling back to `@DgsTypeDefinitionRegistry` to add some dynamic parts to the schema.
 
-The following is an example of a `DgsTypeDefinitionFactory`.
+The following is an example of a `DgsTypeDefinitionRegistry`.
 
 ```java
 @DgsComponent
@@ -66,7 +66,7 @@ FieldCoordinates coordinates = FieldCoordinates.coordinates("Query", "randomNumb
 
 It's helpful to combine creating schemas/datafetchers at runtime with dynamically re-loading the schema in some very rare use-cases.  
 You can achieve this by implementing your own `ReloadSchemaIndicator`. 
-You can use an external signal (e.g., reading from a message queue) to have the framework recreate the schema by executing the `@DgsTypeDefinitionFactory` and `@DgsCodeRegistry` again. 
+You can use an external signal (e.g., reading from a message queue) to have the framework recreate the schema by executing the `@DgsTypeDefinitionRegistry` and `@DgsCodeRegistry` again. 
 If these methods create the schema based on external input, you have a system that can dynamically rewire its API.
 
 For obvious reasons, this isn't an approach that you should use for typical APIs; stable APIs are generally the thing to aim for!
