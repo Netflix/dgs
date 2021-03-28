@@ -12,6 +12,7 @@ nav:
   - Async Data Fetching: data-loaders.md
   - Error Handling: error-handling.md
   - Examples: examples.md
+  - Videos: videos.md
   - Advanced:
     - Nested data fetchers: advanced/context-passing.md
     - Hot reloading schemas: advanced/schema-reloading.md
