@@ -78,7 +78,7 @@
   --transition-timing: 125ms;
 }
 
-html {
+body {
   --background-color: var(--background-color--dark);
   --background-color__accent: var(--background-color__accent--dark);
   --background-color__accent--heavy: var(--background-color__accent--heavy--dark);
@@ -111,7 +111,7 @@ html {
   --text-color--reverse: var(--text-color--reverse--dark);
 }
 
-html.theme--light {
+body[data-md-color-scheme="default"] {
   --background-color: var(--background-color--light);
   --background-color__accent: var(--background-color__accent--light);
   --background-color__accent--heavy: var(--background-color__accent--heavy--light);
@@ -145,7 +145,7 @@ html.theme--light {
 }
 
 @media (prefers-color-scheme: light) {
-  html {
+  body {
     --background-color: var(--background-color--light);
     --background-color__accent: var(--background-color__accent--light);
     --background-color__accent--heavy: var(--background-color__accent--heavy--light);
@@ -178,7 +178,7 @@ html.theme--light {
     --text-color--reverse: var(--text-color--reverse--light);
   }
 
-  html.theme--dark {
+  body[data-md-color-scheme="slate"] {
     --background-color: var(--background-color--dark);
     --background-color__accent: var(--background-color__accent--dark);
     --background-color__accent--heavy: var(--background-color__accent--heavy--dark);
@@ -365,7 +365,6 @@ body {
   font-weight: bold;
 }
 .dgs-header-nav__button[for="__drawer"] {
-  padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
 
@@ -384,6 +383,9 @@ body {
 @media screen and (min-width: 76.25em) {
   .md-header-nav__button[for=__drawer] {
     display: none;
+  }
+  form.md-header__option {
+    padding-right: 1rem;
   }
 }
 
@@ -436,7 +438,7 @@ body {
 }
 .dgs-header-nav__source {
   max-width: none;
-  padding-right: 2rem;
+  padding-right: 1.5rem;
   width: auto;
 }
 
@@ -607,6 +609,9 @@ body {
 
 .md-icon svg {
   fill: var(--text-color);
+}
+.md-header__button.md-icon svg {
+  fill: var(--header-link__color);
 }
 .md-search__input~.md-search__icon svg {
   fill: var(--input__placeholder-color--dark);
