@@ -795,3 +795,26 @@ a[title="Edit this page"] {
   padding-bottom: 3rem;
   padding-top: 3rem;
 }
+
+
+/*
+  youtube embeds ===================
+*/
+
+.iframe-video__container {
+  border: 3px solid var(--brand-color);
+  border-radius: 8px;
+  margin-bottom: 3rem;
+  padding-top: 56.25%;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.iframe-video {
+  border: 0;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
