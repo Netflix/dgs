@@ -38,12 +38,30 @@ extra_javascript:
 theme:
   name: material
   palette:
-    scheme: preference
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: light green
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: light green
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
   custom_dir: dgs_theme
   favicon: images/favicon.png
   logo: images/logo--blue.svg
   icon:
     repo: octicons/mark-github-16
+
+
 markdown_extensions:
   - pymdownx.highlight:
       linenums: true
