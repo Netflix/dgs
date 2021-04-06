@@ -14,7 +14,7 @@ Open the project in an IDE (Intellij recommended).
 ## Adding the DGS Framework Dependency
 
 Add the `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` dependency to your Gradle or Maven configuration.
-dgs version: 
+dgs version:
 
 === "Gradle"
     ```groovy
@@ -48,7 +48,7 @@ dgs version:
 
 <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
  NOTE: The DGS Framework requires Kotlin 1.4, and does not work with Kotlin 1.3. Older Spring Boot versions may bring in Kotlin 1.3.
-</div>  
+</div>
 
 ## Creating a Schema
 
@@ -143,7 +143,7 @@ That's all the code needed, the application is ready to be tested!
 
 ## Using @InputArgument
 You may have noticed the use of `@InputArgument` to extract the input arguments from your data fetching environment.
-This should work for most input types, such as `String`, `Integer`, custom scalars, and input objects. 
+This should work for most input types, such as `String`, `Integer`, custom scalars, and input objects.
 
 
 === "Java"

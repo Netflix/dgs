@@ -10,7 +10,7 @@ If you created a project with Spring Initializr this configuration should alread
     dependencies {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
-    
+
     test {
         useJUnitPlatform()
     }
@@ -21,7 +21,7 @@ If you created a project with Spring Initializr this configuration should alread
         useJUnitPlatform()
     }
     ```
-=== "Maven" 
+=== "Maven"
     ```xml
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -39,24 +39,24 @@ Create a test class with the following contents to test the `ShowsDatafetcher` f
     import org.junit.jupiter.api.Test;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.boot.test.context.SpringBootTest;
-    
+
     import java.util.List;
-    
+
     import static org.assertj.core.api.Assertions.assertThat;
-    
-    
+
+
     @SpringBootTest(classes = {DgsAutoConfiguration.class, ShowsDatafetcher.class})
     class ShowsDatafetcherTest {
-    
+
         @Autowired
         DgsQueryExecutor dgsQueryExecutor;
-    
+
         @Test
         void shows() {
             List<String> titles = dgsQueryExecutor.executeAndExtractJsonPath(
                     " { shows { title releaseYear }}",
                     "data.shows[*].title");
-    
+
             assertThat(titles).contains("Ozark");
         }
     }
@@ -69,13 +69,13 @@ Create a test class with the following contents to test the `ShowsDatafetcher` f
     import org.junit.jupiter.api.Test
     import org.springframework.beans.factory.annotation.Autowired
     import org.springframework.boot.test.context.SpringBootTest
-    
+
     @SpringBootTest(classes = [DgsAutoConfiguration::class, ShowsDataFetcher::class])
     class ShowsDataFetcherTest {
-    
+
         @Autowired
         lateinit var dgsQueryExecutor: DgsQueryExecutor
-    
+
         @Test
         fun shows() {
             val titles : List<String> = dgsQueryExecutor.executeAndExtractJsonPath("""
@@ -86,7 +86,7 @@ Create a test class with the following contents to test the `ShowsDatafetcher` f
                     }
                 }
             """.trimIndent(), "data.shows[*].title")
-    
+
             assertThat(titles).contains("Ozark")
         }
     }
@@ -95,7 +95,7 @@ Create a test class with the following contents to test the `ShowsDatafetcher` f
 The `@SpringBootTest` annotation makes this a Spring test.
 If you do not specify `classes` explicitly, Spring will start all components on the classpath.
 For a small application this is fine, but for applications with components that are "expensive" to start we can speed up the test by only adding the classes we need for the test.
-In this case we need to include the DGS framework itself using the `DgsAutoConfiguration` class, and the `ShowsDatafetcher`. 
+In this case we need to include the DGS framework itself using the `DgsAutoConfiguration` class, and the `ShowsDatafetcher`.
 
 To execute queries, inject `DgsQueryExecutor` in the test.
 This interface has several methods to execute a query and get back the result.
@@ -108,10 +108,10 @@ Write a few more tests, for example to verify the behavior with using the `title
 You can run the tests from the IDE, or from Gradle/Maven, just like any JUnit test.
 
 ## Building GraphQL Queries for Tests
-In the examples shown previously, we handcrafted the query string. 
-This is simple enough for queries that are small and straightforward. 
+In the examples shown previously, we handcrafted the query string.
+This is simple enough for queries that are small and straightforward.
 However, constructing longer query strings can be tedious, specially in Java without support for multi-line Strings.
-For this, we can use the [GraphQLQueryRequest](advanced/java-client.md) to build the graphql request in combination with the [code generation](./generating-code-from-schema.md) plugin to generate the classes needed to use the request builder. 
+For this, we can use the [GraphQLQueryRequest](advanced/java-client.md) to build the graphql request in combination with the [code generation](./generating-code-from-schema.md) plugin to generate the classes needed to use the request builder.
 This provides a convenient type-safe way to build your queries.
 
 To set up code generation to generate the required classes to use for building your queries, follow the instructions [here](advanced/java-client.md#type-safe-query-api).
@@ -146,7 +146,7 @@ Now we can write a test that uses `GraphQLQueryRequest` to build the query and e
     }
     ```
 
-The `GraphQLQueryRequest` is available as part of the [graphql-client module](advanced/java-client.md) and is used to build the query string, and wrap the response respectively. 
+The `GraphQLQueryRequest` is available as part of the [graphql-client module](advanced/java-client.md) and is used to build the query string, and wrap the response respectively.
 You can also refer to the GraphQLClient JavaDoc for more details on the list of supported methods.
 
 ## Mocking External Service Calls in Tests
@@ -162,7 +162,7 @@ Spring already has good support for doing so with the [@Mockbean](https://docs.s
 
 ### Example
 Let's update the `Shows` example to load shows from an external data source, instead of just returning a fixed list.
-For the sake of the example we'll just move the fixed list of shows to a new class that we'll annotate `@Service`. 
+For the sake of the example we'll just move the fixed list of shows to a new class that we'll annotate `@Service`.
 The data fetcher is updated to use the injected `ShowsService`.
 
 === "Java"
@@ -190,7 +190,7 @@ The data fetcher is updated to use the injected `ShowsService`.
     interface ShowsService {
         fun shows(): List<ShowsDataFetcher.Show>
     }
-    
+
     @Service
     class BasicShowsService : ShowsService {
         override fun shows(): List<ShowsDataFetcher.Show> {
@@ -203,12 +203,12 @@ The data fetcher is updated to use the injected `ShowsService`.
             )
         }
     }
-    
+
     @DgsComponent
     class ShowsDataFetcher {
         @Autowired
         lateinit var showsService: ShowsService
-    
+
         @DgsData(parentType = "Query", field = "shows")
         fun shows(@InputArgument("titleFilter") titleFilter: String?): List<Show> {
             return if (titleFilter != null) {
@@ -230,22 +230,22 @@ Let's try to mock this service in the test!
 
         @Autowired
         DgsQueryExecutor dgsQueryExecutor;
-    
+
         @MockBean
         ShowsService showsService;
-    
+
         @BeforeEach
         public void before() {
             Mockito.when(showsService.shows()).thenAnswer(invocation -> List.of(new Show("mock title", 2020)));
         }
-    
+
         @Test
         public void showsWithQueryApi() {
             GraphQLQueryRequest graphQLQueryRequest = new GraphQLQueryRequest(
                     new ShowsGraphQLQuery.Builder().build(),
                     new ShowsProjectionRoot().title()
             );
-    
+
             List<String> titles = dgsQueryExecutor.executeAndExtractJsonPath(graphQLQueryRequest.serialize(), "data.shows[*].title");
             assertThat(titles).containsExactly("mock title");
         }
@@ -255,23 +255,23 @@ Let's try to mock this service in the test!
     ```kotlin
     @SpringBootTest(classes = [DgsAutoConfiguration::class, ShowsDataFetcher::class])
     class ShowsDataFetcherTest {
-    
+
         @Autowired
         lateinit var
         dgsQueryExecutor:DgsQueryExecutor
-    
+
         @MockBean
         lateinit var
         showsService:ShowsService
-    
+
         @BeforeEach
-    
+
         fun before() {
             Mockito.`when`(showsService.shows()).thenAnswer {
                 listOf(ShowsDataFetcher.Show("mock title", 2020))
             }
         }
-    
+
         @Test
         fun shows() {
             val titles :List<String> =dgsQueryExecutor.executeAndExtractJsonPath("""
@@ -282,7 +282,7 @@ Let's try to mock this service in the test!
                             }
                         }
                     """.trimIndent(), "data.shows[*].title")
-    
+
             assertThat(titles).contains("mock title")
         }
     }
@@ -309,7 +309,7 @@ We use the mocked example from above to force an exception.
     @Test
     fun showsWithException() {
         Mockito.`when`(showsService.shows()).thenThrow(RuntimeException("nothing to see here"))
-    
+
         val result = dgsQueryExecutor.execute("""
             {
                 shows {
@@ -318,7 +318,7 @@ We use the mocked example from above to force an exception.
                 }
             }
         """.trimIndent())
-    
+
         assertThat(result.errors).isNotEmpty
         assertThat(result.errors[0].message).isEqualTo("java.lang.RuntimeException: nothing to see here")
     }
@@ -328,4 +328,3 @@ When an error happens while executing the query, the errors are wrapped in a `Qu
 This allows you to easily inspect the error.
 The `message` of the `QueryException` is the concatenation of all the errors.
 The `getErrors()` method gives access to the individual errors for further inspection.
-

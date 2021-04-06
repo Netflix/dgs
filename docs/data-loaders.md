@@ -119,7 +119,7 @@ However, instead of actually loading the data from another service or database, 
 You can retrieve a data loader from the `DataFetchingEnvironment` with its `getDataLoader()` method.
 This requires  you to pass the name of the data loader as a string.
 The other change to the data fetcher is that it returns a `CompletableFuture` instead of the actual type you’re loading.
-This enables the framework to do work asynchronously, and is a requirement for batching<!-- http://go/pv -->.  
+This enables the framework to do work asynchronously, and is a requirement for batching<!-- http://go/pv -->.
 
 ### Using the DgsDataFetchingEnvironment
 You can also get the data loader in a type-safe way by using our custom `DgsDataFetchingEnvironment`, which is an enhanced version of `DataFetchingEnvironment` in `graphql-java`, and provides `getDataLoader()` using the classname.
@@ -170,7 +170,7 @@ You must pass in the executor as the second argument of the `supplyAsync()` meth
 @DgsData(parentType = "Query", field = "list_things")
 public CompletableFuture<List<Thing>> resolve(DataFetchingEnvironment environment) {
  return CompletableFuture.supplyAsync(() -> {
-    return myService.getThings();            
+    return myService.getThings();
 }, executor);
 ```
 
