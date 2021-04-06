@@ -55,7 +55,7 @@ Please ensure that your project’s sources refer to the generated code using<!-
 <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
  NOTE: generateJava does NOT add the data fetchers that it generates to your project’s sources.
  These fetchers serve mainly as a basic boilerplate code that require further implementation from you.
-</div> 
+</div>
 
 You can exclude parts of the schema from code-generation by placing them in a different schema directory that is not specified<!-- http://go/pv --> as part of the `schemaPaths` for the plugin.
  
