@@ -149,7 +149,7 @@ interface TypedError {
     side branching logic.
     """
     errorType: ErrorType!
-    
+
     """
     The ErrorDetail is an optional field which will
     provide more fine grained information on the error
@@ -160,7 +160,7 @@ interface TypedError {
     will be much larger and likely change/grow over time.
     """
     errorDetail: ErrorDetail
-    
+
     """
     Indicates the source that issued the error. For example, could
     be a backend service name, a domain graph service name, or a
@@ -168,14 +168,14 @@ interface TypedError {
     may be a client library name, or the client app name.
     """
     origin: String
-    
+
     """
     Optionally provided based on request flag
     Could include e.g. stacktrace or info from
     upstream service
     """
     debugInfo: DebugInfo
-    
+
     """
     Http URI to a page detailing additional
     information that could be used to debug
@@ -205,4 +205,3 @@ The following table shows the available `ErrorType` `enum` values:
 <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
 The HTTP analogs are only rough mappings that are given here to provide a quick conceptual explanation of the semantics of the error by showing their analogs in the HTTP specification.
 </div>
-

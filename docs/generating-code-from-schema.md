@@ -41,7 +41,7 @@ generateJava{
 
 <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
  NOTE: Please use the latest version of the plugin, available <a href="https://github.com/Netflix/dgs-codegen/releases">here</a>
-</div>    
+</div>
 
 The plugin adds a `generateJava` Gradle task that runs as part of your project’s build.
 `generateJava` generates the code in the project’s `build/generated` directory.
@@ -58,7 +58,7 @@ Please ensure that your project’s sources refer to the generated code using<!-
 </div>
 
 You can exclude parts of the schema from code-generation by placing them in a different schema directory that is not specified<!-- http://go/pv --> as part of the `schemaPaths` for the plugin.
- 
+
 
 ### Mapping existing types
 
@@ -85,10 +85,10 @@ You can use these classes to query data from a GraphQL endpoint using Java, or i
 The Java GraphQL Client is useful for server-to-server communication.
 A GraphQL Java Client is [available](advanced/java-client) as part of the framework.
 
-Code generation creates a <code><var>field-name</var>GraphQLQuery</code> for each Query and Mutation field. 
-The <code>\*GraphQLQuery</code> query class contains fields for each parameter of the field. 
-For each type returned by a Query or Mutation, code generation creates a <code>\*ProjectionRoot</code>. 
-A projection is a builder class that specifies which fields get returned. 
+Code generation creates a <code><var>field-name</var>GraphQLQuery</code> for each Query and Mutation field.
+The <code>\*GraphQLQuery</code> query class contains fields for each parameter of the field.
+For each type returned by a Query or Mutation, code generation creates a <code>\*ProjectionRoot</code>.
+A projection is a builder class that specifies which fields get returned.
 
 The following is an example usage of a generated API:
 
@@ -182,10 +182,10 @@ generateJava {
 
 # Configuring code generation
 
-Code generation has many configuration switches. 
+Code generation has many configuration switches.
 The following table shows the Gradle configuration options, but the same options are available command line and in Maven as well.
 
-| Configuration property | Description | Default Value | 
+| Configuration property | Description | Default Value |
 | ------------- | ------------- | ----------- |
 | schemaPaths  | List of files/directories containing schemas | src/main/resources/schema |
 | packageName | Base package name of generated code | |
@@ -206,7 +206,3 @@ The following table shows the Gradle configuration options, but the same options
 | skipEntityQueries | Disable generating Entity queries for federated types | false |
 | shortProjectionNames | Shorten class names of projection types. These types are not visible to the developer. | false |
 | maxProjectionDepth | Maximum projection depth to generate. Useful for (federated) schemas with very deep nesting | 10 |
-
-
-
-

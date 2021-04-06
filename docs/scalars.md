@@ -38,7 +38,7 @@ public class DateTimeScalar implements Coercing<LocalDateTime, String> {
 scalar DateTime
 ```
 ## Registering Custom Scalars
-In more recent versions of `graphql-java` (>v15.0), some scalars, most notably, the `Long` scalar are no longer available by default. 
+In more recent versions of `graphql-java` (>v15.0), some scalars, most notably, the `Long` scalar are no longer available by default.
 These are non standard scalar that is difficult for clients (e.g. JavaScript) to handle reliably.
 As a result of the deprecation,  you will need to 1) Define the scalar in your schema, and 2) Register the scalar.
 

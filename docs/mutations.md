@@ -139,5 +139,3 @@ However, make sure its<!-- "its" is ambiguous here --> fields are either `var` o
 ```kotlin
 data class RatingInput(var title: String, var stars: Int)
 ```
-
-
