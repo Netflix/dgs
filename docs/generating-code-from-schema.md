@@ -31,6 +31,7 @@ apply plugin: 'com.netflix.dgs.codegen'
 ```
 
 Next, you need to add the task configuration as shown here:
+
 ```groovy
 generateJava{
    schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
@@ -41,7 +42,7 @@ generateJava{
 
 <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
  NOTE: Please use the latest version of the plugin, available <a href="https://github.com/Netflix/dgs-codegen/releases">here</a>
-</div>    
+</div>   
 
 The plugin adds a `generateJava` Gradle task that runs as part of your project’s build.
 `generateJava` generates the code in the project’s `build/generated` directory.
@@ -58,7 +59,33 @@ Please ensure that your project’s sources refer to the generated code using<!-
 </div> 
 
 You can exclude parts of the schema from code-generation by placing them in a different schema directory that is not specified<!-- http://go/pv --> as part of the `schemaPaths` for the plugin.
- 
+
+### Fixing the "Could not initialize class graphql.parser.antlr.GraphqlLexer" problem
+
+Gradle's plugin system uses a flat classpath for all plugins, which makes it very easy to run into classpath conflicts.
+One of the dependencies of the Codegen plugin is ANTLR, which is unfortuanatly used by some other plugins as well.
+If you see an error such as `Could not initialize class graphql.parser.antlr.GraphqlLexer` this typically indicates a classpath conflict.
+If this happens, please change the ordering of the plugins in your build script.
+ANTLR is typically backwards, but not forwards, compatible.
+
+For multi-module projects means you need to declare the Codegen plugin in the root build file, without applying it:
+
+```groovy
+plugins {
+    id("com.netflix.dgs.codegen") version "[REPLACE_WITH_CODEGEN_PLUGIN_VERSION]" apply false
+    
+    //other plugins
+}
+```
+
+In the module where the plugin should be applied, you specify the plugin in the plugins block again, but without the version.
+
+```groovy
+plugins {
+    id("com.netflix.dgs.codegen")
+}
+```
+
 
 ### Mapping existing types
 
