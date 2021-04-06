@@ -86,6 +86,7 @@ plugins {
 }
 ```
 
+If you're using the old `buildscript` syntax, you add the plugin dependency to the root `buildscript`, but only `apply` in the module.
 
 ### Mapping existing types
 
