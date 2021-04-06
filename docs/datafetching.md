@@ -27,7 +27,7 @@ We can implement this schema with a single datafetcher.
 ```java
 @DgsComponent
 public class ShowDataFetcher {
-   
+
    @DgsData(parentType = "Query", field = "shows")
    List<Show> shows() {
 
@@ -86,7 +86,7 @@ Do note that the `shows` datafetcher is returning a list of `Show`, while the `a
 The framework executes the `actors` datafetcher for each `Show` returned by the `shows` datafetcher.
 If the actors get loaded from a database, this would now cause an N+1 problem. To solve the N+1 problem, you use [data loaders](../data-loaders).
 
-Note: There are more complex scenarios with nested datafetchers, and ways to pass context between related datafetchers. 
+Note: There are more complex scenarios with nested datafetchers, and ways to pass context between related datafetchers.
 See the [nested datafetchers guide](../advanced/context-passing) for more advanced use-cases.
 
 ## Using @InputArgument
@@ -125,15 +125,15 @@ public List<Show> shows(@InputArgument String title, @InputArgument ShowFilter f
 Optionally we can specify the `name` argument in the `@InputArgument` annotation, if the argument name doesn't match the method argument name.
 
 ## Nullability in Kotlin for input arguments
-If you're using Kotlin you must consider if an input type is nullable. 
-If the schema defines an input argument as nullable, the code must reflect this by using a nullable type. 
+If you're using Kotlin you must consider if an input type is nullable.
+If the schema defines an input argument as nullable, the code must reflect this by using a nullable type.
 If a non-nullable type receives a null value, Kotlin will throw an exception.
 
 For example:
 
 ```graphql
 # name is a nullable input argument
-hello(name: String): String 
+hello(name: String): String
 ```
 You must write the datafetcher function as:
 ```kotlin
@@ -167,7 +167,7 @@ Using this we can write a datafetcher as follows:
 
 ```graphql
 type Query {
-    shows: [Show]    
+    shows: [Show]
 }
 ```
 
@@ -184,7 +184,7 @@ Sometimes you need to evaluate HTTP headers, or other elements of the request, i
 You can easily get a HTTP header value by using the `@RequestHeader` annotation. The `@RequestHeader` annotation is the same annotation as used in Spring WebMVC.
 
 ```java
-public String hello(@RequestHeader String host) 
+public String hello(@RequestHeader String host)
 ```
 
 Technically, headers are lists of values. If multiple values are set, you can retrieve them as a list by using a List as your argument type. Otherwise, the values are concatenated to a single String.
