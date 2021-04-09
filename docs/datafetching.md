@@ -29,7 +29,7 @@ We can implement this schema with a single datafetcher.
 public class ShowDataFetcher {
    
    @DgsData(parentType = "Query", field = "shows")
-   List<Show> shows() {
+   public List<Show> shows() {
 
        //Load shows from a database and return the list of Show objects
        return shows;
@@ -62,14 +62,14 @@ In such scenarios, it's better to create a separate datafetcher for the expensiv
 
 ```java
 @DgsData(parentType = "Query", field = "shows")
-List<Show> shows() {
+public List<Show> shows() {
 
     //Load shows, which doesn't include "actors"
     return shows;
 }
 
 @DgsData(parentType = "Show", field = "actors")
-List<Actor> actors(DgsDataFetchingEnvironment dfe) {
+public List<Actor> actors(DgsDataFetchingEnvironment dfe) {
 
    Show show = dfe.getSource();
    actorsService.forShow(show.getId());
