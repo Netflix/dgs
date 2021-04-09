@@ -239,8 +239,15 @@ This is useful if you want to find data loaders that might be responsible for po
 Captures the elapsed time of each data fetcher invocation.
 This is useful if you want to find data fetchers that might be responsible for poor query performance.
 
-!!! note
-    This metric is not available if the data is resolved via a Batch Loader.
+
+!!! warning
+    This metric is not available if:
+
+    * The data is resolved via a Batch Loader.
+    * The DataFetcher is [TrivialDataFetcher]. A _trivial DataFetcher_ is one that simply maps data from an object to a field.
+    This is defined directly in `graphql-java`.
+
+[TrivialDataFetcher]: https://github.com/graphql-java/graphql-java/blob/master/src/main/java/graphql/TrivialDataFetcher.java
 
 **Name:** `gql.resolver`
 
