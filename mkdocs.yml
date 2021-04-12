@@ -14,6 +14,7 @@ nav:
   - Examples: examples.md
   - Videos: videos.md
   - Advanced:
+    - Using the Platform BOM: advanced/platform-bom.md
     - Nested data fetchers: advanced/context-passing.md
     - Hot reloading schemas: advanced/schema-reloading.md
     - Java GraphQL Client: advanced/java-client.md
@@ -72,3 +73,4 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - footnotes
