@@ -37,10 +37,50 @@ public class DateTimeScalar implements Coercing<LocalDateTime, String> {
 ```graphql
 scalar DateTime
 ```
+
 ## Registering Custom Scalars
-In more recent versions of `graphql-java` (>v15.0), some scalars, most notably, the `Long` scalar are no longer available by default.
-These are non standard scalar that is difficult for clients (e.g. JavaScript) to handle reliably.
-As a result of the deprecation,  you will need to 1) Define the scalar in your schema, and 2) Register the scalar.
+
+In more recent versions of `graphql-java` (>v15.0) [some scalars](https://github.com/graphql-java/graphql-java-extended-scalars),
+most notably the `Long` scalar, are no longer available by default.
+These are non standard scalar that are difficult for clients (e.g. JavaScript) to handle reliably.
+As a result of the deprecation, you will need to add them explicitly, and to do this you have a few options.
+
+!!! tip
+    Go to the [graphql-java-extended-scalars project page](https://github.com/graphql-java/graphql-java-extended-scalars)
+    to see the full list of scalars supported by this library. There you will also find examples of the scalars used
+    in both _schemas_ as well as example queries.
+
+### Automatically Register Scalar Extensions via graphql-dgs-extended-scalars
+
+The DGS Framework, as of version 3.9.2, has the `graphql-dgs-extended-scalars` module. This module provides an
+_auto-configuration_ that will register automatically the scalar extensions defined in the
+`com.graphql-java:graphql-java-extended-scalars` library. To use it you need to...
+
+1. Add the `com.netflix.graphql.dgs:graphql-dgs-extended-scalars` dependency to your build. If you are using the
+   [DGS BOM] you don't need to specify a version for it, the BOM will recommend one.
+1. Define the scalar in your schema
+
+
+The `graphql-java-extended-scalars` module offers a few knobs you can use to turn off registration.
+
+
+| Property                                          | Description |
+| ------------------------------------------------- | ----------- |
+| dgs.graphql.extensions.scalars.time-dates.enabled | If set to `false`, it will not register the DateTime, Date, and Time scalar extensions.           |
+| dgs.graphql.extensions.scalars.objects.enabled    | If set to `false`, it will not register the Object, Json, Url, and Locale scalar extensions.      |
+| dgs.graphql.extensions.scalars.numbers.enabled    | If set to `false`, it will not register all numeric scalar extensions such as PositiveInt, NegativeInt, etc.|
+| dgs.graphql.extensions.scalars.chars.enabled      | If set to `false`, it will not register the GraphQLChar extension. |
+| dgs.graphql.extensions.scalars.enabled            | If set to `false`, it will disable automatic registration of all of the above. |
+
+
+### Register Scalar Extensions via DgsRuntimeWiring
+
+You can also register the Scalar Extensions manually. To do so you need to...
+
+1. Add the `com.graphql-java:graphql-java-extended-scalars` dependency to your build. If you are using the
+   [DGS BOM] you don't need to specify a version for it, the BOM will recommend one.
+1. Define the scalar in your schema
+1. Register the scalar.
 
 Here is an example of how you would set that up:
 
@@ -58,3 +98,6 @@ public class LongScalarRegistration {
     }
 }
 ```
+
+
+[DGS BOM]: ./advanced/platform-bom.md
