@@ -73,6 +73,7 @@ This schema allows querying for a list of shows, optionally filtering by title.
 
 Data fetchers are responsible for returning data for a query.
 Create two new classes `example.ShowsDataFetcher` and `Show` and add the following code.
+Note that we have a [Codegen plugin](../generating-code-from-schema) that can do this automatically, but in this guide we'll manually write the classes.
 
 === "Java"
     ```java
@@ -87,8 +88,8 @@ Create two new classes `example.ShowsDataFetcher` and `Show` and add the followi
                 new Show("Orange is the New Black", 2013)
         );
 
-        @DgsData(parentType = "Query", field = "shows")
-        public List<Show> shows(@InputArgument("titleFilter") String titleFilter) {
+        @DgsQuery
+        public List<Show> shows(@InputArgument String titleFilter) {
             if(titleFilter == null) {
                 return shows;
             }
@@ -126,8 +127,8 @@ Create two new classes `example.ShowsDataFetcher` and `Show` and add the followi
             Show("Dead to Me", 2019),
             Show("Orange is the New Black", 2013))
 
-        @DgsData(parentType = "Query", field = "shows")
-        fun shows(@InputArgument("titleFilter") titleFilter : String?): List<Show> {
+        @DgsQuery
+        fun shows(@InputArgument titleFilter : String?): List<Show> {
             return if(titleFilter != null) {
                 shows.filter { it.title.contains(titleFilter) }
             } else {
@@ -140,39 +141,6 @@ Create two new classes `example.ShowsDataFetcher` and `Show` and add the followi
     ```
 
 That's all the code needed, the application is ready to be tested!
-
-## Using @InputArgument
-You may have noticed the use of `@InputArgument` to extract the input arguments from your data fetching environment.
-This should work for most input types, such as `String`, `Integer`, custom scalars, and input objects.
-
-
-=== "Java"
-    ```java
-        @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.AddReview)
-        public List<Review> addReview(@InputArgument("review")SubmittedReview reviewInput) {
-            reviewsService.saveReview(reviewInput);
-
-            List<Review> reviews = reviewsService.reviewsForShow(reviewInput.getShowId());
-
-            return Objects.requireNonNullElseGet(reviews, List::of);
-        }
-
-    ```
-
-The above is applicable for most list types representing scalars or custom scalars, such as, `List<Integer>`, `List<String>`, `List<DateTime>` etc. However, if you have a list of input object types, you will also need to specify the collection type for proper deserialization as shown below:
-
-=== "Java"
-    ```java
-        @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.AddReviews)
-        public List<Review> addReviews(@InputArgument(value = "reviews", collectionType=SubmittedReview.class) List<SubmittedReview>    reviewsInput) {
-            reviewsService.saveReviews(reviewsInput);
-
-            List<Integer> showIds = reviewsInput.stream().map( review -> review.getShowId() ).collect(Collectors.toList());
-            Map<Integer, List<Review>> reviews = reviewsService.reviewsForShows(showIds);
-
-            return new ArrayList(reviews.values());
-    }
-    ```
 
 ## Test the app with GraphiQL
 
