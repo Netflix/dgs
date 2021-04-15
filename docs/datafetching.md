@@ -1,6 +1,6 @@
 In the [getting started guide](../getting-started) we introduced the `@DgsData` annotation, which you use to create a data fetcher. In this section, we look at some of the finer details of datafetchers.
 
-## The @DgsData annotation
+## The @DgsData, @DgsQuery, @DgsMutation and @DgsSubscription annotations
 You use the `@DgsData` annotation on a Java/Kotlin method to make that method a datafetcher.
 The method must be in a `@DgsComponent` class.
 The `@DgsData` annotation has two parameters:
@@ -35,6 +35,27 @@ public class ShowDataFetcher {
        return shows;
    }
 }
+```
+
+If the `field` parameter is not set, the method name will be used as the field name.
+The `@DgsQuery`, `@DgsMutation` and `@DgsSubscription` annotations are shorthands to define datafetchers on the `Query`, `Mutation` and `Subscription` types.
+The following definitions are all equivalent.
+
+```java
+@DgsData(parentType = "Query", field = "shows")
+public List<Show> shows() { .... }
+
+// The "field" argument is omitted. It uses the method name as the field name.
+@DgsData(parentType = "Query")
+public List<Show> shows() { .... }
+
+// The parentType is "Query", the field name is derived from the method name.
+@DgsQuery
+public List<Show> shows() { .... }
+
+// The parentType is "Query", the field name is explicitly specified.
+@DgsQuery(field = "shows")
+public List<Show> shows() { .... }
 ```
 
 Notice how a datafetcher can return complex objects or lists of objects.
@@ -124,7 +145,7 @@ public List<Show> shows(@InputArgument String title, @InputArgument ShowFilter f
 
 Optionally we can specify the `name` argument in the `@InputArgument` annotation, if the argument name doesn't match the method argument name.
 
-## Nullability in Kotlin for input arguments
+### Nullability in Kotlin for input arguments
 If you're using Kotlin you must consider if an input type is nullable.
 If the schema defines an input argument as nullable, the code must reflect this by using a nullable type.
 If a non-nullable type receives a null value, Kotlin will throw an exception.
@@ -143,7 +164,7 @@ fun hello(@InputArgument hello: String?)
 In Java you don't have to worry about this, types can always be null.
 You do need to null check in your datafetching code!
 
-## Using @InputArgument with lists
+### Using @InputArgument with lists
 An input argument can also be a list.
 If the list type is an input type, you must specify the type explicitly in the `@InputArgument` annotation.
 
@@ -157,6 +178,19 @@ type Query {
 public String hello(@InputArgument(collectionType = Person.class) List<Person> people)
 
 ```
+
+### Using Optional with @InputArgument
+Input arguments are often defined as optional in schemas.
+Your datafetcher code needs to null-check arguments to check if they were provided.
+Instead of null-checks you can wrap an input argument in an Optional.
+
+```java
+public List<Show> shows(@InputArgument(collectionType = ShowFilter.class) Optional<ShowFilter> filter)
+```
+
+You do need to provide the type in the `collectionType` argument when using complex types, similar to using lists.
+If the argument is not provided, the value will be `Optional.empty()`.
+It's a matter of preference to use `Optional` or not.
 
 ## Codegen constants
 
@@ -178,10 +212,11 @@ public List<Show> shows() {}
 
 The benefit of using constants is that you can detect issues between your schema and datafetchers at compile time.
 
-## @RequestHeader and DgsRequestData
+## @RequestHeader and @RequestParam
 
 Sometimes you need to evaluate HTTP headers, or other elements of the request, in a datafetcher.
-You can easily get a HTTP header value by using the `@RequestHeader` annotation. The `@RequestHeader` annotation is the same annotation as used in Spring WebMVC.
+You can easily get a HTTP header value by using the `@RequestHeader` annotation. 
+The `@RequestHeader` annotation is the same annotation as used in Spring WebMVC.
 
 ```java
 public String hello(@RequestHeader String host)
@@ -189,6 +224,11 @@ public String hello(@RequestHeader String host)
 
 Technically, headers are lists of values. If multiple values are set, you can retrieve them as a list by using a List as your argument type. Otherwise, the values are concatenated to a single String.
 
+Similarly, you can get request parameters using `@RequestParam`.
+Both `@RequestHeader` and `@RequestParam` support a `defaultValue` and `required` argument.
+If a `@RequestHeader` or `@RequestParam` is `required`, doesn't have a `defaultValue` and isn't provided, a `DgsInvalidInputArgumentException` is thrown.
+
+## Using DgsRequestData
 Alternatively, you can get the `DgsRequestData` object from the datafetching context.
 The `DgsRequestData` has the HTTP headers as `HttpHeaders` and the request itself is represented as a `WebRequest`. Both are types from Spring Web.
 Depending on your runtime environment, you can further cast the `WebRequest` to, for example, a `ServletWebRequest`.
@@ -200,6 +240,8 @@ public String serverName(DgsDataFetchingEnvironment dfe) {
      return ((ServletWebRequest)requestData.getWebRequest()).getRequest().getServerName();
 }
 ```
+
+Similar to `@InputArgument` it's possible to wrap a header or parameter in an `Optional`.
 
 ## Using context
 The `DgsRequestData` object described in the previous section is part of the datafetching _context_.
