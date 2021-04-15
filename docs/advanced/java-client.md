@@ -22,14 +22,16 @@ The `url` is the server url of the endpoint you want to call.
 This url will be passed down to the callback discussed below.
 
 Using the `GraphQLClient` a query can be executed.
-The `executeQuery` method has three arguments:
+The `executeQuery` method has four arguments:
 
 1. The query String
 2. An optional map of query variables
+3. An optional operation name
 3. An instance of `RequestExecutor`, typically provided as a lambda.
 
 Because of the large number HTTP clients in use within Netflix, the GraphQLClient is decoupled from any particular HTTP client implementation.
 Any HTTP client (RestTemplate, RestClient, OkHTTP, ....) can be used.
+The operation name is useful in case of logging queries, or if you happen to have multiple queries as part of the same request.
 The developer is responsible for making the actual HTTP call by implementing a `RequestExecutor`.
 `RequestExecutor` receives the `url`, a map of `headers` and the request `body` as parameters, and should return an instance of `HttpResponse`.
 Based on the HTTP response the GraphQLClient parses the response and provides easy access to data and errors.
@@ -59,7 +61,7 @@ private static final String QUERY = "{\n" +
 
 public List<TicksConnection> getData() {
     DefaultGraphQLClient graphQLClient = new DefaultGraphQLClient(URL);
-    GraphQLResponse response = graphQLClient.executeQuery(query, new HashMap<>(), (url, headers, body) -> {
+    GraphQLResponse response = graphQLClient.executeQuery(query, new HashMap<>(), "TicksQuery", (url, headers, body) -> {
         /**
          * The requestHeaders providers headers typically required to call a GraphQL endpoint, including the Accept and Content-Type headers.
          * To use RestTemplate, the requestHeaders need to be transformed into Spring's HttpHeaders.
