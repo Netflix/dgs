@@ -30,7 +30,7 @@ Let's go through an example and assume that we want to use the DGS Framework 3.1
 
     dependencies {
         // DGS BOM/platform dependency. This is the only place you set version of DGS
-        api(platform('com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:3.10.2'))
+        implementation(platform('com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:3.10.2'))
 
         // DGS dependencies. We don't have to specify a version here!
         implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
@@ -50,7 +50,7 @@ Let's go through an example and assume that we want to use the DGS Framework 3.1
 
     dependencies {
         //DGS BOM/platform dependency. This is the only place you set version of DGS
-        api(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:3.10.2"))
+        implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:3.10.2"))
 
         //DGS dependencies. We don't have to specify a version here!
         implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
