@@ -225,7 +225,7 @@ The following table shows the Gradle configuration options, but the same options
 | generateBoxedTypes | Always use boxed types for primitives | false (boxed types are used only for nullable fields) |
 | generateClient | Generate a Query API | false |
 | generateDataTypes | Generate data types. Useful for only generating a Query API. Input types are still generated when `generateClient` is true. | true |
-| generateDataTypes | Generate data types. Useful for only generating a Query API. Input types are still generated when `generateClient` is true. | true |
+| generateInterfaces | Generate interfaces for data classes. This is useful if you would like to extend the generated POJOs for more context and use interfaces instead of the data classes in your data fetchers. | false |
 | generatedSourcesDir | Build directory for Gradle | build |
 | outputDir | Sub directory of the `generatedSourcesDir` to generate into | generated |
 | exampleOutputDir | Directory to generate datafetcher example code to | generated-examples |
