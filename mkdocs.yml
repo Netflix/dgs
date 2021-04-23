@@ -5,6 +5,7 @@ repo_url: https://github.com/netflix/dgs-framework
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
+  - Configuration: configuration.md
   - Data fetching: datafetching.md
   - Testing: query-execution-testing.md
   - Mutations: mutations.md
