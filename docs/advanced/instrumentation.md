@@ -199,9 +199,48 @@ Captures the elapsed time that a given GraphQL query, or mutation, takes.
 
 **Tags:**
 
-| tag name     | values                 |description |
-| ------------ | ---------------------- | ---------- |
-| `outcome`    | `success` or `failure` | Result of the operation, as defined by the [ExecutionResult].
+| tag name             | values                                      |description |
+| -------------------  | ------------------------------------------- | ---------- |
+| `outcome`            | `success` or `failure`                      | Result of the operation, as defined by the [ExecutionResult].
+| `queryComplexity`    | one in [5, 10, 20, 50, 100, 200, 500, 1000] | The total number of nodes in the query.
+
+The `queryComplexity` is typically calculated as 1 + childComplexity. The query complexity is valuable to calculate th cost of a query as this can vary based on input arguments to the query. The computed value is represented as one of the bucketed values to reduce the cardinality of the metric.
+
+**Example Query:**
+
+```
+query {
+  viewer {
+    repositories(first: 50) {
+      edges {
+        repository:node {
+          name
+
+          issues(first: 10) {
+            totalCount
+            edges {
+              node {
+                title
+                bodyHTML
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**Example Calculation:**
+
+```
+50          = 50 repositories
++
+50 x 10     = 500 repository issues
+
+            = 550 total nodes
+```
 
 
 ### Error Counter: gql.error
