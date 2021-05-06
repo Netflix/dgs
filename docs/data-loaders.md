@@ -61,6 +61,38 @@ In this example, it just passes on the list of keys to the backend that owns `Di
 However, you might also write such a service so that it loads data from a database.
 Although this example registers a data loader, nobody will use that data loader until you implement a data fetcher that uses it.
 
+
+## Implementing a Data Loader With Try
+If you want to handle exceptions during fetching of partial results, you can return a list of `Try` objects from the loader. 
+The query result will contain partial results for the successful calls and  an error for the exception case.
+
+```java
+package com.netflix.graphql.dgs.example.dataLoader;
+
+import com.netflix.graphql.dgs.DgsDataLoader;
+import org.dataloader.BatchLoader;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
+
+@DgsDataLoader(name = "directors")
+public class DirectorsDataLoader implements BatchLoader<String, Try<Director>> {
+
+    @Autowired
+    DirectorServiceClient directorServiceClient;
+
+    @Override
+    public CompletionStage<List<Try<Director>>> load(List<String> keys) {
+        return CompletableFuture.supplyAsync(() -> keys.stream()
+            .map(key -> Try.tryCall(() -> directorServiceClient.loadDirectors(keys)))
+            .collect(Collectors.toList()));
+        }
+    }
+}
+```
+
 ## Provide as Lambda
 
 Because `BatchLoader` is a functional interface (an interface with only a single method), you can also provide it as a lambda expression.
