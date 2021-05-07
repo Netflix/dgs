@@ -46,9 +46,23 @@ dgs version:
     </dependency>
     ```
 
-<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
- NOTE: The DGS Framework requires Kotlin 1.4, and does not work with Kotlin 1.3. Older Spring Boot versions may bring in Kotlin 1.3.
-</div>
+!!! caution
+    The DGS Framework requires Kotlin 1.4, and does not work with Kotlin 1.3. Older Spring Boot versions may bring in Kotlin 1.3.
+
+!!! important
+    If you use [Spring Boot Gradle Plugin 2.3], you will have to be explicit on the Kotlin version that
+    will be available. **This plugin will downgrade the transitive 1.4 Kotlin version to 1.3**.
+    You can be explicit by setting it via Gradle's _extensions_ as follows:
+    === "Gradle"
+        ```groovy
+        ext['slf4j.version'] = '1.4.31'
+        ```
+    === "Gradle Kotlin"
+        ```kotlin
+        extra["kotlin.version"] = "1.4.31"
+        ```
+
+[Spring Boot Gradle Plugin 2.3]: https://docs.spring.io/spring-boot/docs/2.3.10.RELEASE/gradle-plugin/reference/html/
 
 ## Creating a Schema
 
