@@ -61,6 +61,8 @@ _auto-configuration_ that will register automatically the scalar extensions defi
 1. Define the scalar in your schema
 
 
+Other mapping available on [extended scalars doc](https://github.com/graphql-java/graphql-java-extended-scalars)
+
 The `graphql-java-extended-scalars` module offers a few knobs you can use to turn off registration.
 
 
@@ -71,6 +73,34 @@ The `graphql-java-extended-scalars` module offers a few knobs you can use to tur
 | dgs.graphql.extensions.scalars.numbers.enabled    | If set to `false`, it will not register all numeric scalar extensions such as PositiveInt, NegativeInt, etc.|
 | dgs.graphql.extensions.scalars.chars.enabled      | If set to `false`, it will not register the GraphQLChar extension. |
 | dgs.graphql.extensions.scalars.enabled            | If set to `false`, it will disable automatic registration of all of the above. |
+
+
+!!! important
+    Are you using the [code generation Gradle Plugin](generating-code-from-schema.md)?
+
+    The `graphql-java-extended-scalars`  module doesn't modify the behavior of such plugin,
+    you will need to explicit define the _type mappings_.
+    For example, let's say we want to use both the `Url` and `PositiveInt` Scalars.
+    You will have to use this to your build file.
+    === "Gradle"
+        ```groovy
+        generateJava {
+            typeMapping = [
+                "Url" : "java.net.URL",
+                "PositiveInt" : "java.lang.Integer"
+            ]
+        }
+        ```
+    === "Gradle Kotlin"
+        ```kotlin
+        generateJava {
+            typeMapping = mutableMapOf(
+                "Url" to "java.net.URL",
+                "PositiveInt" to "java.lang.Integer"
+            )
+        }
+        ```
+
 
 
 ### Register Scalar Extensions via DgsRuntimeWiring
