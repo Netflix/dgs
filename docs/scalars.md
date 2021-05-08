@@ -60,6 +60,29 @@ _auto-configuration_ that will register automatically the scalar extensions defi
    [DGS BOM] you don't need to specify a version for it, the BOM will recommend one.
 1. Define the scalar in your schema
 
+You also need to define explicit [type mapping](https://netflix.github.io/dgs/generating-code-from-schema/).   
+Example to use `Url` and `PositiveInt` scalars.
+
+Add this to `build.gradle`
+```
+generateJava {
+    typeMapping = ["Url" : "java.net.URL", "PositiveInt" : "java.lang.Integer"]
+}
+```
+
+Define scalar on your schema
+
+```
+scalar Url
+scalar PositiveInt
+
+type SampleScalar {
+  theUrl: Url
+  thePositiveInt: PositiveInt
+}
+```
+
+Other mapping available on [extended scalars doc](https://github.com/graphql-java/graphql-java-extended-scalars)
 
 The `graphql-java-extended-scalars` module offers a few knobs you can use to turn off registration.
 
