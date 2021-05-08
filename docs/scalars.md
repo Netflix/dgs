@@ -81,7 +81,7 @@ The `graphql-java-extended-scalars` module offers a few knobs you can use to tur
     The `graphql-java-extended-scalars`  module doesn't modify the behavior of such plugin,
     you will need to explicit define the _type mappings_.
     For example, let's say we want to use both the `Url` and `PositiveInt` Scalars.
-    You will have to use this to your build file.
+    You will have to add the mapping below to your build file.
     === "Gradle"
         ```groovy
         generateJava {
