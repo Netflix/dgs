@@ -24,7 +24,7 @@ public Publisher<Stock> stocks() {
 The `Publisher` interface is from Reactive Streams.
 Flux is the default implementation for Spring.
 
-A complete example can be found [in `SubscriptionDatafetcher.java`](https://github.com/Netflix/dgs-framework/blob/master/graphql-dgs-example-java/src/main/java/com/netflix/graphql/dgs/example/datafetcher/SubscriptionDataFetcher.java).
+A complete example can be found [in `SubscriptionDatafetcher.java`](https://github.com/Netflix/dgs-framework/blob/master/graphql-dgs-example-shared/src/main/java/com/netflix/graphql/dgs/example/shared/datafetcher/SubscriptionDataFetcher.java).
 Next, a transport implementation must be chosen<!-- http://go/pv -->, which depends on how your app is deployed<!-- http://go/pv -->.
 
 ## WebSockets
