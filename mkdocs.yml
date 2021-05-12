@@ -65,13 +65,15 @@ theme:
 
 
 markdown_extensions:
+  - admonition
   - pymdownx.highlight:
       linenums: true
       linenums_style: pymdownx-inline
   - pymdownx.superfences
   - pymdownx.inlinehilite
   - pymdownx.tabbed
-  - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - toc:
+      permalink: True
   - footnotes
