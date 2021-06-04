@@ -111,7 +111,7 @@ generateJava{
 The code generator can also create client API classes.
 You can use these classes to query data from a GraphQL endpoint using Java, or in unit tests using the `QueryExecutor`.
 The Java GraphQL Client is useful for server-to-server communication.
-A GraphQL Java Client is [available](advanced/java-client) as part of the framework.
+A GraphQL Java Client is [available](advanced/java-client.md) as part of the framework.
 
 Code generation creates a <code><var>field-name</var>GraphQLQuery</code> for each Query and Mutation field.
 The <code>\*GraphQLQuery</code> query class contains fields for each parameter of the field.
