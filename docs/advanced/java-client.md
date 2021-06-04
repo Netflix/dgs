@@ -10,7 +10,7 @@ The client has two components, each usable by itself, or in combination together
 The GraphQL client wraps any HTTP client and provides easy parsing of GraphQL responses.
 The client can be used against any GraphQL endpoint (it doesn't have to be implemented with the DGS framework),
 but provides extra conveniences for parsing Gateway and DGS responses.
-This includes support for the [Errors Spec](/error-handling).
+This includes support for the [Errors Spec](../error-handling.md).
 
 To use the client, create an instance of `DefaultGraphQLClient`.
 
@@ -104,10 +104,10 @@ Refer to the `GraphQLClient` JavaDoc for the complete list of supported methods.
 ### Errors
 
 The GraphQLClient checks both for HTTP level errors (based on the response status code) and the `errors` block in a GraphQL response.
-The GraphQLClient is compatible with the [Errors Spec](/error-handling) used by the Gateway and DGS, and makes it easy to extract error information such as the ErrorType.
+The GraphQLClient is compatible with the [Errors Spec](../error-handling.md) used by the Gateway and DGS, and makes it easy to extract error information such as the ErrorType.
 
 For example, for following GraphQL response the GraphQLClient lets you easily get the ErrorType and ErrorDetail fields.
-Note that the `ErrorType` is an enum as specified by the [Errors Spec](/error-handling).
+Note that the `ErrorType` is an enum as specified by the [Errors Spec](../error-handling.md).
 
 ```graphql
 {
@@ -142,7 +142,7 @@ The generated API is a builder style API that lets you build a GraphQL query and
 Because the code gets re-generated when the schema changes, it helps catch errors in the query.
 Because Java doesn't support multi-line strings (yet) it's also arguably a more readable way to specify a query.
 
-If you own a DGS and want to generate a client for this DGS (e.g. for testing purposes) the client generation is just an extra property on the [Codegen configuration](generating-code-from-schema).
+If you own a DGS and want to generate a client for this DGS (e.g. for testing purposes) the client generation is just an extra property on the [Codegen configuration](../generating-code-from-schema.md).
 Specify the following in your `build.gradle`.
 
 ```groovy
