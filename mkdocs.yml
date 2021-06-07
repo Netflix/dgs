@@ -1,6 +1,6 @@
 site_name: DGS Framework
 edit_uri: edit
-repo_name: GitHub
+repo_name: dgs
 repo_url: https://github.com/netflix/dgs-framework
 site_url: https://netflix.github.io/dgs/
 remote_branch: gh-pages
