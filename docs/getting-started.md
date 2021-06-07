@@ -13,8 +13,10 @@ Open the project in an IDE (Intellij recommended).
 
 ## Adding the DGS Framework Dependency
 
-Add the `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` dependency to your Gradle or Maven configuration.
-dgs version:
+Add the platform dependencies to your Gradle or Maven configuration.
+The `com.netflix.graphql.dgs:graphql-dgs-platform-dependencies` dependency is a [platform/BOM dependency](https://netflix.github.io/dgs/advanced/platform-bom/), which aligns the versions of the individual modules and transitive dependencies of the framework.
+The `com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter` is a Spring Boot starter that includes everything you need to get started building a DGS.
+If you're building on top of `WebFlux`, use `com.netflix.graphql.dgs:graphql-dgs-webflux-starter` instead.
 
 === "Gradle"
     ```groovy
@@ -23,7 +25,8 @@ dgs version:
     }
 
     dependencies {
-        implementation "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:latest.release"
+        implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
+        implementation "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter"
     }
     ```
 === "Gradle Kotlin"
@@ -33,17 +36,42 @@ dgs version:
     }
 
     dependencies {
-        implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:latest.release")
+        implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
+        implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
     }
     ```
 === "Maven"
     ```xml
-    <dependency>
-        <groupId>com.netflix.graphql.dgs</groupId>
-        <artifactId>graphql-dgs-spring-boot-starter</artifactId>
-        <!-- Make sure to set the latest framework version! -->
-        <version>${dgs.framework.version}</version>
-    </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.netflix.graphql.dgs</groupId>
+                <artifactId>graphql-dgs-platform-dependencies</artifactId>
+                <!-- The DGS BOM/platform dependency. This is the only place you set version of DGS -->
+                <version>4.1.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netflix.graphql.dgs</groupId>
+            <artifactId>graphql-dgs-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     ```
 
 !!! caution
