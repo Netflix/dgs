@@ -3,6 +3,7 @@ edit_uri: edit
 repo_name: GitHub
 repo_url: https://github.com/netflix/dgs-framework
 site_url: https://netflix.github.io/dgs/
+remote_branch: gh-pages
 
 nav:
   - Home: index.md
