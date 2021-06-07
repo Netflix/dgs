@@ -2,6 +2,8 @@ site_name: DGS Framework
 edit_uri: edit
 repo_name: GitHub
 repo_url: https://github.com/netflix/dgs-framework
+site_url: https://netflix.github.io/dgs/
+
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
