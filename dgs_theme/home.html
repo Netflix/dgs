@@ -138,12 +138,12 @@ public boolean <span class="highlight">uploadScript(DataFetchingEnvironment dfe)
     <code class="dgs-example-code">
 <pre class="dgs-example-pre">
 type Show <span class="highlight">@key(fields: "id") @extends</span> {
-id: ID <span class="highlight">@external</span>
-reviews: [Review]
+  id: ID <span class="highlight">@external</span>
+  reviews: [Review]
 }
 
 type Review {
-starRating: Int
+  starRating: Int
 }</pre>
     </code>
 
