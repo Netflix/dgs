@@ -158,22 +158,21 @@ Total execution time: 3ms
 ## Metrics Out of The Box
 
 !!! abstract "tl;dr"
-
     * Supported vi the opt-in `graphql-dgs-spring-boot-micrometer` module.
     * Provides specific GraphQL metrics such as `gql.query`, `gql.error`, and `gql.dataLoader`.
-    * Backed by [Micrometer], it supports several backends.
+    * Supports several backends since its implemented via [Micrometer].
 
 
 === "Gradle Groovy"
     ```groovy
     dependencies {
-        implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer:3.+'
+        implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer'
     }
     ```
 === "Gradle Kotlin"
     ```kotlin
     dependencies {
-        implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer:3.+")
+        implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer")
     }
     ```
 === "Maven"
@@ -182,29 +181,34 @@ Total execution time: 3ms
         <dependency>
             <groupId>com.netflix.graphql.dgs</groupId>
             <artifactId>graphql-dgs-spring-boot-micrometer</artifactId>
-            <version>3.+</version>
         <dependency>
     </dependencies>
     ```
-!!! warning
-    The version used above is just an example. Please verify the verison you want to use by visiting
-    the [Release page](https://github.com/Netflix/dgs-framework/releases).
+
+!!! hint
+    Note that the version is missing since we assume you are using the latest BOM.
+    We recommend you [use the DGS Platform BOM](advanced/platform-bom.md) to handle such versions.
 
 
-### Query Timer: gql.query
+### Shared Tags
 
-Captures the elapsed time that a given GraphQL query, or mutation, takes.
-
-**Name:** `gql.query`
+The following are tags shared across most of the meters.
 
 **Tags:**
 
-| tag name             | values                                      |description |
-| -------------------  | ------------------------------------------- | ---------- |
-| `outcome`            | `success` or `failure`                      | Result of the operation, as defined by the [ExecutionResult].
-| `queryComplexity`    | one in [5, 10, 20, 50, 100, 200, 500, 1000] | The total number of nodes in the query.
+| tag name               | values                                      |description |
+| ---------------------- | ------------------------------------------- | ---------- |
+| `gql.operation`        | QUERY, MUTATION, SUBSCRIPTION are the possible values. These represent the GraphQL operation that is executed.
+| `gql.operation.name`   | GraphQL operation name if any, else `anonymous`. Since the cardinality of the value is high it will be [limited](#cardinality-limiter).
+| `gql.query.complexity` | one in [5, 10, 20, 50, 100, 200, 500, 1000] | The total number of nodes in the query. Refer to [Query Complexity section](#graphql-query-complexity). for additional information.
+| `gql.query.sig.hash`   | [Query Signature Hash](#graphql-query-signature-hash) of the query that was executed. Since the cardinality of the value is high it will be [limited](#cardinality-limiter).
 
-The `queryComplexity` is typically calculated as 1 + childComplexity. The query complexity is valuable to calculate th cost of a query as this can vary based on input arguments to the query. The computed value is represented as one of the bucketed values to reduce the cardinality of the metric.
+
+#### GraphQL Query Complexity
+
+The `gql.query.complexity` is typically calculated as 1 + Child's Complexity. The query complexity is valuable to calculate
+the cost of a query as this can vary based on input arguments to the query.
+The computed value is represented as one of the bucketed values to reduce the cardinality of the metric.
 
 **Example Query:**
 
@@ -241,6 +245,60 @@ query {
 
             = 550 total nodes
 ```
+
+
+#### GraphQL Query Signature Hash
+
+The **Query Signature** is defined as the tuple of the _GraphQL AST Signature_ of the _GraphQL Document_ and the _GraphQL
+AST Signature Hash_. The _GraphQL AST Signature_ of a _GraphQL Document_ is defined as follows:
+
+> A canonical AST which removes excess operations, removes any field aliases,
+> hides literal values and sorts the result into a canonical query
+Ref [graphql-java](https://github.com/graphql-java/graphql-java/blob/master/src/main/java/graphql/language/AstSignature.java#L35-L41)
+
+The **GraphQL AST Signature Hash** is the Hex 256 SHA string produced by encoding the *AST Signature*.
+While we can't tag a metric by its signature, due its length, we can use the *hash*, as now expressed by the
+`gql.query.sig.hash` tag.
+
+There are a few configuration parameters that can change the behavior of the `gql.query.sig.hash` tag.
+
+* `management.metrics.dgs-graphql.query-signature.enabled`:
+   Defaulting to `true`, it enables the calculation of the  *GQL Query Signature*. The `gql.query.sig.hash` will express the _GQL Query Signature Hash_.
+* `management.metrics.dgs-graphql.query-signature.caching.enabled`:
+   Defaulting to `true`, it will cache the *GQL Query Signature*. If set to `false` it will just disable the cache but will
+   not turn the calculation of the signature off. If you want to turn such calculation off use the
+   `management.metrics.dgs-graphql.query-signature.enabled` property.
+
+
+#### Cardinality Limiter
+
+The _cardinality_ of a given tag, the number of different values that a tag can express, can be problematic to
+servers supporting metrics. In order to prevent the cardinality of some of the tags supported out of the box there
+are some limiters by default. The limited tag values will only _see_ the first 100 different values by default,
+from there new values will be expressed as `--others--`.
+
+You can change the limiter via the following configuration:
+
+* `management.metrics.dgs-graphql.tags.limiter.limit`: Defaults to`100`, sets the number of different values expressed per limited tag.
+
+Not all tags are limited, currently, only following are:
+
+* `gql.operation.name`
+* `gql.query.sig.hash`
+
+
+
+### Query Timer: gql.query
+
+Captures the elapsed time that a given GraphQL query, or mutation, takes.
+
+**Name:** `gql.query`
+
+**Tags:**
+
+| tag name               | values                                      |description |
+| ---------------------- | ------------------------------------------- | ---------- |
+| `outcome`              | `success` or `failure`                      | Result of the operation, as defined by the [ExecutionResult].
 
 
 ### Error Counter: gql.error
@@ -314,29 +372,12 @@ You can customize the tags applied to the metrics above by providing *beans* tha
 | `DgsFieldFetchTagCustomizer` | Used to add tags specific to the execution of _data fetchers_. The [SimpleGqlOutcomeTagCustomizer] is an example of this as well.|             |
 
 
-### Configuration
+### Additional Metrics Configuration
 
-#### management.metrics.dgs-graphql.enabled
-
-Enables the metrics provided out of the box.
-**Defaults** to `true`.
-
-#### management.metrics.dgs-graphql.tag-customizers.outcome.enabled
-
-Enables the _tag customizer_ that will label the `gql.query` and `gql.resolver` timers with an `outcome` reflecting
-the result of the GraphQL outcome, either `success` or `failure`.
-Note that in GraphQL, vs REST, an [HTTP OK](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200) is not
-necessarily a response without errors. To evaluate the success of a response we needs to consider if there are any
-GraphQL errors as part of the response payload. In other words, you will get an HTTP 200 response even if the
-GraphQL response has errors.
-
-
-**Defaults** to `true`.
-
-#### management.metrics.dgs-graphql.data-loader-instrumentation.enabled
-
-Enables instrumentation of _data loaders_.
-**Defaults** to `true`.
+* `management.metrics.dgs-graphql.enabled`: Enables the metrics provided out of the box; **defaults** to `true`.
+* `management.metrics.dgs-graphql.tag-customizers.outcome.enabled`: Enables the _tag customizer_ that will label the `gql.query` and `gql.resolver` timers with an `outcome` reflecting
+   the result of the GraphQL outcome, either `success` or `failure`; **defaults** to `true`.
+* `management.metrics.dgs-graphql.data-loader-instrumentation.enabled`: Enables instrumentation of _data loaders_; **defaults** to `true`.
 
 ---
 
