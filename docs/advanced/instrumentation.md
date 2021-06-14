@@ -187,7 +187,7 @@ Total execution time: 3ms
 
 !!! hint
     Note that the version is missing since we assume you are using the latest BOM.
-    We recommend you [use the DGS Platform BOM](advanced/platform-bom.md) to handle such versions.
+    We recommend you [use the DGS Platform BOM](platform-bom.md) to handle such versions.
 
 
 ### Shared Tags
