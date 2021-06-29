@@ -1,0 +1,1273 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="canonical" href="https://netflix.github.io/dgs/advanced/java-client/">
+      
+      <link rel="icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.9">
+    
+    
+      
+        <title>Java GraphQL Client - DGS Framework</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ca7ac06f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.f1a3b89f.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/dgs_theme.css?v=3.0.13">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-green">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#usage" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Mitigate bug: https://github.com/mkdocs/mkdocs/issues/2191 -->
+
+
+
+<div class="sash" data-no-interact></div>
+
+<!-- Application header -->
+<header class="md-header dgs-header" data-md-component="header">
+
+  <!-- Top-level navigation -->
+  <nav class="md-header-nav md-grid dgs-header-nav" aria-label="Header">
+
+    <!-- Link to home -->
+    <a
+      href="https://netflix.github.io/dgs/"
+      title="DGS Framework"
+      class="md-header-nav__button dgs-header-nav__button md-logo dgs-logo"
+      aria-label="DGS Framework"
+    >
+      
+  <img src="../../images/logo--blue.svg" alt="logo">
+
+    </a>
+
+    <!-- Header title -->
+    <div class="md-header-nav__title dgs-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis sr-only">
+          <span class="md-header-nav__topic md-ellipsis">
+            DGS Framework
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Java GraphQL Client
+            
+          </span>
+        </div>
+      
+    </div>
+
+    <div class="dgs-header-nav__start">
+      <a class="md-header-nav__button dgs-header-nav__button dgs-getting-started" href="/dgs/getting-started/">
+        <span class="dgs-header-nav__text--upper">Guides & Docs</span>
+        <span class="dgs-header-nav__text--lower">
+          <time>Updated 2021-06-29</time>
+        </span>
+      </a>
+    </div>
+
+    <!-- Repository containing source -->
+    
+      <div class="md-header-nav__source dgs-header-nav__source">
+        
+<a href="https://github.com/netflix/dgs-framework/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+
+     <!-- Color palette -->
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: light)"
+            data-md-color-scheme="default"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_1"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to dark mode"
+            for="__palette_2"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m10-3a5 5 0 0 1 5 5 5 5 0 0 1-5 5H7a5 5 0 0 1-5-5 5 5 0 0 1 5-5h10M7 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3h10a3 3 0 0 0 3-3 3 3 0 0 0-3-3H7z"/></svg>
+          </label>
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: dark)"
+            data-md-color-scheme="slate"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_2"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to light mode"
+            for="__palette_1"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3z"/></svg>
+          </label>
+        
+      </form>
+    
+
+    <!-- Button to open drawer -->
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+
+    <!-- Button to open search dialogue -->
+    
+      <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+
+      <!-- Search interface -->
+      <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Search interface -->
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input
+        type="text"
+        class="md-search__input"
+        name="query"
+        aria-label="Search"
+        placeholder="Search"
+        autocapitalize="off"
+        autocorrect="off"
+        autocomplete="off"
+        spellcheck="false"
+        data-md-component="search-query"
+        data-md-state="active"
+        required
+      />
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button
+        type="reset"
+        class="md-search__icon md-icon"
+        aria-label="Clear"
+        data-md-component="search-reset"
+        tabindex="-1"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-search-decoration" data-no-interact></div>
+</div>
+    
+
+
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DGS Framework" class="md-nav__button md-logo" aria-label="DGS Framework" data-md-component="logo">
+      
+  <img src="../../images/logo--blue.svg" alt="logo">
+
+    </a>
+    DGS Framework
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/netflix/dgs-framework/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datafetching/" class="md-nav__link">
+        Data fetching
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../query-execution-testing/" class="md-nav__link">
+        Testing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mutations/" class="md-nav__link">
+        Mutations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generating-code-from-schema/" class="md-nav__link">
+        Code Generation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-loaders/" class="md-nav__link">
+        Async Data Fetching
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../error-handling/" class="md-nav__link">
+        Error Handling
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/" class="md-nav__link">
+        Examples
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../videos/" class="md-nav__link">
+        Videos
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_12" type="checkbox" id="__nav_12" checked>
+      
+      <label class="md-nav__link" for="__nav_12">
+        Advanced
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Advanced" data-md-level="1">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../platform-bom/" class="md-nav__link">
+        Using the Platform BOM
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../context-passing/" class="md-nav__link">
+        Nested data fetchers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../schema-reloading/" class="md-nav__link">
+        Hot reloading schemas
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Java GraphQL Client
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Java GraphQL Client
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#http-client-wrapper" class="md-nav__link">
+    HTTP client wrapper
+  </a>
+  
+    <nav class="md-nav" aria-label="HTTP client wrapper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    Errors
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-safe-query-api" class="md-nav__link">
+    Type safe Query API
+  </a>
+  
+    <nav class="md-nav" aria-label="Type safe Query API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interface-projections" class="md-nav__link">
+    Interface projections
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-federated-queries" class="md-nav__link">
+    Building Federated Queries
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        Security
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../file-uploads/" class="md-nav__link">
+        File Uploads
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../subscriptions/" class="md-nav__link">
+        Subscriptions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../type-resolvers-for-abstract-types/" class="md-nav__link">
+        Interfaces and Unions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../instrumentation/" class="md-nav__link">
+        Instrumentation (Tracing, Metrics)
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom-datafetcher-context/" class="md-nav__link">
+        Data Fetching Context
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../federated-testing/" class="md-nav__link">
+        Federated Testing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dynamic-schemas/" class="md-nav__link">
+        Dynamic schemas
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scalars/" class="md-nav__link">
+        Adding Custom Scalars
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mocking/" class="md-nav__link">
+        Mocking
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/Netflix/dgs-framework/tree/master/graphql-dgs-example-java" class="md-nav__link">
+        React Example
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#http-client-wrapper" class="md-nav__link">
+    HTTP client wrapper
+  </a>
+  
+    <nav class="md-nav" aria-label="HTTP client wrapper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    Errors
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-safe-query-api" class="md-nav__link">
+    Type safe Query API
+  </a>
+  
+    <nav class="md-nav" aria-label="Type safe Query API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interface-projections" class="md-nav__link">
+    Interface projections
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-federated-queries" class="md-nav__link">
+    Building Federated Queries
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/netflix/dgs-framework/edit/advanced/java-client.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Java GraphQL Client</h1>
+                
+                <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<p>The DGS framework provides a GraphQL client that can be used to retrieve data from a GraphQL endpoint.
+The client has two components, each usable by itself, or in combination together.</p>
+<ul>
+<li>GraphQLClient - A HTTP client wrapper that provides easy parsing of GraphQL responses</li>
+<li>Query API codegen - Generate type-safe Query builders</li>
+</ul>
+<h2 id="http-client-wrapper">HTTP client wrapper<a class="headerlink" href="#http-client-wrapper" title="Permanent link">&para;</a></h2>
+<p>The GraphQL client wraps any HTTP client and provides easy parsing of GraphQL responses.
+The client can be used against any GraphQL endpoint (it doesn't have to be implemented with the DGS framework),
+but provides extra conveniences for parsing Gateway and DGS responses.
+This includes support for the <a href="../../error-handling/">Errors Spec</a>.</p>
+<p>To use the client, create an instance of <code>DefaultGraphQLClient</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">GraphQLClient</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultGraphQLClient</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+</code></pre></div>
+<p>The <code>url</code> is the server url of the endpoint you want to call.
+This url will be passed down to the callback discussed below.</p>
+<p>Using the <code>GraphQLClient</code> a query can be executed.
+The <code>executeQuery</code> method has four arguments:</p>
+<ol>
+<li>The query String</li>
+<li>An optional map of query variables</li>
+<li>An optional operation name</li>
+<li>An instance of <code>RequestExecutor</code>, typically provided as a lambda.</li>
+</ol>
+<p>Because of the large number HTTP clients in use within Netflix, the GraphQLClient is decoupled from any particular HTTP client implementation.
+Any HTTP client (RestTemplate, RestClient, OkHTTP, ....) can be used.
+The operation name is useful in case of logging queries, or if you happen to have multiple queries as part of the same request.
+The developer is responsible for making the actual HTTP call by implementing a <code>RequestExecutor</code>.
+<code>RequestExecutor</code> receives the <code>url</code>, a map of <code>headers</code> and the request <code>body</code> as parameters, and should return an instance of <code>HttpResponse</code>.
+Based on the HTTP response the GraphQLClient parses the response and provides easy access to data and errors.
+The example below uses <code>RestTemplate</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>private RestTemplate dgsRestTemplate;
+<span class="linenos" data-linenos=" 2 "></span>
+<span class="linenos" data-linenos=" 3 "></span>private static final String URL = &quot;http://someserver/graphql&quot;;
+<span class="linenos" data-linenos=" 4 "></span>
+<span class="linenos" data-linenos=" 5 "></span>private static final String QUERY = &quot;{\n&quot; +
+<span class="linenos" data-linenos=" 6 "></span>            &quot;  ticks(first: %d, after:%d){\n&quot; +
+<span class="linenos" data-linenos=" 7 "></span>            &quot;    edges {\n&quot; +
+<span class="linenos" data-linenos=" 8 "></span>            &quot;      node {\n&quot; +
+<span class="linenos" data-linenos=" 9 "></span>            &quot;        route {\n&quot; +
+<span class="linenos" data-linenos="10 "></span>            &quot;          name\n&quot; +
+<span class="linenos" data-linenos="11 "></span>            &quot;          grade\n&quot; +
+<span class="linenos" data-linenos="12 "></span>            &quot;          pitches\n&quot; +
+<span class="linenos" data-linenos="13 "></span>            &quot;          location\n&quot; +
+<span class="linenos" data-linenos="14 "></span>            &quot;        }\n&quot; +
+<span class="linenos" data-linenos="15 "></span>            &quot;        \n&quot; +
+<span class="linenos" data-linenos="16 "></span>            &quot;        userStars\n&quot; +
+<span class="linenos" data-linenos="17 "></span>            &quot;      }\n&quot; +
+<span class="linenos" data-linenos="18 "></span>            &quot;    }\n&quot; +
+<span class="linenos" data-linenos="19 "></span>            &quot;  }\n&quot; +
+<span class="linenos" data-linenos="20 "></span>            &quot;}&quot;;
+<span class="linenos" data-linenos="21 "></span>
+<span class="linenos" data-linenos="22 "></span>public List&lt;TicksConnection&gt; getData() {
+<span class="linenos" data-linenos="23 "></span>    DefaultGraphQLClient graphQLClient = new DefaultGraphQLClient(URL);
+<span class="linenos" data-linenos="24 "></span>    GraphQLResponse response = graphQLClient.executeQuery(QUERY, new HashMap&lt;&gt;(), &quot;TicksQuery&quot;, (url, headers, body) -&gt; {
+<span class="linenos" data-linenos="25 "></span>        /**
+<span class="linenos" data-linenos="26 "></span>         * The requestHeaders providers headers typically required to call a GraphQL endpoint, including the Accept and Content-Type headers.
+<span class="linenos" data-linenos="27 "></span>         * To use RestTemplate, the requestHeaders need to be transformed into Spring&#39;s HttpHeaders.
+<span class="linenos" data-linenos="28 "></span>         */
+<span class="linenos" data-linenos="29 "></span>        HttpHeaders requestHeaders = new HttpHeaders();
+<span class="linenos" data-linenos="30 "></span>        headers.forEach(requestHeaders::put);
+<span class="linenos" data-linenos="31 "></span>
+<span class="linenos" data-linenos="32 "></span>        /**
+<span class="linenos" data-linenos="33 "></span>         * Use RestTemplate to call the GraphQL service. 
+<span class="linenos" data-linenos="34 "></span>         * The response type should simply be String, because the parsing will be done by the GraphQLClient.
+<span class="linenos" data-linenos="35 "></span>         */
+<span class="linenos" data-linenos="36 "></span>        ResponseEntity&lt;String&gt; exchange = dgsRestTemplate.exchange(url, HttpMethod.POST, new HttpEntity(body, requestHeaders), String.class);
+<span class="linenos" data-linenos="37 "></span>
+<span class="linenos" data-linenos="38 "></span>        /**
+<span class="linenos" data-linenos="39 "></span>         * Return a HttpResponse, which contains the HTTP status code and response body (as a String).
+<span class="linenos" data-linenos="40 "></span>         * The way to get these depend on the HTTP client.
+<span class="linenos" data-linenos="41 "></span>         */
+<span class="linenos" data-linenos="42 "></span>        return new HttpResponse(exchange.getStatusCodeValue(), exchange.getBody());
+<span class="linenos" data-linenos="43 "></span>    }); 
+<span class="linenos" data-linenos="44 "></span>
+<span class="linenos" data-linenos="45 "></span>    TicksConnection ticks = response.extractValueAsObject(&quot;ticks&quot;, TicksConnection.class);
+<span class="linenos" data-linenos="46 "></span>    return ticks;
+<span class="linenos" data-linenos="47 "></span>}
+</code></pre></div>
+<p>The <code>GraphQLClient</code> provides methods to parse and retrieve data and errors in a variety of ways.
+Refer to the <code>GraphQLClient</code> JavaDoc for the complete list of supported methods.</p>
+<table>
+<thead>
+<tr>
+<th>method</th>
+<th>description</th>
+<th>example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>getData</td>
+<td>Get the data as a Map<String, Object></td>
+<td><code>Map&lt;String,Object&gt; data = response.getData()</code></td>
+</tr>
+<tr>
+<td>dataAsObject</td>
+<td>Parse data as the provided class, using the Jackson Object Mapper</td>
+<td><code>TickResponse data = response.dataAsObject(TicksResponse.class)</code></td>
+</tr>
+<tr>
+<td>extractValue</td>
+<td>Extract values given a <a href="https://github.com/json-path/JsonPath">JsonPath</a>. The return type will be whatever type you expect, but depends on the JSON shape. For JSON objects, a Map is returned. Although this looks type safe, it really isn't. It's mostly useful for "simple" types like String, Int etc., and Lists of those types.</td>
+<td><code>List&lt;String&gt; name = response.extractValue("movies[*].originalTitle")</code></td>
+</tr>
+<tr>
+<td>extractValueAsObject</td>
+<td>Extract values given a JsonPath and deserialize into the given class</td>
+<td><code>Ticks ticks = response.extractValueAsObject("ticks", Ticks.class)</code></td>
+</tr>
+<tr>
+<td>extractValueAsObject</td>
+<td>Extract values given a JsonPath and deserialize into the given TypeRef. Useful for Maps and Lists of a certain class.</td>
+<td><code>List&lt;Route&gt; routes = response.extractValueAsObject("ticks.edges[*].node.route", new TypeRef&lt;List&lt;Route&gt;&gt;(){})</code></td>
+</tr>
+<tr>
+<td>getRequestDetails</td>
+<td>Extract a <code>RequestDetails</code> object. This only works if requestDetails was requested in the query, and against the Gateway.</td>
+<td>RequestDetails requestDetails = <code>response.getRequestDetails()</code></td>
+</tr>
+<tr>
+<td>getParsed</td>
+<td>Get the parsed <code>DocumentContext</code> for further JsonPath processing</td>
+<td><code>response.getDocumentContext()</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h3>
+<p>The GraphQLClient checks both for HTTP level errors (based on the response status code) and the <code>errors</code> block in a GraphQL response.
+The GraphQLClient is compatible with the <a href="../../error-handling/">Errors Spec</a> used by the Gateway and DGS, and makes it easy to extract error information such as the ErrorType.</p>
+<p>For example, for following GraphQL response the GraphQLClient lets you easily get the ErrorType and ErrorDetail fields.
+Note that the <code>ErrorType</code> is an enum as specified by the <a href="../../error-handling/">Errors Spec</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>{
+<span class="linenos" data-linenos=" 2 "></span>  &quot;errors&quot;: [
+<span class="linenos" data-linenos=" 3 "></span>    {
+<span class="linenos" data-linenos=" 4 "></span>      &quot;message&quot;: &quot;java.lang.RuntimeException: test&quot;,
+<span class="linenos" data-linenos=" 5 "></span>      &quot;locations&quot;: [],
+<span class="linenos" data-linenos=" 6 "></span>      &quot;path&quot;: [
+<span class="linenos" data-linenos=" 7 "></span>        &quot;hello&quot;
+<span class="linenos" data-linenos=" 8 "></span>      ],
+<span class="linenos" data-linenos=" 9 "></span>      &quot;extensions&quot;: {
+<span class="linenos" data-linenos="10 "></span>        &quot;errorType&quot;: &quot;BAD_REQUEST&quot;,
+<span class="linenos" data-linenos="11 "></span>        &quot;errorDetail&quot;: &quot;FIELD_NOT_FOUND&quot;
+<span class="linenos" data-linenos="12 "></span>      }
+<span class="linenos" data-linenos="13 "></span>    }
+<span class="linenos" data-linenos="14 "></span>  ],
+<span class="linenos" data-linenos="15 "></span>  &quot;data&quot;: {
+<span class="linenos" data-linenos="16 "></span>    &quot;hello&quot;: null
+<span class="linenos" data-linenos="17 "></span>  }
+<span class="linenos" data-linenos="18 "></span>}
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">assertThat</span><span class="p">(</span><span class="n">graphQLResponse</span><span class="p">.</span><span class="na">errors</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="na">extensions</span><span class="p">.</span><span class="na">errorType</span><span class="p">).</span><span class="na">isEqualTo</span><span class="p">(</span><span class="n">ErrorType</span><span class="p">.</span><span class="na">BAD_REQUEST</span><span class="p">)</span>
+<span class="linenos" data-linenos="2 "></span><span class="n">assertThat</span><span class="p">(</span><span class="n">graphQLResponse</span><span class="p">.</span><span class="na">errors</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="na">extensions</span><span class="p">.</span><span class="na">errorDetail</span><span class="p">).</span><span class="na">isEqualTo</span><span class="p">(</span><span class="s">&quot;FIELD_NOT_FOUND&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="type-safe-query-api">Type safe Query API<a class="headerlink" href="#type-safe-query-api" title="Permanent link">&para;</a></h2>
+<p>Based on a GraphQL schema a type safe query API can be generated for Java/Kotlin.
+The generated API is a builder style API that lets you build a GraphQL query and it's projection (field selection).
+Because the code gets re-generated when the schema changes, it helps catch errors in the query.
+Because Java doesn't support multi-line strings (yet) it's also arguably a more readable way to specify a query.</p>
+<p>If you own a DGS and want to generate a client for this DGS (e.g. for testing purposes) the client generation is just an extra property on the <a href="../../generating-code-from-schema/">Codegen configuration</a>.
+Specify the following in your <code>build.gradle</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="n">buildscript</span> <span class="o">{</span>
+<span class="linenos" data-linenos=" 2 "></span>   <span class="n">dependencies</span><span class="o">{</span>
+<span class="linenos" data-linenos=" 3 "></span>      <span class="n">classpath</span> <span class="s1">&#39;netflix:graphql-dgs-codegen-gradle:latest.release&#39;</span>
+<span class="linenos" data-linenos=" 4 "></span>   <span class="o">}</span>
+<span class="linenos" data-linenos=" 5 "></span><span class="o">}</span>
+<span class="linenos" data-linenos=" 6 "></span>
+<span class="linenos" data-linenos=" 7 "></span><span class="n">apply</span> <span class="nl">plugin:</span> <span class="s1">&#39;codegen-gradle-plugin&#39;</span>
+<span class="linenos" data-linenos=" 8 "></span>
+<span class="linenos" data-linenos=" 9 "></span><span class="n">generateJava</span><span class="o">{</span>
+<span class="linenos" data-linenos="10 "></span>   <span class="n">packageName</span> <span class="o">=</span> <span class="s1">&#39;com.example.packagename&#39;</span> <span class="c1">// The package name to use to generate sources</span>
+<span class="linenos" data-linenos="11 "></span>   <span class="n">generateClient</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="linenos" data-linenos="12 "></span><span class="o">}</span>
+</code></pre></div>
+<p>Code will be generated on build.
+The generated code is in <code>build/generated</code>.</p>
+<p>With codegen configured correctly, a builder style API will be generated when building the project.
+Using the same query example as above, the query can be build using the generated builder API.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>GraphQLQueryRequest graphQLQueryRequest =
+<span class="linenos" data-linenos=" 2 "></span>                new GraphQLQueryRequest(
+<span class="linenos" data-linenos=" 3 "></span>                    new TicksGraphQLQuery.Builder()
+<span class="linenos" data-linenos=" 4 "></span>                        .first(first)
+<span class="linenos" data-linenos=" 5 "></span>                        .after(after)
+<span class="linenos" data-linenos=" 6 "></span>                        .build(),
+<span class="linenos" data-linenos=" 7 "></span>                    new TicksConnectionProjectionRoot()
+<span class="linenos" data-linenos=" 8 "></span>                        .edges()
+<span class="linenos" data-linenos=" 9 "></span>                            .node()
+<span class="linenos" data-linenos="10 "></span>                                .date()
+<span class="linenos" data-linenos="11 "></span>                                .route()
+<span class="linenos" data-linenos="12 "></span>                                    .name()
+<span class="linenos" data-linenos="13 "></span>                                    .votes()
+<span class="linenos" data-linenos="14 "></span>                                        .starRating()
+<span class="linenos" data-linenos="15 "></span>                                        .parent()
+<span class="linenos" data-linenos="16 "></span>                                    .grade());
+<span class="linenos" data-linenos="17 "></span>
+<span class="linenos" data-linenos="18 "></span>String query = graphQLQueryRequest.serialize();
+</code></pre></div>
+<p>The <code>GraphQLQueryRequest</code> is a class from <code>graphql-dgs-client</code>.
+The <code>TicksGraphQLQuery</code> and <code>TicksConnectionProjectionRoot</code> are generated.
+After building the query, it can be serialized to a String, and executed using the GraphQLClient.</p>
+<p>Note that the <code>edges</code> and <code>node</code> fields are because the example schema is using Relay pagination.</p>
+<h3 id="interface-projections">Interface projections<a class="headerlink" href="#interface-projections" title="Permanent link">&para;</a></h3>
+<p>When a field returns an interface, fields on the concrete types are specified using a fragment.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>type Query @extends {
+<span class="linenos" data-linenos=" 2 "></span>    script(name: String): Script
+<span class="linenos" data-linenos=" 3 "></span>}
+<span class="linenos" data-linenos=" 4 "></span>
+<span class="linenos" data-linenos=" 5 "></span>interface Script {
+<span class="linenos" data-linenos=" 6 "></span>    title: String
+<span class="linenos" data-linenos=" 7 "></span>    director: String
+<span class="linenos" data-linenos=" 8 "></span>    actors: [Actor]
+<span class="linenos" data-linenos=" 9 "></span>}
+<span class="linenos" data-linenos="10 "></span>
+<span class="linenos" data-linenos="11 "></span>type MovieScript implements Script {
+<span class="linenos" data-linenos="12 "></span>    title: String
+<span class="linenos" data-linenos="13 "></span>    director: String
+<span class="linenos" data-linenos="14 "></span>    length: Int
+<span class="linenos" data-linenos="15 "></span>}
+<span class="linenos" data-linenos="16 "></span>
+<span class="linenos" data-linenos="17 "></span>type ShowScript implements Script {
+<span class="linenos" data-linenos="18 "></span>    title: String
+<span class="linenos" data-linenos="19 "></span>    director: String
+<span class="linenos" data-linenos="20 "></span>    episodes: Int
+<span class="linenos" data-linenos="21 "></span>}
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>query { 
+<span class="linenos" data-linenos="2 "></span>    script(name: &quot;Top Secret&quot;) { 
+<span class="linenos" data-linenos="3 "></span>        title 
+<span class="linenos" data-linenos="4 "></span>        ... on MovieScript {
+<span class="linenos" data-linenos="5 "></span>            length
+<span class="linenos" data-linenos="6 "></span>        } 
+<span class="linenos" data-linenos="7 "></span>    } 
+<span class="linenos" data-linenos="8 "></span>}
+</code></pre></div>
+<p>This syntax is supported by the Query builder as well.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span> <span class="n">GraphQLQueryRequest</span> <span class="n">graphQLQueryRequest</span> <span class="o">=</span>
+<span class="linenos" data-linenos=" 2 "></span>    <span class="k">new</span> <span class="n">GraphQLQueryRequest</span><span class="p">(</span>
+<span class="linenos" data-linenos=" 3 "></span>        <span class="k">new</span> <span class="n">ScriptGraphQLQuery</span><span class="p">.</span><span class="na">Builder</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 4 "></span>            <span class="p">.</span><span class="na">name</span><span class="p">(</span><span class="s">&quot;Top Secret&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 5 "></span>            <span class="p">.</span><span class="na">build</span><span class="p">(),</span>
+<span class="linenos" data-linenos=" 6 "></span>        <span class="k">new</span> <span class="n">ScriptProjectionRoot</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 7 "></span>            <span class="p">.</span><span class="na">title</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 8 "></span>            <span class="p">.</span><span class="na">onMovieScript</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 9 "></span>                <span class="p">.</span><span class="na">length</span><span class="p">();</span>                    
+<span class="linenos" data-linenos="10 "></span>    <span class="p">);</span>
+</code></pre></div>
+<h3 id="building-federated-queries">Building Federated Queries<a class="headerlink" href="#building-federated-queries" title="Permanent link">&para;</a></h3>
+<p>You can use <code>GraphQLQueryRequest</code> along with <code>EntitiesGraphQLQuery</code> to generated federated queries. 
+The API provides a type-safe way to construct the <a href="https://www.apollographql.com/docs/apollo-server/federation/federation-spec/#resolve-requests-for-entities">_entities</a> query with the associated <code>representations</code> based on the input schema. 
+The <code>representations</code> are passed in as a map of variables. Each representation class is generated based on the <code>key</code> fields defined  on the entity in your schema, along with the <code>__typename</code>. 
+The <code>EntitiesProjectionRoot</code> is used to select query fields on the specified type.</p>
+<p>For example, let us look at a schema that extends a <code>Movie</code> type:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>type Movie @key(fields: &quot;movieId&quot;) @extends {
+<span class="linenos" data-linenos=" 2 "></span>    movieId: Int @external
+<span class="linenos" data-linenos=" 3 "></span>    script: MovieScript
+<span class="linenos" data-linenos=" 4 "></span>}
+<span class="linenos" data-linenos=" 5 "></span>
+<span class="linenos" data-linenos=" 6 "></span>type MovieScript  {
+<span class="linenos" data-linenos=" 7 "></span>    title: String
+<span class="linenos" data-linenos=" 8 "></span>    director: String
+<span class="linenos" data-linenos=" 9 "></span>    actors: [Actor]
+<span class="linenos" data-linenos="10 "></span>}
+<span class="linenos" data-linenos="11 "></span>
+<span class="linenos" data-linenos="12 "></span>type Actor {
+<span class="linenos" data-linenos="13 "></span>    name: String
+<span class="linenos" data-linenos="14 "></span>    gender: String
+<span class="linenos" data-linenos="15 "></span>    age: Int
+<span class="linenos" data-linenos="16 "></span>}
+</code></pre></div>
+<p>With client code generation, you will now have a <code>MovieRepresentation</code> containing the key field, i.e., <code>movieId</code>, and the <code>__typename</code> field already set to type <code>Movie</code>. 
+Now you can add each representation to the <code>EntitiesGraphQLQuery</code> as a <code>representations</code> variable.
+You will also have a <code>EntitiesProjectionRoot</code> with <code>onMovie()</code> to select fields on <code>Movie</code> from.
+Finally, you put them all together as a <code>GraphQLQueryRequest</code>, which you serialize into the final query string.
+The map of <code>representations</code> variables is available via <code>getVariables</code> on the <code>EntitiesGraphQLQuery</code>.</p>
+<p>Here is an example for the schema shown earlier:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>        <span class="n">EntitiesGraphQLQuery</span> <span class="n">entitiesQuery</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EntitiesGraphQLQuery</span><span class="p">.</span><span class="na">Builder</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 2 "></span>                    <span class="p">.</span><span class="na">addRepresentationAsVariable</span><span class="p">(</span>
+<span class="linenos" data-linenos=" 3 "></span>                            <span class="n">MovieRepresentation</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">().</span><span class="na">movieId</span><span class="p">(</span><span class="mi">1122</span><span class="p">).</span><span class="na">build</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 4 "></span>                    <span class="p">)</span>
+<span class="linenos" data-linenos=" 5 "></span>                    <span class="p">.</span><span class="na">build</span><span class="p">();</span>
+<span class="linenos" data-linenos=" 6 "></span>        <span class="n">GraphQLQueryRequest</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GraphQLQueryRequest</span><span class="p">(</span>
+<span class="linenos" data-linenos=" 7 "></span>                    <span class="n">entitiesQuery</span><span class="p">,</span>
+<span class="linenos" data-linenos=" 8 "></span>                    <span class="k">new</span> <span class="n">EntitiesProjectionRoot</span><span class="p">().</span><span class="na">onMovie</span><span class="p">().</span><span class="na">movieId</span><span class="p">().</span><span class="na">script</span><span class="p">().</span><span class="na">title</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 9 "></span>                    <span class="p">);</span>
+<span class="linenos" data-linenos="10 "></span>
+<span class="linenos" data-linenos="11 "></span>        <span class="n">String</span> <span class="n">query</span>  <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="na">serialize</span><span class="p">();</span>
+<span class="linenos" data-linenos="12 "></span>        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">representations</span> <span class="o">=</span> <span class="n">entitiesQuery</span><span class="p">.</span><span class="na">getVariables</span><span class="p">();</span>
+</code></pre></div></p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../schema-reloading/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Hot reloading schemas" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Hot reloading schemas
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../security/" class="md-footer__link md-footer__link--next" aria-label="Next: Security" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Security
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.477d984a.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.82b56eb2.min.js"></script>
+      
+        <script src="../../js/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

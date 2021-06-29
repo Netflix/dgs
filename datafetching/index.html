@@ -1,0 +1,1263 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="canonical" href="https://netflix.github.io/dgs/datafetching/">
+      
+      <link rel="icon" href="../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.9">
+    
+    
+      
+        <title>Data fetching - DGS Framework</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ca7ac06f.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.f1a3b89f.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../stylesheets/dgs_theme.css?v=3.0.13">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-green">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-dgsdata-dgsquery-dgsmutation-and-dgssubscription-annotations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Mitigate bug: https://github.com/mkdocs/mkdocs/issues/2191 -->
+
+
+
+<div class="sash" data-no-interact></div>
+
+<!-- Application header -->
+<header class="md-header dgs-header" data-md-component="header">
+
+  <!-- Top-level navigation -->
+  <nav class="md-header-nav md-grid dgs-header-nav" aria-label="Header">
+
+    <!-- Link to home -->
+    <a
+      href="https://netflix.github.io/dgs/"
+      title="DGS Framework"
+      class="md-header-nav__button dgs-header-nav__button md-logo dgs-logo"
+      aria-label="DGS Framework"
+    >
+      
+  <img src="../images/logo--blue.svg" alt="logo">
+
+    </a>
+
+    <!-- Header title -->
+    <div class="md-header-nav__title dgs-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis sr-only">
+          <span class="md-header-nav__topic md-ellipsis">
+            DGS Framework
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Data fetching
+            
+          </span>
+        </div>
+      
+    </div>
+
+    <div class="dgs-header-nav__start">
+      <a class="md-header-nav__button dgs-header-nav__button dgs-getting-started" href="/dgs/getting-started/">
+        <span class="dgs-header-nav__text--upper">Guides & Docs</span>
+        <span class="dgs-header-nav__text--lower">
+          <time>Updated 2021-06-29</time>
+        </span>
+      </a>
+    </div>
+
+    <!-- Repository containing source -->
+    
+      <div class="md-header-nav__source dgs-header-nav__source">
+        
+<a href="https://github.com/netflix/dgs-framework/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+
+     <!-- Color palette -->
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: light)"
+            data-md-color-scheme="default"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_1"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to dark mode"
+            for="__palette_2"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m10-3a5 5 0 0 1 5 5 5 5 0 0 1-5 5H7a5 5 0 0 1-5-5 5 5 0 0 1 5-5h10M7 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3h10a3 3 0 0 0 3-3 3 3 0 0 0-3-3H7z"/></svg>
+          </label>
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: dark)"
+            data-md-color-scheme="slate"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_2"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to light mode"
+            for="__palette_1"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3z"/></svg>
+          </label>
+        
+      </form>
+    
+
+    <!-- Button to open drawer -->
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+
+    <!-- Button to open search dialogue -->
+    
+      <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+
+      <!-- Search interface -->
+      <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Search interface -->
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input
+        type="text"
+        class="md-search__input"
+        name="query"
+        aria-label="Search"
+        placeholder="Search"
+        autocapitalize="off"
+        autocorrect="off"
+        autocomplete="off"
+        spellcheck="false"
+        data-md-component="search-query"
+        data-md-state="active"
+        required
+      />
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button
+        type="reset"
+        class="md-search__icon md-icon"
+        aria-label="Clear"
+        data-md-component="search-reset"
+        tabindex="-1"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-search-decoration" data-no-interact></div>
+</div>
+    
+
+
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="DGS Framework" class="md-nav__button md-logo" aria-label="DGS Framework" data-md-component="logo">
+      
+  <img src="../images/logo--blue.svg" alt="logo">
+
+    </a>
+    DGS Framework
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/netflix/dgs-framework/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Data fetching
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Data fetching
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-dgsdata-dgsquery-dgsmutation-and-dgssubscription-annotations" class="md-nav__link">
+    The @DgsData, @DgsQuery, @DgsMutation and @DgsSubscription annotations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#child-datafetchers" class="md-nav__link">
+    Child datafetchers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-inputargument" class="md-nav__link">
+    Using @InputArgument
+  </a>
+  
+    <nav class="md-nav" aria-label="Using @InputArgument">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nullability-in-kotlin-for-input-arguments" class="md-nav__link">
+    Nullability in Kotlin for input arguments
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-inputargument-with-lists" class="md-nav__link">
+    Using @InputArgument with lists
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-optional-with-inputargument" class="md-nav__link">
+    Using Optional with @InputArgument
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#codegen-constants" class="md-nav__link">
+    Codegen constants
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requestheader-and-requestparam" class="md-nav__link">
+    @RequestHeader and @RequestParam
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-dgsrequestdata" class="md-nav__link">
+    Using DgsRequestData
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-context" class="md-nav__link">
+    Using context
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-execution-testing/" class="md-nav__link">
+        Testing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mutations/" class="md-nav__link">
+        Mutations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generating-code-from-schema/" class="md-nav__link">
+        Code Generation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-loaders/" class="md-nav__link">
+        Async Data Fetching
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error-handling/" class="md-nav__link">
+        Error Handling
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        Examples
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../videos/" class="md-nav__link">
+        Videos
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_12" type="checkbox" id="__nav_12" >
+      
+      <label class="md-nav__link" for="__nav_12">
+        Advanced
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Advanced" data-md-level="1">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/platform-bom/" class="md-nav__link">
+        Using the Platform BOM
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/context-passing/" class="md-nav__link">
+        Nested data fetchers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/schema-reloading/" class="md-nav__link">
+        Hot reloading schemas
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/java-client/" class="md-nav__link">
+        Java GraphQL Client
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/security/" class="md-nav__link">
+        Security
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/file-uploads/" class="md-nav__link">
+        File Uploads
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/subscriptions/" class="md-nav__link">
+        Subscriptions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/type-resolvers-for-abstract-types/" class="md-nav__link">
+        Interfaces and Unions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/instrumentation/" class="md-nav__link">
+        Instrumentation (Tracing, Metrics)
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/custom-datafetcher-context/" class="md-nav__link">
+        Data Fetching Context
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/federated-testing/" class="md-nav__link">
+        Federated Testing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/dynamic-schemas/" class="md-nav__link">
+        Dynamic schemas
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scalars/" class="md-nav__link">
+        Adding Custom Scalars
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/mocking/" class="md-nav__link">
+        Mocking
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/Netflix/dgs-framework/tree/master/graphql-dgs-example-java" class="md-nav__link">
+        React Example
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-dgsdata-dgsquery-dgsmutation-and-dgssubscription-annotations" class="md-nav__link">
+    The @DgsData, @DgsQuery, @DgsMutation and @DgsSubscription annotations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#child-datafetchers" class="md-nav__link">
+    Child datafetchers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-inputargument" class="md-nav__link">
+    Using @InputArgument
+  </a>
+  
+    <nav class="md-nav" aria-label="Using @InputArgument">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nullability-in-kotlin-for-input-arguments" class="md-nav__link">
+    Nullability in Kotlin for input arguments
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-inputargument-with-lists" class="md-nav__link">
+    Using @InputArgument with lists
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-optional-with-inputargument" class="md-nav__link">
+    Using Optional with @InputArgument
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#codegen-constants" class="md-nav__link">
+    Codegen constants
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requestheader-and-requestparam" class="md-nav__link">
+    @RequestHeader and @RequestParam
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-dgsrequestdata" class="md-nav__link">
+    Using DgsRequestData
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-context" class="md-nav__link">
+    Using context
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/netflix/dgs-framework/edit/datafetching.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Data fetching</h1>
+                
+                <p>In the <a href="../getting-started">getting started guide</a> we introduced the <code>@DgsData</code> annotation, which you use to create a data fetcher. In this section, we look at some of the finer details of datafetchers.</p>
+<h2 id="the-dgsdata-dgsquery-dgsmutation-and-dgssubscription-annotations">The @DgsData, @DgsQuery, @DgsMutation and @DgsSubscription annotations<a class="headerlink" href="#the-dgsdata-dgsquery-dgsmutation-and-dgssubscription-annotations" title="Permanent link">&para;</a></h2>
+<p>You use the <code>@DgsData</code> annotation on a Java/Kotlin method to make that method a datafetcher.
+The method must be in a <code>@DgsComponent</code> class.
+The <code>@DgsData</code> annotation has two parameters:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>parentType</code></td>
+<td>This is the type that contains the field.</td>
+</tr>
+<tr>
+<td><code>field</code></td>
+<td>The field that the datafetcher is responsible for</td>
+</tr>
+</tbody>
+</table>
+<p>For example, we have the following schema.</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>type Query {
+<span class="linenos" data-linenos="2 "></span>   shows: [Show]
+<span class="linenos" data-linenos="3 "></span>}
+<span class="linenos" data-linenos="4 "></span>
+<span class="linenos" data-linenos="5 "></span>type Show {
+<span class="linenos" data-linenos="6 "></span>  title: String
+<span class="linenos" data-linenos="7 "></span>  actors: [Actor]
+<span class="linenos" data-linenos="8 "></span>}
+</code></pre></div>
+We can implement this schema with a single datafetcher.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@DgsComponent</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ShowDataFetcher</span> <span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span>
+<span class="linenos" data-linenos=" 4 "></span>   <span class="nd">@DgsData</span><span class="p">(</span><span class="n">parentType</span> <span class="o">=</span> <span class="s">&quot;Query&quot;</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="s">&quot;shows&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 5 "></span>   <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Show</span><span class="o">&gt;</span> <span class="nf">shows</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos" data-linenos=" 6 "></span>
+<span class="linenos" data-linenos=" 7 "></span>       <span class="c1">//Load shows from a database and return the list of Show objects</span>
+<span class="linenos" data-linenos=" 8 "></span>       <span class="k">return</span> <span class="n">shows</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 9 "></span>   <span class="p">}</span>
+<span class="linenos" data-linenos="10 "></span><span class="p">}</span>
+</code></pre></div>
+<p>If the <code>field</code> parameter is not set, the method name will be used as the field name.
+The <code>@DgsQuery</code>, <code>@DgsMutation</code> and <code>@DgsSubscription</code> annotations are shorthands to define datafetchers on the <code>Query</code>, <code>Mutation</code> and <code>Subscription</code> types.
+The following definitions are all equivalent.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@DgsData</span><span class="p">(</span><span class="n">parentType</span> <span class="o">=</span> <span class="s">&quot;Query&quot;</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="s">&quot;shows&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Show</span><span class="o">&gt;</span> <span class="nf">shows</span><span class="p">()</span> <span class="p">{</span> <span class="p">....</span> <span class="p">}</span>
+<span class="linenos" data-linenos=" 3 "></span>
+<span class="linenos" data-linenos=" 4 "></span><span class="c1">// The &quot;field&quot; argument is omitted. It uses the method name as the field name.</span>
+<span class="linenos" data-linenos=" 5 "></span><span class="nd">@DgsData</span><span class="p">(</span><span class="n">parentType</span> <span class="o">=</span> <span class="s">&quot;Query&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Show</span><span class="o">&gt;</span> <span class="nf">shows</span><span class="p">()</span> <span class="p">{</span> <span class="p">....</span> <span class="p">}</span>
+<span class="linenos" data-linenos=" 7 "></span>
+<span class="linenos" data-linenos=" 8 "></span><span class="c1">// The parentType is &quot;Query&quot;, the field name is derived from the method name.</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="nd">@DgsQuery</span>
+<span class="linenos" data-linenos="10 "></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Show</span><span class="o">&gt;</span> <span class="nf">shows</span><span class="p">()</span> <span class="p">{</span> <span class="p">....</span> <span class="p">}</span>
+<span class="linenos" data-linenos="11 "></span>
+<span class="linenos" data-linenos="12 "></span><span class="c1">// The parentType is &quot;Query&quot;, the field name is explicitly specified.</span>
+<span class="linenos" data-linenos="13 "></span><span class="nd">@DgsQuery</span><span class="p">(</span><span class="n">field</span> <span class="o">=</span> <span class="s">&quot;shows&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos="14 "></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Show</span><span class="o">&gt;</span> <span class="nf">shows</span><span class="p">()</span> <span class="p">{</span> <span class="p">....</span> <span class="p">}</span>
+</code></pre></div>
+<p>Notice how a datafetcher can return complex objects or lists of objects.
+You don't have to create a separate datafetcher for each field.
+The framework will take care of only returning the fields that are specified in the query.
+For example, if a user queries:</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>{
+<span class="linenos" data-linenos="2 "></span>    shows {
+<span class="linenos" data-linenos="3 "></span>        title
+<span class="linenos" data-linenos="4 "></span>    }
+<span class="linenos" data-linenos="5 "></span>}
+</code></pre></div>
+Although we're returning Show objects, which in the example contains both a <code>title</code> and an <code>actors</code> field, the <code>actors</code> field gets stripped off before the response gets sent back.</p>
+<h2 id="child-datafetchers">Child datafetchers<a class="headerlink" href="#child-datafetchers" title="Permanent link">&para;</a></h2>
+<p>The previous example assumed that you could load a list of <code>Show</code> objects from your database with a single query.
+It wouldn't matter which fields the user included in the GraphQL query; the cost of loading the shows would be the same.
+What if there is an extra cost to specific fields?
+For example, what if loading actors for a show requires an extra query?
+It would be wasteful to run the extra query to load actors if the <code>actors</code> field doesn't get returned to the user.</p>
+<p>In such scenarios, it's better to create a separate datafetcher for the expensive field.</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@DgsData</span><span class="p">(</span><span class="n">parentType</span> <span class="o">=</span> <span class="s">&quot;Query&quot;</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="s">&quot;shows&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Show</span><span class="o">&gt;</span> <span class="nf">shows</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span>
+<span class="linenos" data-linenos=" 4 "></span>    <span class="c1">//Load shows, which doesn&#39;t include &quot;actors&quot;</span>
+<span class="linenos" data-linenos=" 5 "></span>    <span class="k">return</span> <span class="n">shows</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="p">}</span>
+<span class="linenos" data-linenos=" 7 "></span>
+<span class="linenos" data-linenos=" 8 "></span><span class="nd">@DgsData</span><span class="p">(</span><span class="n">parentType</span> <span class="o">=</span> <span class="s">&quot;Show&quot;</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="s">&quot;actors&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;</span> <span class="nf">actors</span><span class="p">(</span><span class="n">DgsDataFetchingEnvironment</span> <span class="n">dfe</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos" data-linenos="10 "></span>
+<span class="linenos" data-linenos="11 "></span>   <span class="n">Show</span> <span class="n">show</span> <span class="o">=</span> <span class="n">dfe</span><span class="p">.</span><span class="na">getSource</span><span class="p">();</span>
+<span class="linenos" data-linenos="12 "></span>   <span class="n">actorsService</span><span class="p">.</span><span class="na">forShow</span><span class="p">(</span><span class="n">show</span><span class="p">.</span><span class="na">getId</span><span class="p">());</span>
+<span class="linenos" data-linenos="13 "></span>   <span class="k">return</span> <span class="n">actors</span><span class="p">;</span>
+<span class="linenos" data-linenos="14 "></span><span class="p">}</span>
+</code></pre></div>
+The <code>actors</code> datafetcher only gets executed when the <code>actors</code> field is included in the query.
+The <code>actors</code> datafetcher also introduces a new concept; the <code>DgsDataFetchingEnvironment</code>.
+The <code>DgsDataFetchingEnvironment</code> gives access to the <code>context</code>, the query itself, data loaders, and the <code>source</code> object.
+The source object is the object that contains the field.
+For this example, the source is the <code>Show</code> object, which you can use to get the show's identifier to use in the query for actors.</p>
+<p>Do note that the <code>shows</code> datafetcher is returning a list of <code>Show</code>, while the <code>actors</code> datafetcher fetches the actors for a single show.
+The framework executes the <code>actors</code> datafetcher for each <code>Show</code> returned by the <code>shows</code> datafetcher.
+If the actors get loaded from a database, this would now cause an N+1 problem. To solve the N+1 problem, you use <a href="../data-loaders">data loaders</a>.</p>
+<p>Note: There are more complex scenarios with nested datafetchers, and ways to pass context between related datafetchers.
+See the <a href="../advanced/context-passing">nested datafetchers guide</a> for more advanced use-cases.</p>
+<h2 id="using-inputargument">Using @InputArgument<a class="headerlink" href="#using-inputargument" title="Permanent link">&para;</a></h2>
+<p>It's very common for GraphQL queries to have one or more input arguments. According to the GraphQL specification, an input argument can be:</p>
+<ul>
+<li>An input type</li>
+<li>A scalar</li>
+<li>An enum</li>
+</ul>
+<p>Other types, such as output types, unions and interfaces, are not allowed as input arguments.</p>
+<p>You can get input arguments as method arguments in a datafetcher method using the <code>@InputArgument</code> annotation.
+The framework internally uses Jackson to convert the argument to the correct type.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>type Query {
+<span class="linenos" data-linenos=" 2 "></span>    shows(title: String, filter: ShowFilter): [Show]
+<span class="linenos" data-linenos=" 3 "></span>}
+<span class="linenos" data-linenos=" 4 "></span>
+<span class="linenos" data-linenos=" 5 "></span>input ShowFilter {
+<span class="linenos" data-linenos=" 6 "></span>   director: String
+<span class="linenos" data-linenos=" 7 "></span>   genre: ShowGenre
+<span class="linenos" data-linenos=" 8 "></span>}
+<span class="linenos" data-linenos=" 9 "></span>
+<span class="linenos" data-linenos="10 "></span>enum ShowGenre {
+<span class="linenos" data-linenos="11 "></span>   commedy, action, horror
+<span class="linenos" data-linenos="12 "></span>}
+</code></pre></div>
+<p>We can write a datafetcher with the following signature:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="nd">@DgsData</span><span class="p">(</span><span class="n">parentType</span> <span class="o">=</span> <span class="s">&quot;Query&quot;</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="s">&quot;shows&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos="2 "></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Show</span><span class="o">&gt;</span> <span class="nf">shows</span><span class="p">(</span><span class="nd">@InputArgument</span> <span class="n">String</span> <span class="n">title</span><span class="p">,</span> <span class="nd">@InputArgument</span> <span class="n">ShowFilter</span> <span class="n">filter</span><span class="p">)</span>
+</code></pre></div></p>
+<p>Optionally we can specify the <code>name</code> argument in the <code>@InputArgument</code> annotation, if the argument name doesn't match the method argument name.</p>
+<h3 id="nullability-in-kotlin-for-input-arguments">Nullability in Kotlin for input arguments<a class="headerlink" href="#nullability-in-kotlin-for-input-arguments" title="Permanent link">&para;</a></h3>
+<p>If you're using Kotlin you must consider if an input type is nullable.
+If the schema defines an input argument as nullable, the code must reflect this by using a nullable type.
+If a non-nullable type receives a null value, Kotlin will throw an exception.</p>
+<p>For example:</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span># name is a nullable input argument
+<span class="linenos" data-linenos="2 "></span>hello(name: String): String
+</code></pre></div>
+You must write the datafetcher function as:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="kd">fun</span> <span class="nf">hello</span><span class="p">(</span><span class="nd">@InputArgument</span> <span class="n">hello</span><span class="p">:</span> <span class="kt">String?</span><span class="p">)</span>
+</code></pre></div></p>
+<p>In Java you don't have to worry about this, types can always be null.
+You do need to null check in your datafetching code!</p>
+<h3 id="using-inputargument-with-lists">Using @InputArgument with lists<a class="headerlink" href="#using-inputargument-with-lists" title="Permanent link">&para;</a></h3>
+<p>An input argument can also be a list.
+If the list type is an input type, you must specify the type explicitly in the <code>@InputArgument</code> annotation.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>type Query {
+<span class="linenos" data-linenos="2 "></span>    hello(people:[Person]): String
+<span class="linenos" data-linenos="3 "></span>}
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="kd">public</span> <span class="n">String</span> <span class="nf">hello</span><span class="p">(</span><span class="nd">@InputArgument</span><span class="p">(</span><span class="n">collectionType</span> <span class="o">=</span> <span class="n">Person</span><span class="p">.</span><span class="na">class</span><span class="p">)</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">people</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="using-optional-with-inputargument">Using Optional with @InputArgument<a class="headerlink" href="#using-optional-with-inputargument" title="Permanent link">&para;</a></h3>
+<p>Input arguments are often defined as optional in schemas.
+Your datafetcher code needs to null-check arguments to check if they were provided.
+Instead of null-checks you can wrap an input argument in an Optional.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Show</span><span class="o">&gt;</span> <span class="nf">shows</span><span class="p">(</span><span class="nd">@InputArgument</span><span class="p">(</span><span class="n">collectionType</span> <span class="o">=</span> <span class="n">ShowFilter</span><span class="p">.</span><span class="na">class</span><span class="p">)</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">ShowFilter</span><span class="o">&gt;</span> <span class="n">filter</span><span class="p">)</span>
+</code></pre></div>
+<p>You do need to provide the type in the <code>collectionType</code> argument when using complex types, similar to using lists.
+If the argument is not provided, the value will be <code>Optional.empty()</code>.
+It's a matter of preference to use <code>Optional</code> or not.</p>
+<h2 id="codegen-constants">Codegen constants<a class="headerlink" href="#codegen-constants" title="Permanent link">&para;</a></h2>
+<p>In the examples of <code>@DgsData</code> so far, we used string values for the <code>parentType</code> and <code>field</code> arguments.
+If you are using <a href="../generating-code-from-schema">code generation</a> you can instead use generated constants.
+Codegen creates a <code>DgsConstants</code> class with constants for each type and field in your schema.
+Using this we can write a datafetcher as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>type Query {
+<span class="linenos" data-linenos="2 "></span>    shows: [Show]
+<span class="linenos" data-linenos="3 "></span>}
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="nd">@DgsData</span><span class="p">(</span><span class="n">parentType</span> <span class="o">=</span> <span class="n">DgsConstants</span><span class="p">.</span><span class="na">QUERY_TYPE</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="n">DgsConstants</span><span class="p">.</span><span class="na">QUERY</span><span class="p">.</span><span class="na">Shows</span><span class="p">)</span>
+<span class="linenos" data-linenos="2 "></span><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Show</span><span class="o">&gt;</span> <span class="nf">shows</span><span class="p">()</span> <span class="p">{}</span>
+</code></pre></div>
+<p>The benefit of using constants is that you can detect issues between your schema and datafetchers at compile time.</p>
+<h2 id="requestheader-and-requestparam">@RequestHeader and @RequestParam<a class="headerlink" href="#requestheader-and-requestparam" title="Permanent link">&para;</a></h2>
+<p>Sometimes you need to evaluate HTTP headers, or other elements of the request, in a datafetcher.
+You can easily get a HTTP header value by using the <code>@RequestHeader</code> annotation. 
+The <code>@RequestHeader</code> annotation is the same annotation as used in Spring WebMVC.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="kd">public</span> <span class="n">String</span> <span class="nf">hello</span><span class="p">(</span><span class="nd">@RequestHeader</span> <span class="n">String</span> <span class="n">host</span><span class="p">)</span>
+</code></pre></div>
+<p>Technically, headers are lists of values. If multiple values are set, you can retrieve them as a list by using a List as your argument type. Otherwise, the values are concatenated to a single String.</p>
+<p>Similarly, you can get request parameters using <code>@RequestParam</code>.
+Both <code>@RequestHeader</code> and <code>@RequestParam</code> support a <code>defaultValue</code> and <code>required</code> argument.
+If a <code>@RequestHeader</code> or <code>@RequestParam</code> is <code>required</code>, doesn't have a <code>defaultValue</code> and isn't provided, a <code>DgsInvalidInputArgumentException</code> is thrown.</p>
+<h2 id="using-dgsrequestdata">Using DgsRequestData<a class="headerlink" href="#using-dgsrequestdata" title="Permanent link">&para;</a></h2>
+<p>Alternatively, you can get the <code>DgsRequestData</code> object from the datafetching context.
+The <code>DgsRequestData</code> has the HTTP headers as <code>HttpHeaders</code> and the request itself is represented as a <code>WebRequest</code>. Both are types from Spring Web.
+Depending on your runtime environment, you can further cast the <code>WebRequest</code> to, for example, a <code>ServletWebRequest</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="nd">@DgsData</span><span class="p">(</span><span class="n">parentType</span> <span class="o">=</span> <span class="s">&quot;Query&quot;</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="s">&quot;serverName&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos="2 "></span><span class="kd">public</span> <span class="n">String</span> <span class="nf">serverName</span><span class="p">(</span><span class="n">DgsDataFetchingEnvironment</span> <span class="n">dfe</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos" data-linenos="3 "></span>     <span class="n">DgsRequestData</span> <span class="n">requestData</span> <span class="o">=</span>  <span class="n">DgsContext</span><span class="p">.</span><span class="na">getRequestData</span><span class="p">(</span><span class="n">dfe</span><span class="p">);</span>
+<span class="linenos" data-linenos="4 "></span>     <span class="k">return</span> <span class="p">((</span><span class="n">ServletWebRequest</span><span class="p">)</span><span class="n">requestData</span><span class="p">.</span><span class="na">getWebRequest</span><span class="p">()).</span><span class="na">getRequest</span><span class="p">().</span><span class="na">getServerName</span><span class="p">();</span>
+<span class="linenos" data-linenos="5 "></span><span class="p">}</span>
+</code></pre></div>
+<p>Similar to <code>@InputArgument</code> it's possible to wrap a header or parameter in an <code>Optional</code>.</p>
+<h2 id="using-context">Using context<a class="headerlink" href="#using-context" title="Permanent link">&para;</a></h2>
+<p>The <code>DgsRequestData</code> object described in the previous section is part of the datafetching <em>context</em>.
+You can further customize the context for datafetchers by creating a <code>DgsCustomContextBuilder</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@Component</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyContextBuilder</span> <span class="kd">implements</span> <span class="n">DgsCustomContextBuilder</span><span class="o">&lt;</span><span class="n">MyContext</span><span class="o">&gt;</span> <span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span>    <span class="nd">@Override</span>
+<span class="linenos" data-linenos=" 4 "></span>    <span class="kd">public</span> <span class="n">MyContext</span> <span class="nf">build</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos" data-linenos=" 5 "></span>        <span class="k">return</span> <span class="k">new</span> <span class="n">MyContext</span><span class="p">();</span>
+<span class="linenos" data-linenos=" 6 "></span>    <span class="p">}</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="p">}</span>
+<span class="linenos" data-linenos=" 8 "></span>
+<span class="linenos" data-linenos=" 9 "></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyContext</span> <span class="p">{</span>
+<span class="linenos" data-linenos="10 "></span>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">customState</span> <span class="o">=</span> <span class="s">&quot;Custom state!&quot;</span><span class="p">;</span>
+<span class="linenos" data-linenos="11 "></span>
+<span class="linenos" data-linenos="12 "></span>    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getCustomState</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos" data-linenos="13 "></span>        <span class="k">return</span> <span class="n">customState</span><span class="p">;</span>
+<span class="linenos" data-linenos="14 "></span>    <span class="p">}</span>
+<span class="linenos" data-linenos="15 "></span><span class="p">}</span>
+</code></pre></div>
+<p>A data fetcher can now retrieve the context by calling the <code>getCustomContext()</code> method:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="nd">@DgsData</span><span class="p">(</span><span class="n">parentType</span> <span class="o">=</span> <span class="s">&quot;Query&quot;</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="s">&quot;withContext&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos="2 "></span><span class="kd">public</span> <span class="n">String</span> <span class="nf">withContext</span><span class="p">(</span><span class="n">DataFetchingEnvironment</span> <span class="n">dfe</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos" data-linenos="3 "></span>    <span class="n">MyContext</span> <span class="n">customContext</span> <span class="o">=</span> <span class="n">DgsContext</span><span class="p">.</span><span class="na">getCustomContext</span><span class="p">(</span><span class="n">dfe</span><span class="p">);</span>
+<span class="linenos" data-linenos="4 "></span>    <span class="k">return</span> <span class="n">customContext</span><span class="p">.</span><span class="na">getCustomState</span><span class="p">();</span>
+<span class="linenos" data-linenos="5 "></span><span class="p">}</span>
+</code></pre></div>
+<p>Similarly, custom context can be used in a DataLoader.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@DgsDataLoader</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;exampleLoaderWithContext&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleLoaderWithContext</span> <span class="kd">implements</span> <span class="n">BatchLoaderWithContext</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span>    <span class="nd">@Override</span>
+<span class="linenos" data-linenos=" 4 "></span>    <span class="kd">public</span> <span class="n">CompletionStage</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="nf">load</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">keys</span><span class="p">,</span> <span class="n">BatchLoaderEnvironment</span> <span class="n">environment</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos" data-linenos=" 5 "></span>
+<span class="linenos" data-linenos=" 6 "></span>        <span class="n">MyContext</span> <span class="n">context</span> <span class="o">=</span> <span class="n">DgsContext</span><span class="p">.</span><span class="na">getCustomContext</span><span class="p">(</span><span class="n">environment</span><span class="p">);</span>
+<span class="linenos" data-linenos=" 7 "></span>
+<span class="linenos" data-linenos=" 8 "></span>        <span class="k">return</span> <span class="n">CompletableFuture</span><span class="p">.</span><span class="na">supplyAsync</span><span class="p">(()</span> <span class="o">-&gt;</span> <span class="n">keys</span><span class="p">.</span><span class="na">stream</span><span class="p">().</span><span class="na">map</span><span class="p">(</span><span class="n">key</span> <span class="o">-&gt;</span> <span class="n">context</span><span class="p">.</span><span class="na">getCustomState</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">).</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">()));</span>
+<span class="linenos" data-linenos=" 9 "></span>    <span class="p">}</span>
+<span class="linenos" data-linenos="10 "></span><span class="p">}</span>
+</code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../configuration/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Configuration" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Configuration
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../query-execution-testing/" class="md-footer__link md-footer__link--next" aria-label="Next: Testing" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Testing
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.477d984a.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.82b56eb2.min.js"></script>
+      
+        <script src="../js/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
