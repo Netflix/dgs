@@ -61,7 +61,7 @@ private static final String QUERY = "{\n" +
 
 public List<TicksConnection> getData() {
     DefaultGraphQLClient graphQLClient = new DefaultGraphQLClient(URL);
-    GraphQLResponse response = graphQLClient.executeQuery(query, new HashMap<>(), "TicksQuery", (url, headers, body) -> {
+    GraphQLResponse response = graphQLClient.executeQuery(QUERY, new HashMap<>(), "TicksQuery", (url, headers, body) -> {
         /**
          * The requestHeaders providers headers typically required to call a GraphQL endpoint, including the Accept and Content-Type headers.
          * To use RestTemplate, the requestHeaders need to be transformed into Spring's HttpHeaders.
