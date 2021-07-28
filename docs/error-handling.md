@@ -17,8 +17,8 @@ Mapping custom exceptions
 
 It can be useful to map application specific exceptions to meaningful exceptions back to the client.
 You can do this by registering a `DataFetcherExceptionHandler`.
-Make sure to either extend or delegate to the `DefaultDataFetcherExceptionHandler` class, this is the default exception handler of the framework.
-If you don't extend/delegate to this class, you lose the framework's built-in exception handler.
+Make sure to delegate to the `DefaultDataFetcherExceptionHandler` class, this is the default exception handler of the framework.
+If you don't delegate to this class, you lose the framework's built-in exception handler.
 
 The following is an example of a custom exception handler implementation.
 
