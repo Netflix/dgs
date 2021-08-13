@@ -8,8 +8,7 @@ The client has two components, each usable by itself, or in combination together
 ## HTTP client wrapper
 
 The GraphQL client wraps any HTTP client and provides easy parsing of GraphQL responses.
-The client can be used against any GraphQL endpoint (it doesn't have to be implemented with the DGS framework),
-but provides extra conveniences for parsing Gateway and DGS responses.
+The client can be used against any GraphQL endpoint (it doesn't have to be implemented with the DGS framework), but provides extra conveniences for parsing Gateway and DGS responses.
 This includes support for the [Errors Spec](../error-handling.md).
 
 To use the client, create an instance of `DefaultGraphQLClient`.
@@ -26,12 +25,13 @@ The `executeQuery` method has four arguments:
 
 1. The query String
 2. An optional map of query variables
-3. An optional operation name
+3. An optional operation name (for logging purposes, or when you send multiple queries in a request)
 3. An instance of `RequestExecutor`, typically provided as a lambda.
 
-Because of the large number HTTP clients in use within Netflix, the GraphQLClient is decoupled from any particular HTTP client implementation.
-Any HTTP client (RestTemplate, RestClient, OkHTTP, ....) can be used.
-The operation name is useful in case of logging queries, or if you happen to have multiple queries as part of the same request.
+Because of the many HTTP clients in the Java ecosystem, the GraphQLClient is decoupled from any particular HTTP client implementation.
+Any HTTP client (WebClient, RestTemplate, OkHTTP, ....) can be used.
+At Netflix we primarily use WebClient, which is part of the Spring ecosystem.
+
 The developer is responsible for making the actual HTTP call by implementing a `RequestExecutor`.
 `RequestExecutor` receives the `url`, a map of `headers` and the request `body` as parameters, and should return an instance of `HttpResponse`.
 Based on the HTTP response the GraphQLClient parses the response and provides easy access to data and errors.
@@ -101,6 +101,7 @@ Refer to the `GraphQLClient` JavaDoc for the complete list of supported methods.
 | getRequestDetails | Extract a `RequestDetails` object. This only works if requestDetails was requested in the query, and against the Gateway. | RequestDetails requestDetails = `response.getRequestDetails()` |
 | getParsed | Get the parsed `DocumentContext` for further JsonPath processing | `response.getDocumentContext()`|
 
+
 ### Errors
 
 The GraphQLClient checks both for HTTP level errors (based on the response status code) and the `errors` block in a GraphQL response.
@@ -138,21 +139,18 @@ assertThat(graphQLResponse.errors.get(0).extensions.errorDetail).isEqualTo("FIEL
 ## Type safe Query API
 
 Based on a GraphQL schema a type safe query API can be generated for Java/Kotlin.
-The generated API is a builder style API that lets you build a GraphQL query and it's projection (field selection).
+The generated API is a builder style API that lets you build a GraphQL query, and it's projection (field selection).
 Because the code gets re-generated when the schema changes, it helps catch errors in the query.
-Because Java doesn't support multi-line strings (yet) it's also arguably a more readable way to specify a query.
+It's arguably also more readable, although multiline String support in Java and Kotlin do mitigate that issue as well.
 
 If you own a DGS and want to generate a client for this DGS (e.g. for testing purposes) the client generation is just an extra property on the [Codegen configuration](../generating-code-from-schema.md).
 Specify the following in your `build.gradle`.
 
 ```groovy
-buildscript {
-   dependencies{
-      classpath 'netflix:graphql-dgs-codegen-gradle:latest.release'
-   }
+// Using plugins DSL
+plugins {
+    id "com.netflix.dgs.codegen" version "[REPLACE_WITH_CODEGEN_PLUGIN_VERSION]"
 }
-
-apply plugin: 'codegen-gradle-plugin'
 
 generateJava{
    packageName = 'com.example.packagename' // The package name to use to generate sources
@@ -160,8 +158,7 @@ generateJava{
 }
 ```
 
-Code will be generated on build.
-The generated code is in `build/generated`.
+Code will be generated on build, and the generated code will be under `builder/generated`, which is added to the classpath by the plugin.
 
 With codegen configured correctly, a builder style API will be generated when building the project.
 Using the same query example as above, the query can be build using the generated builder API.
@@ -192,6 +189,25 @@ The `TicksGraphQLQuery` and `TicksConnectionProjectionRoot` are generated.
 After building the query, it can be serialized to a String, and executed using the GraphQLClient.
 
 Note that the `edges` and `node` fields are because the example schema is using Relay pagination.
+
+### Scalars in DGS Client
+
+Custom scalars can be used in input types in GraphQL. Let's take the example of a `DateRange` scalar that represents a "from" and "to" date.
+In Java, we want to represent this as a DateRange class that takes a `LocalDate` for the `from` and `to` fields.
+When generating a query API we want to be use the API as follows:
+
+```
+new GraphQLQueryRequest(
+                ReviewsGraphQLQuery.newRequest().dateRange(new DateRange(LocalDate.of(2020, 1, 1), LocalDate.now())).build(),
+                new ReviewsProjectionRoot().submittedDate().starScore(), scalars);
+```
+
+When sending the query, we somehow have to serialize this `DateRange` though.
+There are many ways to represent a date, so how do we make sure that we use the same representation as the server expects?
+
+In this release we added an optional `scalars` argument to the `GraphQLQueryRequest` constructor.
+This is a `Map<Class<?>, Coercing<?,?>` that maps the Java class representing the input to an actual Scalar implementation.
+This way you can re-use exactly the same serialization code that you already have for your scalar implementation or one of the existing ones from for example the `graphql-dgs-extended-scalars` module.
 
 ### Interface projections
 
