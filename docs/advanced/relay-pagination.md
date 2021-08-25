@@ -18,13 +18,6 @@ dependencies {
 }
 ```
 
-Next, you can set up your schema to declare the `@connection` directive.
-
-```graphql
-// This needs to be done explicitly!!
-directive @connection on OBJECT
-```
-
 Next, add the directive on the type you want to paginate.
 
 ```graphql
@@ -36,6 +29,8 @@ type Message @connection {
     name: String
 }
 ```
+
+Note that the `@connection` directive is defined automatically by the framework, so there is no need to add it to your schema file.
 
 This results in the following relay types dynamically generated and added to the schema:
 
