@@ -265,6 +265,19 @@ public class MyContext {
 }
 ```
 
+If you require access to the request, e.g. to read HTTP headers, you can implement the `DgsCustomContextBuilderWithRequest` interface instead.
+
+```java
+@Component
+public class MyContextBuilder implements DgsCustomContextBuilderWithRequest<MyContext> {
+    @Override
+    public MyContext build(Map<String, Object> extensions, HttpHeaders headers, WebRequest webRequest) {
+        //e.g. you can now read headers to set up context
+        return new MyContext();
+    }
+}
+```
+
 A data fetcher can now retrieve the context by calling the `getCustomContext()` method:
 
 ```java
