@@ -181,7 +181,7 @@ Total execution time: 3ms
         <dependency>
             <groupId>com.netflix.graphql.dgs</groupId>
             <artifactId>graphql-dgs-spring-boot-micrometer</artifactId>
-        <dependency>
+        </dependency>
     </dependencies>
     ```
 
