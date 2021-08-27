@@ -158,9 +158,9 @@ Total execution time: 3ms
 ## Metrics Out of The Box
 
 !!! abstract "tl;dr"
-    * Supported vi the opt-in `graphql-dgs-spring-boot-micrometer` module.
+    * Supported via the opt-in `graphql-dgs-spring-boot-micrometer` module.
     * Provides specific GraphQL metrics such as `gql.query`, `gql.error`, and `gql.dataLoader`.
-    * Supports several backends since its implemented via [Micrometer].
+    * Supports several backend implementations since its implemented via [Micrometer].
 
 
 === "Gradle Groovy"
@@ -335,14 +335,17 @@ This is useful if you want to find data loaders that might be responsible for po
 
 Captures the elapsed time of each data fetcher invocation.
 This is useful if you want to find data fetchers that might be responsible for poor query performance.
+That said, there might be times where you want to remove a _data fetcher_ from being measured/included in this meter.
+You can do so by annotating the method with `@DgsEnableDataFetcherInstrumentation(false)`.
 
 
-!!! warning
+!!! info
     This metric is not available if:
 
     * The data is resolved via a Batch Loader.
+    * The method is annotated with `@DgsEnableDataFetcherInstrumentation(false)`.
     * The DataFetcher is [TrivialDataFetcher]. A _trivial DataFetcher_ is one that simply maps data from an object to a field.
-    This is defined directly in `graphql-java`.
+      This is defined directly in `graphql-java`.
 
 [TrivialDataFetcher]: https://github.com/graphql-java/graphql-java/blob/master/src/main/java/graphql/TrivialDataFetcher.java
 

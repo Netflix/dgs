@@ -110,6 +110,35 @@ If the actors get loaded from a database, this would now cause an N+1 problem. T
 Note: There are more complex scenarios with nested datafetchers, and ways to pass context between related datafetchers.
 See the [nested datafetchers guide](../advanced/context-passing) for more advanced use-cases.
 
+
+### Support Multiple @DgsData annotations via @DgsData.List
+
+Since [v4.6.0], methods can be annotated with multiple `@DgsData` annotations.
+Effectively you can resolve multiple GraphQL Type fields via the same method implementation.
+To do so you will have to leverage the `@DgsData.List` annotation, for example:
+
+=== "Java"
+    ```java
+    @DgsData.List({
+        @DgsData(parentType = "Query", field = "movies"),
+        @DgsData(parentType = "Query", field = "shows")
+    })
+    ```
+=== "Kotlin"
+    ```kotlin
+    @DgsData.List(
+        DgsData(parentType = "Query", field = "movies"),
+        DgsData(parentType = "Query", field = "shows")
+    )
+    ```
+
+!!! tip
+    Both `@DgsQuery` and `@DgsMutation` can't be defined multiple times in a single method. Pleae use `@DgsData`
+    instead and explicitly define the `parentType` to match either `Query` or `Mutation`.
+
+
+[v4.6.0]: https://github.com/Netflix/dgs-framework/releases/tag/v4.6.0
+
 ## Using @InputArgument
 It's very common for GraphQL queries to have one or more input arguments. According to the GraphQL specification, an input argument can be:
 
@@ -215,7 +244,7 @@ The benefit of using constants is that you can detect issues between your schema
 ## @RequestHeader and @RequestParam
 
 Sometimes you need to evaluate HTTP headers, or other elements of the request, in a datafetcher.
-You can easily get a HTTP header value by using the `@RequestHeader` annotation. 
+You can easily get a HTTP header value by using the `@RequestHeader` annotation.
 The `@RequestHeader` annotation is the same annotation as used in Spring WebMVC.
 
 ```java
