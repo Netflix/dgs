@@ -111,7 +111,7 @@ Note: There are more complex scenarios with nested datafetchers, and ways to pas
 See the [nested datafetchers guide](../advanced/context-passing) for more advanced use-cases.
 
 
-### Support Multiple @DgsData annotations via @DgsData.List
+## Support Multiple @DgsData annotations via @DgsData.List
 
 Since [v4.6.0], methods can be annotated with multiple `@DgsData` annotations.
 Effectively you can resolve multiple GraphQL Type fields via the same method implementation.
