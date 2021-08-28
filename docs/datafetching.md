@@ -241,7 +241,7 @@ public List<Show> shows() {}
 
 The benefit of using constants is that you can detect issues between your schema and datafetchers at compile time.
 
-## @RequestHeader and @RequestParam
+## @RequestHeader, @RequestParam and @CookieValue
 
 Sometimes you need to evaluate HTTP headers, or other elements of the request, in a datafetcher.
 You can easily get a HTTP header value by using the `@RequestHeader` annotation.
@@ -256,6 +256,18 @@ Technically, headers are lists of values. If multiple values are set, you can re
 Similarly, you can get request parameters using `@RequestParam`.
 Both `@RequestHeader` and `@RequestParam` support a `defaultValue` and `required` argument.
 If a `@RequestHeader` or `@RequestParam` is `required`, doesn't have a `defaultValue` and isn't provided, a `DgsInvalidInputArgumentException` is thrown.
+
+To easily get access to cookie values you can use Spring's `@CookieValue` annotation.
+
+```java
+@DgsQuery
+public String usingCookieWithDefault(@CookieValue(defaultValue = "defaultvalue") myCookie: String) {
+    return myCookie
+}
+```
+
+`@CookieValue` supports a `defaultValue` and the `required` argument.
+You can also use an `Optional<String>` for a `@CookieValue` if it's not required.
 
 ## Using DgsRequestData
 Alternatively, you can get the `DgsRequestData` object from the datafetching context.
