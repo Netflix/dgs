@@ -1,6 +1,6 @@
 In the [getting started guide](../getting-started) we introduced the `@DgsData` annotation, which you use to create a data fetcher. In this section, we look at some of the finer details of datafetchers.
 
-## The @DgsData, @DgsQuery, @DgsMutation and @DgsSubscription annotations
+## The @DgsData, @DgsQuery, @DgsMutation and @DgsSubscription Annotations
 You use the `@DgsData` annotation on a Java/Kotlin method to make that method a datafetcher.
 The method must be in a `@DgsComponent` class.
 The `@DgsData` annotation has two parameters:
@@ -72,7 +72,7 @@ For example, if a user queries:
 ```
 Although we're returning Show objects, which in the example contains both a `title` and an `actors` field, the `actors` field gets stripped off before the response gets sent back.
 
-## Child datafetchers
+## Child Datafetchers
 The previous example assumed that you could load a list of `Show` objects from your database with a single query.
 It wouldn't matter which fields the user included in the GraphQL query; the cost of loading the shows would be the same.
 What if there is an extra cost to specific fields?
@@ -111,7 +111,7 @@ Note: There are more complex scenarios with nested datafetchers, and ways to pas
 See the [nested datafetchers guide](../advanced/context-passing) for more advanced use-cases.
 
 
-## Support Multiple @DgsData annotations via @DgsData.List
+## Support Multiple @DgsData Annotations Via @DgsData.List
 
 Since [v4.6.0], methods can be annotated with multiple `@DgsData` annotations.
 Effectively you can resolve multiple GraphQL Type fields via the same method implementation.
@@ -133,7 +133,7 @@ To do so you will have to leverage the `@DgsData.List` annotation, for example:
     ```
 
 !!! tip
-    Both `@DgsQuery` and `@DgsMutation` can't be defined multiple times in a single method. Pleae use `@DgsData`
+    Both `@DgsQuery` and `@DgsMutation` can't be defined multiple times in a single method. Please use `@DgsData`
     instead and explicitly define the `parentType` to match either `Query` or `Mutation`.
 
 
@@ -174,7 +174,7 @@ public List<Show> shows(@InputArgument String title, @InputArgument ShowFilter f
 
 Optionally we can specify the `name` argument in the `@InputArgument` annotation, if the argument name doesn't match the method argument name.
 
-### Nullability in Kotlin for input arguments
+### Nullability in Kotlin for Input Arguments
 If you're using Kotlin you must consider if an input type is nullable.
 If the schema defines an input argument as nullable, the code must reflect this by using a nullable type.
 If a non-nullable type receives a null value, Kotlin will throw an exception.
@@ -221,7 +221,7 @@ You do need to provide the type in the `collectionType` argument when using comp
 If the argument is not provided, the value will be `Optional.empty()`.
 It's a matter of preference to use `Optional` or not.
 
-## Codegen constants
+## Codegen Constants
 
 In the examples of `@DgsData` so far, we used string values for the `parentType` and `field` arguments.
 If you are using [code generation](../generating-code-from-schema) you can instead use generated constants.
