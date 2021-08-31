@@ -75,7 +75,7 @@ If you're building on top of `WebFlux`, use `com.netflix.graphql.dgs:graphql-dgs
     ```
 
 !!! caution
-    The DGS Framework requires Kotlin 1.4, and does not work with Kotlin 1.3. Older Spring Boot versions may bring in Kotlin 1.3.
+    The DGS Framework requires Kotlin <1.4, and does not work with Kotlin 1.3. Older Spring Boot versions may bring in Kotlin 1.3.
 
 !!! important
     If you use [Spring Boot Gradle Plugin 2.3], you will have to be explicit on the Kotlin version that
