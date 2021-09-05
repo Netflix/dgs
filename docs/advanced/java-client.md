@@ -206,7 +206,7 @@ When sending the query, we somehow have to serialize this `DateRange` though.
 There are many ways to represent a date, so how do we make sure that we use the same representation as the server expects?
 
 In this release we added an optional `scalars` argument to the `GraphQLQueryRequest` constructor.
-This is a `Map<Class<?>, Coercing<?,?>` that maps the Java class representing the input to an actual Scalar implementation.
+This is a `Map<Class<?>, Coercing<?,?>>` that maps the Java class representing the input to an actual Scalar implementation.
 This way you can re-use exactly the same serialization code that you already have for your scalar implementation or one of the existing ones from for example the `graphql-dgs-extended-scalars` module.
 
 ### Interface projections

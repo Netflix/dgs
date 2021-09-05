@@ -142,7 +142,7 @@ Note that we have a [Codegen plugin](../generating-code-from-schema) that can do
 
     public class Show {
         private final String title;
-        private final Integer releaseYear   ;
+        private final Integer releaseYear;
 
         public Show(String title, Integer releaseYear) {
             this.title = title;
