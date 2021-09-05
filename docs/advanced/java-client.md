@@ -196,7 +196,7 @@ Custom scalars can be used in input types in GraphQL. Let's take the example of 
 In Java, we want to represent this as a DateRange class that takes a `LocalDate` for the `from` and `to` fields.
 When generating a query API we want to be use the API as follows:
 
-```
+```java
 new GraphQLQueryRequest(
                 ReviewsGraphQLQuery.newRequest().dateRange(new DateRange(LocalDate.of(2020, 1, 1), LocalDate.now())).build(),
                 new ReviewsProjectionRoot().submittedDate().starScore(), scalars);
