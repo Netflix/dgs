@@ -38,6 +38,13 @@ public class DateTimeScalar implements Coercing<LocalDateTime, String> {
 scalar DateTime
 ```
 
+
+!!! important
+    If you are [Building GraphQL Queries for Tests](./query-execution-testing.md), make sure to pass your custom scalars in
+    `GraphQLQueryRequest` constructor as descibred in [Scalars in DGS Client](./advanced/java-client.md)
+
+
+
 ## Registering Custom Scalars
 
 In more recent versions of `graphql-java` (>v15.0) [some scalars](https://github.com/graphql-java/graphql-java-extended-scalars),
