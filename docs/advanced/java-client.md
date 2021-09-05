@@ -192,9 +192,12 @@ Note that the `edges` and `node` fields are because the example schema is using 
 
 ### Scalars in DGS Client
 
-Custom scalars can be used in input types in GraphQL. Let's take the example of a `DateTimeScalar` (created in [Adding Custom Scalars](../scalars.md)). In Java, we want to represent this as a `LocalDateTime` class. When sending the query, we somehow have to serialize this. There are many ways to represent a date, so how do we make sure that we use the same representation as the server expects?
+Custom scalars can be used in input types in GraphQL. Let's take the example of a `DateTimeScalar` (created in [Adding Custom Scalars](../scalars.md)).
+In Java, we want to represent this as a `LocalDateTime` class. When sending the query, we somehow have to serialize this.
+There are many ways to represent a date, so how do we make sure that we use the same representation as the server expects?
 
-In this release we added an optional `scalars` argument to the `GraphQLQueryRequest` constructor. This is a `Map<Class<?>, Coercing<?,?>>` that maps the Java class representing the input to an actual Scalar implementation. We will generate the query API with `DateTimeScalar` as follows:
+In this release we added an optional `scalars` argument to the `GraphQLQueryRequest` constructor. This is a `Map<Class<?>, Coercing<?,?>>` that maps the
+Java class representing the input to an actual Scalar implementation. We will generate the query API with `DateTimeScalar` as follows:
 
 ```java
 Map<Class<?>, Coercing<?, ?>> scalars = new HashMap<>();
@@ -205,7 +208,8 @@ new GraphQLQueryRequest(
                 new ReviewsProjectionRoot().submittedDate().starScore(), scalars);
 ```
 
-This way you can re-use exactly the same serialization code that you already have for your scalar implementation or one of the existing ones from - for example - the `graphql-dgs-extended-scalars` module.
+This way you can re-use exactly the same serialization code that you already have for your scalar implementation or one of the existing ones from - for example -
+the `graphql-dgs-extended-scalars` module.
 
 ### Interface projections
 
