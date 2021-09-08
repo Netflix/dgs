@@ -111,7 +111,7 @@ Note: There are more complex scenarios with nested datafetchers, and ways to pas
 See the [nested datafetchers guide](../advanced/context-passing) for more advanced use-cases.
 
 
-## Support Multiple @DgsData Annotations Via @DgsData.List
+## Multiple @DgsData Annotations Via @DgsData.List
 
 Since [v4.6.0], methods can be annotated with multiple `@DgsData` annotations.
 Effectively you can resolve multiple GraphQL Type fields via the same method implementation.
@@ -149,7 +149,6 @@ It's very common for GraphQL queries to have one or more input arguments. Accord
 Other types, such as output types, unions and interfaces, are not allowed as input arguments.
 
 You can get input arguments as method arguments in a datafetcher method using the `@InputArgument` annotation.
-The framework internally uses Jackson to convert the argument to the correct type.
 
 ```graphql
 type Query {
@@ -168,11 +167,33 @@ enum ShowGenre {
 
 We can write a datafetcher with the following signature:
 ```java
-@DgsData(parentType = "Query", field = "shows")
+@DgsQuery
 public List<Show> shows(@InputArgument String title, @InputArgument ShowFilter filter)
 ```
 
+The `@InputArgument` annotation will use the name of the method argument to match it with the name of an input argument sent in the query.
 Optionally we can specify the `name` argument in the `@InputArgument` annotation, if the argument name doesn't match the method argument name.
+
+The framework converts input arguments to Java/Kotlin types.
+The first step for converting input arguments is `graphql-java` using scalar implementations to convert raw string input into whatever type the scalar represents.
+A GraphQL `Int` becomes an `Integer` in Java, a formatted date string becomes a `LocalDateTime` (depending on the scalars you're using!), lists become an instance of `java.util.ArrayList`.
+Input objects are represented as a `Map<String, Object>` in `graphql-java`.
+
+The next step is the DGS Framework converting the `Map<String, Object>` to the Java/Kotlin classes that you use for the `@InputArgument`.
+For Java classes, the framework creates a new instance of the class using the no-arg constructor.
+This implies that a no-arg constructor is required.
+It then sets each field of the instance to the input argument values.
+
+For Kotlin Data classes, the instance can only be created by passing in all arguments in the constructor.
+This means you have to make sure to make fields optional in the data class when the fields are optional in the GraphQL schema!
+
+If you're using the [Codegen](generating-code-from-schema) plugin (you really should!), the input types will work perfectly out of the box.
+
+!!!info "Input argument conversion isn't JSON"
+    It's easy to confuse the conversion described above with JSON deserialization as you are familiar with in libraries such as Jackson.
+    Although it looks similar, the mechanisms are completely unrelated. 
+    Input arguments aren't JSON, and the Scalar mechanism is really the core of how conversion works.
+    This also means that Jackson annotations on Java/Kotlin types are not used at all. 
 
 ### Nullability in Kotlin for Input Arguments
 If you're using Kotlin you must consider if an input type is nullable.
