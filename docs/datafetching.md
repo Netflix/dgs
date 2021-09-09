@@ -195,6 +195,12 @@ If you're using the [Codegen](generating-code-from-schema) plugin (you really sh
     Input arguments aren't JSON, and the Scalar mechanism is really the core of how conversion works.
     This also means that Jackson annotations on Java/Kotlin types are not used at all. 
 
+!!!info "Defining scalars, and scalars in codegen"
+    @InputArgument is designed to work well with scalars.
+    More information about defining custom scalars in the framework can be found [here](scalars).
+    For a scalar you typically either create a class representing the value, or use an existing type. 
+    Such types need to be mapped in [Codegen configuration](https://netflix.github.io/dgs/generating-code-from-schema/#mapping-existing-types) so that they don't (incorrectly) get generated.
+
 ### Nullability in Kotlin for Input Arguments
 If you're using Kotlin you must consider if an input type is nullable.
 If the schema defines an input argument as nullable, the code must reflect this by using a nullable type.
