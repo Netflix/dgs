@@ -314,3 +314,43 @@ Here is an example for the schema shown earlier:
         Map<String, Object> representations = entitiesQuery.getVariables();
 ```
 
+## Subscriptions
+
+Subscriptions are supported through the `ReactiveGraphQLClient` interface.
+The interface has two implementations:
+
+* `WebSocketGraphQLClient`: For subscriptions over WebSockets
+* `SSESubscriptionGraphQLClient`: For subscriptions over Server Sent Events (SSE)
+
+Both implementations require the use of WebClient, and cannot be used with other HTTP clients (in contrast to the "normal" DGS client).
+The clients return a `Flux` of `GraphQLResponse`.
+Each `GraphQLResponse` represents a message pushed from the subscription, and contains `data` and `errors`.
+It also offers convenience methods to parse data using JsonPath.
+
+=== "Java"
+    ```java
+        WebClient webClient = WebClient.create("http://localhost:" + port);
+        SSESubscriptionGraphQLClient client = new SSESubscriptionGraphQLClient("/subscriptions", webClient);
+        Flux<GraphQLResponse> numbers = client.reactiveExecuteQuery("subscription {numbers}", Collections.emptyMap());
+
+        numbers
+            .mapNotNull(r -> r.extractValue("data.numbers"))
+            .log()
+            .subscribe();
+    ```
+=== "Kotlin"
+    ```kotlin
+    val webClient = WebClient.create("http://localhost:$port")
+    val client = SSESubscriptionGraphQLClient("/subscriptions", webClient)
+    val reactiveExecuteQuery = client.reactiveExecuteQuery("subscription {numbers}", emptyMap())
+
+    reactiveExecuteQuery
+        .mapNotNull { r -> r.data["numbers"] }
+        .log()
+        .subscribe()
+    ```
+
+In case the connection fails to set up, either because of a connection error, or because of an invalid query, a `WebClientResponseException` will be thrown.
+Errors later on in the process will be errors in the stream.
+
+Don't forget to `subscribe()` to the stream, otherwise the connection doesn't get started!
