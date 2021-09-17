@@ -82,7 +82,7 @@ It would be wasteful to run the extra query to load actors if the `actors` field
 In such scenarios, it's better to create a separate datafetcher for the expensive field.
 
 ```java
-@DgsData(parentType = "Query", field = "shows")
+@DgsQuery
 public List<Show> shows() {
 
     //Load shows, which doesn't include "actors"
@@ -275,10 +275,12 @@ You can easily get a HTTP header value by using the `@RequestHeader` annotation.
 The `@RequestHeader` annotation is the same annotation as used in Spring WebMVC.
 
 ```java
+@DgsQuery
 public String hello(@RequestHeader String host)
 ```
 
 Technically, headers are lists of values. If multiple values are set, you can retrieve them as a list by using a List as your argument type. Otherwise, the values are concatenated to a single String.
+Similar to `@InputArgument` it's possible to wrap a header or parameter in an `Optional`.
 
 Similarly, you can get request parameters using `@RequestParam`.
 Both `@RequestHeader` and `@RequestParam` support a `defaultValue` and `required` argument.
@@ -296,24 +298,55 @@ public String usingCookieWithDefault(@CookieValue(defaultValue = "defaultvalue")
 `@CookieValue` supports a `defaultValue` and the `required` argument.
 You can also use an `Optional<String>` for a `@CookieValue` if it's not required.
 
-## Using DgsRequestData
-Alternatively, you can get the `DgsRequestData` object from the datafetching context.
-The `DgsRequestData` has the HTTP headers as `HttpHeaders` and the request itself is represented as a `WebRequest`. Both are types from Spring Web.
-Depending on your runtime environment, you can further cast the `WebRequest` to, for example, a `ServletWebRequest`.
+## Using DgsRequestData to get access to the request object
+
+You can get access to the request object, representing the HTTP request itself, as well.
+It's stored on the `DgsContext` object in the `DgsDataFetchingEnvironment`. 
+
+Because Spring WebMVC and Spring Webflux use different types to represent the request, the `DgsRequestData` is different depending on what environment (WebMVC/WebFlux) you're running in.
+The `DgsRequestData` interface only gives access to the request headers and the `extensions`.
+To get the actual request object, you need to cast the `DgsRequestData` to the correct implementation.
+This is either `DgsWebMvcRequestData` or `DgsReactiveRequestData`.
+Let's use this in an example to set a cookie, which is done through the response object.
+
+Let's look at a WebMVC example first.
+From the `DgsWebMvcRequestData` you can get the `WebRequest`, which can be further cast to a `ServletWebRequest`.
 
 ```java
-@DgsData(parentType = "Query", field = "serverName")
-public String serverName(DgsDataFetchingEnvironment dfe) {
-     DgsRequestData requestData =  DgsContext.getRequestData(dfe);
-     return ((ServletWebRequest)requestData.getWebRequest()).getRequest().getServerName();
+@DgsQuery
+@DgsMutation
+public String updateCookie(@InputArgument String value, DgsDataFetchingEnvironment dfe) {
+    DgsWebMvcRequestData requestData = (DgsWebMvcRequestData) dfe.getDgsContext().getRequestData();
+    ServletWebRequest webRequest = (ServletWebRequest) requestData.getWebRequest();
+    javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie("mydgscookie", value);
+    webRequest.getResponse().addCookie(cookie);
+
+    return value;
 }
 ```
 
-Similar to `@InputArgument` it's possible to wrap a header or parameter in an `Optional`.
+Now let's try the same with WebFlux.
+`DgsRequestData` is now an instance of `DgsReactiveRequestData`, which gives access to the `ServerRequest`.
 
-## Using context
-The `DgsRequestData` object described in the previous section is part of the datafetching _context_.
-You can further customize the context for datafetchers by creating a `DgsCustomContextBuilder`.
+```java
+@DgsMutation
+public String updateCookie(@InputArgument String value, DgsDataFetchingEnvironment dfe) {
+    DgsReactiveRequestData requestData = (DgsReactiveRequestData) dfe.getDgsContext().getRequestData();
+    ServerRequest serverRequest = requestData.getServerRequest();
+
+    serverRequest.exchange().getResponse()
+            .addCookie(ResponseCookie.from("mydgscookie", "webfluxupdated").build());
+    return value;
+}
+```
+
+## Using data fetcher context
+The `DgsRequestData` object described in the previous section is part of the data fetching _context_.
+The DGS Framework adds the `DgsRequestData` to the data fetching context.
+You can also add your own data to the context, for use in data fetchers.
+The context is initialized per request, before query execution starts.
+
+You can customize the context and add your own data by creating a `DgsCustomContextBuilder`.
 
 ```java
 @Component

@@ -74,12 +74,10 @@ If you're building on top of `WebFlux`, use `com.netflix.graphql.dgs:graphql-dgs
     </dependencies>
     ```
 
-!!! caution
-    The DGS Framework requires Kotlin 1.4, and does not work with Kotlin 1.3. Older Spring Boot versions may bring in Kotlin 1.3.
-
 !!! important
+    The DGS framework uses Kotlin 1.5.
     If you use [Spring Boot Gradle Plugin 2.3], you will have to be explicit on the Kotlin version that
-    will be available. **This plugin will downgrade the transitive 1.4 Kotlin version to 1.3**.
+    will be available. **This plugin will downgrade the transitive 1.5 Kotlin version to 1.3**.
     You can be explicit by setting it via Gradle's _extensions_ as follows:
     === "Gradle"
         ```groovy
