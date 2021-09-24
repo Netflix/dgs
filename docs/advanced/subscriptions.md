@@ -101,3 +101,68 @@ Such scenarios are easy to set up in a unit test, simply run multiple queries/mu
 Notice that the unit tests really only test your code.
 It doesn't care about transport protocols.
 This is exactly what you need for your tests, because your tests should focus on testing your code, not the framework code.
+
+## Integration testing subscriptions
+
+Although most subscription logic should be tested in unit tests, it can be useful to test end-to-end with a client.
+This can be achieved with the DGS client, and works well in a `@SpringBootTest` with a random port.
+The example below starts a subscription, and sends to mutations that should result in updates on the subscription.
+The example uses Websockets, but the same can be done for SSE.
+The code for this example can be found in the [example project](https://github.com/Netflix/dgs-examples-java/blob/main/src/test/java/com/example/demo/ReviewSubscriptionIntegrationTest.java).
+
+```java
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class ReviewSubscriptionIntegrationTest {
+
+    @LocalServerPort
+    private Integer port;
+
+    private WebSocketGraphQLClient webSocketGraphQLClient;
+    private MonoGraphQLClient graphQLClient;
+    private MonoRequestExecutor requestExecutor = (url, headers, body) -> WebClient.create(url)
+            .post()
+            .bodyValue(body)
+            .headers(consumer -> headers.forEach(consumer::addAll))
+            .exchangeToMono(r -> r.bodyToMono(String.class).map(responseBody -> new HttpResponse(r.rawStatusCode(), responseBody, r.headers().asHttpHeaders())));
+
+
+    @BeforeEach
+    public void setup() {
+        webSocketGraphQLClient = new WebSocketGraphQLClient("ws://localhost:" + port + "/subscriptions", new ReactorNettyWebSocketClient());
+        graphQLClient = new DefaultGraphQLClient("http://localhost:" + port + "/graphql");
+    }
+
+    @Test
+    public void testWebSocketSubscription() {
+        GraphQLQueryRequest subscriptionRequest = new GraphQLQueryRequest(
+                ReviewAddedGraphQLQuery.newRequest().showId(1).build(),
+                new ReviewAddedProjectionRoot().starScore()
+        );
+
+        GraphQLQueryRequest addReviewMutation1 = new GraphQLQueryRequest(
+                AddReviewGraphQLQuery.newRequest().review(SubmittedReview.newBuilder().showId(1).starScore(5).username("DGS User").build()).build(),
+                new AddReviewProjectionRoot().starScore()
+        );
+
+        GraphQLQueryRequest addReviewMutation2 = new GraphQLQueryRequest(
+                AddReviewGraphQLQuery.newRequest().review(SubmittedReview.newBuilder().showId(1).starScore(3).username("DGS User").build()).build(),
+                new AddReviewProjectionRoot().starScore()
+        );
+
+        Flux<Integer> starScore = webSocketGraphQLClient.reactiveExecuteQuery(subscriptionRequest.serialize(), Collections.emptyMap()).map(r -> r.extractValue("reviewAdded.starScore"));
+
+        StepVerifier.create(starScore)
+                .thenAwait(Duration.ofSeconds(1)) //This await is necessary because of issue [#657](https://github.com/Netflix/dgs-framework/issues/657)
+                .then(() -> {
+                    graphQLClient.reactiveExecuteQuery(addReviewMutation1.serialize(), Collections.emptyMap(), requestExecutor).block();
+
+                })
+                .then(() ->
+                        graphQLClient.reactiveExecuteQuery(addReviewMutation2.serialize(), Collections.emptyMap(), requestExecutor).block())
+                .expectNext(5)
+                .expectNext(3)
+                .thenCancel()
+                .verify();
+    }
+}
+```

@@ -354,3 +354,5 @@ In case the connection fails to set up, either because of a connection error, or
 Errors later on in the process will be errors in the stream.
 
 Don't forget to `subscribe()` to the stream, otherwise the connection doesn't get started!
+
+The client is also very useful for integration testing purposes, which is discussed [here](/advanced/subscriptions/#subscriptions/#integration-testing-subscriptions).
