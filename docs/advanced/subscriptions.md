@@ -152,7 +152,7 @@ public class ReviewSubscriptionIntegrationTest {
         Flux<Integer> starScore = webSocketGraphQLClient.reactiveExecuteQuery(subscriptionRequest.serialize(), Collections.emptyMap()).map(r -> r.extractValue("reviewAdded.starScore"));
 
         StepVerifier.create(starScore)
-                .thenAwait(Duration.ofSeconds(1))
+                .thenAwait(Duration.ofSeconds(1)) //This await is necessary because of issue [#657](https://github.com/Netflix/dgs-framework/issues/657)
                 .then(() -> {
                     graphQLClient.reactiveExecuteQuery(addReviewMutation1.serialize(), Collections.emptyMap(), requestExecutor).block();
 
