@@ -73,7 +73,7 @@ public List<TicksConnection> getData() {
          * Use RestTemplate to call the GraphQL service. 
          * The response type should simply be String, because the parsing will be done by the GraphQLClient.
          */
-        ResponseEntity<String> exchange = dgsRestTemplate.exchange(url, HttpMethod.POST, new HttpEntity(body, requestHeaders), String.class);
+        ResponseEntity<String> exchange = dgsRestTemplate.exchange(url, HttpMethod.POST, new HttpEntity<String>(body, requestHeaders), String.class);
         
         /**
          * Return a HttpResponse, which contains the HTTP status code and response body (as a String).
