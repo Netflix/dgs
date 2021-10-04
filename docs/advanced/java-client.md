@@ -1,96 +1,58 @@
 ## Usage
 The DGS framework provides a GraphQL client that can be used to retrieve data from a GraphQL endpoint.
+The client is also useful for integration testing a DGS.
 The client has two components, each usable by itself, or in combination together.
 
-* GraphQLClient - A HTTP client wrapper that provides easy parsing of GraphQL responses
+* GraphQL Client - A HTTP client wrapper that provides easy parsing of GraphQL responses
 * Query API codegen - Generate type-safe Query builders
 
-## HTTP client wrapper
+The client has multiple interfaces and implementations for different needs.
+The interfaces are the following:
 
-The GraphQL client wraps any HTTP client and provides easy parsing of GraphQL responses.
-The client can be used against any GraphQL endpoint (it doesn't have to be implemented with the DGS framework), but provides extra conveniences for parsing Gateway and DGS responses.
-This includes support for the [Errors Spec](../error-handling.md).
+* GraphQLClient - Client interface for blocking implementations. Only recommended when using a blocking HTTP client.
+* MonoGraphQLClient - The same as GraphQLClient, but based on the reactive `Mono` interface meant for non-blocking implementations. Comes with an out-of-the-box WebClient implementation: `MonoGraphQLClient.createWithWebClient(...)`.
+* ReactiveGraphQLClient - Client interface for streaming responses such as Subscriptions, where multiple results are expected. Based on the reactive `Flux` interface. Implemented by `SSESubscriptionGraphQLClient` and `WebSocketGraphQLClient`.
 
-To use the client, create an instance of `DefaultGraphQLClient`.
+## GraphQL Client with WebClient
 
-```java
-GraphQLClient client = new DefaultGraphQLClient(url);
+The easiest way to use the DGS GraphQL Client is to use the WebClient implementation.
+WebClient is the recommended HTTP client in Spring, and is the best choice for most use cases, unless you have a specific reason to use a different HTTP client.
+Because WebClient is Reactive, the client returns a `Mono` for all operations.
+
+=== "Java"
+    ```java
+    //Configure a WebClient for your needs, e.g. including authentication headers and TLS.
+    WebClient webClient = WebClient.create("http://localhost:8080/graphql");
+    WebClientGraphQLClient client = MonoGraphQLClient.createWithWebClient(webClient);
+    
+    //The GraphQLResponse contains data and errors.
+    Mono<GraphQLResponse> graphQLResponseMono = graphQLClient.reactiveExecuteQuery(query);
+    
+    //GraphQLResponse has convenience methods to extract fields using JsonPath.
+    Mono<String> somefield = graphQLResponseMono.map(r -> r.extractValue("somefield"));
+    
+    //Don't forget to subscribe! The request won't be executed otherwise.
+    somefield.subscribe();
+    ```
+=== "Kotlin"
+    ```kotlin
+    //Configure a WebClient for your needs, e.g. including authentication headers and TLS.
+    val client = MonoGraphQLClient.createWithWebClient(WebClient.create("http://localhost:8080/graphql"))
+
+    //Executing the query returns a Mono of GraphQLResponse.
+    val result = client.reactiveExecuteQuery("{hello}").map { r -> r.extractValue<String>("hello") }
+
+    //Don't forget to subscribe! The request won't be executed otherwise.
+    somefield.subscribe();
 ```
 
-The `url` is the server url of the endpoint you want to call.
-This url will be passed down to the callback discussed below.
+The `reactiveExecuteQuery` method takes a query String as input, and optionally a Map of variables and an operation name.
+Instead of using a query String, you can use code generation to create a type-safe query builder API.
 
-Using the `GraphQLClient` a query can be executed.
-The `executeQuery` method has four arguments:
+The `GraphQLResponse` provides methods to parse and retrieve data and errors in a variety of ways.
+Refer to the `GraphQLResponse` JavaDoc for the complete list of supported methods.
 
-1. The query String
-2. An optional map of query variables
-3. An optional operation name (for logging purposes, or when you send multiple queries in a request)
-3. An instance of `RequestExecutor`, typically provided as a lambda.
 
-Because of the many HTTP clients in the Java ecosystem, the GraphQLClient is decoupled from any particular HTTP client implementation.
-Any HTTP client (WebClient, RestTemplate, OkHTTP, ....) can be used.
-At Netflix we primarily use WebClient, which is part of the Spring ecosystem.
-
-The developer is responsible for making the actual HTTP call by implementing a `RequestExecutor`.
-`RequestExecutor` receives the `url`, a map of `headers` and the request `body` as parameters, and should return an instance of `HttpResponse`.
-Based on the HTTP response the GraphQLClient parses the response and provides easy access to data and errors.
-The example below uses `RestTemplate`.
-
-```
-private RestTemplate dgsRestTemplate;
-
-private static final String URL = "http://someserver/graphql";
-
-private static final String QUERY = "{\n" +
-            "  ticks(first: %d, after:%d){\n" +
-            "    edges {\n" +
-            "      node {\n" +
-            "        route {\n" +
-            "          name\n" +
-            "          grade\n" +
-            "          pitches\n" +
-            "          location\n" +
-            "        }\n" +
-            "        \n" +
-            "        userStars\n" +
-            "      }\n" +
-            "    }\n" +
-            "  }\n" +
-            "}";
-
-public List<TicksConnection> getData() {
-    DefaultGraphQLClient graphQLClient = new DefaultGraphQLClient(URL);
-    GraphQLResponse response = graphQLClient.executeQuery(QUERY, new HashMap<>(), "TicksQuery", (url, headers, body) -> {
-        /**
-         * The requestHeaders providers headers typically required to call a GraphQL endpoint, including the Accept and Content-Type headers.
-         * To use RestTemplate, the requestHeaders need to be transformed into Spring's HttpHeaders.
-         */
-        HttpHeaders requestHeaders = new HttpHeaders();
-        headers.forEach(requestHeaders::put);
-        
-        /**
-         * Use RestTemplate to call the GraphQL service. 
-         * The response type should simply be String, because the parsing will be done by the GraphQLClient.
-         */
-        ResponseEntity<String> exchange = dgsRestTemplate.exchange(url, HttpMethod.POST, new HttpEntity<String>(body, requestHeaders), String.class);
-        
-        /**
-         * Return a HttpResponse, which contains the HTTP status code and response body (as a String).
-         * The way to get these depend on the HTTP client.
-         */
-        return new HttpResponse(exchange.getStatusCodeValue(), exchange.getBody());
-    }); 
-
-    TicksConnection ticks = response.extractValueAsObject("ticks", TicksConnection.class);
-    return ticks;
-}
-```
-
-The `GraphQLClient` provides methods to parse and retrieve data and errors in a variety of ways.
-Refer to the `GraphQLClient` JavaDoc for the complete list of supported methods.
-
-                                                                                                                 
 | method  | description  | example | 
 |---|---|---|
 | getData | Get the data as a Map<String, Object>  |  `Map<String,Object> data = response.getData()` |
@@ -101,6 +63,18 @@ Refer to the `GraphQLClient` JavaDoc for the complete list of supported methods.
 | getRequestDetails | Extract a `RequestDetails` object. This only works if requestDetails was requested in the query, and against the Gateway. | RequestDetails requestDetails = `response.getRequestDetails()` |
 | getParsed | Get the parsed `DocumentContext` for further JsonPath processing | `response.getDocumentContext()`|
 
+The client can be used against any GraphQL endpoint (it doesn't have to be implemented with the DGS framework), but provides extra conveniences for parsing Gateway and DGS responses.
+This includes support for the [Errors Spec](../error-handling.md).
+
+### Headers
+
+HTTP headers can easily be added to the request.
+
+```java
+WebClientGraphQLClient client = MonoGraphQLClient.createWithWebClient(webClient, headers -> headers.add("myheader", "test"));
+```
+
+By default, the client already sets the `Content-type` and `Accept` headers.
 
 ### Errors
 
@@ -135,6 +109,71 @@ Note that the `ErrorType` is an enum as specified by the [Errors Spec](../error-
 assertThat(graphQLResponse.errors.get(0).extensions.errorType).isEqualTo(ErrorType.BAD_REQUEST)
 assertThat(graphQLResponse.errors.get(0).extensions.errorDetail).isEqualTo("FIELD_NOT_FOUND")
 ```
+
+
+## Plug in your own HTTP client
+
+Instead of using WebClient, you can also plug in your own HTTP client.
+This is useful if you already have a configured client for your backend with authN/authZ, TLS, etc.
+In this case you are responsible for making the actual request, but the GraphQL client wraps the HTTP client and provides easy parsing of GraphQL responses.
+
+There are two interfaces that you can pick from:
+
+* GraphQLClient: For blocking HTTP clients
+* MonoGraphQLClient: For non-blocking HTTP clients
+
+Both interfaces return a `GraphQLResponse` for each query execution, but `MonoGraphQLClient` wraps the result in a `Mono`, making it a better fit for non-blocking clients.
+Create an instance by using the factory method on the interface.
+
+=== "Java"
+    ```java
+    CustomGraphQLClient client = GraphQLClient.createCustom(url,  (url, headers, body) -> {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        headers.forEach(httpHeaders::addAll);
+        ResponseEntity<String> exchange = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(body, httpHeaders),String.class);
+        return new HttpResponse(exchange.getStatusCodeValue(), exchange.getBody());
+    });
+    
+    GraphQLResponse graphQLResponse = client.executeQuery(query, emptyMap(), "SubmitReview");
+    String submittedBy = graphQLResponse.extractValueAsObject("submitReview.submittedBy", String.class);
+    ```
+=== "Kotlin"
+    ```kotlin
+    //Configure your HTTP client
+    val restTemplate = RestTemplate();
+    
+    val client = GraphQLClient.createCustom("http://localhost:8080/graphql") { url, headers, body ->
+        //Prepare the request, e.g. set up headers.
+        val httpHeaders = HttpHeaders()
+        headers.forEach { httpHeaders.addAll(it.key, it.value) }
+    
+        //Use your HTTP client to send the request to the server.
+        val exchange = restTemplate.exchange(url, HttpMethod.POST, HttpEntity(body, httpHeaders), String::class.java)
+        
+        //Transform the response into a HttpResponse
+        HttpResponse(exchange.statusCodeValue, exchange.body)
+    }
+    
+    //Send a query and extract a value out of the result.
+    val result = client.executeQuery("{hello}").extractValue<String>("hello")
+    ```
+
+Alternatively, use `MonoGraphQLClient.createCustomReactive(...)` to create the reactive equivalent.
+The provided `RequestExecutor` must now return `Mono<HttpResponse>`.
+
+```java
+CustomMonoGraphQLClient client = MonoGraphQLClient.createCustomReactive(url, (requestUrl, headers, body) -> {
+    HttpHeaders httpHeaders = new HttpHeaders();
+    headers.forEach(httpHeaders::addAll);
+    ResponseEntity<String> exchange = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(body, httpHeaders),String.class);
+    return Mono.just(new HttpResponse(exchange.getStatusCodeValue(), exchange.getBody(), exchange.getHeaders()));
+});
+Mono<GraphQLResponse> graphQLResponse = client.reactiveExecuteQuery(query, emptyMap(), "SubmitReview");
+String submittedBy = graphQLResponse.map(r -> r.extractValueAsObject("submitReview.submittedBy", String.class)).block();
+```
+
+Note that in this example we just use `Mono.just` to create a Mono.
+This doesn't make the call non-blocking.
 
 ## Type safe Query API
 
@@ -355,4 +394,4 @@ Errors later on in the process will be errors in the stream.
 
 Don't forget to `subscribe()` to the stream, otherwise the connection doesn't get started!
 
-The client is also very useful for integration testing purposes, which is discussed [here](/advanced/subscriptions/#subscriptions/#integration-testing-subscriptions).
+The client is also very useful for integration testing purposes, which is discussed [here](/advanced/subscriptions/#integration-testing-subscriptions).
