@@ -124,6 +124,8 @@ There are two interfaces that you can pick from:
 
 Both interfaces return a `GraphQLResponse` for each query execution, but `MonoGraphQLClient` wraps the result in a `Mono`, making it a better fit for non-blocking clients.
 Create an instance by using the factory method on the interface.
+This returns an instance of `CustomGraphQLClient` or `CustomMonoGraphQLClient`.
+The implementations are named `Custom*` to indicate you need to provide handling of the actual HTTP request.
 
 === "Java"
     ```java
