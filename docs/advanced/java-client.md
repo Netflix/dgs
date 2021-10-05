@@ -177,6 +177,19 @@ String submittedBy = graphQLResponse.map(r -> r.extractValueAsObject("submitRevi
 Note that in this example we just use `Mono.just` to create a Mono.
 This doesn't make the call non-blocking.
 
+### Migrating from DefaultGraphQLClient
+
+In previous versions of the framework we provided the `DefaultGraphQLClient` class.
+This has been deprecated for the following reasons:
+
+* The "Default" in the name suggested that it should be the implementation for most use cases. However, the new WebClient implementation is a much better option now. Naming things is hard.
+* The API required you to pass in the `RequestExecutor` for each query execution. This wasn't ergonomic for the new WebClient implementation, because no `RequestExecutor` is required.
+
+If you want to migrate existing usage of `DefaultGraphQLClient` you can either use the WebClient implementation and get rid of your `RequestExecutor` entirely, or alternatively use `CustomGraphQLClient` / `CustomMonoGraphQLClient` which has almost the same API.
+To migrate to `CustomGraphQLClient` you pass in your existing `RequestExecutor` to the `GraphQLClient.createCustom(url, requestExecutor)` factory method, and remove it from the `executeQuery` methods.
+
+We plan to eventually remove the `DefaultGraphQLClient`, because its API is confusing.
+
 ## Type safe Query API
 
 Based on a GraphQL schema a type safe query API can be generated for Java/Kotlin.
