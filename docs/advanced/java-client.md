@@ -409,4 +409,4 @@ Errors later on in the process will be errors in the stream.
 
 Don't forget to `subscribe()` to the stream, otherwise the connection doesn't get started!
 
-An example of using the client to write subscription integration tests is available [here](subscriptions/#integration-testing-subscriptions).
+An example of using the client to write subscription integration tests is available [here](../advanced/subscriptions/#integration-testing-subscriptions).
