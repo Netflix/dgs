@@ -130,12 +130,3 @@ public class RatingMutation {
     }
 }
 ```
-
-## Kotlin data types
-
-In Kotlin, you can use Data Classes to represent input types.
-However, make sure its<!-- "its" is ambiguous here --> fields are either `var` or add a `@JsonProperty` to each constructor argument, and use `jacksonObjectMapper()` to create a Kotlin-compatible Jackson mapper.
-
-```kotlin
-data class RatingInput(var title: String, var stars: Int)
-```
