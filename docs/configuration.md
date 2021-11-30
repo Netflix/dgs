@@ -67,9 +67,9 @@ dgs:
 | management.metrics.dgs-graphql.autotime.percentiles-histogram      | Boolean  | `false` | Enables publishing percentile histograms for the DGS Micrometer Timers. [^1]                                                    |
 
 !!!hint
-You can configure percentiles, and enable percentile histograms, directly via the per-meter customizations available
-out of the box in Spring Boot. For example, to enable percentile histograms for all `gql.*` meters you can
-set the following property:
+    You can configure percentiles, and enable percentile histograms, directly via the per-meter customizations available
+    out of the box in Spring Boot. For example, to enable percentile histograms for all `gql.*` meters you can
+    set the following property:
 
     ```
     management.metrics.distribution.percentiles-histogram.gql=true
@@ -79,4 +79,4 @@ set the following property:
 
 [^1]: [Spring Boot's Per Meter Properties] can be used to configure percentiles, and histograms, out of the box.
 
-[spring boot's per meter properties]: https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.metrics.customizing.per-meter-properties
+[Spring Boot's Per Meter Properties]: https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.metrics.customizing.per-meter-properties
