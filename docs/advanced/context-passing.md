@@ -56,7 +56,7 @@ List<Review> reviews(DgsDataFetchingEnvironment dfe) {
 
 This example is the easiest and most common scenario, but only possible if the `showId` field is available on the `Show` type.
 
-No showdId - Use an internal type
+No showId - Use an internal type
 ----
 
 Sometimes you don't want to expose the `showId` field in the schema, or our types are not set up to carry this field for other reasons.
@@ -128,7 +128,7 @@ List<Show> shows() {
 
 As said, the extra field doesn't affect the response to the client at all.
 
-No showId - use local context
+No showId - Use local context
 -----
 
 Using wrapper types works well when the schema type and internal type are mostly similar.
