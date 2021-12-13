@@ -15,6 +15,7 @@ nav:
   - Code Generation: generating-code-from-schema.md
   - Async Data Fetching: data-loaders.md
   - Error Handling: error-handling.md
+  - Federation: federation.md
   - Examples: examples.md
   - Videos: videos.md
   - Advanced:
