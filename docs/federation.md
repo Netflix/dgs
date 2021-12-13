@@ -25,9 +25,10 @@ The example project has the following set up:
     If you are completely new to the DGS framework, please take a look at the [DGS Getting Started](./getting-started.md) guide, which also contains an introduction video.
     The remainder of the guide on this page assumes basic GraphQL and DGS knowledge, and focuses on more advanced use cases.
 
-### Defining the type
+### Defining a federated type
 The Shows DGS defines the `Show` type with fields id, title and releaseYear. 
 Note that the `id` field is marked as the key. 
+The example has one key, but you can have multiple kets as well `@key(fields:"fieldA fieldB"`
 This indicates to the gateway that the `id` field will be used for identifying the corresponding Show in the Shows DGS and must be specified for federated types.
 ```graphql
 type Query {
@@ -41,7 +42,7 @@ type Show @key(fields: "id") {
 }
 ```
 
-### Extending a Federated Type
+### Extending a federated Type
 
 To extend a type you redefine the type in your own schema, using directive `@extends` to instruct that it's a type extension.
 `@key` is required to indicate the field that the gateway will use to identify the original `Show` for a query.
@@ -58,8 +59,11 @@ type Review {
 }
 ```
 When redefining a type, only the id field, and the fields you're adding need to be listed.
-Other fields, such as `title` for `Show` are provided by the Shows DGS and do not need to be specified unless you are using it in the schema.
+Other fields, such as `title` for `Show` type are provided by the Shows DGS and do not need to be specified unless you are using it in the schema.
 Federation makes sure the fields provided by all DGSs are combined into a single type for returning the results of a query.
+
+!!!info
+    Don't forget to use the @external directive if you define a field that doesn't belong to your DGS, but you need to reference it.
 
 ## Implementing a Federated Type
 The very first step to get started is to generate Java types that represent the schema.
@@ -134,7 +138,7 @@ This query comes with the following variables:
 ```
 
 The Reviews DGS needs to implement an `entity fetcher` to handle this query.
-An entity fetcher is responsible for creating an instance of a `Show` Java instance based on the representation in the `_entities` query above.
+An entity fetcher is responsible for creating an instance of a `Show` based on the representation in the `_entities` query above.
 The DGS framework does most of the heavy lifting, and all we have to do is provide the following:
 
 [Full code](https://github.com/Netflix/dgs-federation-example/blob/master/reviews-dgs/src/main/java/com/example/demo/datafetchers/ReviewsDatafetcher.java)
@@ -198,8 +202,9 @@ class ReviewssDatafetcherTest {
                         "}}}}",
                 "data['_entities'][0].reviews", variables, new TypeRef<>() {});
 
-        assertThat(reviewsList).isNotNull();
-        assertThat(reviewsList.size()).isEqualTo(3);
+        assertThat(reviewsList)
+                .isNotNull()
+                .hasSize(3);
     }
 }
 ```
