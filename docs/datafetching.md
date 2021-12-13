@@ -187,7 +187,7 @@ It then sets each field of the instance to the input argument values.
 For Kotlin Data classes, the instance can only be created by passing in all arguments in the constructor.
 This means you have to make sure to make fields optional in the data class when the fields are optional in the GraphQL schema!
 
-If you're using the [Codegen](generating-code-from-schema) plugin (you really should!), the input types will work perfectly out of the box.
+If you're using the [Codegen](../generating-code-from-schema) plugin (you really should!), the input types will work perfectly out of the box.
 
 !!!info "Input argument conversion isn't JSON"
     It's easy to confuse the conversion described above with JSON deserialization as you are familiar with in libraries such as Jackson.
@@ -197,7 +197,7 @@ If you're using the [Codegen](generating-code-from-schema) plugin (you really sh
 
 !!!info "Defining scalars, and scalars in codegen"
     @InputArgument is designed to work well with scalars.
-    More information about defining custom scalars in the framework can be found [here](scalars).
+    More information about defining custom scalars in the framework can be found [here](../scalars).
     For a scalar you typically either create a class representing the value, or use an existing type. 
     Such types need to be mapped in [Codegen configuration](https://netflix.github.io/dgs/generating-code-from-schema/#mapping-existing-types) so that they don't (incorrectly) get generated.
 
