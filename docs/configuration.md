@@ -46,6 +46,24 @@ dgs:
 | dgs.graphql.extensions.scalars.objects.enabled    | Boolean | `true`  | Will register the Object, Json, Url, and Locale scalar extensions.                                                                                                  |
 | dgs.graphql.extensions.scalars.time-dates.enabled | Boolean | `true`  | Will register the DateTime, Date, and Time scalar extensions.                                                                                                       |
 
+
+### DGS Datetime Scalars: graphql-dgs-datetime-scalars
+
+| Name                                                   | Type    | Default          | Description                                                                                                                                              |
+|--------------------------------------------------------|---------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| dgs.graphql.datetime.scalars.enabled                   | Boolean | `true`           | Registered the Datetime Scalar Extensions available in [graphql-java-datetime](https://github.com/donbeave/graphql-java-datetime) for the DGS Framework. |
+| dgs.graphql.datetime.scalars.date.scalarName           | String  | `Date`           | Will register an alias for the `Date` scalar                                                                                                             |
+| dgs.graphql.datetime.scalars.localDate.scalarName      | String  | `LocalDate`      | Will register an alias for the `LocalDate` scalar                                                                                                        |
+| dgs.graphql.datetime.scalars.localDate.format          | String  | null             | A custom format for `LocalDate` scalar                                                                                                                   |
+| dgs.graphql.datetime.scalars.localDateTime.scalarName  | String  | `LocalDateTime`  | Will register an alias for the `LocalDateTime` scalar                                                                                                    |
+| dgs.graphql.datetime.scalars.localDateTime.format      | String  | null             | A custom format for `LocalDateTime` scalar                                                                                                               |
+| dgs.graphql.datetime.scalars.localTime.scalarName      | String  | `LocalTime`      | Will register an alias for the `LocalTime` scalar                                                                                                        |
+| dgs.graphql.datetime.scalars.offsetDateTime.scalarName | String  | `OffsetDateTime` | Will register an alias for the `OffsetDateTime` scalar                                                                                                   |
+| dgs.graphql.datetime.scalars.yearMonth.scalarName      | String  | `YearMonth`      | Will register an alias for the `YearMonth` scalar                                                                                                        |
+| dgs.graphql.datetime.scalars.duration.scalarName       | String  | `Duration`       | Will register an alias for the `Duration` scalar                                                                                                         |
+| dgs.graphql.datetime.scalars.zone-conversion-enabled   | Boolean | false            | If enabled, will automatically convert between UTC and the default `TimeZone` for `LocalDateTime`                                                        |
+
+
 ### DGS Extended Validation: graphql-dgs-extended-validation
 
 | Name                                      | Type    | Default | Description                                                                                                                                                                                    |
