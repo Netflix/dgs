@@ -203,6 +203,14 @@ This is where a lot of the power from GraphQL comes from, but a surprise to many
 The GraphiQL editor is really just a UI that uses the `/graphql` endpoint of your service.
 You could now connect a UI to your backend as well, for example using [React and the Apollo Client](https://www.apollographql.com/docs/react/).
 
+## Install the Intellij plugin
+
+If you are a Intellij user, there is a plugin available for DGS. 
+The plugin supports navigation between schema files and code and many hints and quick fixes.
+You can install the plugin from the Jetbrains plugin repository [here](https://plugins.jetbrains.com/plugin/17852-dgs).
+
+![Plugin installation](/images/intellij-marketplace.png)
+
 ## Next steps
 
 Now that you have a first GraphQL service running, we recommend improving this further by doing the following:
