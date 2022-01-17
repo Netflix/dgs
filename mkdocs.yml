@@ -32,6 +32,7 @@ nav:
     - Federated Testing: advanced/federated-testing.md
     - Dynamic schemas: advanced/dynamic-schemas.md
     - Relay Pagination: advanced/relay-pagination.md
+    - Operation Caching: advanced/operation-caching.md
     - Adding Custom Scalars: scalars.md
     - Mocking: advanced/mocking.md
     - React Example: https://github.com/Netflix/dgs-framework/tree/master/graphql-dgs-example-java
