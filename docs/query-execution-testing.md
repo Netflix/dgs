@@ -328,3 +328,67 @@ When an error happens while executing the query, the errors are wrapped in a `Qu
 This allows you to easily inspect the error.
 The `message` of the `QueryException` is the concatenation of all the errors.
 The `getErrors()` method gives access to the individual errors for further inspection.
+
+## Testing with Client
+
+If you are interested in testing the web layer as well, you can use the [Java GraphQL Client](advanced/java-client.md).
+Following is a simple example:
+
+=== "Java"
+    ```java
+    import static org.junit.jupiter.api.Assertions.assertTrue;
+
+    import java.util.HashMap;
+    import java.util.List;
+
+    import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration;
+    import com.netflix.graphql.dgs.client.DefaultGraphQLClient;
+    import com.netflix.graphql.dgs.client.GraphQLClient;
+    import com.netflix.graphql.dgs.client.GraphQLResponse;
+    import com.netflix.graphql.dgs.client.HttpResponse;
+
+    import org.junit.jupiter.api.Test;
+    import org.springframework.boot.test.context.SpringBootTest;
+    import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+    import org.springframework.boot.web.server.LocalServerPort;
+    import org.springframework.http.HttpEntity;
+    import org.springframework.http.HttpHeaders;
+    import org.springframework.http.HttpMethod;
+    import org.springframework.http.ResponseEntity;
+    import org.springframework.web.client.RestTemplate;
+
+
+    @SpringBootTest(classes = {DgsAutoConfiguration.class, ShowsDatafetcher.class},
+            webEnvironment = WebEnvironment.RANDOM_PORT)
+    class ShowsDatafetcherTest {
+
+        private GraphQLClient client;
+        private RestTemplate restTemplate;
+
+        public ShowsDatafetcherTest(@LocalServerPort Integer port) {
+            this.client = new DefaultGraphQLClient("http://localhost:" + port.toString() + "/graphql");
+            this.restTemplate = new RestTemplate();
+        }
+
+        @Test
+        void shows() {
+            String query = "{ shows { title releaseYear }}";
+
+            // Read more about executeQuery() at https://netflix.github.io/dgs/advanced/java-client/
+            GraphQLResponse response =
+                    this.client.executeQuery(query, new HashMap<>(), (url, headers, body) -> {
+                        HttpHeaders requestHeaders = new HttpHeaders();
+                        headers.forEach(requestHeaders::put);
+                        ResponseEntity<String> exchange =
+                                this.restTemplate.exchange(url, HttpMethod.POST,
+                                        new HttpEntity<String>(body, requestHeaders), String.class);
+                        return new HttpResponse(exchange.getStatusCodeValue(), exchange.getBody());
+                    });
+
+            List<?> titles = response.extractValueAsObject("shows[*].title", List.class);
+
+            assertTrue(titles.contains("Ozark"));
+
+        }
+    }
+    ```
