@@ -341,7 +341,6 @@ Following is a simple example:
     import java.util.HashMap;
     import java.util.List;
 
-    import com.netflix.graphql.dgs.DgsQueryExecutor;
     import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration;
     import com.netflix.graphql.dgs.client.DefaultGraphQLClient;
     import com.netflix.graphql.dgs.client.GraphQLClient;
@@ -349,7 +348,6 @@ Following is a simple example:
     import com.netflix.graphql.dgs.client.HttpResponse;
 
     import org.junit.jupiter.api.Test;
-    import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.boot.test.context.SpringBootTest;
     import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
     import org.springframework.boot.web.server.LocalServerPort;
@@ -363,9 +361,6 @@ Following is a simple example:
     @SpringBootTest(classes = {DgsAutoConfiguration.class, ShowsDatafetcher.class},
             webEnvironment = WebEnvironment.RANDOM_PORT)
     class ShowsDatafetcherTest {
-
-        @Autowired
-        DgsQueryExecutor dgsQueryExecutor;
 
         private GraphQLClient client;
         private RestTemplate restTemplate;
