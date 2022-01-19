@@ -20,7 +20,8 @@ WebClient is the recommended HTTP client in Spring, and is the best choice for m
 Because WebClient is Reactive, the client returns a `Mono` for all operations.
 
 === "Java"
-    ```java
+
+```java
     //Configure a WebClient for your needs, e.g. including authentication headers and TLS.
     WebClient webClient = WebClient.create("http://localhost:8080/graphql");
     WebClientGraphQLClient client = MonoGraphQLClient.createWithWebClient(webClient);
@@ -33,9 +34,11 @@ Because WebClient is Reactive, the client returns a `Mono` for all operations.
     
     //Don't forget to subscribe! The request won't be executed otherwise.
     somefield.subscribe();
-    ```
+```
+    
 === "Kotlin"
-    ```kotlin
+
+```kotlin
     //Configure a WebClient for your needs, e.g. including authentication headers and TLS.
     val client = MonoGraphQLClient.createWithWebClient(WebClient.create("http://localhost:8080/graphql"))
 
