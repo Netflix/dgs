@@ -208,6 +208,28 @@ generateJava {
 }
 ```
 
+### Limiting generated code for Client API
+If your schema is large or has a lot of cycles, it is not ideal to generate client APIs for the entire schema, since you will end up with a large number of projections.
+This can cause code generation to slow down significantly, or run out of memory depending on your schema.
+We have a few configuration parameters that help tune this so you can limit the generation of client API to only what is required.
+
+```groovy
+generateJava {
+    ...
+    generateClient = true
+    skipEntityQueries = true
+    includeQueries = ["hello"]
+    includeMutations = [""]
+    includeSubscriptions = [""]
+    maxProjectionDepth = 2
+}
+```
+Firstly, you can specify exactly which queries/mutation/subscriptions to generate for via `includeQueries`, `includeMutations`, and `includeSubscriptions`.
+`skipEntityQueries` is only used if you are constructing federated `_entities` queries for testing purposes, so you can also set that to restrict the amount of generated code.
+Finally, `maxProjectionDepth` will instruct codegen to stop generating beyond 2 levels of the graph from the query root.
+The default is 10.
+This will help further limit the number of projections as well.
+
 # Configuring code generation
 
 Code generation has many configuration switches.
@@ -231,6 +253,7 @@ The following table shows the Gradle configuration options, but the same options
 | exampleOutputDir | Directory to generate datafetcher example code to | generated-examples |
 | includeQueries | Generate Query API only for the given list of Query fields | All queries defined in schema |
 | includeMutations | Generate Query API only for the given list of Mutation fields | All mutations defined in schema |
+| includeSubscriptions | Generate Query API only for the given list of Subscription fields | All subscriptions defined in schema |
 | skipEntityQueries | Disable generating Entity queries for federated types | false |
 | shortProjectionNames | Shorten class names of projection types. These types are not visible to the developer. | false |
 | maxProjectionDepth | Maximum projection depth to generate. Useful for (federated) schemas with very deep nesting | 10 |
