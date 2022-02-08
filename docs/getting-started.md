@@ -81,7 +81,7 @@ If you're building on top of `WebFlux`, use `com.netflix.graphql.dgs:graphql-dgs
     You can be explicit by setting it via Gradle's _extensions_ as follows:
     === "Gradle"
         ```groovy
-        ext['slf4j.version'] = '1.4.31'
+        ext['kotlin.version'] = '1.4.31'
         ```
     === "Gradle Kotlin"
         ```kotlin
