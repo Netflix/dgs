@@ -62,3 +62,17 @@ public Connection<Message> hello(DataFetchingEnvironment env) {
     return new SimpleListConnection<>(Collections.singletonList(new Message("This is a generated connection"))).get(env);
 }
 ```
+
+If your schema references a pagination type in a nested type, and you are using the code generation plugin, you will need some additional configuration, as described in the next section.
+
+## Configuring Code Generation 
+If you are using the [DGS Codegen Plugin](https://netflix.github.io/dgs/generating-code-from-schema/) for generating your data model, you will need to also add a type mapping for the relay types.
+The code generation plugin does not process the `@connection` directive and therefore needs to be configured so the generated classes can refer to the mapped type.
+
+For example,
+```gradle
+generateJava{
+  ...
+  typeMapping = ["MessageConnection": "graphql.relay.SimpleListConnection<Message>"]
+}
+```
