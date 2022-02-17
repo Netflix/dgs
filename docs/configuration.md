@@ -2,14 +2,15 @@
 
 ### Core Properties
 
-| Name                            | Type     | Default                             | Description                                              |
-| ------------------------------- | -------- | ----------------------------------- | -------------------------------------------------------- |
-| dgs.graphql.path                | String   | `"/graphql"`                        | Path to the endpoint that will serve GraphQL requests.   |
-| dgs.graphql.schema-json.enabled | Boolean  | `true`                              | Enables schema-json endpoint functionality.              |
-| dgs.graphql.schema-json.path    | String   | `"/schema.json"`                    | Path to the schema-json endpoint without trailing slash. |
-| dgs.graphql.schema-locations    | [String] | `"classpath*:schema/**/*.graphql*"` | Location of the GraphQL schema files.                    |
-| dgs.graphql.graphiql.enabled    | Boolean  | `true`                              | Enables GraphiQL functionality.                          |
-| dgs.graphql.graphiql.path       | String   | `"/graphiql"`                       | Path to the GraphiQL endpoint without trailing slash.    |
+| Name                              | Type     | Default                             | Description                                              |
+| --------------------------------- | -------- | ----------------------------------- | -------------------------------------------------------- |
+| dgs.graphql.path                  | String   | `"/graphql"`                        | Path to the endpoint that will serve GraphQL requests.   |
+| dgs.graphql.introspection.enabled | Boolean  | `true`                              | Enables graphql introspection functionality.             |
+| dgs.graphql.schema-json.enabled   | Boolean  | `true`                              | Enables schema-json endpoint functionality.              |
+| dgs.graphql.schema-json.path      | String   | `"/schema.json"`                    | Path to the schema-json endpoint without trailing slash. |
+| dgs.graphql.schema-locations      | [String] | `"classpath*:schema/**/*.graphql*"` | Location of the GraphQL schema files.                    |
+| dgs.graphql.graphiql.enabled      | Boolean  | `true`                              | Enables GraphiQL functionality.                          |
+| dgs.graphql.graphiql.path         | String   | `"/graphiql"`                       | Path to the GraphiQL endpoint without trailing slash.    |
 
 #### Example: Configure the location of the GraphQL Schema Files
 
