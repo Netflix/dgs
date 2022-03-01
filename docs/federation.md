@@ -144,7 +144,7 @@ The DGS framework does most of the heavy lifting, and all we have to do is provi
 [Full code](https://github.com/Netflix/dgs-federation-example/blob/master/reviews-dgs/src/main/java/com/example/demo/datafetchers/ReviewsDatafetcher.java)
 ```java
 @DgsEntityFetcher(name = "Show")
-public Show show(Map<String, Object> values) {
+public Show movie(Map<String, Object> values) {
         return new Show((String) values.get("id"), null);
 }
 ```
