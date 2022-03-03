@@ -156,7 +156,7 @@ public Show show(Map<String, Object> values) {
 !!!info
     Methods annotated using `@DgsEntityFetcher` are expected to return a concrete type (in this example: `Show`), `CompletionStage<T>` (e.g. `CompletableFuture<T>`), or Reactor `Mono<T>` instance.
 
-    Instances of Reactor `Flux<T>` are not supported. When your scenario warrants returning a list, we suggest using [`Flux#collectList`](https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html#collectList--).
+    Instances of Reactor `Flux<T>` are not supported. When your scenario warrants returning a collection of concrete types, we suggest using [`Flux#collectList`](https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html#collectList--).
 
 ### Providing Data with a Data Fetcher
 
