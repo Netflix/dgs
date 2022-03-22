@@ -578,6 +578,7 @@ body {
   }
 }
 
+.dgs-header .md-search__form,
 .dgs-header .md-search__input {
   border-radius: 2rem !important;
 }
@@ -615,6 +616,17 @@ body {
 }
 .md-search__input~.md-search__icon svg {
   fill: var(--input__placeholder-color--dark);
+}
+.md-search__input~.md-search__icon[type="reset"] {
+  position: absolute;
+  right: 0.5em;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+}
+.md-search__input:placeholder-shown~.md-search__icon[type="reset"],
+.md-search__input[value=""]~.md-search__icon[type="reset"] {
+  opacity: 0;
 }
 
 [data-md-toggle=search]:checked~.dgs-header .md-search__input {
