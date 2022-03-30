@@ -7,12 +7,12 @@ Also, this mechanism will NOT affect how custom scalars are serialized - those w
 To create a custom object mapper, implement a Spring bean of type `ObjectMapper` with `@Qualifier("dgsObjectMapper")`.
 
 ```java
-@Bean
+  @Bean
   @Qualifier("dgsObjectMapper")
-  open fun dgsObjectMapper(): ObjectMapper {
-    val customMapper = jacksonObjectMapper()
-    customMapper.registerModule(JavaTimeModule())
-    return customMapper
+  public ObjectMapper dgsObjectMapper() {
+    ObjectMapper customMapper = new ObjectMapper()
+    customMapper.registerModule(JavaTimeModule());
+    return customMapper;
 }
 ```
 
