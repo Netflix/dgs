@@ -34,6 +34,7 @@ nav:
     - Relay Pagination: advanced/relay-pagination.md
     - Operation Caching: advanced/operation-caching.md
     - Adding Custom Scalars: scalars.md
+    - Custom Object Mapper: advanced/custom-object-mapper.md
     - Mocking: advanced/mocking.md
     - React Example: https://github.com/Netflix/dgs-framework/tree/master/graphql-dgs-example-java
 
