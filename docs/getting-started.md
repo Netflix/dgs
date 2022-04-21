@@ -209,7 +209,7 @@ If you are a Intellij user, there is a plugin available for DGS.
 The plugin supports navigation between schema files and code and many hints and quick fixes.
 You can install the plugin from the Jetbrains plugin repository [here](https://plugins.jetbrains.com/plugin/17852-dgs).
 
-![Plugin installation](/images/intellij-marketplace.png)
+![Plugin installation](./images/intellij-marketplace.png)
 
 ## Next steps
 
