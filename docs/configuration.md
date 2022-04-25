@@ -45,7 +45,7 @@ dgs:
 | dgs.graphql.extensions.scalars.chars.enabled      | Boolean | `true`  | Will register the GraphQLChar extension.                                                                                                                            |
 | dgs.graphql.extensions.scalars.numbers.enabled    | Boolean | `true`  | Will register all numeric scalar extensions such as PositiveInt, NegativeInt, etc.                                                                                  |
 | dgs.graphql.extensions.scalars.objects.enabled    | Boolean | `true`  | Will register the Object, Json, Url, and Locale scalar extensions.                                                                                                  |
-| dgs.graphql.extensions.scalars.time-dates.enabled | Boolean | `true`  | Will register the DateTime, Date, and Time scalar extensions.                                                                                                       |
+| dgs.graphql.extensions.scalars.time-dates.enabled | Boolean | `true`  | Will register the DateTime, Date, Time and LocalTime scalar extensions.                                                                                                       |
 
 ### DGS Extended Validation: graphql-dgs-extended-validation
 
