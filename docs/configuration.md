@@ -46,6 +46,8 @@ dgs:
 | dgs.graphql.extensions.scalars.numbers.enabled    | Boolean | `true`  | Will register all numeric scalar extensions (PositiveInt, NegativeInt, NonPositiveInt, NonNegativeInt, PositiveFloat, NegativeFloat, NonPositiveFloat, NonNegativeFloat, Long, Short, Byte, BigDecimal, BigInteger).                                                                                  |
 | dgs.graphql.extensions.scalars.objects.enabled    | Boolean | `true`  | Will register the Object, Json, Url, and Locale scalar extensions.                                                                                                  |
 | dgs.graphql.extensions.scalars.time-dates.enabled | Boolean | `true`  | Will register the DateTime, Date, and Time scalar extensions.                                                                                                       |
+| dgs.graphql.extensions.scalars.ids.enabled        | Boolean | `true`  | Will register the UUID scalar extension.                                                                                                                            |
+
 
 ### DGS Extended Validation: graphql-dgs-extended-validation
 
