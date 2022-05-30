@@ -26,7 +26,7 @@ dgs:
       - classpath*:graphql-schemas/**/*.graphql*
 ```
 
-Now, if you want to add additional locations to look for the GraphQL Schema files you an add them to the list.
+Now, if you want to add additional locations to look for the GraphQL Schema files you add them to the list.
 For example, let's say we want to also look into your `graphql-experimental-schemas`:
 
 ```yaml

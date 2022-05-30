@@ -205,7 +205,7 @@ You could now connect a UI to your backend as well, for example using [React and
 
 ## Install the Intellij plugin
 
-If you are a Intellij user, there is a plugin available for DGS. 
+If you are an Intellij user, there is a plugin available for DGS.
 The plugin supports navigation between schema files and code and many hints and quick fixes.
 You can install the plugin from the Jetbrains plugin repository [here](https://plugins.jetbrains.com/plugin/17852-dgs).
 
