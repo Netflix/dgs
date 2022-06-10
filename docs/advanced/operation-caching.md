@@ -37,7 +37,7 @@ The bean can also be injected using an annotated `@Bean` method:
 public class MyDgsConfiguration {
 
     @Bean
-    public public PreparsedDocumentEntry getDocument(ExecutionInput executionInput,
+    public PreparsedDocumentEntry getDocument(ExecutionInput executionInput,
                                                      Function<ExecutionInput, PreparsedDocumentEntry> parseAndValidateFunction) {
         return new CachingPreparsedDocumentProvider();
     }
