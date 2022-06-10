@@ -323,7 +323,7 @@ This syntax is supported by the Query builder as well.
 ```
 
 ### Building Federated Queries
-You can use `GraphQLQueryRequest` along with `EntitiesGraphQLQuery` to generated federated queries. 
+You can use `GraphQLQueryRequest` along with `EntitiesGraphQLQuery` to generate federated queries. 
 The API provides a type-safe way to construct the [_entities](https://www.apollographql.com/docs/apollo-server/federation/federation-spec/#resolve-requests-for-entities) query with the associated `representations` based on the input schema. 
 The `representations` are passed in as a map of variables. Each representation class is generated based on the `key` fields defined  on the entity in your schema, along with the `__typename`. 
 The `EntitiesProjectionRoot` is used to select query fields on the specified type.
