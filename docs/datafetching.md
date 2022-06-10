@@ -271,7 +271,7 @@ The benefit of using constants is that you can detect issues between your schema
 ## @RequestHeader, @RequestParam and @CookieValue
 
 Sometimes you need to evaluate HTTP headers, or other elements of the request, in a datafetcher.
-You can easily get a HTTP header value by using the `@RequestHeader` annotation.
+You can easily get an HTTP header value by using the `@RequestHeader` annotation.
 The `@RequestHeader` annotation is the same annotation as used in Spring WebMVC.
 
 ```java

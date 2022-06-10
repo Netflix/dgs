@@ -194,7 +194,7 @@ public class ReviewsDgs {
 !!! abstract "tl;dr"
     * Supported via the opt-in `graphql-dgs-spring-boot-micrometer` module.
     * Provides specific GraphQL metrics such as `gql.query`, `gql.error`, and `gql.dataLoader`.
-    * Supports several backend implementations since its implemented via [Micrometer].
+    * Supports several backend implementations since it's implemented via [Micrometer].
 
 
 === "Gradle Groovy"

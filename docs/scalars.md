@@ -49,7 +49,7 @@ scalar DateTime
 
 In more recent versions of `graphql-java` (>v15.0) [some scalars](https://github.com/graphql-java/graphql-java-extended-scalars),
 most notably the `Long` scalar, are no longer available by default.
-These are non standard scalar that are difficult for clients (e.g. JavaScript) to handle reliably.
+These are non-standard scalars that are difficult for clients (e.g. JavaScript) to handle reliably.
 As a result of the deprecation, you will need to add them explicitly, and to do this you have a few options.
 
 !!! tip
