@@ -1,4 +1,4 @@
-In the [getting started guide](../getting-started) we introduced the `@DgsData` annotation, which you use to create a data fetcher. In this section, we look at some of the finer details of datafetchers.
+In the [getting started guide](../getting-started) we introduced the `@DgsQuery` annotation, which you use to create a data fetcher. In this section, we look at some of the finer details of datafetchers.
 
 ## The @DgsData, @DgsQuery, @DgsMutation and @DgsSubscription Annotations
 You use the `@DgsData` annotation on a Java/Kotlin method to make that method a datafetcher.
