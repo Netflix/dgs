@@ -1,4 +1,4 @@
-Data loaders solve the N+1 problem while loading data.
+Data loaders solve the [N+1 problem](https://stackoverflow.com/q/97197/8237967) while loading data.
 
 ## The N+1 Problem Explained
 Say you query for a list of movies, and each movie includes some data about the director of the movie.

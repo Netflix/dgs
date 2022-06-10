@@ -13,7 +13,7 @@ nav:
   - Testing: query-execution-testing.md
   - Mutations: mutations.md
   - Code Generation: generating-code-from-schema.md
-  - Async Data Fetching: data-loaders.md
+  - Data Loaders (N+1): data-loaders.md
   - Error Handling: error-handling.md
   - Federation: federation.md
   - Examples: examples.md
