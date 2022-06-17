@@ -25,24 +25,27 @@ The following is an example of a custom exception handler implementation.
 ```java
 @Component
 public class CustomDataFetchingExceptionHandler implements DataFetcherExceptionHandler {
-    private final DefaultDataFetcherExceptionHandler defaultHandler = new DefaultDataFetcherExceptionHandler();
 
-    @Override
-    public DataFetcherExceptionHandlerResult onException(DataFetcherExceptionHandlerParameters handlerParameters) {
-        if(handlerParameters.getException() instanceof MyException) {
-            Map<String, Object> debugInfo = new HashMap<>();
-            debugInfo.put("somefield", "somevalue");
+   @Override
+   public CompletableFuture<DataFetcherExceptionHandlerResult> handleException(DataFetcherExceptionHandlerParameters handlerParameters) {
+      if (handlerParameters.getException() instanceof MyException) {
+         Map<String, Object> debugInfo = new HashMap<>();
+         debugInfo.put("somefield", "somevalue");
 
-            GraphQLError graphqlError = TypedGraphQLError.INTERNAL.message("This custom thing went wrong!")
-                    .debugInfo(debugInfo)
-                    .path(handlerParameters.getPath()).build();
-            return DataFetcherExceptionHandlerResult.newResult()
-                    .error(graphqlError)
-                    .build();
-        } else {
-            return defaultHandler.onException(handlerParameters);
-        }
-    }
+         GraphQLError graphqlError = TypedGraphQLError.newInternalErrorBuilder()
+                 .message("This custom thing went wrong!")
+                 .debugInfo(debugInfo)
+                 .path(handlerParameters.getPath()).build();
+
+         DataFetcherExceptionHandlerResult result = DataFetcherExceptionHandlerResult.newResult()
+                 .error(graphqlError)
+                 .build();
+
+         return CompletableFuture.completedFuture(result);
+      } else {
+         return DataFetcherExceptionHandler.super.handleException(handlerParameters);
+      }
+   }
 }
 ```
 
