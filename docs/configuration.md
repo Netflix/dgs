@@ -71,15 +71,27 @@ dgs:
 | management.metrics.dgs-graphql.autotime.percentiles-histogram      | Boolean  | `false` | Enables publishing percentile histograms for the DGS Micrometer Timers. [^1]                                                    |
 
 !!!hint
-    You can configure percentiles, and enable percentile histograms, directly via the per-meter customizations available
-    out of the box in Spring Boot. For example, to enable percentile histograms for all `gql.*` meters you can
-    set the following property:
+You can configure percentiles, and enable percentile histograms, directly via the per-meter customizations available
+out of the box in Spring Boot. For example, to enable percentile histograms for all `gql.*` meters you can
+set the following property:
 
     ```
     management.metrics.distribution.percentiles-histogram.gql=true
     ```
 
     For more information please refer to [Spring Boot's Per Meter Properties].
+
+### DGS Subscriptions (WebSocket): graphql-dgs-subscription-websockets
+
+| Name                                                               | Type     | Default | Description                                                                                                                     |
+| ------------------------------------------------------------------ | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| dgs.graphql.websockets.path       | String   | `"/subscriptions"`                  | Path to the endpoint that will serve websocket subscription requests. |
+
+### DGS Subscriptions (SSE): graphql-dgs-subscription-sse
+
+| Name                                                               | Type     | Default | Description                                                                                                                     |
+| ------------------------------------------------------------------ | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| dgs.graphql.sse.path              | String   | `"/subscriptions"`                  | Path to the endpoint that will serve sse subscription requests.       |
 
 [^1]: [Spring Boot's Per Meter Properties] can be used to configure percentiles, and histograms, out of the box.
 
