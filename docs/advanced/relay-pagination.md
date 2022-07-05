@@ -35,20 +35,31 @@ Note that the `@connection` directive is defined automatically by the framework,
 This results in the following relay types dynamically generated and added to the schema:
 
 ```graphql
+"MessageConnection"
 type MessageConnection {
-    edges: [MessageEdge]
-    pageInfo: PageInfo
+  "Field edges"
+  edges: [MessageEdge]
+  "Field pageInfo"
+  pageInfo: PageInfo
 }
 
+"MessageEdge"
 type MessageEdge {
+    "Field node"
     node: Message
+    "Field cursor"
     cursor: String
 }
 
+"PageInfo"
 type PageInfo {
+    "Field hasPreviousPage"
     hasPreviousPage: Boolean!
+    "Field hasNextPage"
     hasNextPage: Boolean!
+    "Field startCursor"
     startCursor: String
+    "Field endCursor"
     endCursor: String
 }
 ```
