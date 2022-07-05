@@ -29,13 +29,14 @@ A complete example can be found [in `SubscriptionDatafetcher.java`](https://gith
 
 The GraphQL specification doesn't specify a transport protocol.
 WebSockets are the most popular transport protocol however, and are supported by the DGS Framework.
-Apollo defines a [sub-protocol](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md), which is supported by client libraries and implemented by the DGS framework.
+Apollo defines a [sub-protocol](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md), which is supported by client libraries and implemented by the DGS framework.
 
 To enable WebSockets support, add the following module to your `build.gradle`:
 
 ```groovy
 implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure:latest.release'
 ```
+Please note: DGS does not currently support the newer version of the WebSocket protocol as specified [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
 
 ## Server Sent Events (SSE)
 
