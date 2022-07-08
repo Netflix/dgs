@@ -70,17 +70,38 @@ theme:
   icon:
     repo: octicons/mark-github-16
 
+plugins:
+  - search
 
 markdown_extensions:
+  - toc:
+      permalink: True
   - admonition
+  - meta
+  - footnotes
+  # pymdownx
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tilde
+  # - pymdownx.snippets:
+  #     auto_append:
+  #       - docs/common/snippets/REFERENCES.md
+  #     check_paths: !ENV [ SNIPPETS_CHECK_PATHS, 'false' ]
   - pymdownx.highlight:
       linenums: true
       linenums_style: pymdownx-inline
-  - pymdownx.superfences
-  - pymdownx.inlinehilite
-  - pymdownx.tabbed
-  - pymdownx.details
-  - pymdownx.superfences
-  - toc:
-      permalink: True
-  - footnotes
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+    # ----
+  # Support annotations, ref https://squidfunk.github.io/mkdocs-material/reference/annotations/
+  - attr_list
+  - md_in_html
+
