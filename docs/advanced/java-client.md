@@ -25,17 +25,17 @@ Because WebClient is Reactive, the client returns a `Mono` for all operations.
     //Configure a WebClient for your needs, e.g. including authentication headers and TLS.
     WebClient webClient = WebClient.create("http://localhost:8080/graphql");
     WebClientGraphQLClient client = MonoGraphQLClient.createWithWebClient(webClient);
-    
+
     //The GraphQLResponse contains data and errors.
     Mono<GraphQLResponse> graphQLResponseMono = graphQLClient.reactiveExecuteQuery(query);
-    
+
     //GraphQLResponse has convenience methods to extract fields using JsonPath.
     Mono<String> somefield = graphQLResponseMono.map(r -> r.extractValue("somefield"));
-    
+
     //Don't forget to subscribe! The request won't be executed otherwise.
     somefield.subscribe();
 ```
-    
+
 === "Kotlin"
 
 ```kotlin
@@ -56,12 +56,12 @@ The `GraphQLResponse` provides methods to parse and retrieve data and errors in 
 Refer to the `GraphQLResponse` JavaDoc for the complete list of supported methods.
 
 
-| method  | description  | example | 
+| method  | description  | example |
 |---|---|---|
 | getData | Get the data as a Map<String, Object>  |  `Map<String,Object> data = response.getData()` |
 | dataAsObject | Parse data as the provided class, using the Jackson Object Mapper  | `TickResponse data = response.dataAsObject(TicksResponse.class)` |
 | extractValue | Extract values given a [JsonPath](https://github.com/json-path/JsonPath). The return type will be whatever type you expect, but depends on the JSON shape. For JSON objects, a Map is returned. Although this looks type safe, it really isn't. It's mostly useful for "simple" types like String, Int etc., and Lists of those types. | `List<String> name = response.extractValue("movies[*].originalTitle")` |
-| extractValueAsObject | Extract values given a JsonPath and deserialize into the given class | `Ticks ticks = response.extractValueAsObject("ticks", Ticks.class)` |  
+| extractValueAsObject | Extract values given a JsonPath and deserialize into the given class | `Ticks ticks = response.extractValueAsObject("ticks", Ticks.class)` |
 | extractValueAsObject | Extract values given a JsonPath and deserialize into the given TypeRef. Useful for Maps and Lists of a certain class. | `List<Route> routes = response.extractValueAsObject("ticks.edges[*].node.route", new TypeRef<List<Route>>(){})` |
 | getRequestDetails | Extract a `RequestDetails` object. This only works if requestDetails was requested in the query, and against the Gateway. | RequestDetails requestDetails = `response.getRequestDetails()` |
 | getParsed | Get the parsed `DocumentContext` for further JsonPath processing | `response.getDocumentContext()`|
@@ -138,7 +138,7 @@ The implementations are named `Custom*` to indicate you need to provide handling
         ResponseEntity<String> exchange = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(body, httpHeaders),String.class);
         return new HttpResponse(exchange.getStatusCodeValue(), exchange.getBody());
     });
-    
+
     GraphQLResponse graphQLResponse = client.executeQuery(query, emptyMap(), "SubmitReview");
     String submittedBy = graphQLResponse.extractValueAsObject("submitReview.submittedBy", String.class);
     ```
@@ -146,19 +146,19 @@ The implementations are named `Custom*` to indicate you need to provide handling
     ```kotlin
     //Configure your HTTP client
     val restTemplate = RestTemplate();
-    
+
     val client = GraphQLClient.createCustom("http://localhost:8080/graphql") { url, headers, body ->
         //Prepare the request, e.g. set up headers.
         val httpHeaders = HttpHeaders()
         headers.forEach { httpHeaders.addAll(it.key, it.value) }
-    
+
         //Use your HTTP client to send the request to the server.
         val exchange = restTemplate.exchange(url, HttpMethod.POST, HttpEntity(body, httpHeaders), String::class.java)
-        
+
         //Transform the response into a HttpResponse
         HttpResponse(exchange.statusCodeValue, exchange.body)
     }
-    
+
     //Send a query and extract a value out of the result.
     val result = client.executeQuery("{hello}").extractValue<String>("hello")
     ```
@@ -241,9 +241,10 @@ GraphQLQueryRequest graphQLQueryRequest =
 String query = graphQLQueryRequest.serialize();
 ```
 
-The `GraphQLQueryRequest` is a class from `graphql-dgs-client`.
+The `GraphQLQueryRequest` is a class made available by the [Codegen plugin](../../generating-code-from-schema), specifically the `graphql-dgs-codegen-client-core` module.
+Such module will be added as an _implementation dependency_ if the plugin is applied to the project.
 The `TicksGraphQLQuery` and `TicksConnectionProjectionRoot` are generated.
-After building the query, it can be serialized to a String, and executed using the GraphQLClient.
+After building the query, it can be serialized to a String, and executed using the `GraphQLClient`.
 
 Note that the `edges` and `node` fields are because the example schema is using Relay pagination.
 
@@ -297,13 +298,13 @@ type ShowScript implements Script {
 ```
 
 ```graphql
-query { 
-    script(name: "Top Secret") { 
-        title 
+query {
+    script(name: "Top Secret") {
+        title
         ... on MovieScript {
             length
-        } 
-    } 
+        }
+    }
 }
 ```
 
@@ -318,14 +319,14 @@ This syntax is supported by the Query builder as well.
         new ScriptProjectionRoot()
             .title()
             .onMovieScript()
-                .length();                    
+                .length();
     );
 ```
 
 ### Building Federated Queries
-You can use `GraphQLQueryRequest` along with `EntitiesGraphQLQuery` to generate federated queries. 
-The API provides a type-safe way to construct the [_entities](https://www.apollographql.com/docs/apollo-server/federation/federation-spec/#resolve-requests-for-entities) query with the associated `representations` based on the input schema. 
-The `representations` are passed in as a map of variables. Each representation class is generated based on the `key` fields defined  on the entity in your schema, along with the `__typename`. 
+You can use `GraphQLQueryRequest` along with `EntitiesGraphQLQuery` to generate federated queries.
+The API provides a type-safe way to construct the [_entities](https://www.apollographql.com/docs/apollo-server/federation/federation-spec/#resolve-requests-for-entities) query with the associated `representations` based on the input schema.
+The `representations` are passed in as a map of variables. Each representation class is generated based on the `key` fields defined  on the entity in your schema, along with the `__typename`.
 The `EntitiesProjectionRoot` is used to select query fields on the specified type.
 
 For example, let us look at a schema that extends a `Movie` type:
@@ -349,7 +350,7 @@ type Actor {
 }
 ```
 
-With client code generation, you will now have a `MovieRepresentation` containing the key field, i.e., `movieId`, and the `__typename` field already set to type `Movie`. 
+With client code generation, you will now have a `MovieRepresentation` containing the key field, i.e., `movieId`, and the `__typename` field already set to type `Movie`.
 Now you can add each representation to the `EntitiesGraphQLQuery` as a `representations` variable.
 You will also have a `EntitiesProjectionRoot` with `onMovie()` to select fields on `Movie` from.
 Finally, you put them all together as a `GraphQLQueryRequest`, which you serialize into the final query string.
