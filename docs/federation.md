@@ -28,7 +28,7 @@ The example project has the following set up:
 ### Defining a federated type
 The Shows DGS defines the `Show` type with fields id, title and releaseYear. 
 Note that the `id` field is marked as the key. 
-The example has one key, but you can have multiple keys as well `@key(fields:"fieldA fieldB"`
+The example has one key, but you can have multiple keys as well `@key(fields:"fieldA fieldB")`
 This indicates to the gateway that the `id` field will be used for identifying the corresponding Show in the Shows DGS and must be specified for federated types.
 ```graphql
 type Query {
