@@ -28,6 +28,7 @@ nav:
     - Subscriptions: advanced/subscriptions.md
     - Interfaces and Unions: advanced/type-resolvers-for-abstract-types.md
     - Instrumentation (Tracing, Metrics): advanced/instrumentation.md
+    - GraphQLContext : advanced/graphqlcontext-leveraging.md
     - Data Fetching Context: advanced/custom-datafetcher-context.md
     - Federated Testing: advanced/federated-testing.md
     - Dynamic schemas: advanced/dynamic-schemas.md
