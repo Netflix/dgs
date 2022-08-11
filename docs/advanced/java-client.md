@@ -241,7 +241,7 @@ GraphQLQueryRequest graphQLQueryRequest =
 String query = graphQLQueryRequest.serialize();
 ```
 
-The `GraphQLQueryRequest` is a class made available by the [Codegen plugin](../../generating-code-from-schema), specifically the `graphql-dgs-codegen-client-core` module.
+The `GraphQLQueryRequest` is a class made available by the [Codegen plugin](../../generating-code-from-schema), specifically the `graphql-dgs-codegen-shared-core` module.
 Such module will be added as an _implementation dependency_ if the plugin is applied to the project.
 The `TicksGraphQLQuery` and `TicksConnectionProjectionRoot` are generated.
 After building the query, it can be serialized to a String, and executed using the `GraphQLClient`.
