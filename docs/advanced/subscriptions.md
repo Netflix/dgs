@@ -29,12 +29,25 @@ A complete example can be found [in `SubscriptionDatafetcher.java`](https://gith
 
 The GraphQL specification doesn't specify a transport protocol.
 WebSockets are the most popular transport protocol however, and are supported by the DGS Framework.
-Apollo defines a [sub-protocol](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md), which is supported by client libraries and implemented by the DGS framework.
 
-To enable WebSockets support, add the following module to your `build.gradle`:
+The framework now supports the `graphql-transport-ws` [sub-protocol](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md) for websockets for both webmvc and webflux stacks.
+Apollo now supports the client for the [newer protocol](https://www.apollographql.com/docs/react/data/subscriptions/#setting-up-the-transport) as well. 
+
+!!!note
+    The deprecated `graphql-ws` [sub-protocol](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) is functional for backwards compatibility.
+    However, this implementation will no longer be actively maintained in the framework and we will be dropping support in a future release.
+
+
+To enable WebSockets support for the WebMVC stack, add the following module to your `build.gradle`:
 
 ```groovy
 implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure:latest.release'
+```
+
+For WebFlux, the starter already comes with support for websocket subscriptions, so no additional configuration is required.
+
+```groovy
+implementation 'com.netflix.graphql.dgs:graphql-dgs-webflux-starter:latest.release'
 ```
 
 The subscription endpoint is on `/subscriptions`.
