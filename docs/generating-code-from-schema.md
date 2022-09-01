@@ -230,6 +230,66 @@ Finally, `maxProjectionDepth` will instruct codegen to stop generating beyond 2 
 The default is 10.
 This will help further limit the number of projections as well.
 
+### Custom annotations
+This feature provides the ability to support any custom annotation on the generated POJOs using the @annotate directive in graphQL.
+The @annotate directive can be placed on type, input or fields in the graphQL. This feature is tured off as default and can be enabled by setting generateCustomAnnotation to true in pom for maven or build.gradle for gradle.
+```
+<generateCustomAnnotations>true</generateCustomAnnotations>
+```
+
+@annotate definition in the graphQL:
+```
+"Custom Annotation with optional type and parameters"
+directive @annotate(
+    name: String!
+    type: String = "AccountAnnotation"
+    inputs: JSON
+) repeatable on OBJECT | FIELD_DEFINITION | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+```
+Some examples:
+```
+type Person @annotate(name: "ValidPerson", type: "validator", inputs: {types: [HUSBAND, WIFE]}) {
+       name: String @annotate(name: "com.test.anotherValidator.ValidName")
+       type: String @annotate(name: "ValidType", type: "personType", inputs: {types: [PRIMARY, SECONDARY]}) 
+}
+```
+The package mapping for the annotation and enums can be provided in the pom file for maven. The same configurations are available for gradle as well.
+```
+<includeImports>
+  <ValidPerson>com.test.validator</ValidPerson>
+</includeImports>
+<includeEnumImports>
+  <ValidPerson>
+    <types>com.enums</types>
+</ValidPerson>
+<ValidType>
+    <types>com.personType.enum</types>
+</ValidType>
+</includeEnumImports>
+```
+Generated POJO in kotlin. Please note that this feature is also available i n Java.
+```
+package com.netflix.graphql.dgs.codegen.tests.generated.types
+
+import com.fasterxml.jackson.`annotation`.JsonProperty
+import com.personType.enums.ValidType
+import com.test.anotherValidator.ValidName
+import com.test.validator.ValidPerson
+import kotlin.String
+
+@ValidPerson(types = [com.enums.HUSBAND, com.enums.WIFE])
+public data class Person(
+  @JsonProperty("name")
+  @ValidName
+  public val name: String? = null,
+  @JsonProperty("type")
+  @ValidType(types = [com.personType.enums.PRIMARY, com.personType.enums.SECONDARY])
+  public val type: String? = null,
+) {
+  public companion object
+}
+```
+
 # Configuring code generation
 
 Code generation has many configuration switches.
@@ -257,3 +317,6 @@ The following table shows the Gradle configuration options, but the same options
 | skipEntityQueries | Disable generating Entity queries for federated types | false |
 | shortProjectionNames | Shorten class names of projection types. These types are not visible to the developer. | false |
 | maxProjectionDepth | Maximum projection depth to generate. Useful for (federated) schemas with very deep nesting | 10 |
+| includeImports             | Maps the custom annotation names to the package                                                                                                                                             |                                                       |
+| includeEnumImports         | Maps the custom annaotion and enum argument names to the enum packages                                                                                                                      |                                                       |
+| generateCustomAnnotations  | Enable/disable generation of custom annotation                                                                                                                                              | false                                                 | 
