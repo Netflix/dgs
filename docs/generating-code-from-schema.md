@@ -230,7 +230,7 @@ Finally, `maxProjectionDepth` will instruct codegen to stop generating beyond 2 
 The default is 10.
 This will help further limit the number of projections as well.
 
-### Custom annotations
+### Generating classes with Custom Annotations
 This feature provides the ability to support any custom annotation on the generated POJOs using the @annotate directive in graphQL.
 The @annotate directive can be placed on type, input or fields in the graphQL. This feature is turned off by default and can be enabled by setting generateCustomAnnotation to true in build.gradle.
 ```groovy
@@ -253,6 +253,7 @@ directive @annotate(
     inputs: JSON
 ) repeatable on OBJECT | FIELD_DEFINITION | INPUT_OBJECT | INPUT_FIELD_DEFINITION
 ```
+Make sure that the corresponding Java annotations corresponding to the annotation names in the schema should be implemented by the user in their project.
 Some examples:
 ```
 type Person @annotate(name: "ValidPerson", type: "validator", inputs: {types: [HUSBAND, WIFE]}) {
@@ -363,6 +364,6 @@ The following table shows the Gradle configuration options, but the same options
 | skipEntityQueries | Disable generating Entity queries for federated types                                                                                                                                       | false |
 | shortProjectionNames | Shorten class names of projection types. These types are not visible to the developer.                                                                                                      | false |
 | maxProjectionDepth | Maximum projection depth to generate. Useful for (federated) schemas with very deep nesting                                                                                                 | 10 |
-| includeImports             | Maps the custom annotation type to the package, the annotations belong to                                                                                                                   |                                                       |
-| includeEnumImports         | Maps the custom annotation and enum argument names to the enum packages                                                                                                                     |                                                       |
+| includeImports             | Maps the custom annotation type to the package, the annotations belong to. Only used when generateCustomAnnotaions is enabled.                                                              |                                                       |
+| includeEnumImports         | Maps the custom annotation and enum argument names to the enum packages. Only used when generateCustomAnnotaions is enabled.                                                                                                                   |                                                       |
 | generateCustomAnnotations  | Enable/disable generation of custom annotation                                                                                                                                              | false                                                 | 
