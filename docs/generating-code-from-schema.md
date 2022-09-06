@@ -253,7 +253,7 @@ directive @annotate(
     inputs: JSON
 ) repeatable on OBJECT | FIELD_DEFINITION | INPUT_OBJECT | INPUT_FIELD_DEFINITION
 ```
-Make sure that the corresponding Java annotations corresponding to the annotation names in the schema should be implemented by the user in their project.
+Custom annotations specified in the schema will require corresponding Java implementations to be implemented by the user in their project.
 Some examples:
 ```
 type Person @annotate(name: "ValidPerson", type: "validator", inputs: {types: [HUSBAND, WIFE]}) {
