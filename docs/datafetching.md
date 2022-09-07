@@ -217,8 +217,10 @@ You must write the datafetcher function as:
 fun hello(@InputArgument hello: String?)
 ```
 
-In Java you don't have to worry about this, types can always be null.
-You do need to null check in your datafetching code!
+In Java you don't have to worry about this, types can always be null assuming you are using boxed types. 
+Generally, we recommend using boxed types instead of unboxed if you are expecting null input.
+You do need to null check in your datafetching code for handling possible null inputs.
+If using unboxed types, null input will result in exceptions.
 
 ### Using @InputArgument with lists
 An input argument can also be a list.
