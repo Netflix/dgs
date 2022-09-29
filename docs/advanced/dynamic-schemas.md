@@ -38,8 +38,7 @@ This `TypeDefinitionRegistry` creates a field `randomNumber` on the `Query` obje
 
 ## Creating datafetchers programmatically
 
-If you're creating schema elements dynamically, it's likely you also need to create datafetchers dynamically. You can use the `@DgsCodeRegistry
-` annotation to add datafetchers programmatically.
+If you're creating schema elements dynamically, it's likely you also need to create datafetchers dynamically. You can use the `@DgsCodeRegistry` annotation to add datafetchers programmatically.
 A method annotated `@DgsCodeRegistry` takes two arguments:
 
 GraphQLCodeRegistry.Builder codeRegistryBuilder
@@ -52,10 +51,10 @@ The following is an example of a programmatically created datafetcher for the fi
 ```java
 @DgsComponent
 public class DynamicDataFetcher {
-@DgsCodeRegistry
-public GraphQLCodeRegistry.Builder registry(GraphQLCodeRegistry.Builder codeRegistryBuilder, TypeDefinitionRegistry registry) {
-DataFetcher<Integer> df = (dfe) -> new Random().nextInt();
-FieldCoordinates coordinates = FieldCoordinates.coordinates("Query", "randomNumber");
+    @DgsCodeRegistry
+    public GraphQLCodeRegistry.Builder registry(GraphQLCodeRegistry.Builder codeRegistryBuilder, TypeDefinitionRegistry registry) {
+        DataFetcher<Integer> df = (dfe) -> new Random().nextInt();
+        FieldCoordinates coordinates = FieldCoordinates.coordinates("Query", "randomNumber");
 
         return codeRegistryBuilder.dataFetcher(coordinates, df);
     }
