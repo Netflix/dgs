@@ -88,6 +88,20 @@ plugins {
 
 If you're using the old `buildscript` syntax, you add the plugin dependency to the root `buildscript`, but only `apply` in the module.
 
+### Generating code from external schemas in JARs
+You can also specify external dependencies containing schemas to use for generation by declaring it as a dependency in the `dgsCodegen` configuration.
+The plugin will scan all `.graphql` and `.graphqls` files and generate those classes under the same `build/generated` directory.
+This is useful if you have external dependencies containing some shared types that you want to add to your schema for code generation. 
+Not that this does NOT affect your project's schema, and is only for code generation.
+
+```groovy
+dependencies {
+    // other dependencies
+    dgsCodegen 'com.netflix.graphql.dgs:example-schema:x.x.x'
+}
+```
+
+
 ### Mapping existing types
 
 Codegen tries to generate a type for each type it finds in the schema, with a few exceptions.
