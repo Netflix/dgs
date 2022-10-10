@@ -211,14 +211,14 @@ public CompletableFuture<List<Thing>> resolve(DataFetchingEnvironment environmen
 
 ## Thread Pool Optimization
 
-Using `supplyAsync()` without a second argument will cause the main work of a Data loader to run on a [common thread pool](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html#commonPool--) 
-shared with most other async operations in your application. If that Data loader is responsible for calling a slow service and/or subject to heavy load, the common thread pool could become fully saturated.
-In the worst case, this could result in application "freezes" as each dataloader in the application awaits a free thread from the fixed-size common pool. 
+Using `supplyAsync()` without a second argument will cause the main work of a data loader to run on a [common thread pool](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html#commonPool--) 
+shared with most other async operations in your application. If that data loader is responsible for calling a slow service and/or subject to heavy load, the common thread pool could become fully saturated.
+In the worst case, this could result in application "freezes" as each data loader in the application awaits a free thread from the fixed-size common pool. 
 
-To account for this, IO-bound Data loaders should instead maintain their own dedicated thread pool rather than use the common pool.
+To account for this, IO-bound data loaders should instead maintain their own dedicated thread pool rather than use the common pool.
 When choosing a thread pool, it's recommended to review the options under the [Executors Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executors.html),
 but a safe default for IO bound workloads is usually `Executors.newCachedThreadPool()`. As opposed to the fixed-size static thread pool, `Executors.newCachedThreadPool()` will 
-create new threads on-demand if all previously-createds threads are saturated.
+create new threads on-demand if all previously-createds threads are saturated, but still prefers thread re-use when possible.
 
 ```java
 @Configuration
@@ -230,7 +230,7 @@ public class SlowDataLoaderConfiguration {
 }
 ```
 
-Individual Bean names combined with `@Qualifier` annotations will result in the proper executor being autowired to the corresponding Data loader.
+Individual Bean names combined with `@Qualifier` annotations will result in the proper executor being autowired to the corresponding data loader.
 
 ```java
 @DgsDataLoader(name = "slow")
@@ -238,14 +238,15 @@ public class SlowDataLoader implements MappedBatchLoader<String, Snail> {
 
     @Autowired
     @Qualifier("SlowDataLoaderThreadPool")
-    Executor executor;
+    Executor dedicatedExecutor;
     
     @Autowired
     DirectorServiceClient directorServiceClient;
 
     @Override
     public CompletionStage<Map<String, Snail>> load(Set<String> keys) {
-        return CompletableFuture.supplyAsync(() -> directorServiceClient.loadSlowData(keys), executor);
+        // This slow operation will now run on a dedicated thread pool instea of the common pool
+        return CompletableFuture.supplyAsync(() -> directorServiceClient.loadSlowData(keys), dedicatedExecutor);
     }
 }
 ```
