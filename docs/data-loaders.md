@@ -211,13 +211,13 @@ public CompletableFuture<List<Thing>> resolve(DataFetchingEnvironment environmen
 
 ## Thread Pool Optimization
 
-Using `supplyAsync()` without a second argument provided causes the main work of a Data loader to run on a [common thread pool](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html#commonPool--) 
-shared with most other async operations in your application. If that Data loader is calling a slow service and subject to heavy load, the common thread pool could become fully saturated.
+Using `supplyAsync()` without a second argument will cause the main work of a Data loader to run on a [common thread pool](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html#commonPool--) 
+shared with most other async operations in your application. If that Data loader is responsible for calling a slow service and/or subject to heavy load, the common thread pool could become fully saturated.
 In the worst case, this could result in application "freezes" as each dataloader in the application awaits a free thread from the fixed-size common pool. 
 
-To account for this, IO-bound Data loaders should instead maintain their own dedicated thread pool rather than reserve threads from the common pool. 
+To account for this, IO-bound Data loaders should instead maintain their own dedicated thread pool rather than use the common pool.
 When choosing a thread pool, it's recommended to review the options under the [Executors Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executors.html),
-but a safe default for IO bound workloads is usually `Executors.newCachedThreadPool()`. As opposed to the fixed-size static thread pool, `Executors.newCachedThreadPool` will 
+but a safe default for IO bound workloads is usually `Executors.newCachedThreadPool()`. As opposed to the fixed-size static thread pool, `Executors.newCachedThreadPool()` will 
 create new threads on-demand if all previously-createds threads are saturated.
 
 ```java
