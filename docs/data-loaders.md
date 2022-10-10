@@ -208,6 +208,48 @@ public CompletableFuture<List<Thing>> resolve(DataFetchingEnvironment environmen
 }, executor);
 ```
 
+
+## Thread Pool Optimization
+
+Using `supplyAsync()` without a second argument provided causes the main work of a Data loader to run on a [common thread pool](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html#commonPool--) 
+shared with most other async operations in your application. If that Data loader is calling a slow service and subject to heavy load, the common thread pool could become fully saturated.
+In the worst case, this could result in application "freezes" as each dataloader in the application awaits a free thread from the fixed-size common pool. 
+
+To account for this, IO-bound Data loaders should instead maintain their own dedicated thread pool rather than reserve threads from the common pool. 
+When choosing a thread pool, it's recommended to review the options under the [Executors Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executors.html),
+but a safe default for IO bound workloads is usually `Executors.newCachedThreadPool()`. As opposed to the fixed-size static thread pool, `Executors.newCachedThreadPool` will 
+create new threads on-demand if all previously-createds threads are saturated.
+
+```java
+@Configuration
+public class SlowDataLoaderConfiguration {
+    @Bean(name = "SlowDataLoaderThreadPool")
+    Executor slowDataLoaderExecutor() {
+        return Executors.newCachedThreadPool();
+    }
+}
+```
+
+Individual Bean names combined with `@Qualifier` annotations will result in the proper executor being autowired to the corresponding Data loader.
+
+```java
+@DgsDataLoader(name = "slow")
+public class SlowDataLoader implements MappedBatchLoader<String, Snail> {
+
+    @Autowired
+    @Qualifier("SlowDataLoaderThreadPool")
+    Executor executor;
+    
+    @Autowired
+    DirectorServiceClient directorServiceClient;
+
+    @Override
+    public CompletionStage<Map<String, Snail>> load(Set<String> keys) {
+        return CompletableFuture.supplyAsync(() -> directorServiceClient.loadSlowData(keys), executor);
+    }
+}
+```
+
 ## Caching
 
 Batching is the most important aspect of preventing N+1 problems.
