@@ -218,7 +218,7 @@ In the worst case, this could result in application "freezes" as each data loade
 To account for this, IO-bound data loaders should instead maintain their own dedicated thread pool rather than use the common pool.
 When choosing a thread pool, it's recommended to review the options under the [Executors Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executors.html),
 but a safe default for IO bound workloads is usually `Executors.newCachedThreadPool()`. As opposed to the fixed-size common thread pool, `Executors.newCachedThreadPool()` will 
-create new threads on-demand if all previously-createds threads are saturated, but still prefers thread re-use when possible.
+create new threads on-demand if all previously-created threads are saturated but still prefers thread re-use when possible.
 
 ```java
 @Configuration
