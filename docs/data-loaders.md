@@ -245,7 +245,7 @@ public class SlowDataLoader implements MappedBatchLoader<String, Snail> {
 
     @Override
     public CompletionStage<Map<String, Snail>> load(Set<String> keys) {
-        // This slow operation will now run on a dedicated thread pool instea of the common pool
+        // This slow operation will now run on a dedicated thread pool instead of the common pool
         return CompletableFuture.supplyAsync(() -> directorServiceClient.loadSlowData(keys), dedicatedExecutor);
     }
 }
