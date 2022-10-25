@@ -230,8 +230,6 @@ Finally, `maxProjectionDepth` will instruct codegen to stop generating beyond 2 
 The default is 10.
 This will help further limit the number of projections as well.
 
-<<<<<<< Updated upstream
-=======
 ### Generating classes with Custom Annotations
 This feature provides the ability to support any custom annotation on the generated POJOs using the @annotate directive in graphQL.
 The @annotate directive can be placed on type, input or fields in the graphQL. This feature is turned off by default and can be enabled by setting generateCustomAnnotation to true in build.gradle.
