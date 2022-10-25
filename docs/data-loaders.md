@@ -71,6 +71,8 @@ package com.netflix.graphql.dgs.example.dataLoader;
 
 import com.netflix.graphql.dgs.DgsDataLoader;
 import org.dataloader.BatchLoader;
+import org.dataloader.Try;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -81,15 +83,15 @@ import java.util.stream.Collectors;
 public class DirectorsDataLoader implements BatchLoader<String, Try<Director>> {
 
     @Autowired
-    DirectorServiceClient directorServiceClient;
+    private DirectorServiceClient directorServiceClient;
 
     @Override
     public CompletionStage<List<Try<Director>>> load(List<String> keys) {
         return CompletableFuture.supplyAsync(() -> keys.stream()
-            .map(key -> Try.tryCall(() -> directorServiceClient.loadDirectors(keys)))
-            .collect(Collectors.toList()));
-        }
+                .map(key -> Try.tryCall(() -> directorServiceClient.loadDirectors(keys)))
+                .collect(Collectors.toList()));
     }
+
 }
 ```
 

@@ -17,8 +17,25 @@ In the case of the DGS Framework we have two different BOM definitions, the `gra
 and the `graphql-dgs-platform`. The latter only defines version alignment for the DGS modules while the first also
 defines versions for the dependencies of the DGS framework, such as Spring, Jackson, and Kotlin.
 
+## Using the Platform/BOM
 
-## Using the Platform/BOM?
+!!! warning
+    If you are using the [Spring Boot Dependency Management Plugin], please use the
+    following syntax, such that the DGS BOM provides the version of `graphql-java`, and other managed dependencies.
+    ```groovy
+    dependencyManagement {
+        imports {
+            // We need to define the DGS BOM as follows such that the
+            // io.spring.dependency-management plugin respects the versions expressed in the DGS BOM, e.g. graphql-java
+            mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release")
+        }
+    }
+    ```
+
+    If the DGS BOM is not expressed in the `dependencyManagement` block as an imported Maven BOM, the [Spring Boot Dependency Management Plugin] will force the `graphql-java` version to a lower version.
+    This will cause conflicts with what the DGS framework, and other artifacts such as the _federation library_, expect.
+
+[Spring Boot Dependency Management Plugin]: https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/
 
 Let's go through an example and assume that we want to use the DGS Framework 3.10.2...
 
@@ -29,10 +46,10 @@ Let's go through an example and assume that we want to use the DGS Framework 3.1
     }
 
     dependencies {
-        // DGS BOM/platform dependency. This is the only place you set version of DGS
+        //DGS BOM/platform dependency. This is the only place you set version of DGS
         implementation(platform('com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:3.10.2'))
 
-        // DGS dependencies. We don't have to specify a version here!
+        //DGS dependencies. We don't have to specify a version here!
         implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter'
         implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure'
 
@@ -100,9 +117,10 @@ and `graphql-dgs-subscriptions-websockets-autoconfigure`. The BOM will make sure
 in other words, using the same version. In addition, since we are using the `graphql-dgs-platform-dependencies`,
 we can use the DGS chosen version of some dependencies as well, such as Jackson.
 
-!!!note
+!!! note
     Versions in the platform are recommendations. The versions can be overridden by the user,
-    or by other platforms you might be using (such as the Spring dependency-management plugin).
+    or by other platforms you might be using.
+
 
 [^1]: Gradle supports this via the [Java Platform](https://docs.gradle.org/current/userguide/java_platform_plugin.html), checkout the section that describes how to [consume a Java platform](https://docs.gradle.org/current/userguide/java_platform_plugin.html#sec:java_platform_consumption).
 
