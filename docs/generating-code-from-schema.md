@@ -246,17 +246,20 @@ This will help further limit the number of projections as well.
 
 ### Generating classes with Custom Annotations
 This feature provides the ability to support any custom annotation on the generated POJOs using the @annotate directive in graphQL.
-The @annotate directive can be placed on type, input or fields in the graphQL. This feature is turned off by default and can be enabled by setting generateCustomAnnotation to true in build.gradle.
+The `@annotate` directive can be placed on type, input or fields in the graphQL. This feature is turned off by default and can be enabled by setting generateCustomAnnotation to true in build.gradle.
+
 ```groovy
 generateJava {
     ...
     generateCustomAnnotations = true
 }
 ```
-@annotate contains 3 fields:
-* name - Mandatory field. Name of the annotation. Eg: ValidPerson. You can have the package along with the annotation name. eg: com.test.ValidPerson. The package value given with the annotation name takes precedence over the mapped package in build.gradle.
+@annotate contains 4 fields:
+
+* name - Mandatory field. Name of the annotation. Eg: ValidPerson. You can have the package along with the annotation name. eg: `com.test.ValidPerson`. The package value given with the annotation name takes precedence over the mapped package in build.gradle.
 * type - Optional field. This variable is used to map the annotation package in build.gradle. The package if given with annotation name will take precedence over this value. But if neither are given an empty string is used.
-* inputs - Optional field. Contains the inputs to the annotation in key-value pairs. Eg: inputs: {types: [HUSBAND, WIFE]}
+* inputs - Optional field. Contains the inputs to the annotation in key-value pairs. Eg: `inputs: {types: [HUSBAND, WIFE]}`. Inputs can be of types: String, int, float, enums, list, map etc.
+* target - Optional field. Refers to the site targets for the annotations. Refer to [use target site doc](https://kotlinlang.org/docs/annotations.html#annotation-use-site-targets) for the target site available values.
 
 @annotate definition in the graphQL:
 ```
@@ -265,9 +268,10 @@ directive @annotate(
     name: String!
     type: String
     inputs: JSON
+    target: String
 ) repeatable on OBJECT | FIELD_DEFINITION | INPUT_OBJECT | INPUT_FIELD_DEFINITION
 ```
-Custom annotations specified in the schema will require corresponding Java implementations to be implemented by the user in their project.
+Custom annotations specified in the schema will require corresponding implementations by the resolvers to avoid runtime errors.
 Some examples:
 ```
 type Person @annotate(name: "ValidPerson", type: "validator", inputs: {types: [HUSBAND, WIFE]}) {
@@ -284,7 +288,7 @@ generateJava {
     includeEnumImports = ["ValidPerson": ["types": "com.enums"]]
 }
 ```
-Generated POJO in Java. Please note that this feature is also available in Kotlin.
+Generated POJO in Java. **Please note that this feature is also available in Kotlin.**
 ```
 package com.netflix.graphql.dgs.codegen.tests.generated.types;
 
@@ -347,6 +351,71 @@ public class Person {
   @Override
   public int hashCode() {
     return java.util.Objects.hash(name, type);
+  }
+}
+```
+
+Example with target site:
+```
+type Person @deprecated(reason: "This is going bye bye") @annotate(name: "ValidPerson", type: "validator", inputs: {types: [HUSBAND, WIFE]}) {
+    name: String @annotate(name: "com.test.anotherValidator.ValidName", target: "field") @annotate(name: "com.test.nullValidator.NullValue")
+}
+```
+Generated POJO in Java.
+```
+package com.netflix.graphql.dgs.codegen.tests.generated.types;
+
+import com.test.anotherValidator.ValidName;
+import com.test.nullValidator.NullValue;
+import com.test.validator.ValidPerson;
+import java.lang.Deprecated;
+import java.lang.Object;
+import java.lang.Override;
+import java.lang.String;
+
+/**
+ * This is going bye bye
+ */
+@Deprecated
+@ValidPerson(
+    types = [com.enums.HUSBAND, com.enums.WIFE]
+)
+public class Person {
+  @ValidName
+  @NullValue
+  private String name;
+
+  public Person() {
+  }
+
+  public Person(String name) {
+    this.name = name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return "Person{" + "name='" + name + "'" +"}";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person that = (Person) o;
+        return java.util.Objects.equals(name, that.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return java.util.Objects.hash(name);
   }
 }
 ```
