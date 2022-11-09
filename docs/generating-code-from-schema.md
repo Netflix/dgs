@@ -258,7 +258,7 @@ generateJava {
 
 * name - Mandatory field. Name of the annotation. Eg: ValidPerson. You can have the package along with the annotation name. eg: `com.test.ValidPerson`. The package value given with the annotation name takes precedence over the mapped package in build.gradle.
 * type - Optional field. This variable is used to map the annotation package in build.gradle. The package if given with annotation name will take precedence over this value. But if neither are given an empty string is used.
-* inputs - Optional field. Contains the inputs to the annotation in key-value pairs. Eg: `inputs: {types: [HUSBAND, WIFE]}`. Inputs can be of types: String, int, float, enums, list, map etc.
+* inputs - Optional field. Contains the inputs to the annotation in key-value pairs. Eg: `inputs: {types: [HUSBAND, WIFE]}`. Inputs can be of types: String, int, float, enums, list, map, class, etc. For class inputs, refer to *Example with Class Object* 
 * target - Optional field. Refers to the site targets for the annotations. Refer to [use target site doc](https://kotlinlang.org/docs/annotations.html#annotation-use-site-targets) for the target site available values.
 
 @annotate definition in the graphQL:
@@ -355,6 +355,78 @@ public class Person {
 }
 ```
 
+Example with Class Object:
+
+Since GraphQL parser does not have built-in support for class objects, a class is represented as a string ending with ".class" in the schema
+
+```
+type Person @annotate(name: "ValidPerson", type: "validator", inputs: {groups: "BasicValidation.class"}) {
+    name: String @annotate(name: "com.test.anotherValidator.ValidName")
+}
+```
+The package mapping for the annotation and classes can be provided in the build.gradle file. If mapping is not provided, input will be treated as a string.
+
+```groovy
+generateJava {
+    ...
+    generateCustomAnnotations = true,
+    includeImports = mapOf(Pair("validator", "com.test.validator")),
+    includeClassImports = mapOf("ValidPerson" to mapOf(Pair("BasicValidation", "com.test.validator.groups")))
+}
+```
+Generated POJO in Java. *Note: In Kotlin, using the same schema above will generate `BasicValidation::class`*
+```
+package com.netflix.graphql.dgs.codegen.tests.generated.types;
+
+import com.test.anotherValidator.ValidName;
+import com.test.validator.ValidPerson;
+import com.test.validator.groups.BasicValidation;
+import java.lang.Object;
+import java.lang.Override;
+import java.lang.String;
+
+@ValidPerson(
+    groups = BasicValidation.class
+)
+public class Person {
+  @ValidName
+  private String name;
+
+  public Person() {
+  }
+
+  public Person(String name) {
+    this.name = name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return "Person{" + "name='" + name + "'" +"}";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person that = (Person) o;
+        return java.util.Objects.equals(name, that.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return java.util.Objects.hash(name);
+  }
+}
+```
+
 Example with target site:
 ```
 type Person @deprecated(reason: "This is going bye bye") @annotate(name: "ValidPerson", type: "validator", inputs: {types: [HUSBAND, WIFE]}) {
@@ -447,6 +519,7 @@ The following table shows the Gradle configuration options, but the same options
 | skipEntityQueries | Disable generating Entity queries for federated types                                                                                                                                       | false |
 | shortProjectionNames | Shorten class names of projection types. These types are not visible to the developer.                                                                                                      | false |
 | maxProjectionDepth | Maximum projection depth to generate. Useful for (federated) schemas with very deep nesting                                                                                                 | 10 |
-| includeImports             | Maps the custom annotation type to the package, the annotations belong to. Only used when generateCustomAnnotaions is enabled.                                                              |                                                       |
-| includeEnumImports         | Maps the custom annotation and enum argument names to the enum packages. Only used when generateCustomAnnotaions is enabled.                                                                                                                   |                                                       |
+| includeImports             | Maps the custom annotation type to the package, the annotations belong to. Only used when generateCustomAnnotations is enabled.                                                              |                                                       |
+| includeEnumImports         | Maps the custom annotation and enum argument names to the enum packages. Only used when generateCustomAnnotations is enabled.                                                                                                                   |                                                       |
+| includeClassImports        | Maps the custom annotation and class names to the class packages. Only used when generateCustomAnnotations is enabled.
 | generateCustomAnnotations  | Enable/disable generation of custom annotation                                                                                                                                              | false                                                 | 
