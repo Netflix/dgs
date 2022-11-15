@@ -189,7 +189,7 @@ public class ReviewsDgs {
 }
 ```
 
-It's important to note that the default behavior in Apollo federated tracing is to trace requests, even if the federated gateway does not request it (i.e. the gateway does not add `FEDERATED_TRACING_HEADER_NAME` when forwarding the request). Including the following component in your DGS project will explicitly ask Apollo's jvm federation library to not trace a request in the event that the gateway does not request it.
+It's important to note that the default behavior in Apollo's jvm federation library is to trace requests, even if the federated gateway does not request it (i.e. the gateway does not add `FEDERATED_TRACING_HEADER_NAME` when forwarding the request). Including the following component in your DGS project will explicitly ask Apollo's jvm federation library to not trace a request in the event that the gateway does not request it.
 
 ```java
 @Component
