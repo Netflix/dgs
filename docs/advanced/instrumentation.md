@@ -189,6 +189,38 @@ public class ReviewsDgs {
 }
 ```
 
+It's important to note that the default behavior in Apollo federated tracing is to trace requests, even if the federated gateway does not request it (i.e. the gateway does not add `FEDERATED_TRACING_HEADER_NAME` when forwarding the request). Including the following component in your DGS project will explicitly ask Apollo's jvm federation library to not trace a request in the event that the gateway does not request it.
+
+```java
+@Component
+public class ApolloFederatedTracingHeaderForwarder implements GraphQLContextContributor {
+        @Override
+        public void contribute(@NotNull GraphQLContext.Builder builder, @Nullable Map<String, ?> extensions, @Nullable DgsRequestData dgsRequestData) {
+            if (dgsRequestData == null || dgsRequestData.getHeaders() == null) {
+                return;
+            }
+
+            final HttpHeaders headers = dgsRequestData.getHeaders();
+
+            // if the header exists, we should just forward it.
+            if (headers.containsKey(FederatedTracingInstrumentation.FEDERATED_TRACING_HEADER_NAME)) {
+                builder.put(
+                        FederatedTracingInstrumentation.FEDERATED_TRACING_HEADER_NAME,
+                        headers
+                                .get(FederatedTracingInstrumentation.FEDERATED_TRACING_HEADER_NAME)
+                                .stream()
+                                .findFirst()
+                                .get()
+                );
+            }  else {
+                //otherwise, place a value != "ftv1" so when it gets checked for == ftv1 it fails
+                // and trace does not happen.
+                builder.put(FederatedTracingInstrumentation.FEDERATED_TRACING_HEADER_NAME, "DO_NOT_TRACE");
+            }
+        }
+}
+```
+
 ## Metrics Out of The Box
 
 !!! abstract "tl;dr"
