@@ -119,7 +119,7 @@ The `shows` datafetcher should return the wrapper type instead of just `Show`.
 
 ```java
 @DgsData(parentType = "Query", field = "shows")
-List<Show> shows() {
+List<ShowWithId> shows() {
   return showsService.getShows().stream()
     .map(ShowWithId::fromInternalShow)
     .collect(Collectors.toList());
