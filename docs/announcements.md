@@ -1,3 +1,17 @@
+### DGS Framework 6.0.0 now on Spring Boot 3.0.0! (January 16, 2023)
+The latest 6.0.0 release now supports Spring Boot 3.0.0. 
+This is a breaking change and requires the application to be using Spring Boot 3.0.0 and JDK 17.
+The release should not require additional changes in the DGS code besides what is needed for migrating to Spring Boot 3.0.0.
+We will continue to maintain a separate 5.x.x release train for supporting Spring Boot 2.7 for the near future for any minor bug fixes and improvements.
+
+The following versions are updated:
+* Spring Boot 3.0.0
+* Spring Framework 6.0.3
+* Spring Security 6.0.1
+* Spring Cloud 2022.0.0
+* JDK target 17
+
+
 ### Upcoming Release of the DGS Framework for Spring Boot 3.0 (January 10, 2024)
 We plan to release a new version 6.x of the DGS Framework supporting Spring Boot 3.0 by end of January 2023. 
 There are no known additional changes required to use the new version of the DGs framework.
