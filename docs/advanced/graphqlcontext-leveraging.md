@@ -28,3 +28,15 @@ public class ExampleGraphQLContextContributor implements GraphQLContextContribut
     }
 }
 ```
+
+You can now also use the GraphQLContext with the data loader as of DGS Framework 6.0.0:
+```java
+@DgsDataLoader(name = "exampleLoaderWithGraphQLContext")
+public class ExampleLoaderWithGraphQLContext implements BatchLoaderWithContext<String, String> {
+    @Override
+    public CompletionStage<List<String>> load(List<String> keys, BatchLoaderEnvironment environment) {
+        GraphQLContext graphQLContext = environment.getContext();
+        return CompletableFuture.supplyAsync(() -> keys.stream().map((Function<String, String>) graphQLContext::get).collect(Collectors.toList()));
+    }
+}
+```
