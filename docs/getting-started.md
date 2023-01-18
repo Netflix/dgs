@@ -3,7 +3,7 @@
 The DGS framework is now based on Spring Boot 3.0, so get started by creating a new Spring Boot 3.0 application if you don't have one already.
 Note that you can still use the DGS framework with Spring Boot 2.7 by using a 5.x release.
 The Spring Initializr is an easy way to do so.
-You can use either Gradle or Maven, Java 8 or newer or use Kotlin.
+You can use either Gradle or Maven with Java 17 or Kotlin.
 We do recommend Gradle because we have a really cool [code generation plugin](../generating-code-from-schema) for it!
 
 The only Spring dependency needed is Spring Web.
@@ -11,6 +11,11 @@ The only Spring dependency needed is Spring Web.
 ![Spring initializr](images/initializr.png)
 
 Open the project in an IDE (Intellij recommended).
+
+## Requirements
+The latest 6.x release and onwards will require Spring Boot 3.0 for your project. 
+You will also need JDK 17.
+If your application is on Spring Boot 2.7 or earlier, you will need to use the 5.x release train of the DGS framework.
 
 ## Adding the DGS Framework Dependency
 
