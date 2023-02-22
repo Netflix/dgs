@@ -10,8 +10,6 @@ For more context on file uploads and best practices, see [Apollo Server File Upl
 A multipart request is an HTTP request that contains multiple parts in a single request: the mutation query, file data, JSON objects, and whatever else you like.
 You can use Apollo’s upload client, or even a simple cURL, to send along a stream of file data using a multipart request that you model in your schema as a Mutation.
 
-![File uploads with multipart](../images/file-upload-multipart.png#center)
-
 
 See [GraphQL multipart request specification](https://github.com/jaydenseric/graphql-multipart-request-spec) for the specification of a multipart `POST` request for uploading files using GraphQL mutations.
 
@@ -43,20 +41,12 @@ In your DGS, add a data fetcher to handle this as a `MultipartFile` as shown her
 
 ```
 
-Note that you will not be able to use a Jackson object mapper to deserialize a type that contains a `MultipartFile`, so you will need to explicitly get the file argument from your input.
+Also, you need to add a `typeMapping` from `Upload` to `org.springframework.web.multipart.MultipartFile` in your `build.gradle` file. Read more about `typeMapping` [in the DGS Code Generation documentation](https://netflix.github.io/dgs/generating-code-from-schema/#mapping-existing-types).
 
-On your client, you can use `apollo-upload-client` to send your Mutation query as a multipart `POST` request with file data.
-Here’s how you configure your link:
-
-```javascript
-import { createUploadLink } from 'apollo-upload-client'
-
-const uploadLink = createUploadLink({ uri: uri })
-
-const authedClient = authLink && new ApolloClient({
-        link: uploadLink)),
-        cache: new InMemoryCache()
-})
+```kotlin
+generateJava {
+    typeMapping = ["Upload": "org.springfarmework.web.multipart.MultipartFile"]
+}
 ```
 
 Once you set this up, set up your Mutation query and the pass the file that the user selected as a variable:
