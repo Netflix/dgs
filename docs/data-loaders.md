@@ -208,6 +208,27 @@ public CompletableFuture<List<Thing>> resolve(DataFetchingEnvironment environmen
 }, executor);
 ```
 
+## Scheduled Data Loaders with Dispatch Predicates
+The framework now supports setting up a [Dispatch Predicate](https://github.com/graphql-java/java-dataloader#scheduled-dispatching) on a per data loader basis. 
+This allows you to configure when the batch is dispatched based on queue depth or time. 
+Note that the predicate will be applied for the data loader that you set the predicate up for and not across all data loaders.
+Here is how you can set up a `DispatchPredicate` for an example data loader:
+```java
+@DgsDataLoader(name = "messagesWithScheduledDispatch")
+public class MessageDataLoaderWithDispatchPredicate implements BatchLoader<String, String> {
+    @DgsDispatchPredicate
+    DispatchPredicate pred = DispatchPredicate.dispatchIfLongerThan(Duration.ofSeconds(2));
+
+    @Override
+    public CompletionStage<List<String>> load(List<String> keys) {
+        return CompletableFuture.supplyAsync(() -> keys.stream().map(key -> "hello, " + key + "!").collect(Collectors.toList()));
+    }
+}
+
+```
+
+In addition to defining the `load` method for the data loader class, you can specify a DispatchPredicate annotated with `@DgsDispatchPredicate` to apply that for the specific data loader.
+
 
 ## Thread Pool Optimization
 
