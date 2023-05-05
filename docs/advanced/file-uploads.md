@@ -112,3 +112,10 @@ function MultipartScriptUpload() {
 }
 ```
 
+The `Upload` scalar is mapped to `MultipartFile` in the ```build.gradle``` file of the Codegen plugin. You can rename or remove the `Upload` scalar by modifying this `typeMapping`. Read more about the `typeMapping` configuration [here](https://netflix.github.io/dgs/generating-code-from-schema/#mapping-existing-types).
+```groovy
+generateJava {
+    typeMapping = [Upload: "org.springframework.web.multipart.MultipartFile"]
+}
+```
+
