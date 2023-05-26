@@ -226,7 +226,7 @@ String query = new GraphQLQueryRequest(
 ```
 
 Kotlin Projects: 
-Kotlin does not support the Java diamond operator (<>) for inferring type arguments. The recommended workaround is to pass in [Nothing] (https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing.html) as both arguments.
+Kotlin does not support the Java diamond operator (<>) for inferring type arguments. Instead, pass in [Nothing] (https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing.html) as both arguments.
 
 v2 API Kotlin:
 ```kotlin
