@@ -122,7 +122,7 @@ generateJava{
 
 ## Generating Client APIs
 <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
-NOTE: There is a new API for generarting client APIs. The old generateClient will be deprecated soon. <a href="#generateclientv2">See more here</a>
+NOTE: There is a new API for generating client APIs. The old generateClient will be deprecated soon. <a href="#generateclientv2">See more here</a>
 </div>
 
 The code generator can also create client API classes.
