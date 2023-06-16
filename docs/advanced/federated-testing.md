@@ -90,7 +90,7 @@ This set up is shown here:
         // sets up the query and the field selection set using the EntitiesProjectionRoot
         GraphQLQueryRequest request = new GraphQLQueryRequest(
                     entitiesQuery,
-                    new EntitiesProjectionRoot().onMovie().movieId().script().title());
+                    new EntitiesProjectionRoot<>().onMovie().movieId().script().title());
 
         String query  = request.serialize();
         // pass in the constructed _entities query with the variable map containing representations

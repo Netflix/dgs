@@ -124,7 +124,7 @@ Now we can write a test that uses `GraphQLQueryRequest` to build the query and e
     public void showsWithQueryApi() {
         GraphQLQueryRequest graphQLQueryRequest = new GraphQLQueryRequest(
                 new ShowsGraphQLQuery.Builder().titleFilter("Oz").build(),
-                new ShowsProjectionRoot().title()
+                new ShowsProjectionRoot<>().title()
         );
 
         List<String> titles = dgsQueryExecutor.executeAndExtractJsonPath(graphQLQueryRequest.serialize(), "data.shows[*].title");
@@ -139,7 +139,7 @@ Now we can write a test that uses `GraphQLQueryRequest` to build the query and e
             ShowsGraphQLQuery.Builder()
                 .titleFilter("Oz")
                 .build(),
-            ShowsProjectionRoot().title())
+            ShowsProjectionRoot<Nothing, Nothing>().title())
 
         val titles = dgsQueryExecutor.executeAndExtractJsonPath<List<String>>(graphQLQueryRequest.serialize(), "data.shows[*].title")
         assertThat(titles).containsExactly("Ozark")
@@ -243,7 +243,7 @@ Let's try to mock this service in the test!
         public void showsWithQueryApi() {
             GraphQLQueryRequest graphQLQueryRequest = new GraphQLQueryRequest(
                     new ShowsGraphQLQuery.Builder().build(),
-                    new ShowsProjectionRoot().title()
+                    new ShowsProjectionRoot<>().title()
             );
 
             List<String> titles = dgsQueryExecutor.executeAndExtractJsonPath(graphQLQueryRequest.serialize(), "data.shows[*].title");

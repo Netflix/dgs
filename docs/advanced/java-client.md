@@ -195,10 +195,10 @@ We plan to eventually remove the `DefaultGraphQLClient`, because its API is conf
 
 ## Type safe Query API
 
-Based on a GraphQL schema a type safe query API can be generated for Java/Kotlin.
-The generated API is a builder style API that lets you build a GraphQL query, and it's projection (field selection).
+A type safe query API based on a GraphQL schema can be generated for Java/Kotlin.
+The generated API is a builder style API that lets you build a GraphQL query and its projection (field selection).
 Because the code gets re-generated when the schema changes, it helps catch errors in the query.
-It's arguably also more readable, although multiline String support in Java and Kotlin do mitigate that issue as well.
+It's arguably also more readable, although multiline String support in Java and Kotlin does mitigate that issue as well.
 
 If you own a DGS and want to generate a client for this DGS (e.g. for testing purposes) the client generation is just an extra property on the [Codegen configuration](../generating-code-from-schema.md).
 Specify the following in your `build.gradle`.
@@ -211,7 +211,7 @@ plugins {
 
 generateJava{
    packageName = 'com.example.packagename' // The package name to use to generate sources
-   generateClient = true
+   generateClientv2 = true
 }
 ```
 
@@ -227,7 +227,7 @@ GraphQLQueryRequest graphQLQueryRequest =
                         .first(first)
                         .after(after)
                         .build(),
-                    new TicksConnectionProjectionRoot()
+                    new TicksConnectionProjectionRoot<>()
                         .edges()
                             .node()
                                 .date()
@@ -263,7 +263,7 @@ scalars.put(java.time.LocalDateTime.class, new DateTimeScalar());
 
 new GraphQLQueryRequest(
                 ReviewsGraphQLQuery.newRequest().dateRange(new DateRange(LocalDate.of(2020, 1, 1), LocalDate.now())).build(),
-                new ReviewsProjectionRoot().submittedDate().starScore(), scalars);
+                new ReviewsProjectionRoot<>().submittedDate().starScore(), scalars);
 ```
 
 This way you can re-use exactly the same serialization code that you already have for your scalar implementation or one of the existing ones from - for example -
@@ -316,7 +316,7 @@ This syntax is supported by the Query builder as well.
         new ScriptGraphQLQuery.Builder()
             .name("Top Secret")
             .build(),
-        new ScriptProjectionRoot()
+        new ScriptProjectionRoot<>()
             .title()
             .onMovieScript()
                 .length();
@@ -365,7 +365,7 @@ Here is an example for the schema shown earlier:
                     .build();
         GraphQLQueryRequest request = new GraphQLQueryRequest(
                     entitiesQuery,
-                    new EntitiesProjectionRoot().onMovie().movieId().script().title()
+                    new EntitiesProjectionRoot<>().onMovie().movieId().script().title()
                     );
 
         String query  = request.serialize();
