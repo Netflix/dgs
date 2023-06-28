@@ -230,9 +230,9 @@ Kotlin does not support the Java diamond operator (<>) for inferring type argume
 
 v2 API Kotlin:
 ```kotlin
-String query = new GraphQLQueryRequest(
-        new MoviesGraphQLQuery(),
-        new MoviesProjectionRoot<Nothing, Nothing>().movieId()).serialize();
+val query = GraphQLQueryRequest(
+    MoviesGraphQLQuery.Builder().build(),
+    MoviesProjectionRoot<Nothing, Nothing>().movieID()).serialize()
 ```
 
 ### Generating Query APIs for external services
