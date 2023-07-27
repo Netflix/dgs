@@ -24,6 +24,7 @@ nav:
     - Nested data fetchers: advanced/context-passing.md
     - Hot reloading schemas: advanced/schema-reloading.md
     - Java GraphQL Client: advanced/java-client.md
+    - Kotlin CodeGen (Experimental): advanced/kotlin-codegen.md
     - Security:  advanced/security.md
     - File Uploads: advanced/file-uploads.md
     - Subscriptions: advanced/subscriptions.md
