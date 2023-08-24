@@ -224,6 +224,16 @@ String query = new GraphQLQueryRequest(
         new MoviesProjectionRoot<>().movieId()).serialize();
 ```
 
+Kotlin Projects: 
+Kotlin does not support the Java diamond operator (<>) for inferring type arguments. Instead, pass in [Nothing](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing.html) as both arguments.
+
+v2 API Kotlin:
+```kotlin
+val query = GraphQLQueryRequest(
+    MoviesGraphQLQuery.Builder().build(),
+    MoviesProjectionRoot<Nothing, Nothing>().movieID()).serialize()
+```
+
 ### Generating Query APIs for external services
 
 Generating a Query API like above is very useful for testing your own DGS.

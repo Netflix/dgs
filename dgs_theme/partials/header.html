@@ -116,15 +116,12 @@
     </label>
 
     <!-- Button to open search dialogue -->
-    {% if "search" in config["plugins"] %}
-      <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__search">
-        {% include ".icons/material/magnify.svg" %}
-      </label>
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__search">
+      {% include ".icons/material/magnify.svg" %}
+    </label>
 
-      <!-- Search interface -->
-      {% include "partials/search.html" %}
-    {% endif %}
-
+    <!-- Search interface -->
+    {% include "partials/search.html" %}
 
   </nav>
 </header>
