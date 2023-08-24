@@ -36,7 +36,7 @@ Next, you need to add the task configuration as shown here:
 generateJava{
    schemaPaths = ["${projectDir}/src/main/resources/schema"] // List of directories containing schema files
    packageName = 'com.example.packagename' // The package name to use to generate sources
-   generateClientv2 = true // Enable generating the type safe query API
+   generateClient = true // Enable generating the type safe query API
 }
 ```
 
@@ -121,9 +121,6 @@ generateJava{
 ```
 
 ## Generating Client APIs
-<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
-NOTE: There is a new API for generating client APIs. The old generateClient will be deprecated soon. <a href="#generateclientv2">See more here</a>
-</div>
 
 The code generator can also create client API classes.
 You can use these classes to query data from a GraphQL endpoint using Java, or in unit tests using the `QueryExecutor`.
@@ -144,7 +141,7 @@ GraphQLQueryRequest graphQLQueryRequest =
                 .first(first)
                 .after(after)
                 .build(),
-            new TicksConnectionProjectionRoot()
+            new TicksConnectionProjectionRoot<>()
                 .edges()
                     .node()
                         .date()
@@ -201,15 +198,17 @@ type TickEdge {
 }
 ```
 
-### generateClientv2
+### Client API v2
 
-There is a new API for generating client API. To turn on the new version, use the ```generateClientv2``` Gradle configuration option. Note that the v1 API will be deprecated soon. 
+We introduced a new client API in codegen v5.7.0. The ```generateClientv2``` Gradle configuration option was created to allow users to opt into the v2 API.
 
-This new version relies on the use of generics and solves:
+As of v6.0.1, the v1 API has been deprecated. Setting either ```generateClient``` or ```generateClient``` to true will result in the v2 API being generated.
+
+The newer version relies on the use of generics and solves:
 1) Not being able to handle cycles in the schema, and
 2) Not being able to generate on larger schemas due to too many classes getting generated and out of memory errors. We only generate one class per type in the new implementation.
 
-The projection root needs to be instantiated differently for the v2 API.
+To migrate to v2, projection root instantiations need to be slightly modified. Note the ```<>``` in v2.
 
 v1 API:
 ```java
@@ -544,8 +543,8 @@ The following table shows the Gradle configuration options, but the same options
 | language                 | Either `java` or `kotlin`                                                                                                                                                                   | Autodetected from project |
 | typeMapping              | A Map where each key is a GraphQL type, and the value the FQN of a Java class                                                                                                               |  |
 | generateBoxedTypes       | Always use boxed types for primitives                                                                                                                                                       | false (boxed types are used only for nullable fields) |
-| generateClient           | Generate a Query API. This is version 1 of the API, which will be deprecated soon.                                                                                                          | false |
-| generateClientv2         | Generate a Query API. This is version 2 of the API.                                                                                                                                         | false |
+| generateClient           | Generate a Query API. This property does the same thing as generateClientv2.                                                                                                                | false |
+| generateClientv2         | Generate a Query API. This property does the same thing as generateClient.                                                                                                                  | false |
 | generateDataTypes        | Generate data types. Useful for only generating a Query API. Input types are still generated when `generateClientv2` is true.                                                               | true |
 | generateInterfaces       | Generate interfaces for data classes. This is useful if you would like to extend the generated POJOs for more context and use interfaces instead of the data classes in your data fetchers. | false |
 | generatedSourcesDir      | Build directory for Gradle                                                                                                                                                                  | build |
