@@ -38,6 +38,7 @@ nav:
     - Relay Pagination: advanced/relay-pagination.md
     - Operation Caching: advanced/operation-caching.md
     - Adding Custom Scalars: scalars.md
+    - Adding Custom Directives: advanced/custom-directives.md
     - Custom Object Mapper: advanced/custom-object-mapper.md
     - Mocking: advanced/mocking.md
     - Logging: advanced/logging.md
