@@ -275,6 +275,7 @@ The benefit of using constants is that you can detect issues between your schema
 Sometimes you need to evaluate HTTP headers, or other elements of the request, in a datafetcher.
 You can easily get an HTTP header value by using the `@RequestHeader` annotation.
 The `@RequestHeader` annotation is the same annotation as used in Spring WebMVC.
+Note that you will need to ensure you are using the webmvc stack for this functionality.
 
 ```java
 @DgsQuery

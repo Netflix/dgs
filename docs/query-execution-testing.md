@@ -97,6 +97,9 @@ If you do not specify `classes` explicitly, Spring will start all components on 
 For a small application this is fine, but for applications with components that are "expensive" to start we can speed up the test by only adding the classes we need for the test.
 In this case we need to include the DGS framework itself using the `DgsAutoConfiguration` class, and the `ShowsDatafetcher`.
 
+!!!info "Testing data fetchers that use WebMVC annotations such as @RequestHeader"
+If you are using features specific to WebMvc stack, such as `@RequestHeader`, you will also need to specify `DgsWebMvcAutoConfiguration` in the list of classes.
+
 To execute queries, inject `DgsQueryExecutor` in the test.
 This interface has several methods to execute a query and get back the result.
 It executes the exact same code as a query on the `/graphql` endpoint would, but you won’t have to deal with HTTP in your tests.
