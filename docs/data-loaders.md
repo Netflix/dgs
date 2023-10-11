@@ -194,7 +194,6 @@ You can inject this solution in the following way:
 
 ```java
 @Autowired
-@DefaultExecutor
 private Executor executor;
 ```
 
@@ -272,7 +271,7 @@ public class SlowDataLoader implements MappedBatchLoader<String, Snail> {
 }
 ```
 
-Note that a custom executor will not carry Spring Security context automatically like the `@DefaultExecutor` would. 
+Note that a custom executor will not carry Spring Security context automatically. 
 Further documentation on passing Spring Security context between threads can be found in the [Spring Security Concurrency docs](https://docs.spring.io/spring-security/reference/features/integrations/concurrency.html).
 
 ## Caching
