@@ -184,28 +184,16 @@ The data loader implemented above already knows how to handle a list of IDs, and
 
 ## Using Spring Features such as SecurityContextHolder inside a CompletableFuture
 
-When you write async data fetchers, the code will run on worker threads.
-Spring internally stores some context, for example to make the SecurityContextHolder work, on the thread context however.
-This context wouldn’t be available inside code running on a different thread, which makes fetching the Principal associated
-with the request not work.
+All the `*async*` methods on `CompletableFuture` allow you to provide an `Executor`.
+If provided, that stage of the `CompletableFuture` will run on a Thread represented by that `Executor`.
+If no `Executor` is provided, the stage runs on a Thread from the fork/join pool.
 
-Spring Boot has a solution for this: it manages a thread pool that *does* have this context carry over.
-You can inject this solution in the following way:
+In Spring WebMVC it's common to store request information such as SSO data on `ThreadLocal`, which doesn't automatically become available if you run on a different thread, in this case a thread from the `Executor`.
+Spring Security uses `ThreadLocal` for example to store its `SecurityContext`.
 
-```java
-@Autowired
-private Executor executor;
-```
+While creating and extending an `Executor` with the correct context propagation goes beyond the scope of this documentation, a good place to start is the `DelegatingSecurityContextExecutor` from Spring Security.
+A relevant howto guide is available [here](https://www.baeldung.com/spring-security-async-principal-propagation). 
 
-You must pass in the executor as the second argument of the `supplyAsync()` method which<!-- which == the executor? the method? the argument? --> is typically used<!-- http://go/pv --> to make data fetchers asynchronous.
-
-```java
-@DgsData(parentType = "Query", field = "list_things")
-public CompletableFuture<List<Thing>> resolve(DataFetchingEnvironment environment) {
- return CompletableFuture.supplyAsync(() -> {
-    return myService.getThings();
-}, executor);
-```
 
 ## Scheduled Data Loaders with Dispatch Predicates
 The framework now supports setting up a [Dispatch Predicate](https://github.com/graphql-java/java-dataloader#scheduled-dispatching) on a per data loader basis. 
