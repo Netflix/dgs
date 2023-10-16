@@ -447,6 +447,8 @@ You can customize the tags applied to the metrics above by providing *beans* tha
 * `management.metrics.dgs-graphql.tag-customizers.outcome.enabled`: Enables the _tag customizer_ that will label the `gql.query` and `gql.resolver` timers with an `outcome` reflecting
    the result of the GraphQL outcome, either `success` or `failure`; **defaults** to `true`.
 * `management.metrics.dgs-graphql.data-loader-instrumentation.enabled`: Enables instrumentation of _data loaders_; **defaults** to `true`.
+* `management.metrics.dgs-graphql.resolver.enabled`: Enables instrumentation of graphql resolvers; **defaults** to `true`.
+* `management.metrics.dgs-graphql.query.enabled`: Enables instrumentation of graphql query; **defaults** to `true`.
 
 ---
 
