@@ -93,8 +93,8 @@ public List<Show> shows() {
 public List<Actor> actors(DgsDataFetchingEnvironment dfe) {
 
    Show show = dfe.getSource();
-   actorsService.forShow(show.getId());
-   return actors;
+
+   return actorsService.forShow(show.getId());
 }
 ```
 The `actors` datafetcher only gets executed when the `actors` field is included in the query.
