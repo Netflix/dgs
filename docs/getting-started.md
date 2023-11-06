@@ -32,8 +32,13 @@ If you're building on top of `WebFlux`, use `com.netflix.graphql.dgs:graphql-dgs
         mavenCentral()
     }
 
+    dependencyManagement {
+        imports {
+           mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release")
+        }
+    }
+
     dependencies {
-        implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
         implementation "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter"
     }
     ```
@@ -43,8 +48,13 @@ If you're building on top of `WebFlux`, use `com.netflix.graphql.dgs:graphql-dgs
         mavenCentral()
     }
 
+    dependencyManagement {
+        imports {
+           mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release")
+        }
+    }
+
     dependencies {
-        implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
         implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
     }
     ```
