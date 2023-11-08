@@ -202,7 +202,7 @@ type TickEdge {
 
 We introduced a new client API in codegen v5.7.0. The ```generateClientv2``` Gradle configuration option was created to allow users to opt into the v2 API.
 
-As of v6.0.1, the v1 API has been deprecated. Setting either ```generateClient``` or ```generateClient``` to true will result in the v2 API being generated.
+As of v6.0.1, the v1 API has been deprecated. Setting either ```generateClient``` or ```generateClientv2``` to true will result in the v2 API being generated.
 
 The newer version relies on the use of generics and solves:
 1) Not being able to handle cycles in the schema, and
