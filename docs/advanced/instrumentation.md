@@ -156,7 +156,7 @@ Total execution time: 3ms
 
 ## Enabling Apollo Tracing
 
-If you want to leverage [Apollo Tracing](https://github.com/apollographql/apollo-tracing), as supported by `graphql-java`, you can create a bean of type {@link TracingInstrumentation}. 
+If you want to leverage [Apollo Tracing](https://github.com/apollographql/apollo-tracing), as supported by `graphql-java`, you can create a bean of type `TracingInstrumentation`.
 In this example, we added a conditional property on the bean to enable/disable the Apollo Tracing.
 This property is enabled by default, but you can turn it off by setting `graphql.tracing.enabled=false` in your application properties.
 
