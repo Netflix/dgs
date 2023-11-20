@@ -216,6 +216,13 @@ public class MessageDataLoaderWithDispatchPredicate implements BatchLoader<Strin
 
 In addition to defining the `load` method for the data loader class, you can specify a DispatchPredicate annotated with `@DgsDispatchPredicate` to apply that for the specific data loader.
 
+### Chaining Dataloaders
+If you are chaining dataloaders, you are required to [manually call dispatch](https://github.com/graphql-java/java-dataloader#chaining-dataloader-calls), which can result in suboptimal batch sizes.
+The `java-dataloader` library now supports a [tickerMode](https://github.com/graphql-java/java-dataloader#scheduleddataloaderregistry-ticker-mode) in the registry when used with scheduled dispatching. 
+This allows you to schedule the dispatch checks instead of manually calling dispatch in your data laoders.
+To enable this feature for using the ticker mode in the DGS framework, you can set `graphql.dgs.dataloaderTickerModeEnabled` to true. 
+You can continue using the `@DgsDispatchPredicate` as described earlier to define individual policies for the data loaders dispatch schedule.
+The ticker mode feature will be enabled only for those data loaders that have the `DgsDispatchPredicate` set up.
 
 ## Thread Pool Optimization
 
