@@ -13,6 +13,7 @@
 | dgs.graphql.graphiql.path                          | String   | `"/graphiql"`                       | Path to the GraphiQL endpoint without trailing slash.                                                     |
 | dgs.graphql.graphiql.title                         | String   | `"Simple GraphiQL Example"`         | Title of the GraphiQL page                                                                                |
 | dgs.graphql.enableEntityFetcherCustomScalarParsing | Boolean  | `false`                             | Enables the bug fix for entity fetcher custom scalar parsing. This will eventually be enabled by default. |
+| dgs.graphql.dataloaderTickerModeEnabled            | Boolean  | `false`                             | Enables the ticker mode for scheduling data loader dispatches when used with DsgDispatchPredicate. |
 
 
 #### Example: Configure the location of the GraphQL Schema Files
