@@ -35,6 +35,22 @@ public class DynamicTypeDefinitions {
 ```
 
 This `TypeDefinitionRegistry` creates a field `randomNumber` on the `Query` object type.
+```java
+@DgsComponent
+public class DynamicTypeDefinitions {
+    @DgsTypeDefinitionRegistry
+    public TypeDefinitionRegistry registry(TypeDefinitionRegistry registry) {
+        TypeDefinitionRegistry typeDefinitionRegistry = new TypeDefinitionRegistry();
+        ...
+        typeDefinitionRegistry.add(query);
+
+        return typeDefinitionRegistry;
+    }
+}
+```
+
+You can also pass in an existing `TypeDefinitionRegistry` as a parameter in case you need access to existing types.
+
 
 ## Creating datafetchers programmatically
 
