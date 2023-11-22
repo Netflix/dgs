@@ -216,14 +216,64 @@ public class MessageDataLoaderWithDispatchPredicate implements BatchLoader<Strin
 
 In addition to defining the `load` method for the data loader class, you can specify a DispatchPredicate annotated with `@DgsDispatchPredicate` to apply that for the specific data loader.
 
-### Chaining Dataloaders
-If you are chaining dataloaders, you are required to [manually call dispatch](https://github.com/graphql-java/java-dataloader#chaining-dataloader-calls), which can result in suboptimal batch sizes.
-The `java-dataloader` library now supports a [tickerMode](https://github.com/graphql-java/java-dataloader#scheduleddataloaderregistry-ticker-mode) in the registry when used with scheduled dispatching. 
+### Chaining Data Loaders
+Often times, you may want to chain data loaders as shown in the following example:
+```java
+ @DgsData(parentType = "Query", field = "messageFromBatchLoader")
+    public CompletableFuture<String> getMessage(DataFetchingEnvironment env) {
+        DataLoader<String, String> dataLoader = env.getDataLoader("messages");
+        DataLoader<String, String> dataLoaderB = env.getDataLoader("greetings");
+        return dataLoader.load("a").thenCompose(key -> {
+            CompletableFuture<String> loadA = dataLoaderB.load(key);
+            return loadA;
+        });
+    }
+
+```
+
+The above implementation will hang indefinitely in the call to the second data loader in the chain.
+The `java-dataloader` library already handles dispatching of data loader calls at each level of the query. 
+However, when there is yet another load call to the same or different dataloader, who would call dispatch on this data loader?
+Since these return Completable Futures, it is not easy to determine when the dispatch should be triggered.
+To handle this, we need to explicitly call dispatch on the second data loader (shown below) , since there is nothing else to trigger the dispatch when load is invoked on `dataloaderB`.
+```java
+ @DgsData(parentType = "Query", field = "messageFromBatchLoader")
+    public CompletableFuture<String> getMessage(DataFetchingEnvironment env) {
+        DataLoader<String, String> dataLoader = env.getDataLoader("messages");
+        DataLoader<String, String> dataLoaderB = env.getDataLoader("greetings");
+        return dataLoader.load("a").thenCompose(key -> {
+            CompletableFuture<String> loadA = dataLoaderB.load(key);
+            // Manually call dispatch
+            dataLoaderB.dispatch();
+            return loadA;
+        });
+    }
+
+```
+This is expected according to the documented behavior [here](https://github.com/graphql-java/java-dataloader#chaining-dataloader-calls).
+However, this can result in suboptimal batching for `dataloaderB`, with a bacth size of 1.
+
+The `v8.1.0` release introduces a new feature to [enable ticker mode](https://github.com/graphql-java/java-dataloader#scheduleddataloaderregistry-ticker-mode) available in the `java-dataloader` library
 This allows you to schedule the dispatch checks instead of manually calling dispatch in your data loaders.
-To enable this feature for using the ticker mode in the DGS framework, you can set `graphql.dgs.dataloader.ticker-mode-enabled` to true. 
-To control the overall schedule for checking the predicates, you can use `graphql.dgs.dataloader.schedule-duration` to specify the schedule. 
-The default is set to 10ms.
-You can continue using the `@DgsDispatchPredicate` as described earlier to define individual policies for the data loaders dispatch schedule.
+By default, the checks will occur every 10ms but can be configured via `dgs.graphql.dataloader.scheduleDuration`.
+To enable ticker mode in the DGS framework, you can set `dgs.graphql.dataloader.ticker-mode-enabled` to true.
+In addition, you can also specify [dispatch predicates](## Scheduled Data Loaders with Dispatch Predicates) per dataloader vi a`@DgsDispatchPredicate`to better control the batching.
+
+With ticker mode enabled, you can eliminate calls to manually dispatch and rely on the scheduler to periodically check and dispatch any batches as needed.
+This should result in better batching behavior overall.
+Thus the following implementation that would hang earlier will now work as expected without the additional call to dispatch:
+```java
+ @DgsData(parentType = "Query", field = "messageFromBatchLoader")
+    public CompletableFuture<String> getMessage(DataFetchingEnvironment env) {
+        DataLoader<String, String> dataLoader = env.getDataLoader("messages");
+        DataLoader<String, String> dataLoaderB = env.getDataLoader("greetings");
+        return dataLoader.load("a").thenCompose(key -> {
+            CompletableFuture<String> loadA = dataLoaderB.load(key);
+            return loadA;
+        });
+    }
+```
+
 
 ## Thread Pool Optimization
 
