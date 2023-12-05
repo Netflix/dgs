@@ -78,7 +78,7 @@ interface ShowsService {
 
 class InternalShow {
   int showId;
-  Sring title;
+  String title;
   
   // getters and setters
 }
