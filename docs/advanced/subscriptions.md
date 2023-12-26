@@ -30,11 +30,11 @@ A complete example can be found [in `SubscriptionDatafetcher.java`](https://gith
 The GraphQL specification doesn't specify a transport protocol.
 WebSockets are the most popular transport protocol however, and are supported by the DGS Framework.
 
-The framework now supports the `graphql-transport-ws` [sub-protocol](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md) for websockets for both webmvc and webflux stacks.
+The framework now supports the `graphql-ws` [sub-protocol](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md) for websockets for both webmvc and webflux stacks.
 Apollo now supports the client for the [newer protocol](https://www.apollographql.com/docs/react/data/subscriptions/#setting-up-the-transport) as well. 
 
 !!!note
-    The deprecated `graphql-ws` [sub-protocol](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) is functional for backwards compatibility.
+    The deprecated `graphql-transport-ws` [sub-protocol](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) is functional for backwards compatibility.
     However, this implementation will no longer be actively maintained in the framework and we will be dropping support in a future release.
 
 
