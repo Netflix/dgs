@@ -22,48 +22,59 @@ If we wouldn't do this, the result for an async data fetcher would always be 0, 
         private final static Logger LOGGER = LoggerFactory.getLogger(ExampleTracingInstrumentation.class);
 
         @Override
-        public InstrumentationState createState() {
+        public InstrumentationState createState(InstrumentationCreateStateParameters instrumentationCreateStateParameters) {
             return new TracingState();
         }
 
         @Override
-        public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
-            TracingState tracingState = parameters.getInstrumentationState();
+        public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters,
+        InstrumentationState instrumentationState) {
+            var tracingState = (TracingState) instrumentationState;
             tracingState.startTime = System.currentTimeMillis();
+            tracingState.executionId = parameters.getExecutionInput().getExecutionId().toString();
             return super.beginExecution(parameters);
         }
 
+        @NotNull
         @Override
-        public DataFetcher<?> instrumentDataFetcher(DataFetcher<?> dataFetcher, InstrumentationFieldFetchParameters parameters) {
+        public DataFetcher<?> instrumentDataFetcher(
+            DataFetcher<?> dataFetcher,
+            InstrumentationFieldFetchParameters parameters,
+            InstrumentationState instrumentationState) {
             // We only care about user code
-            if(parameters.isTrivialDataFetcher()) {
+            if (parameters.isTrivialDataFetcher()) {
                 return dataFetcher;
             }
 
             return environment -> {
                 long startTime = System.currentTimeMillis();
                 Object result = dataFetcher.get(environment);
-                if(result instanceof CompletableFuture) {
+                if (result instanceof CompletableFuture) {
                     ((CompletableFuture<?>) result).whenComplete((r, ex) -> {
                         long totalTime = System.currentTimeMillis() - startTime;
-                        LOGGER.info("Async datafetcher {} took {}ms", findDatafetcherTag(parameters), totalTime);
+                        LOGGER.info("{}: {} - {}ms - Async datafetcher", ((TracingState) instrumentationState).executionId,
+                                findDatafetcherTag(parameters), totalTime);
                     });
                 } else {
                     long totalTime = System.currentTimeMillis() - startTime;
-                    LOGGER.info("Datafetcher {} took {}ms", findDatafetcherTag(parameters), totalTime);
+                    LOGGER.info("{}: {} - {}ms - Datafetcher", ((TracingState) instrumentationState).executionId,
+                            findDatafetcherTag(parameters), totalTime);
                 }
 
                 return result;
             };
         }
 
+        @NotNull
         @Override
-        public CompletableFuture<ExecutionResult> instrumentExecutionResult(ExecutionResult executionResult, InstrumentationExecutionParameters parameters) {
-            TracingState tracingState = parameters.getInstrumentationState();
-            long totalTime = System.currentTimeMillis() - tracingState.startTime;
-            LOGGER.info("Total execution time: {}ms", totalTime);
+        public CompletableFuture<ExecutionResult> instrumentExecutionResult(
+            ExecutionResult executionResult,
+            InstrumentationExecutionParameters parameters,
+            InstrumentationState instrumentationState) {
+            LOGGER.info("{}: Total {}ms", ((TracingState) instrumentationState).executionId,
+                    System.currentTimeMillis() - ((TracingState) instrumentationState).startTime);
 
-            return super.instrumentExecutionResult(executionResult, parameters);
+            return super.instrumentExecutionResult(executionResult, parameters, instrumentationState);
         }
 
         private String findDatafetcherTag(InstrumentationFieldFetchParameters parameters) {
@@ -75,13 +86,16 @@ If we wouldn't do this, the result for an async data fetcher would always be 0, 
                 parent = (GraphQLObjectType) type;
             }
 
-            return  parent.getName() + "." + parameters.getExecutionStepInfo().getPath().getSegmentName();
+            return parent.getName() + "." + parameters.getExecutionStepInfo().getPath().getSegmentName();
         }
 
         static class TracingState implements InstrumentationState {
             long startTime;
+            String executionId;
         }
     }
+
+    
     ```
 === "Kotlin"
     ```kotlin
@@ -89,10 +103,6 @@ If we wouldn't do this, the result for an async data fetcher would always be 0, 
     class ExampleTracingInstrumentation: SimpleInstrumentation() {
 
         val logger : Logger = LoggerFactory.getLogger(ExampleTracingInstrumentation::class.java)
-
-        override fun createState(): InstrumentationState {
-            return TraceState()
-        }
 
         override fun beginExecution(parameters: InstrumentationExecutionParameters): InstrumentationContext<ExecutionResult> {
             val state: TraceState = parameters.getInstrumentationState()
