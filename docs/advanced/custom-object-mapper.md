@@ -1,18 +1,14 @@
 
-In certain applications, you may want to customize the serialization of the GraphQL response, for e.g., by adding additional modules.
-This can be done by setting up a custom object mapper that overrides the default provided by the DGS framework in your application's configuration class.
-Note that this mapper is only used for serialization of outgoing GraphQL responses.
+In scenarios where a custom object mapper is required, you can customize Spring's underlying object mapper. 
+However, note that this will affect the behavior for all usages of the mapper, and therefore should be done carefully.
 Also, this mechanism will NOT affect how custom scalars are serialized - those would rely on your scalar implementation's serialization logic handled by `graphql-java`
 
-To create a custom object mapper, implement a Spring bean of type `ObjectMapper` with `@Qualifier("dgsObjectMapper")`.
-
 ```java
-  @Bean
-  @Qualifier("dgsObjectMapper")
-  public ObjectMapper dgsObjectMapper() {
-    ObjectMapper customMapper = new ObjectMapper()
-    customMapper.registerModule(JavaTimeModule());
-    return customMapper;
+@Bean
+public Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
+    return new Jackson2ObjectMapperBuilder().serializers(LOCAL_DATETIME_SERIALIZER).serializationInclusion(JsonInclude.Include.NON_NULL);
 }
 ```
+
+
 
