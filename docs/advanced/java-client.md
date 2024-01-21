@@ -258,8 +258,7 @@ In this release we added an optional `scalars` argument to the `GraphQLQueryRequ
 Java class representing the input to an actual Scalar implementation. We will generate the query API with `DateTimeScalar` as follows:
 
 ```java
-Map<Class<?>, Coercing<?, ?>> scalars = new HashMap<>();
-scalars.put(java.time.LocalDateTime.class, new DateTimeScalar());
+Map<Class<?>, Coercing<?, ?>> scalars = Map.of(LocalDateTime.class, DateTimeScalar.INSTANCE.getCoercing());
 
 new GraphQLQueryRequest(
                 ReviewsGraphQLQuery.newRequest().dateRange(new DateRange(LocalDate.of(2020, 1, 1), LocalDate.now())).build(),
