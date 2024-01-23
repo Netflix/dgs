@@ -5,7 +5,7 @@ Every data fetcher will run on the same request thread.
 This effectively means that data fetchers do not have any concurrent/parallel behavior, except when explicitly returning `CompletableFuture`.
 The reason for not having concurrent behavior by default is that this would require using a thread per field, which would not scale well.
 
-You can achieve concurrent data fetchers returning `CompletableFuture` from a data fetcher.
+To achieve concurrency in data fetchers, you can return `CompletableFuture` from a data fetcher.
 A `CompletableFuture` will let you define the `Executor` it will run on, giving you control over managing thread pools.
 
 ## Virtual Threads (JDK 21+)
@@ -24,16 +24,19 @@ dgs.graphql.virtualthreads.enabled=true
 When enabled, each *user defined* data fetcher will run in a new virtual thread.
 Because virtual threads don't need thread pool management, you do not need to configure any thread pool.
 A "user defined data fetcher" is a data fetcher defined with `@DgsQuery`/`@DgsMutation`/`@DgsData`.
-Technically, every field of a POJO also has a data fetcher, but those "simple" data fetchers will not run in separate virtual threads.
+Technically, every field of a POJO also has a data fetcher, but those "trivial" data fetchers will not run in separate virtual threads.
 
 Because each data fetcher runs in its own virtual thread, you get concurrent/parallel behavior out of the box.
 
-Note that data fetchers explicitly returning `CompletableFuture` do not get wrapped in a virtual thread.
-This way you keep the option of managing your own thread pools if needed for your use case.
+
+!!!note
+    Note that data fetchers explicitly returning `CompletableFuture` do not get wrapped in a virtual thread.
+    This way you keep the option of managing your own thread pools if needed for your use case.
 
 Spring Framework 6.1 (Spring Boot 3.2) comes with virtual thread support as well.
-If you use the DGS Framework with Spring WebMVC on Tomcat, you will also get the benefit of using virtual threads for the Tomcat Worker threads.
-The combination of Spring/Tomcat virtual threads and the DGS virtual thread support gives an architecture fully based on virtual threads, making scaling services much easier.
+When using Spring WebMVC on Tomcat, virtual threads can be used for the tomcat work threads.
+
+This is separate from the DGS virtual thread support, but combining the two gives a fully virtual thread based stack, making scaling much easier.
 
 Spring Framework support for virtual threads is enabled with the following property.
 
@@ -41,13 +44,17 @@ Spring Framework support for virtual threads is enabled with the following prope
 spring.threads.virtual.enabled=true
 ```
 
+With virtual threads enabled for both DGS and Spring, a request would be processed as follows.
+
+![virtual-threads](../images/virtual-threads.png)
+
 ### Threading for data loaders
 
 The Dataloader API requires you to interact with the `CompletableFuture` API.
 The `CompletableFuture` API does not allow to change the thread it runs on after creating, so the DGS Framework can't _automagically_ leverage virtual threads.
 You are still in control of which `Executor` is used when creating a `CompletableFuture`.
-If you want to leverage virtual threads, you most certainly can, by providing a virtual thread based `Executor`.
-You may use the DGS Framework created `Executor` by injecting it into your component.
+If you want to use virtual threads for a `CompletableFuture`, you can pass a virtual thread based `Executor` as the second argument of many of the `CompletableFuture` factory methods.
+DGS provides a virtual threads executor that you can use for this.
 
 ```java
 @Autowired
