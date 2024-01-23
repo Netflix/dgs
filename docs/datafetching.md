@@ -406,3 +406,7 @@ public class ExampleLoaderWithContext implements BatchLoaderWithContext<String, 
     }
 }
 ```
+
+## Data fetcher threading model
+
+The threading model for data fetchers, concurrent behavior and the use of JDK 21 Virtual threads is [further explained here](../advanced/virtual-threads).

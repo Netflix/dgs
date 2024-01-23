@@ -22,6 +22,7 @@ nav:
   - Advanced:
     - Using the Platform BOM: advanced/platform-bom.md
     - Nested data fetchers: advanced/context-passing.md
+    - Using Virtual Threads: advanced/virtual-threads.md
     - Hot reloading schemas: advanced/schema-reloading.md
     - Java GraphQL Client: advanced/java-client.md
     - Kotlin CodeGen (Experimental): advanced/kotlin-codegen.md
