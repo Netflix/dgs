@@ -30,6 +30,11 @@ public class DateTimeScalar implements Coercing<LocalDateTime, String> {
 
         throw new CoercingParseLiteralException("Value is not a valid ISO date time");
     }
+    
+    @Override
+    public Value valueToLiteral(@NotNull Object input) {
+        return new StringValue(this.serialize(input));
+    }
 }
 ```
 
