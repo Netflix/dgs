@@ -2,7 +2,7 @@
 In GraphQL, you model a file upload operation as a GraphQL mutation request from a client to your DGS.
 
 The following sections describe how you implement file uploads and downloads using a Multipart POST request.
-For more context on file uploads and best practices, see [Apollo Server File Upload Best Practices](https://www.apollographql.com/blog/apollo-server-file-upload-best-practices-1e7f24cdc050) by Khalil Stemmler from *Apollo Blog*.
+For more context on file uploads and best practices, see [Apollo Server File Upload Best Practices](https://www.apollographql.com/blog/file-upload-best-practices) by Khalil Stemmler from *Apollo Blog*.
     
 
 ## Multipart File Upload
