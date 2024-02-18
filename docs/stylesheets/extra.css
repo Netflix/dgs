@@ -1,6 +1,6 @@
 :root>* {
   --md-primary-fg-color: #e50914;
-  --md-primary-fg-color--light #e50914;
+  --md-primary-fg-color--light: #e50914;
   --md-primary-fg-color--dark: #e50914;
 }
 
@@ -66,7 +66,6 @@ code {
        line-break: strict;
        word-break: keep-all;
 }
-div.td code, td code { white-space: nowrap; }
 div.td code, td code { white-space: nowrap; }
 div.marked-table div.td code, div.marked-table td code {
   word-break: keep-all;
