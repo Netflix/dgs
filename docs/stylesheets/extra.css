@@ -67,7 +67,6 @@ code {
        word-break: keep-all;
 }
 div.td code, td code { white-space: nowrap; }
-div.td code, td code { white-space: nowrap; }
 div.marked-table div.td code, div.marked-table td code {
   word-break: keep-all;
   white-space: nowrap;
