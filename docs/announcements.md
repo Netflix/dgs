@@ -1,3 +1,14 @@
+### Coming Soon!! DGS Framework with Spring GraphQL 
+The DGS and Spring-GraphQL teams are super excited to introduce deep integration between the DGS framework and Spring-GraphQL. 
+This will bring the community together, and we can continue building the best possible GraphQL framework for Spring Boot in the future.
+We have been actively working on this integration over the past several months and are preparing for a release in the coming weeks.
+
+
+### DGS Framework 8.0.0
+This release updates the graphql-java version to 21.2. 
+The main breaking change affects the usage of the already deprecated DefaultExceptionHandler::onException method. 
+If you have defined your own custom exception handlers, you will need to switch to using handleException instead of onException.
+
 ### DGS Framework 7.0.0 (May 15, 2023)
 The latest 7.0.0 release updates the version of graphql-java from graphql-java-19.5 -> graphql-java [20.2](https://github.com/graphql-java/graphql-java/releases/tag/v20.2). Graphql-java-20.0 introduces breaking changes. Refer to the notes [here](https://github.com/graphql-java/graphql-java/releases/tag/v20.0).
 
