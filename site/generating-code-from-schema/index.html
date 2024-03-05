@@ -1,0 +1,1731 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://netflix.github.io/dgs/generating-code-from-schema/">
+      
+      
+        <link rel="prev" href="../mutations/">
+      
+      
+        <link rel="next" href="../data-loaders/">
+      
+      <link rel="icon" href="../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
+    
+    
+      
+        <title>Code Generation - DGS Framework</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.26e3688c.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../stylesheets/dgs_theme.css?v=3.0.13">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-green">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#quick-start" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Mitigate bug: https://github.com/mkdocs/mkdocs/issues/2191 -->
+
+
+
+<div class="sash" data-no-interact></div>
+
+<!-- Application header -->
+<header class="md-header dgs-header" data-md-component="header">
+
+  <!-- Top-level navigation -->
+  <nav class="md-header-nav md-grid dgs-header-nav" aria-label="">
+
+    <!-- Link to home -->
+    <a
+      href="https://netflix.github.io/dgs/"
+      title="DGS Framework"
+      class="md-header-nav__button dgs-header-nav__button md-logo dgs-logo"
+      aria-label="DGS Framework"
+    >
+      
+  <img src="../images/logo--blue.svg" alt="logo">
+
+    </a>
+
+    <!-- Header title -->
+    <div class="md-header-nav__title dgs-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis sr-only">
+          <span class="md-header-nav__topic md-ellipsis">
+            DGS Framework
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Code Generation
+            
+          </span>
+        </div>
+      
+    </div>
+
+    <div class="dgs-header-nav__start">
+      <a class="md-header-nav__button dgs-header-nav__button dgs-getting-started" href="/dgs/getting-started/">
+        <span class="dgs-header-nav__text--upper">Guides & Docs</span>
+        <span class="dgs-header-nav__text--lower">
+          <time>Updated 2023-06-06</time>
+        </span>
+      </a>
+    </div>
+
+    <!-- Repository containing source -->
+    
+      <div class="md-header-nav__source dgs-header-nav__source">
+        <a href="https://github.com/netflix/dgs-framework" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+
+     <!-- Color palette -->
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: light)"
+            data-md-color-scheme="default"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_1"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to dark mode"
+            for="__palette_2"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+          </label>
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: dark)"
+            data-md-color-scheme="slate"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_2"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to light mode"
+            for="__palette_1"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+          </label>
+        
+      </form>
+    
+
+    <!-- Button to open drawer -->
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+
+    <!-- Button to open search dialogue -->
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__search">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+    </label>
+
+    <!-- Search interface -->
+    <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Search interface -->
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input
+        type="text"
+        class="md-search__input"
+        name="query"
+        aria-label="Search"
+        placeholder="Search"
+        autocapitalize="off"
+        autocorrect="off"
+        autocomplete="off"
+        spellcheck="false"
+        data-md-component="search-query"
+        data-md-state="active"
+        required
+      />
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <button
+        type="reset"
+        class="md-search__icon md-icon"
+        aria-label="Clear"
+        data-md-component="search-reset"
+        tabindex="-1"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-search-decoration" data-no-interact></div>
+</div>
+
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="DGS Framework" class="md-nav__button md-logo" aria-label="DGS Framework" data-md-component="logo">
+      
+  <img src="../images/logo--blue.svg" alt="logo">
+
+    </a>
+    DGS Framework
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/netflix/dgs-framework" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../announcements/" class="md-nav__link">
+        New and Noteworthy
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../datafetching/" class="md-nav__link">
+        Data fetching
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-execution-testing/" class="md-nav__link">
+        Testing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mutations/" class="md-nav__link">
+        Mutations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Code Generation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Code Generation
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    Quick Start
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fixing-the-could-not-initialize-class-graphqlparserantlrgraphqllexer-problem" class="md-nav__link">
+    Fixing the "Could not initialize class graphql.parser.antlr.GraphqlLexer" problem
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-code-from-external-schemas-in-jars" class="md-nav__link">
+    Generating code from external schemas in JARs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-existing-types" class="md-nav__link">
+    Mapping existing types
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-client-apis" class="md-nav__link">
+    Generating Client APIs
+  </a>
+  
+    <nav class="md-nav" aria-label="Generating Client APIs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generateclientv2" class="md-nav__link">
+    generateClientv2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-query-apis-for-external-services" class="md-nav__link">
+    Generating Query APIs for external services
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limiting-generated-code-for-client-api" class="md-nav__link">
+    Limiting generated code for Client API
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-classes-with-custom-annotations" class="md-nav__link">
+    Generating classes with Custom Annotations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuring-code-generation" class="md-nav__link">
+    Configuring code generation
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-loaders/" class="md-nav__link">
+        Data Loaders (N+1)
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error-handling/" class="md-nav__link">
+        Error Handling
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../federation/" class="md-nav__link">
+        Federation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        Examples
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../videos/" class="md-nav__link">
+        Videos
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+          Advanced
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_14">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/platform-bom/" class="md-nav__link">
+        Using the Platform BOM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/context-passing/" class="md-nav__link">
+        Nested data fetchers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/schema-reloading/" class="md-nav__link">
+        Hot reloading schemas
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/java-client/" class="md-nav__link">
+        Java GraphQL Client
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/security/" class="md-nav__link">
+        Security
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/file-uploads/" class="md-nav__link">
+        File Uploads
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/subscriptions/" class="md-nav__link">
+        Subscriptions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/type-resolvers-for-abstract-types/" class="md-nav__link">
+        Interfaces and Unions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/instrumentation/" class="md-nav__link">
+        Instrumentation (Tracing, Metrics)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/response-instrumentation/" class="md-nav__link">
+        Response Instrumentation for MVC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/graphqlcontext-leveraging/" class="md-nav__link">
+        GraphQLContext
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/custom-datafetcher-context/" class="md-nav__link">
+        Data Fetching Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/federated-testing/" class="md-nav__link">
+        Federated Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/dynamic-schemas/" class="md-nav__link">
+        Dynamic schemas
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/relay-pagination/" class="md-nav__link">
+        Relay Pagination
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/operation-caching/" class="md-nav__link">
+        Operation Caching
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scalars/" class="md-nav__link">
+        Adding Custom Scalars
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/custom-object-mapper/" class="md-nav__link">
+        Custom Object Mapper
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/mocking/" class="md-nav__link">
+        Mocking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/Netflix/dgs-framework/tree/master/graphql-dgs-example-java" class="md-nav__link">
+        React Example
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    Quick Start
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fixing-the-could-not-initialize-class-graphqlparserantlrgraphqllexer-problem" class="md-nav__link">
+    Fixing the "Could not initialize class graphql.parser.antlr.GraphqlLexer" problem
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-code-from-external-schemas-in-jars" class="md-nav__link">
+    Generating code from external schemas in JARs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-existing-types" class="md-nav__link">
+    Mapping existing types
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-client-apis" class="md-nav__link">
+    Generating Client APIs
+  </a>
+  
+    <nav class="md-nav" aria-label="Generating Client APIs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generateclientv2" class="md-nav__link">
+    generateClientv2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-query-apis-for-external-services" class="md-nav__link">
+    Generating Query APIs for external services
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limiting-generated-code-for-client-api" class="md-nav__link">
+    Limiting generated code for Client API
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-classes-with-custom-annotations" class="md-nav__link">
+    Generating classes with Custom Annotations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuring-code-generation" class="md-nav__link">
+    Configuring code generation
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<p>The DGS Code Generation plugin generates code during your project’s build process based on your Domain Graph Service’s GraphQL schema file.
+The plugin generates the following:</p>
+<ul>
+<li>Data types for types, input types, enums and interfaces.</li>
+<li>A <code>DgsConstants</code> class containing the names of types and fields</li>
+<li>Example data fetchers</li>
+<li>A type safe query API that represents your queries</li>
+</ul>
+<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
+<p>Code generation is typically integrated in the build.
+A Gradle plugin has always been available, and recently a Maven plugin was made <a href="https://github.com/deweyjose/graphqlcodegen">available</a> by the community.</p>
+<p>To apply the plugin, update your project’s <code>build.gradle</code> file to include the following:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="c1">// Using plugins DSL</span>
+<span class="linenos" data-linenos="2 "></span><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;com.netflix.dgs.codegen&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;[REPLACE_WITH_CODEGEN_PLUGIN_VERSION]&quot;</span>
+<span class="linenos" data-linenos="4 "></span><span class="o">}</span>
+</code></pre></div></p>
+<p>Alternatively, you can set up classpath dependencies in your buildscript:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">buildscript</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">   </span><span class="n">dependencies</span><span class="o">{</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">      </span><span class="n">classpath</span><span class="w"> </span><span class="s1">&#39;com.netflix.graphql.dgs.codegen:graphql-dgs-codegen-gradle:[REPLACE_WITH_CODEGEN_PLUGIN_VERSION]&#39;</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">   </span><span class="o">}</span>
+<span class="linenos" data-linenos="5 "></span><span class="o">}</span>
+<span class="linenos" data-linenos="6 "></span>
+<span class="linenos" data-linenos="7 "></span><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s1">&#39;com.netflix.dgs.codegen&#39;</span>
+</code></pre></div></p>
+<p>Next, you need to add the task configuration as shown here:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">   </span><span class="n">schemaPaths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;${projectDir}/src/main/resources/schema&quot;</span><span class="o">]</span><span class="w"> </span><span class="c1">// List of directories containing schema files</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">   </span><span class="n">packageName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;com.example.packagename&#39;</span><span class="w"> </span><span class="c1">// The package name to use to generate sources</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">   </span><span class="n">generateClientv2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c1">// Enable generating the type safe query API</span>
+<span class="linenos" data-linenos="5 "></span><span class="o">}</span>
+</code></pre></div>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
+ NOTE: Please use the latest version of the plugin, available <a href="https://github.com/Netflix/dgs-codegen/releases">here</a>
+</div>
+
+<p>The plugin adds a <code>generateJava</code> Gradle task that runs as part of your project’s build.
+<code>generateJava</code> generates the code in the project’s <code>build/generated</code> directory.
+Note that on a Kotlin project, the <code>generateJava</code> task generates Kotlin code by default (yes the name is confusing).
+This folder is automatically added to the project's classpath.
+Types are available as part of the package specified by the <code><var>packageName</var>.types</code>, where you specify the value of <var>packageName</var> as a configuration in your <code>build.gradle</code> file.
+Please ensure that your project’s sources refer to the generated code using<!-- http://go/pv http://go/use --> the specified package name.</p>
+<p><code>generateJava</code> generates the data fetchers and places them in <code>build/generated-examples</code>.</p>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
+ NOTE: generateJava does NOT add the data fetchers that it generates to your project’s sources.
+ These fetchers serve mainly as a basic boilerplate code that require further implementation from you.
+</div>
+
+<p>You can exclude parts of the schema from code-generation by placing them in a different schema directory that is not specified<!-- http://go/pv --> as part of the <code>schemaPaths</code> for the plugin.</p>
+<h3 id="fixing-the-could-not-initialize-class-graphqlparserantlrgraphqllexer-problem">Fixing the "Could not initialize class graphql.parser.antlr.GraphqlLexer" problem<a class="headerlink" href="#fixing-the-could-not-initialize-class-graphqlparserantlrgraphqllexer-problem" title="Permanent link">&para;</a></h3>
+<p>Gradle's plugin system uses a flat classpath for all plugins, which makes it very easy to run into classpath conflicts.
+One of the dependencies of the Codegen plugin is ANTLR, which is unfortuanatly used by some other plugins as well.
+If you see an error such as <code>Could not initialize class graphql.parser.antlr.GraphqlLexer</code> this typically indicates a classpath conflict.
+If this happens, please change the ordering of the plugins in your build script.
+ANTLR is typically backwards, but not forwards, compatible.</p>
+<p>For multi-module projects means you need to declare the Codegen plugin in the root build file, without applying it:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="n">id</span><span class="o">(</span><span class="s2">&quot;com.netflix.dgs.codegen&quot;</span><span class="o">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;[REPLACE_WITH_CODEGEN_PLUGIN_VERSION]&quot;</span><span class="w"> </span><span class="n">apply</span><span class="w"> </span><span class="kc">false</span>
+<span class="linenos" data-linenos="3 "></span>
+<span class="linenos" data-linenos="4 "></span><span class="w">    </span><span class="c1">//other plugins</span>
+<span class="linenos" data-linenos="5 "></span><span class="o">}</span>
+</code></pre></div>
+<p>In the module where the plugin should be applied, you specify the plugin in the plugins block again, but without the version.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="n">id</span><span class="o">(</span><span class="s2">&quot;com.netflix.dgs.codegen&quot;</span><span class="o">)</span>
+<span class="linenos" data-linenos="3 "></span><span class="o">}</span>
+</code></pre></div>
+<p>If you're using the old <code>buildscript</code> syntax, you add the plugin dependency to the root <code>buildscript</code>, but only <code>apply</code> in the module.</p>
+<h3 id="generating-code-from-external-schemas-in-jars">Generating code from external schemas in JARs<a class="headerlink" href="#generating-code-from-external-schemas-in-jars" title="Permanent link">&para;</a></h3>
+<p>You can also specify external dependencies containing schemas to use for generation by declaring it as a dependency in the <code>dgsCodegen</code> configuration.
+The plugin will scan all <code>.graphql</code> and <code>.graphqls</code> files and generate those classes under the same <code>build/generated</code> directory.
+This is useful if you have external dependencies containing some shared types that you want to add to your schema for code generation. 
+Not that this does NOT affect your project's schema, and is only for code generation.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="c1">// other dependencies</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">dgsCodegen</span><span class="w"> </span><span class="s1">&#39;com.netflix.graphql.dgs:example-schema:x.x.x&#39;</span>
+<span class="linenos" data-linenos="4 "></span><span class="o">}</span>
+</code></pre></div>
+<h3 id="mapping-existing-types">Mapping existing types<a class="headerlink" href="#mapping-existing-types" title="Permanent link">&para;</a></h3>
+<p>Codegen tries to generate a type for each type it finds in the schema, with a few exceptions.</p>
+<ol>
+<li>Basic scalar types - are mapped to corresponding Java/Kotlin types (String, Integer etc.)</li>
+<li>Date and time types - are mapped to corresponding <code>java.time</code> classes</li>
+<li>PageInfo and RelayPageInfo - are mapped to <code>graphql.relay</code> classes</li>
+<li>Types mapped with a <code>typeMapping</code> configuration</li>
+</ol>
+<p>When you have existing classes that you want to use instead of generating a class for a certain type, you can configure the plugin to do so using a <code>typeMapping</code>.
+The <code>typeMapping</code> configuration is a <code>Map</code> where each key is a GraphQL type and each value is a fully qualified Java/Kotlin type.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">   </span><span class="n">typeMapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;MyGraphQLType&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;com.mypackage.MyJavaType&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos="3 "></span><span class="o">}</span>
+</code></pre></div>
+<h2 id="generating-client-apis">Generating Client APIs<a class="headerlink" href="#generating-client-apis" title="Permanent link">&para;</a></h2>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
+NOTE: There is a new API for generating client APIs. The old generateClient will be deprecated soon. <a href="#generateclientv2">See more here</a>
+</div>
+
+<p>The code generator can also create client API classes.
+You can use these classes to query data from a GraphQL endpoint using Java, or in unit tests using the <code>QueryExecutor</code>.
+The Java GraphQL Client is useful for server-to-server communication.
+A GraphQL Java Client is <a href="../advanced/java-client/">available</a> as part of the framework.</p>
+<p>Code generation creates a <code><var>field-name</var>GraphQLQuery</code> for each Query and Mutation field.
+The <code>*GraphQLQuery</code> query class contains fields for each parameter of the field.
+For each type returned by a Query or Mutation, code generation creates a <code>*ProjectionRoot</code>.
+A projection is a builder class that specifies which fields get returned.</p>
+<p>The following is an example usage of a generated API:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="n">GraphQLQueryRequest</span><span class="w"> </span><span class="n">graphQLQueryRequest</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">GraphQLQueryRequest</span><span class="p">(</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">TicksGraphQLQuery</span><span class="p">.</span><span class="na">Builder</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 4 "></span><span class="w">                </span><span class="p">.</span><span class="na">first</span><span class="p">(</span><span class="n">first</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">                </span><span class="p">.</span><span class="na">after</span><span class="p">(</span><span class="n">after</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">(),</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">TicksConnectionProjectionRoot</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">                </span><span class="p">.</span><span class="na">edges</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">                    </span><span class="p">.</span><span class="na">node</span><span class="p">()</span>
+<span class="linenos" data-linenos="10 "></span><span class="w">                        </span><span class="p">.</span><span class="na">date</span><span class="p">()</span>
+<span class="linenos" data-linenos="11 "></span><span class="w">                        </span><span class="p">.</span><span class="na">route</span><span class="p">()</span>
+<span class="linenos" data-linenos="12 "></span><span class="w">                            </span><span class="p">.</span><span class="na">name</span><span class="p">()</span>
+<span class="linenos" data-linenos="13 "></span><span class="w">                            </span><span class="p">.</span><span class="na">votes</span><span class="p">()</span>
+<span class="linenos" data-linenos="14 "></span><span class="w">                                </span><span class="p">.</span><span class="na">starRating</span><span class="p">()</span>
+<span class="linenos" data-linenos="15 "></span><span class="w">                                </span><span class="p">.</span><span class="na">parent</span><span class="p">()</span>
+<span class="linenos" data-linenos="16 "></span><span class="w">                            </span><span class="p">.</span><span class="na">grade</span><span class="p">());</span>
+</code></pre></div>
+<p>This API was generated based on the following schema.
+The <code>edges</code> and <code>node</code> types are because the schema uses pagination.
+The API allows for a fluent style of writing queries, with almost the same feel of writing the query as a String, but with the added benefit of code completion and type safety.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>type Query @extends {
+<span class="linenos" data-linenos=" 2 "></span>    ticks(first: Int, after: Int, allowCached: Boolean): TicksConnection
+<span class="linenos" data-linenos=" 3 "></span>}
+<span class="linenos" data-linenos=" 4 "></span>
+<span class="linenos" data-linenos=" 5 "></span>type Tick {
+<span class="linenos" data-linenos=" 6 "></span>    id: ID
+<span class="linenos" data-linenos=" 7 "></span>    route: Route
+<span class="linenos" data-linenos=" 8 "></span>    date: LocalDate
+<span class="linenos" data-linenos=" 9 "></span>    userStars: Int
+<span class="linenos" data-linenos="10 "></span>    userRating: String
+<span class="linenos" data-linenos="11 "></span>    leadStyle: LeadStyle
+<span class="linenos" data-linenos="12 "></span>    comments: String
+<span class="linenos" data-linenos="13 "></span>}
+<span class="linenos" data-linenos="14 "></span>
+<span class="linenos" data-linenos="15 "></span>type Votes {
+<span class="linenos" data-linenos="16 "></span>    starRating: Float
+<span class="linenos" data-linenos="17 "></span>    nrOfVotes: Int
+<span class="linenos" data-linenos="18 "></span>}
+<span class="linenos" data-linenos="19 "></span>
+<span class="linenos" data-linenos="20 "></span>type Route {
+<span class="linenos" data-linenos="21 "></span>    routeId: ID
+<span class="linenos" data-linenos="22 "></span>    name: String
+<span class="linenos" data-linenos="23 "></span>    grade: String
+<span class="linenos" data-linenos="24 "></span>    style: Style
+<span class="linenos" data-linenos="25 "></span>    pitches: Int
+<span class="linenos" data-linenos="26 "></span>    votes: Votes
+<span class="linenos" data-linenos="27 "></span>    location: [String]
+<span class="linenos" data-linenos="28 "></span>}
+<span class="linenos" data-linenos="29 "></span>
+<span class="linenos" data-linenos="30 "></span>type TicksConnection {
+<span class="linenos" data-linenos="31 "></span>    edges: [TickEdge]
+<span class="linenos" data-linenos="32 "></span>}
+<span class="linenos" data-linenos="33 "></span>
+<span class="linenos" data-linenos="34 "></span>type TickEdge {
+<span class="linenos" data-linenos="35 "></span>    cursor: String!
+<span class="linenos" data-linenos="36 "></span>    node: Tick
+<span class="linenos" data-linenos="37 "></span>}
+</code></pre></div>
+<h3 id="generateclientv2">generateClientv2<a class="headerlink" href="#generateclientv2" title="Permanent link">&para;</a></h3>
+<p>There is a new API for generating client API. To turn on the new version, use the <code>generateClientv2</code> Gradle configuration option. Note that the v1 API will be deprecated soon. </p>
+<p>This new version relies on the use of generics and solves:
+1) Not being able to handle cycles in the schema, and
+2) Not being able to generate on larger schemas due to too many classes getting generated and out of memory errors. We only generate one class per type in the new implementation.</p>
+<p>The projection root needs to be instantiated differently for the v2 API.</p>
+<p>v1 API:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">String</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">GraphQLQueryRequest</span><span class="p">(</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">MoviesGraphQLQuery</span><span class="p">(),</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">MoviesProjectionRoot</span><span class="p">().</span><span class="na">movieId</span><span class="p">()).</span><span class="na">serialize</span><span class="p">();</span>
+</code></pre></div></p>
+<p>v2 API:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">String</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">GraphQLQueryRequest</span><span class="p">(</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">MoviesGraphQLQuery</span><span class="p">(),</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">MoviesProjectionRoot</span><span class="o">&lt;&gt;</span><span class="p">().</span><span class="na">movieId</span><span class="p">()).</span><span class="na">serialize</span><span class="p">();</span>
+</code></pre></div></p>
+<p>Kotlin Projects: 
+Kotlin does not support the Java diamond operator (&lt;&gt;) for inferring type arguments. Instead, pass in <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing.html">Nothing</a> as both arguments.</p>
+<p>v2 API Kotlin:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="kt">String</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new</span><span class="w"> </span><span class="n">GraphQLQueryRequest</span><span class="p">(</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">        </span><span class="n">new</span><span class="w"> </span><span class="n">MoviesGraphQLQuery</span><span class="p">(),</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">        </span><span class="n">new</span><span class="w"> </span><span class="n">MoviesProjectionRoot</span><span class="o">&lt;</span><span class="n">Nothing</span><span class="p">,</span><span class="w"> </span><span class="n">Nothing</span><span class="o">&gt;</span><span class="p">().</span><span class="na">movieId</span><span class="p">()).</span><span class="na">serialize</span><span class="p">();</span>
+</code></pre></div></p>
+<h3 id="generating-query-apis-for-external-services">Generating Query APIs for external services<a class="headerlink" href="#generating-query-apis-for-external-services" title="Permanent link">&para;</a></h3>
+<p>Generating a Query API like above is very useful for testing your own DGS.
+The same type of API can also be useful when interacting with another GraphQL service, where your code is a client of that service.
+This is typically done using the <a href="https://netflix.github.io/dgs/advanced/java-client/">DGS Client</a>.</p>
+<p>When you use code generation both for your own schema, and an internal schema, you might want different code generation configuration for both.
+The recommendation is to create a separate module in your project containing the schema of the external service and the codegen configuration to just generate a Query API.
+The following is example configuration that <em>only</em> generates a Query API.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="w">    </span><span class="n">schemaPaths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;${projectDir}/composed-schema.graphqls&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="w">    </span><span class="n">packageName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;some.other.service&quot;</span>
+<span class="linenos" data-linenos=" 4 "></span><span class="w">    </span><span class="n">generateClientv2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">    </span><span class="n">generateDataTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="n">skipEntityQueries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">    </span><span class="n">includeQueries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;hello&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="n">includeMutations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">    </span><span class="n">shortProjectionNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="10 "></span><span class="w">    </span><span class="n">maxProjectionDepth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="linenos" data-linenos="11 "></span><span class="o">}</span>
+</code></pre></div>
+<h3 id="limiting-generated-code-for-client-api">Limiting generated code for Client API<a class="headerlink" href="#limiting-generated-code-for-client-api" title="Permanent link">&para;</a></h3>
+<p>If your schema is large or has a lot of cycles, it is not ideal to generate client APIs for the entire schema, since you will end up with a large number of projections.
+This can cause code generation to slow down significantly, or run out of memory depending on your schema.
+We have a few configuration parameters that help tune this so you can limit the generation of client API to only what is required.</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="o">...</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">generateClientv2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">    </span><span class="n">skipEntityQueries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="5 "></span><span class="w">    </span><span class="n">includeQueries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;hello&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos="6 "></span><span class="w">    </span><span class="n">includeMutations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos="7 "></span><span class="w">    </span><span class="n">includeSubscriptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos="8 "></span><span class="w">    </span><span class="n">maxProjectionDepth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="linenos" data-linenos="9 "></span><span class="o">}</span>
+</code></pre></div>
+Firstly, you can specify exactly which queries/mutation/subscriptions to generate for via <code>includeQueries</code>, <code>includeMutations</code>, and <code>includeSubscriptions</code>.
+<code>skipEntityQueries</code> is only used if you are constructing federated <code>_entities</code> queries for testing purposes, so you can also set that to restrict the amount of generated code.
+Finally, <code>maxProjectionDepth</code> will instruct codegen to stop generating beyond 2 levels of the graph from the query root.
+The default is 10.
+This will help further limit the number of projections as well.</p>
+<h3 id="generating-classes-with-custom-annotations">Generating classes with Custom Annotations<a class="headerlink" href="#generating-classes-with-custom-annotations" title="Permanent link">&para;</a></h3>
+<p>This feature provides the ability to support any custom annotation on the generated POJOs using the @annotate directive in graphQL.
+The <code>@annotate</code> directive can be placed on type, input or fields in the graphQL. This feature is turned off by default and can be enabled by setting generateCustomAnnotation to true in build.gradle.</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="o">...</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">generateCustomAnnotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="4 "></span><span class="o">}</span>
+</code></pre></div>
+@annotate contains 4 fields:</p>
+<ul>
+<li>name - Mandatory field. Name of the annotation. Eg: ValidPerson. You can have the package along with the annotation name. eg: <code>com.test.ValidPerson</code>. The package value given with the annotation name takes precedence over the mapped package in build.gradle.</li>
+<li>type - Optional field. This variable is used to map the annotation package in build.gradle. The package if given with annotation name will take precedence over this value. But if neither are given an empty string is used.</li>
+<li>inputs - Optional field. Contains the inputs to the annotation in key-value pairs. Eg: <code>inputs: {types: [HUSBAND, WIFE]}</code>. Inputs can be of types: String, int, float, enums, list, map, class, etc. For class inputs, refer to <em>Example with Class Object</em> </li>
+<li>target - Optional field. Refers to the site targets for the annotations. Refer to <a href="https://kotlinlang.org/docs/annotations.html#annotation-use-site-targets">use target site doc</a> for the target site available values.</li>
+</ul>
+<p>@annotate definition in the graphQL:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>&quot;Custom Annotation&quot;
+<span class="linenos" data-linenos="2 "></span>directive @annotate(
+<span class="linenos" data-linenos="3 "></span>    name: String!
+<span class="linenos" data-linenos="4 "></span>    type: String
+<span class="linenos" data-linenos="5 "></span>    inputs: JSON
+<span class="linenos" data-linenos="6 "></span>    target: String
+<span class="linenos" data-linenos="7 "></span>) repeatable on OBJECT | FIELD_DEFINITION | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+</code></pre></div>
+Custom annotations specified in the schema will require corresponding implementations by the resolvers to avoid runtime errors.
+Some examples:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>type Person @annotate(name: &quot;ValidPerson&quot;, type: &quot;validator&quot;, inputs: {types: [HUSBAND, WIFE]}) {
+<span class="linenos" data-linenos="2 "></span>       name: String @annotate(name: &quot;com.test.anotherValidator.ValidName&quot;)
+<span class="linenos" data-linenos="3 "></span>       type: String @annotate(name: &quot;ValidType&quot;, type: &quot;personType&quot;, inputs: {types: [PRIMARY, SECONDARY]}) 
+<span class="linenos" data-linenos="4 "></span>}
+</code></pre></div>
+The package mapping for the annotation and enums can be provided in the build.gradle file.
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="o">...</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">generateCustomAnnotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">    </span><span class="n">includeImports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;validator&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;com.test.validator&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos="5 "></span><span class="w">    </span><span class="n">includeEnumImports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;ValidPerson&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;types&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;com.enums&quot;</span><span class="o">]]</span>
+<span class="linenos" data-linenos="6 "></span><span class="o">}</span>
+</code></pre></div>
+Generated POJO in Java. <strong>Please note that this feature is also available in Kotlin.</strong>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>package com.netflix.graphql.dgs.codegen.tests.generated.types;
+<span class="linenos" data-linenos=" 2 "></span>
+<span class="linenos" data-linenos=" 3 "></span>import com.test.anotherValidator.ValidName;
+<span class="linenos" data-linenos=" 4 "></span>import com.test.validator.ValidPerson;
+<span class="linenos" data-linenos=" 5 "></span>import java.lang.Object;
+<span class="linenos" data-linenos=" 6 "></span>import java.lang.Override;
+<span class="linenos" data-linenos=" 7 "></span>import java.lang.String;
+<span class="linenos" data-linenos=" 8 "></span>
+<span class="linenos" data-linenos=" 9 "></span>@ValidPerson(
+<span class="linenos" data-linenos="10 "></span>    types = [com.enums.HUSBAND, com.enums.WIFE]
+<span class="linenos" data-linenos="11 "></span>)
+<span class="linenos" data-linenos="12 "></span>public class Person {
+<span class="linenos" data-linenos="13 "></span>  @ValidName
+<span class="linenos" data-linenos="14 "></span>  private String name;
+<span class="linenos" data-linenos="15 "></span>
+<span class="linenos" data-linenos="16 "></span>  @ValidType(
+<span class="linenos" data-linenos="17 "></span>      types = [com.personType.enum.PRIMARY, com.personType.enum.SECONDARY]
+<span class="linenos" data-linenos="18 "></span>  )
+<span class="linenos" data-linenos="19 "></span>  private String type;
+<span class="linenos" data-linenos="20 "></span>
+<span class="linenos" data-linenos="21 "></span>  public Person() {
+<span class="linenos" data-linenos="22 "></span>  }
+<span class="linenos" data-linenos="23 "></span>
+<span class="linenos" data-linenos="24 "></span>  public Person(String name, String type) {
+<span class="linenos" data-linenos="25 "></span>    this.name = name;
+<span class="linenos" data-linenos="26 "></span>    this.type = type;
+<span class="linenos" data-linenos="27 "></span>  }
+<span class="linenos" data-linenos="28 "></span>
+<span class="linenos" data-linenos="29 "></span>  public String getName() {
+<span class="linenos" data-linenos="30 "></span>    return name;
+<span class="linenos" data-linenos="31 "></span>  }
+<span class="linenos" data-linenos="32 "></span>
+<span class="linenos" data-linenos="33 "></span>  public void setName(String name) {
+<span class="linenos" data-linenos="34 "></span>    this.name = name;
+<span class="linenos" data-linenos="35 "></span>  }
+<span class="linenos" data-linenos="36 "></span>
+<span class="linenos" data-linenos="37 "></span>  public String getType() {
+<span class="linenos" data-linenos="38 "></span>    return type;
+<span class="linenos" data-linenos="39 "></span>  }
+<span class="linenos" data-linenos="40 "></span>
+<span class="linenos" data-linenos="41 "></span>  public void setType(String type) {
+<span class="linenos" data-linenos="42 "></span>    this.type = type;
+<span class="linenos" data-linenos="43 "></span>  }
+<span class="linenos" data-linenos="44 "></span>
+<span class="linenos" data-linenos="45 "></span>  @Override
+<span class="linenos" data-linenos="46 "></span>  public String toString() {
+<span class="linenos" data-linenos="47 "></span>    return &quot;Person{&quot; + &quot;name=&#39;&quot; + name + &quot;&#39;,&quot; +&quot;type=&#39;&quot; + type + &quot;&#39;&quot; +&quot;}&quot;;
+<span class="linenos" data-linenos="48 "></span>  }
+<span class="linenos" data-linenos="49 "></span>
+<span class="linenos" data-linenos="50 "></span>  @Override
+<span class="linenos" data-linenos="51 "></span>  public boolean equals(Object o) {
+<span class="linenos" data-linenos="52 "></span>    if (this == o) return true;
+<span class="linenos" data-linenos="53 "></span>        if (o == null || getClass() != o.getClass()) return false;
+<span class="linenos" data-linenos="54 "></span>        Person that = (Person) o;
+<span class="linenos" data-linenos="55 "></span>        return java.util.Objects.equals(name, that.name) &amp;&amp;
+<span class="linenos" data-linenos="56 "></span>                            java.util.Objects.equals(type, that.type);
+<span class="linenos" data-linenos="57 "></span>  }
+<span class="linenos" data-linenos="58 "></span>
+<span class="linenos" data-linenos="59 "></span>  @Override
+<span class="linenos" data-linenos="60 "></span>  public int hashCode() {
+<span class="linenos" data-linenos="61 "></span>    return java.util.Objects.hash(name, type);
+<span class="linenos" data-linenos="62 "></span>  }
+<span class="linenos" data-linenos="63 "></span>}
+</code></pre></div></p>
+<p>Example with Class Object:</p>
+<p>Since GraphQL parser does not have built-in support for class objects, a class is represented as a string ending with ".class" in the schema</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>type Person @annotate(name: &quot;ValidPerson&quot;, type: &quot;validator&quot;, inputs: {groups: &quot;BasicValidation.class&quot;}) {
+<span class="linenos" data-linenos="2 "></span>    name: String @annotate(name: &quot;com.test.anotherValidator.ValidName&quot;)
+<span class="linenos" data-linenos="3 "></span>}
+</code></pre></div>
+The package mapping for the annotation and classes can be provided in the build.gradle file. If mapping is not provided, input will be treated as a string.</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="o">...</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">generateCustomAnnotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="o">,</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">    </span><span class="n">includeImports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapOf</span><span class="o">(</span><span class="n">Pair</span><span class="o">(</span><span class="s2">&quot;validator&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;com.test.validator&quot;</span><span class="o">)),</span>
+<span class="linenos" data-linenos="5 "></span><span class="w">    </span><span class="n">includeClassImports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapOf</span><span class="o">(</span><span class="s2">&quot;ValidPerson&quot;</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">mapOf</span><span class="o">(</span><span class="n">Pair</span><span class="o">(</span><span class="s2">&quot;BasicValidation&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;com.test.validator.groups&quot;</span><span class="o">)))</span>
+<span class="linenos" data-linenos="6 "></span><span class="o">}</span>
+</code></pre></div>
+Generated POJO in Java. <em>Note: In Kotlin, using the same schema above will generate <code>BasicValidation::class</code></em>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>package com.netflix.graphql.dgs.codegen.tests.generated.types;
+<span class="linenos" data-linenos=" 2 "></span>
+<span class="linenos" data-linenos=" 3 "></span>import com.test.anotherValidator.ValidName;
+<span class="linenos" data-linenos=" 4 "></span>import com.test.validator.ValidPerson;
+<span class="linenos" data-linenos=" 5 "></span>import com.test.validator.groups.BasicValidation;
+<span class="linenos" data-linenos=" 6 "></span>import java.lang.Object;
+<span class="linenos" data-linenos=" 7 "></span>import java.lang.Override;
+<span class="linenos" data-linenos=" 8 "></span>import java.lang.String;
+<span class="linenos" data-linenos=" 9 "></span>
+<span class="linenos" data-linenos="10 "></span>@ValidPerson(
+<span class="linenos" data-linenos="11 "></span>    groups = BasicValidation.class
+<span class="linenos" data-linenos="12 "></span>)
+<span class="linenos" data-linenos="13 "></span>public class Person {
+<span class="linenos" data-linenos="14 "></span>  @ValidName
+<span class="linenos" data-linenos="15 "></span>  private String name;
+<span class="linenos" data-linenos="16 "></span>
+<span class="linenos" data-linenos="17 "></span>  public Person() {
+<span class="linenos" data-linenos="18 "></span>  }
+<span class="linenos" data-linenos="19 "></span>
+<span class="linenos" data-linenos="20 "></span>  public Person(String name) {
+<span class="linenos" data-linenos="21 "></span>    this.name = name;
+<span class="linenos" data-linenos="22 "></span>  }
+<span class="linenos" data-linenos="23 "></span>
+<span class="linenos" data-linenos="24 "></span>  public String getName() {
+<span class="linenos" data-linenos="25 "></span>    return name;
+<span class="linenos" data-linenos="26 "></span>  }
+<span class="linenos" data-linenos="27 "></span>
+<span class="linenos" data-linenos="28 "></span>  public void setName(String name) {
+<span class="linenos" data-linenos="29 "></span>    this.name = name;
+<span class="linenos" data-linenos="30 "></span>  }
+<span class="linenos" data-linenos="31 "></span>
+<span class="linenos" data-linenos="32 "></span>  @Override
+<span class="linenos" data-linenos="33 "></span>  public String toString() {
+<span class="linenos" data-linenos="34 "></span>    return &quot;Person{&quot; + &quot;name=&#39;&quot; + name + &quot;&#39;&quot; +&quot;}&quot;;
+<span class="linenos" data-linenos="35 "></span>  }
+<span class="linenos" data-linenos="36 "></span>
+<span class="linenos" data-linenos="37 "></span>  @Override
+<span class="linenos" data-linenos="38 "></span>  public boolean equals(Object o) {
+<span class="linenos" data-linenos="39 "></span>    if (this == o) return true;
+<span class="linenos" data-linenos="40 "></span>        if (o == null || getClass() != o.getClass()) return false;
+<span class="linenos" data-linenos="41 "></span>        Person that = (Person) o;
+<span class="linenos" data-linenos="42 "></span>        return java.util.Objects.equals(name, that.name);
+<span class="linenos" data-linenos="43 "></span>  }
+<span class="linenos" data-linenos="44 "></span>
+<span class="linenos" data-linenos="45 "></span>  @Override
+<span class="linenos" data-linenos="46 "></span>  public int hashCode() {
+<span class="linenos" data-linenos="47 "></span>    return java.util.Objects.hash(name);
+<span class="linenos" data-linenos="48 "></span>  }
+<span class="linenos" data-linenos="49 "></span>}
+</code></pre></div></p>
+<p>Example with target site:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>type Person @deprecated(reason: &quot;This is going bye bye&quot;) @annotate(name: &quot;ValidPerson&quot;, type: &quot;validator&quot;, inputs: {types: [HUSBAND, WIFE]}) {
+<span class="linenos" data-linenos="2 "></span>    name: String @annotate(name: &quot;com.test.anotherValidator.ValidName&quot;, target: &quot;field&quot;) @annotate(name: &quot;com.test.nullValidator.NullValue&quot;)
+<span class="linenos" data-linenos="3 "></span>}
+</code></pre></div>
+Generated POJO in Java.
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>package com.netflix.graphql.dgs.codegen.tests.generated.types;
+<span class="linenos" data-linenos=" 2 "></span>
+<span class="linenos" data-linenos=" 3 "></span>import com.test.anotherValidator.ValidName;
+<span class="linenos" data-linenos=" 4 "></span>import com.test.nullValidator.NullValue;
+<span class="linenos" data-linenos=" 5 "></span>import com.test.validator.ValidPerson;
+<span class="linenos" data-linenos=" 6 "></span>import java.lang.Deprecated;
+<span class="linenos" data-linenos=" 7 "></span>import java.lang.Object;
+<span class="linenos" data-linenos=" 8 "></span>import java.lang.Override;
+<span class="linenos" data-linenos=" 9 "></span>import java.lang.String;
+<span class="linenos" data-linenos="10 "></span>
+<span class="linenos" data-linenos="11 "></span>/**
+<span class="linenos" data-linenos="12 "></span> * This is going bye bye
+<span class="linenos" data-linenos="13 "></span> */
+<span class="linenos" data-linenos="14 "></span>@Deprecated
+<span class="linenos" data-linenos="15 "></span>@ValidPerson(
+<span class="linenos" data-linenos="16 "></span>    types = [com.enums.HUSBAND, com.enums.WIFE]
+<span class="linenos" data-linenos="17 "></span>)
+<span class="linenos" data-linenos="18 "></span>public class Person {
+<span class="linenos" data-linenos="19 "></span>  @ValidName
+<span class="linenos" data-linenos="20 "></span>  @NullValue
+<span class="linenos" data-linenos="21 "></span>  private String name;
+<span class="linenos" data-linenos="22 "></span>
+<span class="linenos" data-linenos="23 "></span>  public Person() {
+<span class="linenos" data-linenos="24 "></span>  }
+<span class="linenos" data-linenos="25 "></span>
+<span class="linenos" data-linenos="26 "></span>  public Person(String name) {
+<span class="linenos" data-linenos="27 "></span>    this.name = name;
+<span class="linenos" data-linenos="28 "></span>  }
+<span class="linenos" data-linenos="29 "></span>
+<span class="linenos" data-linenos="30 "></span>  public String getName() {
+<span class="linenos" data-linenos="31 "></span>    return name;
+<span class="linenos" data-linenos="32 "></span>  }
+<span class="linenos" data-linenos="33 "></span>
+<span class="linenos" data-linenos="34 "></span>  public void setName(String name) {
+<span class="linenos" data-linenos="35 "></span>    this.name = name;
+<span class="linenos" data-linenos="36 "></span>  }
+<span class="linenos" data-linenos="37 "></span>
+<span class="linenos" data-linenos="38 "></span>  @Override
+<span class="linenos" data-linenos="39 "></span>  public String toString() {
+<span class="linenos" data-linenos="40 "></span>    return &quot;Person{&quot; + &quot;name=&#39;&quot; + name + &quot;&#39;&quot; +&quot;}&quot;;
+<span class="linenos" data-linenos="41 "></span>  }
+<span class="linenos" data-linenos="42 "></span>
+<span class="linenos" data-linenos="43 "></span>  @Override
+<span class="linenos" data-linenos="44 "></span>  public boolean equals(Object o) {
+<span class="linenos" data-linenos="45 "></span>    if (this == o) return true;
+<span class="linenos" data-linenos="46 "></span>        if (o == null || getClass() != o.getClass()) return false;
+<span class="linenos" data-linenos="47 "></span>        Person that = (Person) o;
+<span class="linenos" data-linenos="48 "></span>        return java.util.Objects.equals(name, that.name);
+<span class="linenos" data-linenos="49 "></span>  }
+<span class="linenos" data-linenos="50 "></span>
+<span class="linenos" data-linenos="51 "></span>  @Override
+<span class="linenos" data-linenos="52 "></span>  public int hashCode() {
+<span class="linenos" data-linenos="53 "></span>    return java.util.Objects.hash(name);
+<span class="linenos" data-linenos="54 "></span>  }
+<span class="linenos" data-linenos="55 "></span>}
+</code></pre></div></p>
+<h1 id="configuring-code-generation">Configuring code generation<a class="headerlink" href="#configuring-code-generation" title="Permanent link">&para;</a></h1>
+<p>Code generation has many configuration switches.
+The following table shows the Gradle configuration options, but the same options are available command line and in Maven as well.</p>
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Description</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>schemaPaths</td>
+<td>List of files/directories containing schemas</td>
+<td>src/main/resources/schema</td>
+</tr>
+<tr>
+<td>packageName</td>
+<td>Base package name of generated code</td>
+<td></td>
+</tr>
+<tr>
+<td>subPackageNameClient</td>
+<td>Sub package name for generated Query API</td>
+<td>client</td>
+</tr>
+<tr>
+<td>subPackageNameDatafetchers</td>
+<td>Sub package name for generated data fetchers</td>
+<td>datafetchers</td>
+</tr>
+<tr>
+<td>subPackageNameTypes</td>
+<td>Sub package name for generated data types</td>
+<td>types</td>
+</tr>
+<tr>
+<td>language</td>
+<td>Either <code>java</code> or <code>kotlin</code></td>
+<td>Autodetected from project</td>
+</tr>
+<tr>
+<td>typeMapping</td>
+<td>A Map where each key is a GraphQL type, and the value the FQN of a Java class</td>
+<td></td>
+</tr>
+<tr>
+<td>generateBoxedTypes</td>
+<td>Always use boxed types for primitives</td>
+<td>false (boxed types are used only for nullable fields)</td>
+</tr>
+<tr>
+<td>generateClient</td>
+<td>Generate a Query API. This is version 1 of the API, which will be deprecated soon.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>generateClientv2</td>
+<td>Generate a Query API. This is version 2 of the API.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>generateDataTypes</td>
+<td>Generate data types. Useful for only generating a Query API. Input types are still generated when <code>generateClientv2</code> is true.</td>
+<td>true</td>
+</tr>
+<tr>
+<td>generateInterfaces</td>
+<td>Generate interfaces for data classes. This is useful if you would like to extend the generated POJOs for more context and use interfaces instead of the data classes in your data fetchers.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>generatedSourcesDir</td>
+<td>Build directory for Gradle</td>
+<td>build</td>
+</tr>
+<tr>
+<td>includeQueries</td>
+<td>Generate Query API only for the given list of Query fields</td>
+<td>All queries defined in schema</td>
+</tr>
+<tr>
+<td>includeMutations</td>
+<td>Generate Query API only for the given list of Mutation fields</td>
+<td>All mutations defined in schema</td>
+</tr>
+<tr>
+<td>includeSubscriptions</td>
+<td>Generate Query API only for the given list of Subscription fields</td>
+<td>All subscriptions defined in schema</td>
+</tr>
+<tr>
+<td>skipEntityQueries</td>
+<td>Disable generating Entity queries for federated types</td>
+<td>false</td>
+</tr>
+<tr>
+<td>shortProjectionNames</td>
+<td>Shorten class names of projection types. These types are not visible to the developer.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>maxProjectionDepth</td>
+<td>Maximum projection depth to generate. Useful for (federated) schemas with very deep nesting</td>
+<td>10</td>
+</tr>
+<tr>
+<td>includeImports</td>
+<td>Maps the custom annotation type to the package, the annotations belong to. Only used when generateCustomAnnotations is enabled.</td>
+<td></td>
+</tr>
+<tr>
+<td>includeEnumImports</td>
+<td>Maps the custom annotation and enum argument names to the enum packages. Only used when generateCustomAnnotations is enabled.</td>
+<td></td>
+</tr>
+<tr>
+<td>includeClassImports</td>
+<td>Maps the custom annotation and class names to the class packages. Only used when generateCustomAnnotations is enabled.</td>
+<td></td>
+</tr>
+<tr>
+<td>generateCustomAnnotations</td>
+<td>Enable/disable generation of custom annotation</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.b4d07000.min.js"></script>
+      
+        <script src="../js/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
