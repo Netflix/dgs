@@ -24,11 +24,12 @@ If your application is on Spring Boot 2.6, you will need to use 5.4.x or earlier
 The DGS and Spring-GraphQL teams are super excited to introduce deep integration between the DGS framework and Spring-GraphQL.
 This will bring the community together, and we can continue building the best possible GraphQL framework for Spring Boot in the future.
 For the time being, we will offer 2 flavors of the DGS Framework - one with the vanilla version, and a version that integrates with spring-graphql via different starters.
-There are no breaking changes to users as the changes are mostly internal to the framework. 
+There are no breaking changes to users as the changes are mostly internal to the framework and the spring-graphql integration should be a drop-in replacement for the existing framework.
+For this reason, we encourage new and existing DGSs to use our spring-graphql starter as much as possible, as this will be the default offering in the future.
 You can read more about the motivation behind integrating with spring-graphql and the details of the integration [here](spring-graphql-integration.md).
-We encourage new and existing DGSs to use our spring-graphql starter as much as possible, as this will be the default offering in the future. 
 
-## Adding the DGS Framework with Spring GraphQL 
+
+## Adding the DGS Framework dependency with Spring GraphQL 
 Add the platform dependencies to your Gradle or Maven configuration.
 The `com.netflix.graphql.dgs:graphql-dgs-platform-dependencies` dependency is a [platform/BOM dependency](https://netflix.github.io/dgs/advanced/platform-bom/), which aligns the versions of the individual modules and transitive dependencies of the framework.
 The `com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter` is a Spring Boot starter that includes everything you need to get started building a DGS that uses Spring GraphQL.
@@ -68,7 +69,7 @@ mavenCentral()
 ```
 
 ## Adding the DGS Framework Dependency
-If you would like to still choose the usual DGS Framework, continue reading this section for details on the setup.
+If you would like to still choose the non-spring graphql starter of DGS Framework, continue reading this section for details on the setup.
 
 Add the platform dependencies to your Gradle or Maven configuration.
 The `com.netflix.graphql.dgs:graphql-dgs-platform-dependencies` dependency is a [platform/BOM dependency](https://netflix.github.io/dgs/advanced/platform-bom/), which aligns the versions of the individual modules and transitive dependencies of the framework.

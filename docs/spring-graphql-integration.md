@@ -37,7 +37,7 @@ With this integration, you can pull in additional features from Spring GraphQL.
 We also eliminate the need for part of the DGS code that integrates the framework with Spring MVC/WebFlux, since there isn't much benefit to duplicating low level functionality.
 
 For the near term, the DGS/Spring-Graphql integration will be available as an opt-in feature via a different spring-graphql flavor of the DGS starter. 
-We plan to make this the default mode in the long term after we see some level of successful adoption.
+We plan to make this the default mode towards the latter part the year, after we see some level of successful adoption.
 
 ## Technical implementation
 Both DGS and Spring-GraphQL are designed with modularity and extensibility in mind. This makes it feasible to integrate the two frameworks. The following diagrams show how the frameworks are integrated at a high level.
@@ -63,7 +63,7 @@ The Spring team has quickly addressed these issues, and the performance is now e
 The good news is that the new integration has been mostly a drop-in replacement, not requiring any breaking code changes for the user. 
 Besides the features and changes listed in this section, everything else should continue to work as expected.
 
-## DGS Configuration with Spring GraphQL
+### DGS Configuration with Spring GraphQL
 There is some overlap between configuration properties for DGS and Spring-GraphQL. Where properties overlap, we use the DGS property for the best backward compatibility. The following list is the overlapping properties.
 
 | *DGS property* | *Spring-GraphQL property* | *What to use* |
@@ -72,12 +72,12 @@ There is some overlap between configuration properties for DGS and Spring-GraphQ
 | N/A | `spring.graphql.schema.fileExtensions` | Not applicable, because `dgs.graphql.schema-locations` includes the path |
 | `dgs.graphql.graphiql.enabled` | `spring.graphql.graphiql.enabled` | Use `dgs.graphql.graphiql.enabled` |
 | `dgs.graphql.graphiql.path` | `spring.graphql.graphiql.path` | Use `dgs.graphql.graphiql.path` |
-| `dgs.graphql.
+| `dgs.graphql.websocket.connection-init-timeout` | `spring.graphql.websocket.connection-init-timeout` | DGS property sets the Spring-GraphQL property | 
 
 
 ### File Uploads
 Support for file uploads will no longer be available by default in the DGS framework. 
-This is supported via an external dependency for spring-graphql via [multipart-spring-graphql](https://github.com/nkonev/multipart-spring-graphql).
+This is supported using an external dependency for spring-graphql via [multipart-spring-graphql](https://github.com/nkonev/multipart-spring-graphql).
 
 ### Schema Inspection
 You can now inspect your schema using Spring GraphQL's [schema inspection] (https://docs.spring.io/spring-graphql/reference/request-execution.html#execution.graphqlsource.schema-mapping-inspection) feature for DGS data fetchers as well.
@@ -85,15 +85,15 @@ You can now inspect schema fields and validate existing DGS data fetcher/and or 
 The inspection also performs a reverse check looking for DataFetcher registrations against schema fields that don’t exist.
 
 ### Testing DGS Data Fetchers
-For testing individual data fetchers without the web layer, you can continue using the existing testing framework provided via `DGSQueryExecutor` interface. 
-We have provided a Spring GraphQL flavor of the `DGSQueryExecutor` that will continue to work as it does today.
+For testing individual data fetchers without the web layer, you can continue using the existing testing framework provided via `DgsQueryExecutor` interface. 
+We have provided a Spring GraphQL flavor of the `DgsQueryExecutor` that will continue to work as it does today.
 Please refer to our testing docs for more details on writing [data fetcher tests](query-execution-testing.md).
 
 For integration testing with the web layer, you can also use the MockMvc test set up that Spring provides.
 It is worth noting that with the Spring GraphQL integration, your MockMVC test set up does need to be updated.
 Since web request processing is now based on async dispatching mechanism, we now [require explicit handling for this](https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework/async-requests.html) in the test setup. 
 
-As an alternative, you can also use the [recommended `HttpGraphQlTester` with `@MockMvc` available in Spring GraphQL](https://docs.spring.io/spring-graphql/docs/1.0.0-M2/reference/html/#boot-graphql-testing) to achieve the same.
+As an alternative, you can also use the [recommended `HttpGraphQlTester` with MockMvc available in Spring GraphQL](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#features.testing.spring-boot-applications.spring-graphql-tests) to achieve the same.
 This works just as well for testing your DGS with a mock web layer as shown in the example below:
 
 ```java
@@ -117,4 +117,3 @@ public class HttpGraphQlTesterTest {
 At this time, we are lacking support for SSE based subscriptions and Persisted Queries that are available in the original DGS Framework. 
 These are on the roadmap and will be made available in the near future depending on support in spring-graphql. 
 
-websocket.connection-init-timeout` | `spring.graphql.websocket.connection-init-timeout` | DGS property sets the Spring-GraphQL property | 
