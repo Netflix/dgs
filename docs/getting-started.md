@@ -19,7 +19,56 @@ You will also need JDK 17.
 If your application is on Spring Boot 2.7, you will need to use the 5.5.x release train of the DGS framework.
 If your application is on Spring Boot 2.6, you will need to use 5.4.x or earlier.
 
+
+## DGS Framework now using Spring GraphQL!
+The DGS and Spring-GraphQL teams are super excited to introduce deep integration between the DGS framework and Spring-GraphQL.
+This will bring the community together, and we can continue building the best possible GraphQL framework for Spring Boot in the future.
+For the time being, we will offer 2 flavors of the DGS Framework - one with the vanilla version, and a version that integrates with spring-graphql via different starters.
+There are no breaking changes to users as the changes are mostly internal to the framework. 
+You can read more about the motivation behind integrating with spring-graphql and the details of the integration [here](spring-graphql-integration.md).
+We encourage new and existing DGSs to use our spring-graphql starter as much as possible, as this will be the default offering in the future. 
+
+## Adding the DGS Framework with Spring GraphQL 
+Add the platform dependencies to your Gradle or Maven configuration.
+The `com.netflix.graphql.dgs:graphql-dgs-platform-dependencies` dependency is a [platform/BOM dependency](https://netflix.github.io/dgs/advanced/platform-bom/), which aligns the versions of the individual modules and transitive dependencies of the framework.
+The `com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter` is a Spring Boot starter that includes everything you need to get started building a DGS that uses Spring GraphQL.
+In addition, you will need to explicitly add `org.springframework.boot:spring-boot-starter-web` or `org.springframework.boot:spring-boot-starter-webflux` depending on the stack you are using.
+
+=== "Gradle"
+```groovy
+repositories {
+mavenCentral()
+}
+
+    dependencyManagement {
+        imports {
+           mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release")
+        }
+    }
+
+    dependencies {
+        implementation "com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter"
+    }
+```
+=== "Gradle Kotlin"
+```kotlin
+repositories {
+mavenCentral()
+}
+
+    dependencyManagement {
+        imports {
+           mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release")
+        }
+    }
+
+    dependencies {
+        implementation("com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter")
+    }
+```
+
 ## Adding the DGS Framework Dependency
+If you would like to still choose the usual DGS Framework, continue reading this section for details on the setup.
 
 Add the platform dependencies to your Gradle or Maven configuration.
 The `com.netflix.graphql.dgs:graphql-dgs-platform-dependencies` dependency is a [platform/BOM dependency](https://netflix.github.io/dgs/advanced/platform-bom/), which aligns the versions of the individual modules and transitive dependencies of the framework.
@@ -66,7 +115,7 @@ If you're building on top of `WebFlux`, use `com.netflix.graphql.dgs:graphql-dgs
                 <groupId>com.netflix.graphql.dgs</groupId>
                 <artifactId>graphql-dgs-platform-dependencies</artifactId>
                 <!-- The DGS BOM/platform dependency. This is the only place you set version of DGS -->
-                <version>4.9.16</version>
+                <version>6.x.x</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -130,8 +179,10 @@ This schema allows querying for a list of shows, optionally filtering by title.
 ## Implement a Data Fetcher
 
 Data fetchers are responsible for returning data for a query.
+With the new Spring-GraphQL integration, it is technically possible to mix and match the DGS/Spring-GraphQL programming models. 
+However, to maintain consistency in your codebase and to take full advantage of DGS features, we recommend sticking with the DGS programming model.
+
 Create two new classes `example.ShowsDataFetcher` and `Show` and add the following code.
-Note that we have a [Codegen plugin](../generating-code-from-schema) that can do this automatically, but in this guide we'll manually write the classes.
 
 === "Java"
     ```java

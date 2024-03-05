@@ -11,6 +11,7 @@ If you have defined your own custom exception handlers, you will need to switch 
 
 ### DGS Framework 7.0.0 (May 15, 2023)
 The latest 7.0.0 release updates the version of graphql-java from graphql-java-19.5 -> graphql-java [20.2](https://github.com/graphql-java/graphql-java/releases/tag/v20.2). Graphql-java-20.0 introduces breaking changes. Refer to the notes [here](https://github.com/graphql-java/graphql-java/releases/tag/v20.0).
+Timnp247!
 
 Other dependencies updated include :
 
