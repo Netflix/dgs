@@ -63,6 +63,18 @@ The Spring team has quickly addressed these issues, and the performance is now e
 The good news is that the new integration has been mostly a drop-in replacement, not requiring any breaking code changes for the user. 
 Besides the features and changes listed in this section, everything else should continue to work as expected.
 
+## DGS Configuration with Spring GraphQL
+There is some overlap between configuration properties for DGS and Spring-GraphQL. Where properties overlap, we use the DGS property for the best backward compatibility. The following list is the overlapping properties.
+
+| *DGS property* | *Spring-GraphQL property* | *What to use* |
+|----|----| ----- |
+| `dgs.graphql.schema-locations` | `spring.graphql.schema.locations` |  Use `dgs.graphql.schema-locations` |
+| N/A | `spring.graphql.schema.fileExtensions` | Not applicable, because `dgs.graphql.schema-locations` includes the path |
+| `dgs.graphql.graphiql.enabled` | `spring.graphql.graphiql.enabled` | Use `dgs.graphql.graphiql.enabled` |
+| `dgs.graphql.graphiql.path` | `spring.graphql.graphiql.path` | Use `dgs.graphql.graphiql.path` |
+| `dgs.graphql.
+
+
 ### File Uploads
 Support for file uploads will no longer be available by default in the DGS framework. 
 This is supported via an external dependency for spring-graphql via [multipart-spring-graphql](https://github.com/nkonev/multipart-spring-graphql).
@@ -104,3 +116,5 @@ public class HttpGraphQlTesterTest {
 ## Known Gaps
 At this time, we are lacking support for SSE based subscriptions and Persisted Queries that are available in the original DGS Framework. 
 These are on the roadmap and will be made available in the near future depending on support in spring-graphql. 
+
+websocket.connection-init-timeout` | `spring.graphql.websocket.connection-init-timeout` | DGS property sets the Spring-GraphQL property | 
