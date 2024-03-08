@@ -1,11 +1,16 @@
-## DGS Framework now using Spring GraphQL!
-The DGS and Spring-GraphQL teams are super excited to introduce deep integration between the DGS framework and Spring-GraphQL. 
-This will bring the community together, and we can continue building the best possible GraphQL framework for Spring Boot in the future.
+## Spring GraphQL Integration 
+The DGS Framework now integrates with Spring GraphQL internally.
+Users can continue using the DGS framework as is without additional changes.
+Please refer to out [Getting Started guide](./getting-started.md) for more details.
+The integration with Spring GraphQL will allow DGS users to take advantage of any new features that Spring GraphQL has to offer without having to reimplement it in the framework.
+While it is technically possible to mix and match the DGS/Spring-GraphQL programming models, we recommend sticking with the DGS programming model for now, if using the DGS Framework.
+By the DGS programming model, we refer primarily to DGS specific concepts, such as the annotations for setting up data fetchers, data loaders etc.
+This will allow users to maintain consistency in the codebase and take full advantage of DGS capabilities.
 
-
-With this integration, it is technically possible to mix and match the DGS/Spring-GraphQL programming models. 
-However, to maintain consistency in your codebase and to take full advantage of DGS features, we recommend sticking with the DGS programming model. 
-Additional features from spring-graphql will be available via existing spring-graphql extensions, such as [multipart-spring-graphql](https://github.com/nkonev/multipart-spring-graphql) and the [Subscription Callback mechanism](https://github.com/apollographql/federation-jvm/pull/354) in the JVM Federation library.
+It is important to note that Spring GraphQL and the DGS framework offer many similar features that may differ in capabilities. 
+For that reason, Spring GraphQL features work best for Spring GraphQL style resolvers and vice versa.
+A nice benefit to integrating with Spring GraphQL, is that it paves a way for new features in Spring GraphQL to be used in the DGS Framework.
+These will be available via existing spring-graphql extensions, such as the [Subscription Callback mechanism](https://github.com/apollographql/federation-jvm/pull/354) in the JVM Federation library.
 
 Continue reading to know more about how to use [Spring GraphQL] (https://docs.spring.io/spring-graphql/reference/index.html) with the DGS Framework.
 
@@ -14,9 +19,7 @@ The DGS Framework provides Java developers with a programming model on top of Sp
 Netflix open-sourced the DGS framework in 2021, and has been the widely adopted GraphQL Java framework by many companies.
 
 While we continued adoption and development on the DGS Framework, the team at Spring were also exploring GraphQL support for Spring Boot. 
-This effort was already underway prior to open-sourcing the DGS framework, while the Spring GraphQL efforts were also yet to be announced. 
-After open sourcing the framework, both teams convened to discuss the current state and future direction. 
-At the time Spring GraphQL was not as feature rich in comparison to the DGS Framework and we both  decided to continue what we were doing. 
+This effort was already underway prior to open-sourcing the DGS framework.
 While both the frameworks started with different goals and approaches, over the past year, Spring-GraphQL has matured and reached feature parity with many aspects of the DGS framework. 
 This resulted in two "competing" frameworks in the community that largely solved the same problem.
 
@@ -24,13 +27,13 @@ Today, new users must choose between one or the other, raising questions about w
 It might also mean missing out on features available in one framework but not the other. This is not an ideal situation for the Java/GraphQL community.
 
 For the maintainers of both frameworks, it would be much more efficient to collaborate on features and improvements instead of having to solve the same problem twice. 
-Notably, bringing the communities together is a highly desirable goal!
+Notably, bringing the communities together is a highly desirable goal.
 
 ### Why not just EOL one of the frameworks?
 The DGS framework is widely used and plays a vital role in the architecture of many companies, including Netflix. 
 Moving away from the framework in favor of Spring-GraphQL would be a costly migration without any real benefits.
 
-Although Spring-GraphQL doesn't have the user base of DGS, it makes sense from a Spring Framework perspective to have an out-of-the-box GraphQL offering, just like Spring supports REST.
+From a Spring Framework perspective, it makes sense to have an out-of-the-box GraphQL offering, just like Spring supports REST.
 
 ## The way forward
 With this integration, you can pull in additional features from Spring GraphQL. 

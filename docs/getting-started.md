@@ -20,9 +20,9 @@ If your application is on Spring Boot 2.7, you will need to use the 5.5.x releas
 If your application is on Spring Boot 2.6, you will need to use 5.4.x or earlier.
 
 
-## DGS Framework now using Spring GraphQL!
-The DGS and Spring-GraphQL teams are super excited to introduce deep integration between the DGS framework and Spring-GraphQL.
-This will bring the community together, and we can continue building the best possible GraphQL framework for Spring Boot in the future.
+## DGS Framework with Spring GraphQL
+The DGS Framework has been updated to deeply integrate with Spring GraphQL. 
+For more details on the motivation and implementation, please refer to the docs [here](./spring-graphql-integration.md)
 For the time being, we will offer 2 flavors of the DGS Framework - one with the vanilla version, and a version that integrates with spring-graphql via different starters.
 There are no breaking changes to users as the changes are mostly internal to the framework and the spring-graphql integration should be a drop-in replacement for the existing framework.
 For this reason, we encourage new and existing DGSs to use our spring-graphql starter as much as possible, as this will be the default offering in the future.
