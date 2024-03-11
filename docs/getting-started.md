@@ -66,7 +66,7 @@ If you're building on top of `WebFlux`, use `com.netflix.graphql.dgs:graphql-dgs
                 <groupId>com.netflix.graphql.dgs</groupId>
                 <artifactId>graphql-dgs-platform-dependencies</artifactId>
                 <!-- The DGS BOM/platform dependency. This is the only place you set version of DGS -->
-                <version>4.9.16</version>
+                <version>[LATEST_VERSION]</version> <!-- Replace [LATEST_VERSION] with the [latest available version](https://mvnrepository.com/artifact/com.netflix.graphql.dgs/graphql-dgs-platform-dependencies) -->
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
