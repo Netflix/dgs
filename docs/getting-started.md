@@ -136,7 +136,7 @@ Note that we have a [Codegen plugin](../generating-code-from-schema) that can do
 === "Java"
     ```java
     @DgsComponent
-    public class ShowsDatafetcher {
+    public class ShowsDataFetcher {
 
         private final List<Show> shows = List.of(
                 new Show("Stranger Things", 2016),
