@@ -220,6 +220,14 @@ Start the application and open a browser to http://localhost:8080/graphiql.
 GraphiQL is a query editor that comes out of the box with the DGS framework.
 Write the following query and tests the result.
 
+```shell
+gradle bootRun
+```
+
+```shell
+mvn spring-boot:run
+```
+
 ```graphql
 {
     shows {
