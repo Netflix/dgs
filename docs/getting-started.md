@@ -135,6 +135,13 @@ Note that we have a [Codegen plugin](../generating-code-from-schema) that can do
 
 === "Java"
     ```java
+    import java.util.List;
+    import java.util.stream.Collectors;
+
+    import com.netflix.graphql.dgs.DgsComponent;
+    import com.netflix.graphql.dgs.DgsQuery;
+    import com.netflix.graphql.dgs.InputArgument;
+
     @DgsComponent
     public class ShowsDataFetcher {
 
@@ -176,6 +183,13 @@ Note that we have a [Codegen plugin](../generating-code-from-schema) that can do
     ```
 === "Kotlin"
     ```kotlin
+    import java.util.List;
+    import java.util.stream.Collectors;
+
+    import com.netflix.graphql.dgs.DgsComponent;
+    import com.netflix.graphql.dgs.DgsQuery;
+    import com.netflix.graphql.dgs.InputArgument;
+
     @DgsComponent
     class ShowsDataFetcher {
         private val shows = listOf(
