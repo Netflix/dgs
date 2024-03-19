@@ -130,7 +130,7 @@ This schema allows querying for a list of shows, optionally filtering by title.
 ## Implement a Data Fetcher
 
 Data fetchers are responsible for returning data for a query.
-Create two new classes `example.ShowsDataFetcher` and `Show` and add the following code.
+Create two new classes `com.example.demo.ShowsDataFetcher` and `com.example.demo.Show` and add the following code.
 Note that we have a [Codegen plugin](../generating-code-from-schema) that can do this automatically, but in this guide we'll manually write the classes.
 
 === "Java"
