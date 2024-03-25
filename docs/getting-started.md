@@ -130,13 +130,20 @@ This schema allows querying for a list of shows, optionally filtering by title.
 ## Implement a Data Fetcher
 
 Data fetchers are responsible for returning data for a query.
-Create two new classes `example.ShowsDataFetcher` and `Show` and add the following code.
+Create two new classes `com.example.demo.ShowsDataFetcher` and `com.example.demo.Show` and add the following code.
 Note that we have a [Codegen plugin](../generating-code-from-schema) that can do this automatically, but in this guide we'll manually write the classes.
 
 === "Java"
     ```java
+    import java.util.List;
+    import java.util.stream.Collectors;
+
+    import com.netflix.graphql.dgs.DgsComponent;
+    import com.netflix.graphql.dgs.DgsQuery;
+    import com.netflix.graphql.dgs.InputArgument;
+
     @DgsComponent
-    public class ShowsDatafetcher {
+    public class ShowsDataFetcher {
 
         private final List<Show> shows = List.of(
                 new Show("Stranger Things", 2016),
@@ -176,6 +183,13 @@ Note that we have a [Codegen plugin](../generating-code-from-schema) that can do
     ```
 === "Kotlin"
     ```kotlin
+    import java.util.List;
+    import java.util.stream.Collectors;
+
+    import com.netflix.graphql.dgs.DgsComponent;
+    import com.netflix.graphql.dgs.DgsQuery;
+    import com.netflix.graphql.dgs.InputArgument;
+
     @DgsComponent
     class ShowsDataFetcher {
         private val shows = listOf(
@@ -205,6 +219,14 @@ That's all the code needed, the application is ready to be tested!
 Start the application and open a browser to http://localhost:8080/graphiql.
 GraphiQL is a query editor that comes out of the box with the DGS framework.
 Write the following query and tests the result.
+
+```shell
+gradle bootRun
+```
+
+```shell
+mvn spring-boot:run
+```
 
 ```graphql
 {
