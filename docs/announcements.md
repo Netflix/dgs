@@ -1,8 +1,9 @@
-### Coming Soon!! DGS Framework with Spring GraphQL 
+### DGS Framework 8.5.0 with Spring GraphQL released! (March 29,2024)
 The DGS and Spring-GraphQL teams are super excited to introduce deep integration between the DGS framework and Spring-GraphQL. 
 This will bring the community together, and we can continue building the best possible GraphQL framework for Spring Boot in the future.
 We have been actively working on this integration over the past several months and are preparing for a release in the coming weeks.
 
+Check out our [release notes](https://github.com/Netflix/dgs-framework/releases/tag/v8.5.0) for all the details! Additional details are available in [here](./spring-graphql-integration.md)
 
 ### DGS Framework 8.0.0
 This release updates the graphql-java version to 21.2. 
