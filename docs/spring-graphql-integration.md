@@ -1,4 +1,3 @@
-## Spring GraphQL Integration 
 The DGS Framework now integrates with Spring GraphQL internally.
 Users can continue using the DGS framework as is without additional changes.
 Please refer to out [Getting Started guide](./getting-started.md) for more details.
@@ -49,13 +48,19 @@ Today, the DGS framework looks as follows.
 A user uses the DGS programming model, such as `@DgsComponent` and `@DgsQuery` to define data fetchers etc.
 A GraphQL query comes in through either WebMVC or WebFlux, and is executed by the `DgsQueryExecutor`, which builds on the graphql-java library to execute the query.
 The `DgsQueryExecutor` is also used directly when writing tests.
+
+
 <img width="722" alt="image" src="https://github.com/Netflix/dgs-framework/assets/109484/6bb0763a-015f-4d0a-994c-51807ecebb47">
+
 
 With the Spring-GraphQL integration, a user can write code with both the DGS programming model and/or the Spring-GraphQL programming model. 
 A GraphQL query comes in through WebMVC/WebFlux/RSocket, which Spring-GraphQL now handles. 
 The representation of the schema (a `GraphQLSchema` from graphql-java) is created by the DGS framework, and used by both the DGS and Spring GraphQL components. 
 Spring GraphQL's `ExecutionGraphQLService` now handles the actual query execution, while the DGS `QueryExecutor` becomes a proxy on top of `ExecutionGraphQLService` so that existing test code continues to work.
+
+
 ![image](https://github.com/Netflix/dgs-framework/assets/109484/a0d8a5cc-96ca-4f30-bd0a-e3bb3616689e)
+
 
 ## Performance
 At Netflix, we tested the DGS/Spring-GraphQL integration on some of our largest services. 
@@ -136,7 +141,7 @@ This is on the roadmap and will be made available in the near future depending o
 
 In the current state of integration, not all DGS features will work seamlessly for Spring GraphQL data fetchers, and vice versa.
 For this reason, we recommend using either the DGS programming model or Spring GraphQL model and not mixing both styles of APIs.
-Known limitations include data loader specific features, such as [Scheduled Dispatch] (https://netflix.github.io/dgs/data-loaders/#scheduled-data-loaders-with-dispatch-predicates)and data loader specific metrics that won't work with Spring GraphQL data loaders.
+Known limitations include data loader specific features, such as [Scheduled Dispatch](https://netflix.github.io/dgs/data-loaders/#scheduled-data-loaders-with-dispatch-predicates)and data loader specific metrics that won't work with Spring GraphQL data loaders.
 You should be able to use new Spring GraphQL features with the framework, such as schema inspection and any new integrations that are compatible with Spring GraphQL.
 
 We intend iteratively improve the state of teh integration in the coming releases based on usage patterns. 
