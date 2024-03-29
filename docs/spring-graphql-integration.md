@@ -67,7 +67,9 @@ The good news is that the new integration has been mostly a drop-in replacement,
 Besides the features and changes listed in this section, everything else should continue to work as expected.
 
 ### DGS Configuration with Spring GraphQL
-There is some overlap between configuration properties for DGS and Spring-GraphQL. Where properties overlap, we use the DGS property for the best backward compatibility. The following list is the overlapping properties.
+There is some overlap between configuration properties for DGS and Spring-GraphQL.
+Where properties overlap, we use the DGS property for the best backward compatibility. 
+The following is the list of overlapping properties:
 
 | *DGS property* | *Spring-GraphQL property* | *What to use* |
 |----|----| ----- |
@@ -77,6 +79,11 @@ There is some overlap between configuration properties for DGS and Spring-GraphQ
 | `dgs.graphql.graphiql.path` | `spring.graphql.graphiql.path` | Use `dgs.graphql.graphiql.path` |
 | `dgs.graphql.websocket.connection-init-timeout` | `spring.graphql.websocket.connection-init-timeout` | DGS property sets the Spring-GraphQL property | 
 
+New properties for Spring GraphQl integration are:
+
+| *DGS Property* | *Description*                                    |
+|---|-----|
+`dgs.graphql.spring.webmvc.asyncdispatch.enabled` | To enable async dispatching for GraphQL requests |
 
 ### File Uploads
 Support for file uploads will no longer be available by default in the DGS framework. 
@@ -93,10 +100,8 @@ We have provided a Spring GraphQL flavor of the `DgsQueryExecutor` that will con
 Please refer to our testing docs for more details on writing [data fetcher tests](query-execution-testing.md).
 
 For integration testing with the web layer, you can also use the MockMvc test set up that Spring provides.
-It is worth noting that with the Spring GraphQL integration, your MockMVC test set up does need to be updated.
-Since web request processing is now based on async dispatching mechanism, we now [require explicit handling for this](https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework/async-requests.html) in the test setup. 
 
-As an alternative, you can also use the [recommended `HttpGraphQlTester` with MockMvc available in Spring GraphQL](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#features.testing.spring-boot-applications.spring-graphql-tests) to achieve the same.
+You can also use the [recommended `HttpGraphQlTester` with MockMvc available in Spring GraphQL](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#features.testing.spring-boot-applications.spring-graphql-tests) to achieve the same.
 This works just as well for testing your DGS with a mock web layer as shown in the example below:
 
 ```java
@@ -115,6 +120,15 @@ public class HttpGraphQlTesterTest {
     }
 }
 ```
+
+### Async Dispatch
+By default, Spring GraphQL uses async dispatch for handling HTTP GraphQL Requests when using WebMVC. 
+In this DGS Framework we have turned off this behavior by default to preserve existing functionality, since it requires existing code to be async aware.
+This implies servlet filters, tests etc. need to be also async aware.
+You can turn on async behavior by setting the `dgs.graphql.spring.webmvc.asyncdispatch.enabled` to true. 
+
+It is worth noting that with the Spring GraphQL integration, your MockMVC test set up does need to be updated.
+Since web request processing is now based on async dispatching mechanism, we now [require explicit handling for this](https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework/async-requests.html) in the test setup.
 
 ## Known Gaps and Limitations
 At this time, we are lacking support for SSE based subscriptions which is available in the original DGS Framework. 
