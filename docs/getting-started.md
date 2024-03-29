@@ -16,10 +16,63 @@ Open the project in an IDE (Intellij recommended).
 ## Requirements
 The latest 6.x release and onwards will require Spring Boot 3.0 for your project. 
 You will also need JDK 17.
-If your application is on Spring Boot 2.7, you will need to use the 5.5.x release train of the DGS framework.
-If your application is on Spring Boot 2.6, you will need to use 5.4.x or earlier.
+
+## DGS Framework with Spring GraphQL
+The DGS Framework has been updated to deeply integrate with Spring GraphQL. 
+For more details on the motivation and implementation, please refer to the docs [here](./spring-graphql-integration.md)
+For the time being, we will offer 2 flavors of the DGS Framework - one with the vanilla version, and a version that integrates with spring-graphql via different starters.
+There are no breaking changes to users as the changes are mostly internal to the framework and the spring-graphql integration should be a drop-in replacement for the existing framework.
+For this reason, we encourage new and existing DGSs to use our spring-graphql starter as much as possible, as this will be the default offering in the future.
+You can read more about the motivation behind integrating with spring-graphql and the details of the integration [here](spring-graphql-integration.md).
+
+
+## Adding the DGS Framework dependency with Spring GraphQL 
+1. **Add the platform BOM** to your Gradle or Maven configuration. 
+The `com.netflix.graphql.dgs:graphql-dgs-platform-dependencies` dependency is a [platform/BOM dependency](https://netflix.github.io/dgs/advanced/platform-bom/), which aligns the versions of the individual modules and transitive dependencies of the framework.
+
+2. **Add the DGS starter**.
+The `com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter` is a Spring Boot starter that includes everything you need to get started building a DGS that uses Spring GraphQL.
+
+3. **Add the relevant Spring Boot starter for the web flavor you want to use**. 
+This would one of `org.springframework.boot:spring-boot-starter-web` or `org.springframework.boot:spring-boot-starter-webflux` depending on the stack you are using.
+
+If you want to use the regular flavor of the DGS framework without the spring-graphql starter, refer to the next section on [Adding the DGS Framework Dependency](#adding-the-dgs-framework-dependency)
+
+=== "Gradle"
+```groovy
+repositories {
+mavenCentral()
+}
+
+    dependencyManagement {
+        imports {
+           mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release")
+        }
+    }
+
+    dependencies {
+        implementation "com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter"
+    }
+```
+=== "Gradle Kotlin"
+```kotlin
+repositories {
+mavenCentral()
+}
+
+    dependencyManagement {
+        imports {
+           mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release")
+        }
+    }
+
+    dependencies {
+        implementation("com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter")
+    }
+```
 
 ## Adding the DGS Framework Dependency
+If you would like to still choose the non-spring graphql starter of DGS Framework, continue reading this section for details on the setup.
 
 Add the platform dependencies to your Gradle or Maven configuration.
 The `com.netflix.graphql.dgs:graphql-dgs-platform-dependencies` dependency is a [platform/BOM dependency](https://netflix.github.io/dgs/advanced/platform-bom/), which aligns the versions of the individual modules and transitive dependencies of the framework.
@@ -66,6 +119,7 @@ If you're building on top of `WebFlux`, use `com.netflix.graphql.dgs:graphql-dgs
                 <groupId>com.netflix.graphql.dgs</groupId>
                 <artifactId>graphql-dgs-platform-dependencies</artifactId>
                 <!-- The DGS BOM/platform dependency. This is the only place you set version of DGS -->
+
                 <version>[LATEST_VERSION]</version> <!-- Replace [LATEST_VERSION] with the [latest available version](https://mvnrepository.com/artifact/com.netflix.graphql.dgs/graphql-dgs-platform-dependencies) -->
                 <type>pom</type>
                 <scope>import</scope>
@@ -130,7 +184,14 @@ This schema allows querying for a list of shows, optionally filtering by title.
 ## Implement a Data Fetcher
 
 Data fetchers are responsible for returning data for a query.
-Create two new classes `com.example.demo.ShowsDataFetcher` and `com.example.demo.Show` and add the following code.
+
+With the new Spring-GraphQL integration, it is technically possible to mix and match the DGS/Spring-GraphQL programming models. 
+However, to maintain consistency in your codebase and to take full advantage of DGS features, we recommend sticking with the DGS programming model.
+Not all DGS features are applicable to Spring-GraphQL data fetchers in the current integration and would therefore not work as expected. 
+Refer to our [Known Gaps and Limitations](./spring-graphql-integration.md#known-gaps-and-limitations) section for more details.
+
+Create two new classes `example.ShowsDataFetcher` and `Show` and add the following code.
+
 Note that we have a [Codegen plugin](../generating-code-from-schema) that can do this automatically, but in this guide we'll manually write the classes.
 
 === "Java"
