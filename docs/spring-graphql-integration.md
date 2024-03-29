@@ -41,6 +41,8 @@ We also eliminate the need for part of the DGS code that integrates the framewor
 For the near term, the DGS/Spring-Graphql integration will be available as an opt-in feature via a different spring-graphql flavor of the DGS starter. 
 We plan to make this the default mode towards the latter part the year, after we see some level of successful adoption.
 
+![image](./images/dgs_spring_graphql-timeline.jpg#center)
+
 ## Technical implementation
 Both DGS and Spring-GraphQL are designed with modularity and extensibility in mind. This makes it feasible to integrate the two frameworks. The following diagrams show how the frameworks are integrated at a high level.
 
@@ -49,8 +51,7 @@ A user uses the DGS programming model, such as `@DgsComponent` and `@DgsQuery` t
 A GraphQL query comes in through either WebMVC or WebFlux, and is executed by the `DgsQueryExecutor`, which builds on the graphql-java library to execute the query.
 The `DgsQueryExecutor` is also used directly when writing tests.
 
-
-<img width="722" alt="image" src="https://github.com/Netflix/dgs-framework/assets/109484/6bb0763a-015f-4d0a-994c-51807ecebb47">
+![image](./images/dgs_architecture.jpg#center)
 
 
 With the Spring-GraphQL integration, a user can write code with both the DGS programming model and/or the Spring-GraphQL programming model. 
@@ -59,7 +60,7 @@ The representation of the schema (a `GraphQLSchema` from graphql-java) is create
 Spring GraphQL's `ExecutionGraphQLService` now handles the actual query execution, while the DGS `QueryExecutor` becomes a proxy on top of `ExecutionGraphQLService` so that existing test code continues to work.
 
 
-![image](https://github.com/Netflix/dgs-framework/assets/109484/a0d8a5cc-96ca-4f30-bd0a-e3bb3616689e)
+![image](./images/dgs_spring_graphql-architecture.jpg#center)
 
 
 ## Performance
