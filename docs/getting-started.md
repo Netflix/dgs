@@ -119,7 +119,8 @@ If you're building on top of `WebFlux`, use `com.netflix.graphql.dgs:graphql-dgs
                 <groupId>com.netflix.graphql.dgs</groupId>
                 <artifactId>graphql-dgs-platform-dependencies</artifactId>
                 <!-- The DGS BOM/platform dependency. This is the only place you set version of DGS -->
-                <version>6.x.x</version>
+
+                <version>[LATEST_VERSION]</version> <!-- Replace [LATEST_VERSION] with the [latest available version](https://mvnrepository.com/artifact/com.netflix.graphql.dgs/graphql-dgs-platform-dependencies) -->
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -183,6 +184,7 @@ This schema allows querying for a list of shows, optionally filtering by title.
 ## Implement a Data Fetcher
 
 Data fetchers are responsible for returning data for a query.
+
 With the new Spring-GraphQL integration, it is technically possible to mix and match the DGS/Spring-GraphQL programming models. 
 However, to maintain consistency in your codebase and to take full advantage of DGS features, we recommend sticking with the DGS programming model.
 Not all DGS features are applicable to Spring-GraphQL data fetchers in the current integration and would therefore not work as expected. 
@@ -190,10 +192,19 @@ Refer to our [Known Gaps and Limitations](./spring-graphql-integration.md#known-
 
 Create two new classes `example.ShowsDataFetcher` and `Show` and add the following code.
 
+Note that we have a [Codegen plugin](../generating-code-from-schema) that can do this automatically, but in this guide we'll manually write the classes.
+
 === "Java"
     ```java
+    import java.util.List;
+    import java.util.stream.Collectors;
+
+    import com.netflix.graphql.dgs.DgsComponent;
+    import com.netflix.graphql.dgs.DgsQuery;
+    import com.netflix.graphql.dgs.InputArgument;
+
     @DgsComponent
-    public class ShowsDatafetcher {
+    public class ShowsDataFetcher {
 
         private final List<Show> shows = List.of(
                 new Show("Stranger Things", 2016),
@@ -233,6 +244,13 @@ Create two new classes `example.ShowsDataFetcher` and `Show` and add the followi
     ```
 === "Kotlin"
     ```kotlin
+    import java.util.List;
+    import java.util.stream.Collectors;
+
+    import com.netflix.graphql.dgs.DgsComponent;
+    import com.netflix.graphql.dgs.DgsQuery;
+    import com.netflix.graphql.dgs.InputArgument;
+
     @DgsComponent
     class ShowsDataFetcher {
         private val shows = listOf(
@@ -262,6 +280,14 @@ That's all the code needed, the application is ready to be tested!
 Start the application and open a browser to http://localhost:8080/graphiql.
 GraphiQL is a query editor that comes out of the box with the DGS framework.
 Write the following query and tests the result.
+
+```shell
+gradle bootRun
+```
+
+```shell
+mvn spring-boot:run
+```
 
 ```graphql
 {
