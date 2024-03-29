@@ -18,16 +18,16 @@ Continue reading to know more about how to use [Spring GraphQL] (https://docs.sp
 The DGS Framework provides Java developers with a programming model on top of Spring Boot to create GraphQL services. 
 Netflix open-sourced the DGS framework in 2021, and has been the widely adopted GraphQL Java framework by many companies.
 
-While we continued adoption and development on the DGS Framework, the team at Spring were also exploring GraphQL support for Spring Boot. 
-This effort was already underway prior to open-sourcing the DGS framework.
-While both the frameworks started with different goals and approaches, over the past year, Spring-GraphQL has matured and reached feature parity with many aspects of the DGS framework. 
-This resulted in two "competing" frameworks in the community that largely solved the same problem.
+Soon after we open-sourced the DGS framework, we learned about parallel efforts by the Spring team to develop a GraphQL framework for Spring Boot. 
+The Spring GraphQL project was in the early stages at the time and provided a low-level of integration with graphql-java. 
+Over the past year, however, Spring GraphQL has matured and is mostly at feature parity with the DGS Framework. 
+We now have 2 competing frameworks that solve the same problems for our users.
 
-Today, new users must choose between one or the other, raising questions about which framework to adopt. 
-It might also mean missing out on features available in one framework but not the other. This is not an ideal situation for the Java/GraphQL community.
+Today, new users must choose between the DGS Framework or Spring GraphQL, thus missing out on features available in one framework but not the other. 
+This is not an ideal situation for the GraphQL Java community.
 
-For the maintainers of both frameworks, it would be much more efficient to collaborate on features and improvements instead of having to solve the same problem twice. 
-Notably, bringing the communities together is a highly desirable goal.
+For the maintainers of DGS and Spring GraphQL, it would be far more effective to collaborate on features and improvements instead of having to solve the same problem independently. 
+Finally, a unified community would provide us with better channels for feedback.
 
 ### Why not just EOL one of the frameworks?
 The DGS framework is widely used and plays a vital role in the architecture of many companies, including Netflix. 
@@ -53,8 +53,8 @@ The `DgsQueryExecutor` is also used directly when writing tests.
 
 With the Spring-GraphQL integration, a user can write code with both the DGS programming model and/or the Spring-GraphQL programming model. 
 A GraphQL query comes in through WebMVC/WebFlux/RSocket, which Spring-GraphQL now handles. 
-The representation of the schema (a `GraphQLSchema` from graphql-java) is created by the DGS framework, and used by both the DGS and Spring-GraphQL components. 
-Spring-GraphQL's `ExecutionGraphQLService` now handles the actual query execution, while the DGS `QueryExecutor` becomes a proxy on top of `ExecutionGraphQLService` so that existing test code continues to work.
+The representation of the schema (a `GraphQLSchema` from graphql-java) is created by the DGS framework, and used by both the DGS and Spring GraphQL components. 
+Spring GraphQL's `ExecutionGraphQLService` now handles the actual query execution, while the DGS `QueryExecutor` becomes a proxy on top of `ExecutionGraphQLService` so that existing test code continues to work.
 ![image](https://github.com/Netflix/dgs-framework/assets/109484/a0d8a5cc-96ca-4f30-bd0a-e3bb3616689e)
 
 ## Performance
