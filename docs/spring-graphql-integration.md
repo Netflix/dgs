@@ -85,7 +85,7 @@ The following is the list of overlapping properties:
 | `dgs.graphql.graphiql.path` | `spring.graphql.graphiql.path` | Use `dgs.graphql.graphiql.path` |
 | `dgs.graphql.websocket.connection-init-timeout` | `spring.graphql.websocket.connection-init-timeout` | DGS property sets the Spring-GraphQL property | 
 
-New properties for Spring GraphQl integration are:
+New properties for Spring GraphQL integration are:
 
 | *DGS Property* | *Description*                                    |
 |---|-----|
@@ -96,7 +96,7 @@ Support for file uploads will no longer be available by default in the DGS frame
 This is supported using an external dependency for spring-graphql via [multipart-spring-graphql](https://github.com/nkonev/multipart-spring-graphql).
 
 ### Schema Inspection
-You can now inspect your schema using Spring GraphQL's [schema inspection] (https://docs.spring.io/spring-graphql/reference/request-execution.html#execution.graphqlsource.schema-mapping-inspection) feature for DGS data fetchers as well.
+You can now inspect your schema using Spring GraphQL's [schema inspection](https://docs.spring.io/spring-graphql/reference/request-execution.html#execution.graphqlsource.schema-mapping-inspection) feature for DGS data fetchers as well.
 You can now inspect schema fields and validate existing DGS data fetcher/and or Spring GraphQL data fetcher registrations, to check if all schema fields are covered either by an explicitly registered DataFetcher, or a matching Java object property. 
 The inspection also performs a reverse check looking for DataFetcher registrations against schema fields that don’t exist.
 
