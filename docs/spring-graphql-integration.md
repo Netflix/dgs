@@ -11,7 +11,7 @@ For that reason, Spring GraphQL features work best for Spring GraphQL style reso
 A nice benefit to integrating with Spring GraphQL, is that it paves a way for new features in Spring GraphQL to be used in the DGS Framework.
 These will be available via existing spring-graphql extensions, such as the [Subscription Callback mechanism](https://github.com/apollographql/federation-jvm/pull/354) in the JVM Federation library.
 
-Continue reading to know more about how to use [Spring GraphQL] (https://docs.spring.io/spring-graphql/reference/index.html) with the DGS Framework.
+Continue reading to know more about how to use [Spring GraphQL](https://docs.spring.io/spring-graphql/reference/index.html) with the DGS Framework.
 
 ## Background - Two competing frameworks
 The DGS Framework provides Java developers with a programming model on top of Spring Boot to create GraphQL services. 
@@ -39,7 +39,7 @@ With this integration, you can pull in additional features from Spring GraphQL.
 We also eliminate the need for part of the DGS code that integrates the framework with Spring MVC/WebFlux, since there isn't much benefit to duplicating low level functionality.
 
 For the near term, the DGS/Spring-Graphql integration will be available as an opt-in feature via a different spring-graphql flavor of the DGS starter. 
-We plan to make this the default mode towards the latter part the year, after we see some level of successful adoption.
+We plan to make this the default mode towards the latter part of the year, after we see some level of successful adoption.
 
 ![image](./images/dgs_spring_graphql-timeline.jpg#center)
 
