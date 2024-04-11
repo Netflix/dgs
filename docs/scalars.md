@@ -113,7 +113,14 @@ The `graphql-java-extended-scalars` module offers a few knobs you can use to tur
         }
         ```
 
+### Testing in Java using `graphql-dgs-extended-scalars`
+Don't forget to provide `DgsExtendedScalarsAutoConfiguration.class` when testing.
 
+```java
+@SpringBootTest(classes = {DgsAutoConfiguration.class, DgsExtendedScalarsAutoConfiguration.class})
+class Test {
+...
+```
 
 ### Register Scalar Extensions via DgsRuntimeWiring
 
