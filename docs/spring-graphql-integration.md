@@ -95,6 +95,12 @@ New properties for Spring GraphQL integration are:
 Support for file uploads will no longer be available by default in the DGS framework. 
 This is supported using an external dependency for spring-graphql via [multipart-spring-graphql](https://github.com/nkonev/multipart-spring-graphql).
 
+### Subscriptions over Websockets
+Spring GraphQL supports subscriptions over websockets. 
+You will now need to use `org.springframework.boot:spring-boot-starter-websocket`instead of `implementation("com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure`.
+In addition, you will need to set the following configuration property: `spring.graphql.websocket.path: /graphql`.
+
+
 ### Schema Inspection
 You can now inspect your schema using Spring GraphQL's [schema inspection](https://docs.spring.io/spring-graphql/reference/request-execution.html#execution.graphqlsource.schema-mapping-inspection) feature for DGS data fetchers as well.
 You can now inspect schema fields and validate existing DGS data fetcher/and or Spring GraphQL data fetcher registrations, to check if all schema fields are covered either by an explicitly registered DataFetcher, or a matching Java object property. 
