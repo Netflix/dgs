@@ -5,6 +5,18 @@ The following sections describe how you implement file uploads and downloads usi
 For more context on file uploads and best practices, see [Apollo Server File Upload Best Practices](https://www.apollographql.com/blog/file-upload-best-practices) by Khalil Stemmler from *Apollo Blog*.
     
 
+## File Uploads using Spring GraphQL starter
+If you are using the [Spring GraphQL integration](../spring-graphql-integration.md), you will need to add an explicit dependency for file uploads functionality.
+Specifically, you need to add this to your `build.gradle`
+
+```groovy
+dependencies {
+    implementation("name.nkonev.multipart-spring-graphql:multipart-spring-graphql:version")
+}
+```
+
+If you are using the [regular DGS starter](../getting-started.md#adding-the-dgs-framework-dependency), you don't need to do add that dependency.
+
 ## Multipart File Upload
 
 A multipart request is an HTTP request that contains multiple parts in a single request: the mutation query, file data, JSON objects, and whatever else you like.
@@ -17,6 +29,7 @@ See [GraphQL multipart request specification](https://github.com/jaydenseric/gra
 
 The DGS framework supports the `Upload` scalar with which you can specify files in your mutation query as a `MultipartFile`.
 When you send a multipart request for file upload, the framework processes each part and assembles the final GraphQL query that it hands to your data fetcher for further processing.
+
 
 Here is an example of a Mutation query that uploads a file to your DGS:
 
