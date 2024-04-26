@@ -1,4 +1,4 @@
-In the [getting started guide](../getting-started) we introduced the `@DgsQuery` annotation, which you use to create a data fetcher. In this section, we look at some of the finer details of datafetchers.
+In the [getting started guide](index.md) we introduced the `@DgsQuery` annotation, which you use to create a data fetcher. In this section, we look at some of the finer details of datafetchers.
 
 ## The @DgsData, @DgsQuery, @DgsMutation and @DgsSubscription Annotations
 You use the `@DgsData` annotation on a Java/Kotlin method to make that method a datafetcher.
@@ -105,10 +105,10 @@ For this example, the source is the `Show` object, which you can use to get the 
 
 Do note that the `shows` datafetcher is returning a list of `Show`, while the `actors` datafetcher fetches the actors for a single show.
 The framework executes the `actors` datafetcher for each `Show` returned by the `shows` datafetcher.
-If the actors get loaded from a database, this would now cause an N+1 problem. To solve the N+1 problem, you use [data loaders](../data-loaders).
+If the actors get loaded from a database, this would now cause an N+1 problem. To solve the N+1 problem, you use [data loaders](data-loaders.md).
 
 Note: There are more complex scenarios with nested datafetchers, and ways to pass context between related datafetchers.
-See the [nested datafetchers guide](../advanced/context-passing) for more advanced use-cases.
+See the [nested datafetchers guide](advanced/context-passing.md) for more advanced use-cases.
 
 
 ## Multiple @DgsData Annotations Via @DgsData.List
@@ -187,7 +187,7 @@ It then sets each field of the instance to the input argument values.
 For Kotlin Data classes, the instance can only be created by passing in all arguments in the constructor.
 This means you have to make sure to make fields optional in the data class when the fields are optional in the GraphQL schema!
 
-If you're using the [Codegen](../generating-code-from-schema) plugin (you really should!), the input types will work perfectly out of the box.
+If you're using the [Codegen](generating-code-from-schema.md) plugin (you really should!), the input types will work perfectly out of the box.
 
 !!!info "Input argument conversion isn't JSON"
     It's easy to confuse the conversion described above with JSON deserialization as you are familiar with in libraries such as Jackson.
@@ -197,7 +197,7 @@ If you're using the [Codegen](../generating-code-from-schema) plugin (you really
 
 !!!info "Defining scalars, and scalars in codegen"
     @InputArgument is designed to work well with scalars.
-    More information about defining custom scalars in the framework can be found [here](../scalars).
+    More information about defining custom scalars in the framework can be found [here](scalars.md).
     For a scalar you typically either create a class representing the value, or use an existing type. 
     Such types need to be mapped in [Codegen configuration](https://netflix.github.io/dgs/generating-code-from-schema/#mapping-existing-types) so that they don't (incorrectly) get generated.
 
@@ -253,7 +253,7 @@ It's a matter of preference to use `Optional` or not.
 ## Codegen Constants
 
 In the examples of `@DgsData` so far, we used string values for the `parentType` and `field` arguments.
-If you are using [code generation](../generating-code-from-schema) you can instead use generated constants.
+If you are using [code generation](generating-code-from-schema.md) you can instead use generated constants.
 Codegen creates a `DgsConstants` class with constants for each type and field in your schema.
 Using this we can write a datafetcher as follows:
 
@@ -409,4 +409,4 @@ public class ExampleLoaderWithContext implements BatchLoaderWithContext<String, 
 
 ## Data fetcher threading model
 
-The threading model for data fetchers, concurrent behavior and the use of JDK 21 Virtual threads is [further explained here](../advanced/virtual-threads).
+The threading model for data fetchers, concurrent behavior and the use of JDK 21 Virtual threads is [further explained here](advanced/virtual-threads.md).

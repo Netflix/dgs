@@ -15,7 +15,7 @@ dependencies {
 }
 ```
 
-If you are using the [regular DGS starter](../getting-started.md#adding-the-dgs-framework-dependency), you don't need to do add that dependency.
+If you are using the [regular DGS starter](../index.md#adding-the-dgs-framework-dependency), you don't need to do add that dependency.
 
 ## Multipart File Upload
 

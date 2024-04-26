@@ -14,4 +14,4 @@ You can enable development mode in three ways:
 
 1. Set the `dgs.reload` configuration property to `true` (e.g. in `application.yml`)
 2. Enable the `laptop` profile
-3. Implement your own `ReloadIndicator` bean to be fully in control over when to reload. This is useful when working with fully [dynamic schemas](../dynamic-schemas).
+3. Implement your own `ReloadIndicator` bean to be fully in control over when to reload. This is useful when working with fully [dynamic schemas](dynamic-schemas.md).

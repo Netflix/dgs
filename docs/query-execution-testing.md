@@ -30,7 +30,7 @@ If you created a project with Spring Initializr this configuration should alread
     </dependency>
     ```
 
-Create a test class with the following contents to test the `ShowsDatafetcher` from the [getting started](../getting-started) example.
+Create a test class with the following contents to test the `ShowsDatafetcher` from the [getting started](index.md) example.
 
 === "Java"
     ```java

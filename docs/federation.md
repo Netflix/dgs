@@ -22,7 +22,7 @@ The example project has the following set up:
 
 
 !!!info
-    If you are completely new to the DGS framework, please take a look at the [DGS Getting Started](./getting-started.md) guide, which also contains an introduction video.
+    If you are completely new to the DGS framework, please take a look at the [DGS Getting Started](./index.md) guide, which also contains an introduction video.
     The remainder of the guide on this page assumes basic GraphQL and DGS knowledge, and focuses on more advanced use cases.
 
 ### Defining a federated type

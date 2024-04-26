@@ -6,8 +6,7 @@ site_url: https://netflix.github.io/dgs/
 remote_branch: gh-pages
 
 nav:
-  - Home: index.md
-  - Getting Started: getting-started.md
+  - Getting Started: index.md
   - Spring GraphQL Integration: spring-graphql-integration.md
   - New and Noteworthy: announcements.md
   - Configuration: configuration.md
