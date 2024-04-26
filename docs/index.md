@@ -173,11 +173,11 @@ Note that we have a [Codegen plugin](generating-code-from-schema.md) that can do
              return shows;
          }
    
-         return shows.stream().filter(s -> s.getTitle().contains(titleFilter)).collect(Collectors.toList());
+         return shows.stream().filter(s -> s.title().contains(titleFilter)).collect(Collectors.toList());
      }
    }
    
-   record Show(String title, String releaseYear) {}
+   record Show(String title, int releaseYear) {}
    ```
 
 === "Kotlin"
