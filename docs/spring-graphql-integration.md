@@ -1,6 +1,6 @@
 The DGS Framework now integrates with Spring GraphQL internally.
 Users can continue using the DGS framework as is without additional changes.
-Please refer to out [Getting Started guide](./getting-started.md) for more details.
+Please refer to out [Getting Started guide](./index.md) for more details.
 The integration with Spring GraphQL will allow DGS users to take advantage of any new features that Spring GraphQL has to offer without having to reimplement it in the framework.
 While it is technically possible to mix and match the DGS/Spring-GraphQL programming models, we recommend sticking with the DGS programming model for now, if using the DGS Framework.
 By the DGS programming model, we specifically refer to DGS concepts, such as the annotations for setting up data fetchers, data loaders etc.

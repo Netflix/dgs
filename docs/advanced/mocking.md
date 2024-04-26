@@ -27,7 +27,7 @@ The value in the `Map` is whatever mock data you want to return for this key.
 
 ### Example
 
-Create a `MockProvider` that provides mock data for the `hello` field you created in the getting started [tutorial](../getting-started.md):
+Create a `MockProvider` that provides mock data for the `hello` field you created in the getting started [tutorial](../index.md):
 
 ```java
 @Component
