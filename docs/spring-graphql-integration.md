@@ -106,6 +106,12 @@ You can now inspect your schema using Spring GraphQL's [schema inspection](https
 You can now inspect schema fields and validate existing DGS data fetcher/and or Spring GraphQL data fetcher registrations, to check if all schema fields are covered either by an explicitly registered DataFetcher, or a matching Java object property. 
 The inspection also performs a reverse check looking for DataFetcher registrations against schema fields that don’t exist.
 
+### Schema resource
+In DGS we supported a property `dgs.graphql.schema-json.enabled` which made the schema available a JSON.
+With the Spring GraphQL integration this changes a little bit.
+Spring GraphQL provides a property `spring.graphql.schema.printer.enabled` (disabled by default).
+When enabled, it provides the schema in text format (not JSON) on `/graphql/schema`.
+
 ### Testing DGS Data Fetchers
 For testing individual data fetchers without the web layer, you can continue using the existing testing framework provided via `DgsQueryExecutor` interface. 
 We have provided a Spring GraphQL flavor of the `DgsQueryExecutor` that will continue to work as it does today.
