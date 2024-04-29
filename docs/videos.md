@@ -1,18 +1,22 @@
 # Videos
 
+## DGS / Spring GraphQL integration @ Coffee and Software with Josh Long
+
+<div class="iframe-video__container">
+  <iframe class="iframe-video" src="https://www.youtube.com/embed/HiCfTHmsXMk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
 ## DGS Framework - GraphQL for Spring Boot @ OpenValue
 
 <div class="iframe-video__container">
   <iframe class="iframe-video" src="https://www.youtube.com/embed/hgA3RrWoZCA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
-
 ## DGS new features and tips - March 2021
 
 <div class="iframe-video__container">
   <iframe class="iframe-video" src="https://www.youtube.com/embed/a1XYtX1ZSG8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
-
 
 ## Tech tips (short videos about a specific feature)
 
