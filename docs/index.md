@@ -12,13 +12,19 @@ At Netflix we build our GraphQL architecture on the DGS framework.
 The DGS framework is now based on Spring Boot 3.0, so get started by creating a new Spring Boot 3.0 application if you don't have one already.
 Note that you can still use the DGS framework with Spring Boot 2.7 by using a 5.5.x release.
 The 6.x release of the framework requires Spring Boot 3.
-The Spring Initializr is an easy way to do so.
+
+The easiest way to create a DGS project is to use the Spring Initializr. 
+You'll need to following dependencies:
+
+1. Netflix DGS
+2. Spring Web or Spring Reactive Web (WebFlux)
+3. (Optional) GraphQL DGS Code Generation
+
+![Spring initializr](images/spring-initializr.png)
+
+
 You can use either Gradle or Maven with Java 17 or Kotlin.
 We do recommend Gradle because we have a really cool [code generation plugin](generating-code-from-schema.md) for it!
-
-The only Spring dependency needed is Spring Web.
-
-![Spring initializr](images/initializr.png)
 
 Open the project in an IDE (Intellij recommended).
 
@@ -35,6 +41,9 @@ For this reason, we encourage new and existing DGSs to use our spring-graphql st
 You can read more about the motivation behind integrating with spring-graphql and the details of the integration [here](spring-graphql-integration.md).
 
 ## Adding the DGS Framework dependency with Spring GraphQL
+
+*If you used the Spring Initializr to generate your DGS project, these steps are not necessary, your project is ready to go!*
+
 1. **Add the platform BOM** to your Gradle or Maven configuration.
    The `com.netflix.graphql.dgs:graphql-dgs-platform-dependencies` dependency is a [platform/BOM dependency](https://netflix.github.io/dgs/advanced/platform-bom/), which aligns the versions of the individual modules and transitive dependencies of the framework.
 
