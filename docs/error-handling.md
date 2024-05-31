@@ -112,7 +112,7 @@ Here is the definition we are using:
 | `message` (non-nullable) | `String!`        | a string description of the error intended for the developer as a guide to understand and correct the error |
 | `locations`              | `[Location]`     | an array of code locations, where each location is a map with the keys `line` and `column`, both natural numbers starting from 1 that describe the beginning of an associated syntax element |
 | `path`                   | `[String | Int]` | if the error is associated with one or more particular fields in the response, this field of the error details the paths of those response fields that experienced the error (this allows clients to identify whether a `null` result is intentional or caused by a runtime error) |
-| `extensions`             | `[TypedError]`   | [see “The TypedError Interface” below](#the-typederror-interface) |
+| `extensions`             | `TypedError`   | [see “The TypedError Interface” below](#the-typederror-interface) |
 
 
 ```graphql
