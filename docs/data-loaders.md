@@ -251,7 +251,7 @@ To handle this, we need to explicitly call dispatch on the second data loader (s
 
 ```
 This is expected according to the documented behavior [here](https://github.com/graphql-java/java-dataloader#chaining-dataloader-calls).
-However, this can result in suboptimal batching for `dataloaderB`, with a bacth size of 1.
+However, this can result in suboptimal batching for `dataloaderB`, with a batch size of 1.
 
 The `v8.1.0` release introduces a new feature to [enable ticker mode](https://github.com/graphql-java/java-dataloader#scheduleddataloaderregistry-ticker-mode) available in the `java-dataloader` library
 This allows you to schedule the dispatch checks instead of manually calling dispatch in your data loaders.
