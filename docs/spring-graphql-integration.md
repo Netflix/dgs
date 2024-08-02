@@ -148,6 +148,11 @@ You can turn on async behavior by setting the `dgs.graphql.spring.webmvc.asyncdi
 It is worth noting that with the Spring GraphQL integration, your MockMVC test set up does need to be updated.
 Since web request processing is now based on async dispatching mechanism, we now [require explicit handling for this](https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework/async-requests.html) in the test setup.
 
+### Modifying Response headers
+Previously, the DGS Framework offered a mechanism to add custom response headers based on the result of processing the GraphQL query using a special `DgsRestController.DGS_RESPONSE_HEADERS_KEY` key.
+This is no longer supported. 
+The recommended way forward is to use the `WebGraphQlInterceptor` in Spring for GraphQL as described [here](./advanced/intercepting-http-request-response.md))
+
 ## Known Gaps and Limitations
 At this time, we are lacking support for SSE based subscriptions which is available in the original DGS Framework. 
 This is on the roadmap and will be made available in the near future depending on support in spring-graphql. 
