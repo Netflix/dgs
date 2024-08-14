@@ -5,6 +5,8 @@ is now the approved context mechanism (replacing the previously used opaque Cont
 via key/value pairs to provide frameworks and userspace code the capability to contribute, share and leverage various 
 pieces of context independent of each other.
 
+Note that if you simply require interception/modification of request and response headers, you can use a `WebGraphQlInterceptor` provided by Spring GraphQL as described [here](intercepting-http-request-response.md).
+
 To make this easily leverageable by DGS customers, a new interface has been provided for which any Spring Beans registered 
 that implement the [`GraphQLContextContributor`](https://github.com/Netflix/dgs-framework/blob/master/graphql-dgs/src/main/kotlin/com/netflix/graphql/dgs/context/GraphQLContextContributor.kt) 
 interface, their `contribute` method will be invoked before any normal instrumentation classes are invoked, allowing 

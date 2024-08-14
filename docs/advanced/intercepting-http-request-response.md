@@ -1,7 +1,7 @@
-# Response Instrumentation
-The DGS framework internally uses [GraphQL Java] and [Spring for GraphQL].
+# Request and Response Header Instrumentation
+The DGS framework internally uses `GraphQL Java` and `Spring for GraphQL`.
 
-If you need to modify the HTTP request and response headers, you can leverage the `WebGraphQlInterceptor` in [Spring for GraphQL] (https://docs.spring.io/spring-graphql/reference/transports.html#server.interception) to accomplish this.
+If you need to modify the HTTP request and response headers, you can leverage the `WebGraphQlInterceptor` in [Spring for GraphQL](https://docs.spring.io/spring-graphql/reference/transports.html#server.interception) to accomplish this.
 This provides a hook to update the request and response headers based using the `GraphQLContext`
 
 #### Example:
