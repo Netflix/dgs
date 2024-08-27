@@ -101,6 +101,9 @@ dependencies {
 }
 ```
 
+For libraries that are looking to export [type mappings](#mapping-existing-types) for their schemas (see next section), you can also add a `dgs.codegen.typemappings` file as a resource under META-INF.
+For a project that is consuming schemas from an external JAR, codegen will also scan `dgs.codegen.typemappings` to automatically map types to corresponding Java classes.
+This avoids the need to explicitly specify type mappings by every consumer of the JAR.
 
 ### Mapping existing types
 
