@@ -98,7 +98,7 @@ For a small application this is fine, but for applications with components that 
 In this case we need to include the DGS framework itself using the `DgsAutoConfiguration` class, and the `ShowsDatafetcher`.
 
 !!!info "Testing data fetchers that use WebMVC annotations such as @RequestHeader"
-    If you are using features specific to WebMvc stack, such as `@RequestHeader`, you will also need to specify `DgsWebMvcAutoConfiguration` in the list of classes.
+    If you are using features specific to WebMvc stack, such as `@RequestHeader`, you will also need to ensure you have the required web dependencies for test.
 
 To execute queries, inject `DgsQueryExecutor` in the test.
 This interface has several methods to execute a query and get back the result.
