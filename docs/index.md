@@ -69,6 +69,7 @@ If you want to use the regular flavor of the DGS framework without the spring-gr
    
    dependencies {
      implementation "com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter"
+     testImplementation "com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter-test"
    }
    ```
 
@@ -86,6 +87,7 @@ If you want to use the regular flavor of the DGS framework without the spring-gr
    
    dependencies {
      implementation("com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter")
+     testImplementation("com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter-test")
    }
    ```
 === "Maven"
@@ -119,6 +121,12 @@ If you want to use the regular flavor of the DGS framework without the spring-gr
    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+   </dependency>
+
+   <dependency>
+      <groupId>com.netflix.graphql.dgs</groupId>
+      <artifactId>graphql-dgs-spring-graphql-starter-test</artifactId>
       <scope>test</scope>
    </dependency>
    </dependencies>

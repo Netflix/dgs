@@ -9,6 +9,7 @@ If you created a project with Spring Initializr this configuration should alread
     ```groovy
     dependencies {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter-test'
     }
 
     test {
@@ -28,6 +29,12 @@ If you created a project with Spring Initializr this configuration should alread
         <artifactId>spring-boot-starter-test</artifactId>
         <scope>test</scope>
     </dependency>
+
+    <dependency>
+        <groupId>com.netflix.graphql.dgs</groupId>
+        <artifactId>graphql-dgs-spring-graphql-starter-test</artifactId>
+        <scope>test</scope>
+    </dependency>
     ```
 
 Create a test class with the following contents to test the `ShowsDatafetcher` from the [getting started](index.md) example.
@@ -35,17 +42,17 @@ Create a test class with the following contents to test the `ShowsDatafetcher` f
 === "Java"
     ```java
     import com.netflix.graphql.dgs.DgsQueryExecutor;
-    import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration;
     import org.junit.jupiter.api.Test;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.boot.test.context.SpringBootTest;
 
     import java.util.List;
+    import com.netflix.graphql.dgs.test.EnableDgsTest;
 
     import static org.assertj.core.api.Assertions.assertThat;
 
-
-    @SpringBootTest(classes = {DgsAutoConfiguration.class, ShowsDatafetcher.class})
+    @SpringBootTest(classes = {ShowsDatafetcher.class})
+    @EnableDgsTest
     class ShowsDatafetcherTest {
 
         @Autowired
@@ -64,13 +71,14 @@ Create a test class with the following contents to test the `ShowsDatafetcher` f
 === "Kotlin"
     ```kotlin
     import com.netflix.graphql.dgs.DgsQueryExecutor
-    import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration
+    import com.netflix.graphql.dgs.test.EnableDgsTest
     import org.assertj.core.api.Assertions.assertThat
     import org.junit.jupiter.api.Test
     import org.springframework.beans.factory.annotation.Autowired
     import org.springframework.boot.test.context.SpringBootTest
 
-    @SpringBootTest(classes = [DgsAutoConfiguration::class, ShowsDataFetcher::class])
+    @SpringBootTest(classes = [ShowsDataFetcher::class])
+    @EnableDgsTest
     class ShowsDataFetcherTest {
 
         @Autowired
@@ -95,10 +103,15 @@ Create a test class with the following contents to test the `ShowsDatafetcher` f
 The `@SpringBootTest` annotation makes this a Spring test.
 If you do not specify `classes` explicitly, Spring will start all components on the classpath.
 For a small application this is fine, but for applications with components that are "expensive" to start we can speed up the test by only adding the classes we need for the test.
-In this case we need to include the DGS framework itself using the `DgsAutoConfiguration` class, and the `ShowsDatafetcher`.
+In this example that's just the `ShowsDatafetcher`.
+You also need components from the DGS framework itself, so that you can run a real GraphQL query in your test.
+Add the `@EnableDgsTest` test slice annotation.
+This annotation effectively adds a list of autoconfiguration classes that start as part of the test.
 
 !!!info "Testing data fetchers that use WebMVC annotations such as @RequestHeader"
-    If you are using features specific to WebMvc stack, such as `@RequestHeader`, you will also need to ensure you have the required web dependencies for test.
+    `@EnableDgsTest` is designed to not require a web stack, to keep tests as fast and simple as possible.
+    In some scenarios you do need web functionality.
+    In that case you should use the `@EnableDgsMockMvcTest`, which also sets up the components to use `MockMvc`.
 
 To execute queries, inject `DgsQueryExecutor` in the test.
 This interface has several methods to execute a query and get back the result.
@@ -228,7 +241,8 @@ Let's try to mock this service in the test!
 
 === "Java"
     ```java
-    @SpringBootTest(classes = {DgsAutoConfiguration.class, ShowsDataFetcher.class})
+    @SpringBootTest(classes = {ShowsDataFetcher.class})
+    @EnableDgsTest
     public class ShowsDataFetcherTests {
 
         @Autowired
@@ -256,7 +270,8 @@ Let's try to mock this service in the test!
     ```
 === "Kotlin"
     ```kotlin
-    @SpringBootTest(classes = [DgsAutoConfiguration::class, ShowsDataFetcher::class])
+    @SpringBootTest(classes = [ShowsDataFetcher::class])
+    @EnableDgsTest
     class ShowsDataFetcherTest {
 
         @Autowired
@@ -332,44 +347,120 @@ This allows you to easily inspect the error.
 The `message` of the `QueryException` is the concatenation of all the errors.
 The `getErrors()` method gives access to the individual errors for further inspection.
 
-## Testing with Client
+## Testing with Spring MockMvc and HttpGraphQlTester
 
-If you are interested in testing the web layer as well, you can use the [Java GraphQL Client](advanced/java-client.md).
-Following is a simple example:
+While testing queries without the web layer is the preferred approach for most tests, it is sometimes useful to include the web layer as well.
+For example, to test integration of filters, security and such.
+It's useful to have a least one such a test as a "smoke test" as part of your testing strategy.
+While for a smoketest you probably want to bootstrap all application components (by using `@SpringBootTest` without arguments), instead of test slices, you can use `HttpGrahpQlTester` in either scenario.
 
-=== "Java"
-    ```java
-    import com.netflix.graphql.dgs.client.GraphQLResponse;
-    import com.netflix.graphql.dgs.client.MonoGraphQLClient;
-    import org.junit.jupiter.api.Test;
-    import org.springframework.boot.test.context.SpringBootTest;
-    import org.springframework.boot.web.server.LocalServerPort;
-    import org.springframework.web.reactive.function.client.WebClient;
-    
-    import java.util.List;
-    
-    import static org.junit.jupiter.api.Assertions.assertTrue;
-    
-    @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-    class ShowsDatafetcherTest {
-    final MonoGraphQLClient monoGraphQLClient;
-    
-        public ShowsDatafetcherTest(@LocalServerPort Integer port) {
-            WebClient webClient = WebClient.create("http://localhost:" + port.toString() + "/graphql");
-            this.monoGraphQLClient = MonoGraphQLClient.createWithWebClient(webClient);
-        }
-    
-        @Test
-        void shows() {
-            String query = "{ shows { title releaseYear }}";
-    
-            // Read more about executeQuery() at https://netflix.github.io/dgs/advanced/java-client/
-            GraphQLResponse response =
-                    monoGraphQLClient.reactiveExecuteQuery(query).block();
-    
-            List<?> titles = response.extractValueAsObject("shows[*].title", List.class);
-    
-            assertTrue(titles.contains("Ozark"));
-        }
+```java
+@SpringBootTest(classes = {ShowsDataFetcher.class})
+@EnableDgsMockMvcTest //Enable DGS and MockMvc
+@AutoConfigureHttpGraphQlTester //Enable HttpGraphQlTester
+public class SmokeTestWithSpringGraphQL {
+    @Autowired
+    private HttpGraphQlTester graphQlTester;
+
+    @Test
+    void testShows() {
+        @Language("GraphQL")
+        var query = """
+                query {
+                    shows {
+                        title
+                    }
+                }
+                """;
+
+        graphQlTester.document(query)
+                .execute()
+                .path("shows[*].title")
+                .entityList(String.class)
+                .containsExactly("The Last Dance", "Cheer", "GLOW");
     }
-    ```
+}
+```
+
+## Testing with MockMvc directly
+
+While it's easier to use `HttpGraphQlTester` as shown above, you can also write a test using `MockMvc` directly and crafting the GraphQl request by hand.
+You can easily send a GraphQL request using `MockMvc` by creating a wrapper object and using Jackson for JSON serialization.
+
+```java
+@SpringBootTest
+@AutoConfigureMockMvc
+public class SmokeTestWithRequest {
+    @Autowired
+    MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Test
+    public void showsSmokeTest() throws Exception {
+        @Language("GraphQL")
+        var query = """                
+                {
+                    shows {
+                        title
+                    }
+                }
+                """;
+
+        mockMvc.perform(post("/graphql")
+                        .secure(true)
+                        .content(objectMapper.writeValueAsBytes(new GraphqlRequest(query)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("data.shows").isArray())
+                .andExpect(jsonPath("data.shows[0].title").exists());
+    }
+
+    record GraphqlRequest(String query){}
+}
+```
+
+## Testing with a real Client
+
+Testing with a real client is typically not needed, and you should avoid such test in most cases.
+Running a server on a real port can be problematic in CI.
+The following test does show how to set this up with the [DGS Java GraphQL Client](advanced/java-client.md) and the server starting on a random port.
+Note that this example starts the whole application instead of just starting individual components.
+
+
+```java
+import com.netflix.graphql.dgs.client.GraphQLResponse;
+import com.netflix.graphql.dgs.client.MonoGraphQLClient;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class ShowsDatafetcherTest {
+final MonoGraphQLClient monoGraphQLClient;
+
+    public ShowsDatafetcherTest(@LocalServerPort Integer port) {
+        WebClient webClient = WebClient.create("http://localhost:" + port.toString() + "/graphql");
+        this.monoGraphQLClient = MonoGraphQLClient.createWithWebClient(webClient);
+    }
+
+    @Test
+    void shows() {
+        String query = "{ shows { title releaseYear }}";
+
+        // Read more about executeQuery() at https://netflix.github.io/dgs/advanced/java-client/
+        GraphQLResponse response =
+                monoGraphQLClient.reactiveExecuteQuery(query).block();
+
+        List<?> titles = response.extractValueAsObject("shows[*].title", List.class);
+
+        assertTrue(titles.contains("Ozark"));
+    }
+}
+```
