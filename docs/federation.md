@@ -4,7 +4,7 @@ Federation is based on the [Federation spec](https://www.apollographql.com/docs/
 A DGS is federation-compatible out of the box with the ability to reference and extend federated types.
 
 !!!tip "There is more federation documentation available"
-    * Read the [Federation Spec](https://www.apollographql.com/docs/apollo-server/federation/federation-spec/).
+    * Read the [Federation Spec](https://www.apollographql.com/docs/graphos/reference/federation/subgraph-spec/).
     * Check out [Federated Testing](./advanced/federated-testing.md) to learn how to write tests for federated queries.
 
 
