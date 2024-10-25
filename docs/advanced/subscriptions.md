@@ -15,9 +15,9 @@ import org.reactivestreams.Publisher;
 
 @DgsSubscription
 public Publisher<Stock> stocks() {
-    //Create a never-ending Flux that emits an item every second
-    return Flux.interval(Duration.ofSeconds(1)).map({ t -> Stock("NFLX", 500 + t) })
-}
+        //Create a never-ending Flux that emits an item every second
+        return Flux.interval(Duration.ofSeconds(1)).map({ t -> Stock("NFLX", 500 + t) })
+        }
 ```
 
 The `Publisher` interface is from Reactive Streams.
@@ -44,6 +44,19 @@ To enable WebSockets support for the WebMVC stack, add the following module to y
 ```groovy
 implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure:latest.release'
 ```
+Please note: DGS does not currently support the newer version of the WebSocket protocol as specified [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+
+## Server Sent Events (SSE)
+
+The GraphQL specification doesn't specify a transport protocol.
+HTTP2 is coming along which doesn't support WebSockets, instead using something new call [Server Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events), which is also supported by the DGS Framework.
+Apollo defines a [sub-protocol](https://github.com/enisdenjo/graphql-sse/blob/master/PROTOCOL.md), which is supported by client libraries and implemented by the DGS framework.
+
+To enable SSE support, add the following module to your `build.gradle`:
+
+```groovy
+implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-sse-autoconfigure:latest.release'
+```
 
 For WebFlux, the starter already comes with support for websocket subscriptions, so no additional configuration is required.
 
@@ -53,11 +66,8 @@ implementation 'com.netflix.graphql.dgs:graphql-dgs-webflux-starter:latest.relea
 
 The subscription endpoint is on `/subscriptions`.
 Normal GraphQL queries can be sent to `/graphql`, while subscription requests go to `/subscriptions`.
-Apollo client supports WebSockets through a [link](https://www.apollographql.com/docs/link/links/ws/).
-Typically, you want to configure Apollo Client with both an HTTP link and a WS link, and [split](https://www.apollographql.com/docs/link/composition/#directional-composition) between them based on the query type.
 
-A simple example of using the Apollo client can be found in the [example project](https://github.com/Netflix/dgs-framework/blob/master/graphql-dgs-example-shared/ui-example/src/index.tsx#L39) of the DGS Framework repository.
-
+Please see the [graphql-sse](https://github.com/enisdenjo/graphql-sse) package for information on how to set up a client to use SSE.
 ## Unit Testing Subscriptions
 
 Similar to a "normal" data fetcher test, you use the `DgsQueryExecutor` to execute a query.
