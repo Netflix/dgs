@@ -144,7 +144,7 @@ This query comes with the following variables:
 
 The Reviews DGS needs to implement an entity fetcher to handle this query.
 
-**Entity fetcher**: A method annotated with [`@DgsEntityFetcher`](https://javadoc.io/doc/com.netflix.graphql.dgs/graphql-dgs/latest/com/netflix/graphql/dgs/DgsEntityFetcher.html) that takes a key and returns a single instance of the entity or null.
+- **Entity fetcher**: A method annotated with [`@DgsEntityFetcher`](https://javadoc.io/doc/com.netflix.graphql.dgs/graphql-dgs/latest/com/netflix/graphql/dgs/DgsEntityFetcher.html) that takes a key and returns a single instance of the entity or null.
 
 Our entity fetcher gets the `id` field and returns a `Show` instance:
 
@@ -158,7 +158,9 @@ public Show movie(Map<String, Object> values) {
 }
 ```
 
-In this case, we're not doing any data fetching: we're creating a `Show` instance that only has an `id` field, and we implement a `Show.reviews` datafetcher in the [next section](#providing-data-with-a-data-fetcher). However, we could instead fetch data in the entity fetcher. If our DGS served multiple fields, and they all came from the same data source, we could fetch them all at once in the entity fetcher instead of writing separate datafetchers for each field:
+In this case, we're not doing any data fetching: our `Show` instance only has an `id` field, and we implement a `Show.reviews` datafetcher in the [next section](#providing-data-with-a-data-fetcher). 
+
+However, we could instead fetch data in the entity fetcher. If our DGS served multiple fields, and they all came from the same data source, we could fetch them all at once in the entity fetcher instead of writing separate datafetchers for each field:
 
 ```java
 @DgsEntityFetcher(name = "Show")
