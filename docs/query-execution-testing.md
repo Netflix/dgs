@@ -9,7 +9,7 @@ If you created a project with Spring Initializr this configuration should alread
     ```groovy
     dependencies {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testImplementation 'com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter-test'
+        testImplementation 'com.netflix.graphql.dgs:dgs-starter-test'
     }
 
     test {
@@ -32,7 +32,7 @@ If you created a project with Spring Initializr this configuration should alread
 
     <dependency>
         <groupId>com.netflix.graphql.dgs</groupId>
-        <artifactId>graphql-dgs-spring-graphql-starter-test</artifactId>
+        <artifactId>dgs-starter-test</artifactId>
         <scope>test</scope>
     </dependency>
     ```
