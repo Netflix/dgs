@@ -12,11 +12,30 @@ For some specific exception types, a more specific GraphQL error type is used.
 | `AccessDeniedException` | `PERMISSION_DENIED` | When a `@Secured` check fails |
 | `DgsEntityNotFoundException` | `NOT_FOUND` | Thrown by the developer when a requested entity (e.g. based on query parameters) isn't found |
 
-Mapping custom exceptions
------
 
+# Handling exceptions
 It can be useful to map application specific exceptions to meaningful exceptions back to the client.
-You can do this by registering a `DataFetcherExceptionHandler`.
+The framework provides two different mechanisms to achieve this.
+
+## Mapping custom exceptions with @ControllerAdvice
+The easiest way to manually map exceptions is to use `@ControllerAdvice` from Spring for GraphQL.
+Annotate a class with `@ControllerAdvice`, and add a method annotated with `@GraphQlExceptionHandler` for each type of exception you want to handle.
+The method must take an argument of the type of exception it should handle, and must return `GraphQLError`.
+If no matching method is found, the framework falls back to the built-in error handling from the framework.
+
+```java
+@ControllerAdvice
+public class ControllerExceptionHandler {
+    @GraphQlExceptionHandler
+    public GraphQLError handle(IllegalArgumentException ex) {
+        return GraphQLError.newError().errorType(ErrorType.BAD_REQUEST).message("Handled an IllegalArgumentException!").build();
+    }
+}
+```
+
+## Mapping custom exceptions by implementing DataFetcherExceptionHandler
+
+You can also register a component of type `DataFetcherExceptionHandler`, which is an interface from graphql-java.
 Make sure to delegate to the `DefaultDataFetcherExceptionHandler` class, this is the default exception handler of the framework.
 If you don't delegate to this class, you lose the framework's built-in exception handler.
 
@@ -24,11 +43,11 @@ The following is an example of a custom exception handler implementation.
 
 ```java
 @Component
-public class CustomDataFetchingExceptionHandler implements DataFetcherExceptionHandler {
+public class MyExceptionHandler implements DataFetcherExceptionHandler {
 
    @Override
    public CompletableFuture<DataFetcherExceptionHandlerResult> handleException(DataFetcherExceptionHandlerParameters handlerParameters) {
-      if (handlerParameters.getException() instanceof MyException) {
+      if (handlerParameters.getException() instanceof RuntimeException) {
          Map<String, Object> debugInfo = new HashMap<>();
          debugInfo.put("somefield", "somevalue");
 
@@ -43,7 +62,7 @@ public class CustomDataFetchingExceptionHandler implements DataFetcherExceptionH
 
          return CompletableFuture.completedFuture(result);
       } else {
-         return DataFetcherExceptionHandler.super.handleException(handlerParameters);
+         return new DefaultDataFetcherExceptionHandler().handleException(handlerParameters);
       }
    }
 }

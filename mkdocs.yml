@@ -41,9 +41,7 @@ nav:
     - Adding Custom Scalars: scalars.md
     - Adding Custom Directives: advanced/custom-directives.md
     - Custom Object Mapper: advanced/custom-object-mapper.md
-    - Mocking: advanced/mocking.md
     - Logging: advanced/logging.md
-    - React Example: https://github.com/Netflix/dgs-framework/tree/master/graphql-dgs-example-java
 
 extra_css:
   - 'stylesheets/extra.css'
