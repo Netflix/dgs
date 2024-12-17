@@ -18,9 +18,9 @@ It can be useful to map application specific exceptions to meaningful exceptions
 The framework provides two different mechanisms to achieve this.
 
 ## Mapping custom exceptions with @ControllerAdvice
-The easiest way to map manually map exceptions is to use `@ControllerAdvice` from Spring for GraphQL.
-Annotate a class with `@ControllerAdvice`, and add a method annotated with `@GraphQLExeptionHandler` for each type of exception you want to handle.
-The method must take an argument of the type of exeption it should handle, and must return `GraphQLError`.
+The easiest way to manually map exceptions is to use `@ControllerAdvice` from Spring for GraphQL.
+Annotate a class with `@ControllerAdvice`, and add a method annotated with `@GraphQlExceptionHandler` for each type of exception you want to handle.
+The method must take an argument of the type of exception it should handle, and must return `GraphQLError`.
 If no matching method is found, the framework falls back to the built-in error handling from the framework.
 
 ```java
