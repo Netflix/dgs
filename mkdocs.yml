@@ -42,7 +42,6 @@ nav:
     - Adding Custom Directives: advanced/custom-directives.md
     - Custom Object Mapper: advanced/custom-object-mapper.md
     - Logging: advanced/logging.md
-    - React Example: https://github.com/Netflix/dgs-framework/tree/master/graphql-dgs-example-java
 
 extra_css:
   - 'stylesheets/extra.css'
