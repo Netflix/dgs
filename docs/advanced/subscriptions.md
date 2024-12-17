@@ -27,36 +27,25 @@ A complete example can be found [in `SubscriptionDatafetcher.java`](https://gith
 
 ## WebSockets
 
-The GraphQL specification doesn't specify a transport protocol.
-WebSockets are the most popular transport protocol however, and are supported by the DGS Framework.
+Spring for GraphQL [provides the WebSockets](https://docs.spring.io/spring-graphql/reference/transports.html#server.transports.websocket) transport layer for subscriptions.
+The framework supports the `graphql-ws` library which uses the `graphql-transport-ws` [sub-protocol](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md) for Websockets for both WebMVC and Webflux stacks.
 
-The framework now supports the `graphql-ws` library which uses the `graphql-transport-ws` [sub-protocol](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md) for websockets for both webmvc and webflux stacks.
-Apollo now supports the client for this [newer protocol](https://www.apollographql.com/docs/react/data/subscriptions/#setting-up-the-transport) as well.
-Note that the newer `graphql-ws` library name is confusing since the deprecated sub-protocol is also named `graphql-ws`.
+To enable WebSockets you need to explicitly set the `spring.graphql.websocket.path` property.
 
-!!!note
-    The deprecated `subscriptions-transport-ws` library, which uses the `graphql-ws` [sub-protocol](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) is functional for backwards compatibility.
-    However, this implementation will no longer be actively maintained in the framework and we will be dropping support in a future release.
-
-
-To enable WebSockets support for the WebMVC stack, add the following module to your `build.gradle`:
+On WebMVC you also have to add the following dependency.
+No extra dependency is needed for Webflux.
 
 ```groovy
-implementation 'com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure:latest.release'
+implementation 'org.springframework.boot:spring-boot-starter-websocket'
 ```
 
-For WebFlux, the starter already comes with support for websocket subscriptions, so no additional configuration is required.
+## Server Sent Events
 
-```groovy
-implementation 'com.netflix.graphql.dgs:graphql-dgs-webflux-starter:latest.release'
-```
+Server Sent Events are also [supported by the Spring for GraphQL](https://docs.spring.io/spring-boot/3.3/reference/web/spring-graphql.html#web.graphql.transports.http-websocket) transport layer, as an alternative to Websockets.
+This can be useful for environments where only HTTP is supported, and Websockets is not an option.
+No extra configuration or dependencies are needed for SSE.
+To sent SSE requests you use the regular `/graphql` endpoint, but with the `text/event-stream` media type.
 
-The subscription endpoint is on `/subscriptions`.
-Normal GraphQL queries can be sent to `/graphql`, while subscription requests go to `/subscriptions`.
-Apollo client supports WebSockets through a [link](https://www.apollographql.com/docs/link/links/ws/).
-Typically, you want to configure Apollo Client with both an HTTP link and a WS link, and [split](https://www.apollographql.com/docs/link/composition/#directional-composition) between them based on the query type.
-
-A simple example of using the Apollo client can be found in the [example project](https://github.com/Netflix/dgs-framework/blob/master/graphql-dgs-example-shared/ui-example/src/index.tsx#L39) of the DGS Framework repository.
 
 ## Unit Testing Subscriptions
 
@@ -76,8 +65,9 @@ The `stocks` subscription produces a result every second, so the test uses `Virt
 Also note that the emitted `ExecutionResult` returns a `Map<String, Object>`, and not the Java type that your data fetcher returns.
 Use the `Jackson Objectmapper` to convert the map to a Java object.
 
-```
-@SpringBootTest(classes = {DgsAutoConfiguration.class, SubscriptionDataFetcher.class})
+```java
+@SpringBootTest(classes = {SubscriptionDataFetcher.class, DgsExtendedScalarsAutoConfiguration.class, DgsPaginationAutoConfiguration.class, UploadScalar.class})
+@EnableDgsTest
 class SubscriptionDataFetcherTest {
 
     @Autowired
@@ -119,64 +109,39 @@ This is exactly what you need for your tests, because your tests should focus on
 ## Integration testing subscriptions
 
 Although most subscription logic should be tested in unit tests, it can be useful to test end-to-end with a client.
-This can be achieved with the DGS client, and works well in a `@SpringBootTest` with a random port.
+This can be achieved with the DGS client, and works well in a `@SpringBootTest` with a random port, and the `WebSocketGraphQLTester`.
 The example below starts a subscription, and sends to mutations that should result in updates on the subscription.
-The example uses Websockets, but the same can be done for SSE.
-The code for this example can be found in the [example project](https://github.com/Netflix/dgs-examples-java/blob/main/src/test/java/com/example/demo/ReviewSubscriptionIntegrationTest.java).
 
 ```java
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ReviewSubscriptionIntegrationTest {
+public class SubscriptionsGraphQlTesterTest {
 
     @LocalServerPort
-    private Integer port;
+    private int port;
 
-    private WebSocketGraphQLClient webSocketGraphQLClient;
-    private MonoGraphQLClient graphQLClient;
-    private MonoRequestExecutor requestExecutor = (url, headers, body) -> WebClient.create(url)
-            .post()
-            .bodyValue(body)
-            .headers(consumer -> headers.forEach(consumer::addAll))
-            .exchangeToMono(r -> r.bodyToMono(String.class).map(responseBody -> new HttpResponse(r.rawStatusCode(), responseBody, r.headers().asHttpHeaders())));
+    @Value("http://localhost:${local.server.port}/graphql")
+    private String baseUrl;
+
+    private GraphQlTester graphQlTester;
 
 
     @BeforeEach
-    public void setup() {
-        webSocketGraphQLClient = new WebSocketGraphQLClient("ws://localhost:" + port + "/subscriptions", new ReactorNettyWebSocketClient());
-        graphQLClient = new DefaultGraphQLClient("http://localhost:" + port + "/graphql");
+    void setUp() {
+        URI url = URI.create(baseUrl);
+        this.graphQlTester = WebSocketGraphQlTester.builder(url, new ReactorNettyWebSocketClient()).build();
     }
 
     @Test
-    public void testWebSocketSubscription() {
-        GraphQLQueryRequest subscriptionRequest = new GraphQLQueryRequest(
-                ReviewAddedGraphQLQuery.newRequest().showId(1).build(),
-                new ReviewAddedProjectionRoot().starScore()
-        );
+    void stocks() {
+        Flux<Stock> result = graphQlTester.document("subscription Stocks { stocks { name, price } }").executeSubscription().toFlux("stocks", Stock.class);
 
-        GraphQLQueryRequest addReviewMutation1 = new GraphQLQueryRequest(
-                AddReviewGraphQLQuery.newRequest().review(SubmittedReview.newBuilder().showId(1).starScore(5).username("DGS User").build()).build(),
-                new AddReviewProjectionRoot().starScore()
-        );
-
-        GraphQLQueryRequest addReviewMutation2 = new GraphQLQueryRequest(
-                AddReviewGraphQLQuery.newRequest().review(SubmittedReview.newBuilder().showId(1).starScore(3).username("DGS User").build()).build(),
-                new AddReviewProjectionRoot().starScore()
-        );
-
-        Flux<Integer> starScore = webSocketGraphQLClient.reactiveExecuteQuery(subscriptionRequest.serialize(), Collections.emptyMap()).map(r -> r.extractValue("reviewAdded.starScore"));
-
-        StepVerifier.create(starScore)
-                .thenAwait(Duration.ofSeconds(1)) //This await is necessary because of issue [#657](https://github.com/Netflix/dgs-framework/issues/657)
-                .then(() -> {
-                    graphQLClient.reactiveExecuteQuery(addReviewMutation1.serialize(), Collections.emptyMap(), requestExecutor).block();
-
-                })
-                .then(() ->
-                        graphQLClient.reactiveExecuteQuery(addReviewMutation2.serialize(), Collections.emptyMap(), requestExecutor).block())
-                .expectNext(5)
-                .expectNext(3)
+        StepVerifier.create(result)
+                .assertNext(res -> Assertions.assertThat(res.getPrice()).isEqualTo(500))
+                .assertNext(res -> Assertions.assertThat(res.getPrice()).isEqualTo(501))
+                .assertNext(res -> Assertions.assertThat(res.getPrice()).isEqualTo(502))
                 .thenCancel()
                 .verify();
     }
 }
+
 ```
