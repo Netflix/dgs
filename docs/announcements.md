@@ -1,3 +1,57 @@
+### DGS Framework 10.0.0 released! (Dec 17, 2024)
+DGS 10.0.0 removes all the legacy code in favor of our integration with Spring for GraphQL.
+In March 2024 we released deep integration with Spring for GraphQL after working closely with the Spring team.
+This integration makes it possible to mix and match features from DGS and Spring for GraphQL, and leverages the web transports provided by Spring for GraphQL.
+With the March released we declared the "old" DGS starter, and the implementation code legacy, with the plan to remove this code end of 2024.
+The community has adopted the DGS/Spring for GraphQL integration really well, in most cases without any required code changes.
+At Netflix we migrated all our services to use the new integration, again mostly without any code changes.
+Performance is critical for our services, and after all the performance optimization that went into the March release and some patch releases after, we see the same performance with the Spring for GraphQL integration as what we had previously.
+
+DGS 10.0.0 finalizes the integration work by removing all the legacy modules and code.
+This greatly reduces the footprint of the codebase, which will speed up feature development into the future!
+
+Although the list of changes is large, you probably won't notice the difference for your applications!
+Just make sure to use the (new) `netflix.graphql.dgs:dgs-starter` AKA `netflix.graphql.dgs:graphql-dgs-spring-graphql-starter` starter!
+
+#### Detailed list of changes
+
+New modules:
+
+* `netflix.graphql.dgs:dgs-starter` as a nicer/shorter name for `netflix.graphql.dgs:graphql-dgs-spring-graphql-starter`.
+
+Deleted modules:
+
+* `graphql-dgs-spring-boot-oss-autoconfigure` (replaced by Spring for GraphQL)
+* `graphql-dgs-spring-webmvc` (replaced by Spring for GraphQL)
+* `graphql-dgs-spring-webmvc-autoconfigure` (replaced by Spring for GraphQL)
+* `graphql-dgs-spring-boot-starter` (replaced by `netflix.graphql.dgs:dgs-starter`)
+* `graphql-dgs-example-java` (legacy example, no longer relevant)
+* `graphql-dgs-example-java-webflux` (legacy example, no longer relevant)
+* `graphql-dgs-mocking` (old feature that wasn't used much)
+* `graphql-dgs-subscriptions-websockets` (replaced by Spring for GraphQL)
+* `graphql-dgs-subscriptions-websockets-autoconfigure` (replaced by Spring for GraphQL)
+* `graphql-dgs-subscriptions-graphql-sse` (replaced by Spring for GraphQL)
+* `graphql-dgs-subscriptions-graphql-sse-autoconfigure` (replaced by Spring for GraphQL)
+* `graphql-dgs-subscriptions-sse` (replaced by Spring for GraphQL)
+* `graphql-dgs-subscriptions-sse-autoconfigure` (replaced by Spring for GraphQL)
+* `graphql-dgs-spring-webflux-autoconfigure` (replaced by Spring for GraphQL)
+* `graphql-dgs-webflux-starter` (replaced by `netflix.graphql.dgs:dgs-starter`)
+
+Deleted classes:
+
+* `DgsAutoConfiguration`: Autoconfiguration classes have moved. This may break tests that are using @SpringBootTest(classes = {DgsAutoConfiguration.class, ...}, and should use @EnableDgsTest instead.
+* `DefaultGraphQLClient`: This is a long deprecated class that has been replaced by [CustomGraphQLClient, CustomReactiveGraphQLClient and WebClientGraphQLClient.
+* `DefaultDgsReactiveQueryExecutor`: There should be no user impact because its interface should be used instead.
+* `DefaultDgsQueryExecutor`: There should be no user impact because its interface should be used instead.
+
+Other changes:
+
+* We're now using the K2 compiler and Kotlin 2.1.
+* Subscriptions over SSE in Spring GraphQL are using the newer, more official GraphQL over SSE RFC spec. The old spec is no longer supported by DGS.
+* If you are using SSESubscriptionGraphQLClient in tests to test your DGS server, switch to GraphqlSSESubscriptionGraphQLClient, which has the same interface, but uses the new protocol.
+* SSESubscriptionGraphQLClient can still be used to call into other services using the old protocol, but this client is now deprecated for removal in the future.
+* Note that Spring GraphQL serves subscriptions on the /graphql endpoint, not on the /subscriptions endpoint like DGS used to do.
+
 ### DGS Framework 8.5.0 with Spring GraphQL released! (March 29,2024)
 The DGS and Spring-GraphQL teams are super excited to introduce deep integration between the DGS framework and Spring-GraphQL. 
 This will bring the community together, and we can continue building the best possible GraphQL framework for Spring Boot in the future.

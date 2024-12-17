@@ -9,9 +9,7 @@ At Netflix we build our GraphQL architecture on the DGS framework.
 
 ## Create a new Spring Boot application
 
-The DGS framework is now based on Spring Boot 3.0, so get started by creating a new Spring Boot 3.0 application if you don't have one already.
-Note that you can still use the DGS framework with Spring Boot 2.7 by using a 5.5.x release.
-The 6.x release of the framework requires Spring Boot 3.
+The DGS framework is now based on Spring Boot 3
 
 The easiest way to create a DGS project is to use the Spring Initializr. 
 You'll need to following dependencies:
@@ -29,18 +27,10 @@ We do recommend Gradle because we have a really cool [code generation plugin](ge
 Open the project in an IDE (Intellij recommended).
 
 ## Requirements
-The latest 6.x release and onwards will require Spring Boot 3.0 for your project.
-You will also need JDK 17.
+The DGS framework requires Spring Boot 3 and JDK 17 for your project.
+The last version compatible with Spring Boot 2 and JDK 8 was 5.x, which is no longer maintained.
 
-## DGS Framework with Spring GraphQL
-The DGS Framework has been updated to deeply integrate with Spring GraphQL.
-For more details on the motivation and implementation, please refer to the docs [here](./spring-graphql-integration.md)
-For the time being, we will offer 2 flavors of the DGS Framework - one with the vanilla version, and a version that integrates with spring-graphql via different starters.
-There are no breaking changes to users as the changes are mostly internal to the framework and the spring-graphql integration should be a drop-in replacement for the existing framework.
-For this reason, we encourage new and existing DGSs to use our spring-graphql starter as much as possible, as this will be the default offering in the future.
-You can read more about the motivation behind integrating with spring-graphql and the details of the integration [here](spring-graphql-integration.md).
-
-## Adding the DGS Framework dependency with Spring GraphQL
+## Adding the DGS Framework dependency with Spring for GraphQL
 
 *If you used the Spring Initializr to generate your DGS project, these steps are not necessary, your project is ready to go!*
 
@@ -48,89 +38,10 @@ You can read more about the motivation behind integrating with spring-graphql an
    The `com.netflix.graphql.dgs:graphql-dgs-platform-dependencies` dependency is a [platform/BOM dependency](https://netflix.github.io/dgs/advanced/platform-bom/), which aligns the versions of the individual modules and transitive dependencies of the framework.
 
 2. **Add the DGS starter**.
-   The `com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter` is a Spring Boot starter that includes everything you need to get started building a DGS that uses Spring GraphQL.
+   The `com.netflix.graphql.dgs:dgs-starter` is a Spring Boot starter that includes everything you need to get started building a DGS that uses Spring GraphQL.
 
 3. **Add the relevant Spring Boot starter for the web flavor you want to use**.
    This would one of `org.springframework.boot:spring-boot-starter-web` or `org.springframework.boot:spring-boot-starter-webflux` depending on the stack you are using.
-
-If you want to use the regular flavor of the DGS framework without the spring-graphql starter, refer to the next section on [Adding the DGS Framework Dependency](#adding-the-dgs-framework-dependency)
-
-=== "Gradle"
-   ``` groovy
-   repositories {
-       mavenCentral()
-   }
-   
-   dependencyManagement {
-     imports {
-        mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release")
-     }
-   }
-   
-   dependencies {
-     implementation "com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter"
-     testImplementation "com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter-test"
-   }
-   ```
-
-=== "Kotlin"
-   ``` kotlin
-   repositories {
-       mavenCentral()
-   }
-   
-   dependencyManagement {
-     imports {
-        mavenBom("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release")
-     }
-   }
-   
-   dependencies {
-     implementation("com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter")
-     testImplementation("com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter-test")
-   }
-   ```
-=== "Maven"
-   ```xml
-   <dependencyManagement>
-      <dependencies>
-         <dependency>
-            <groupId>com.netflix.graphql.dgs</groupId>
-            <artifactId>graphql-dgs-platform-dependencies</artifactId>
-            <!-- The DGS BOM/platform dependency. This is the only place you set version of DGS -->
-   
-            <version>[LATEST_VERSION]
-            </version> <!-- Replace [LATEST_VERSION] with the [latest available version](https://mvnrepository.com/artifact/com.netflix.graphql.dgs/graphql-dgs-platform-dependencies) -->
-            <type>pom</type>
-            <scope>import</scope>
-         </dependency>
-      </dependencies>
-   </dependencyManagement>
-   
-   <dependencies>
-   <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-   </dependency>
-   
-   <dependency>
-      <groupId>com.netflix.graphql.dgs</groupId>
-      <artifactId>graphql-dgs-spring-graphql-starter</artifactId>
-   </dependency>
-   
-   <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-   </dependency>
-
-   <dependency>
-      <groupId>com.netflix.graphql.dgs</groupId>
-      <artifactId>graphql-dgs-spring-graphql-starter-test</artifactId>
-      <scope>test</scope>
-   </dependency>
-   </dependencies>
-   ```
 
 ## Creating a Schema
 
