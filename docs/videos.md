@@ -1,5 +1,11 @@
 # Videos
 
+## GraphQL and DGS at Netflix - an introduction to the DGS framework hosted by Jetbrains
+
+<div class="iframe-video__container">
+    <iframe width="1280" height="720" src="https://www.youtube.com/embed/Xn-oLXQQklU" title="Build GraphQL Services with Spring Boot like Netflix" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
 ## DGS / Spring GraphQL integration @ Coffee and Software with Josh Long
 
 <div class="iframe-video__container">
