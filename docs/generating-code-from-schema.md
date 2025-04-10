@@ -3,13 +3,12 @@ The plugin generates the following:
 
 * Data types for types, input types, enums and interfaces.
 * A `DgsConstants` class containing the names of types and fields
-* Example data fetchers
 * A type safe query API that represents your queries
 
 ## Quick Start
 
 Code generation is typically integrated in the build.
-A Gradle plugin has always been available, and recently a Maven plugin was made [available](https://github.com/deweyjose/graphqlcodegen) by the community.
+This project provides a Gradle plugin, and a Maven plugin was made [available](https://github.com/deweyjose/graphqlcodegen) by the community, built on the same core.
 
 To apply the plugin, update your project’s `build.gradle` file to include the following:
 ```groovy
@@ -49,46 +48,119 @@ The plugin adds a `generateJava` Gradle task that runs as part of your project�
 Note that on a Kotlin project, the `generateJava` task generates Kotlin code by default (yes the name is confusing).
 This folder is automatically added to the project's classpath.
 Types are available as part of the package specified by the <code><var>packageName</var>.types</code>, where you specify the value of <var>packageName</var> as a configuration in your `build.gradle` file.
-Please ensure that your project’s sources refer to the generated code using<!-- http://go/pv http://go/use --> the specified package name.
-
-`generateJava` generates the data fetchers and places them in `build/generated-examples`.
-
-<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
- NOTE: generateJava does NOT add the data fetchers that it generates to your project’s sources.
- These fetchers serve mainly as a basic boilerplate code that require further implementation from you.
-</div>
+Please ensure that your project’s sources refer to the generated code using the specified package name.
 
 You can exclude parts of the schema from code-generation by placing them in a different schema directory that is not specified<!-- http://go/pv --> as part of the `schemaPaths` for the plugin.
 
-### Fixing the "Could not initialize class graphql.parser.antlr.GraphqlLexer" problem
+### Using the generated types
 
-Gradle's plugin system uses a flat classpath for all plugins, which makes it very easy to run into classpath conflicts.
-One of the dependencies of the Codegen plugin is ANTLR, which is unfortuanatly used by some other plugins as well.
-If you see an error such as `Could not initialize class graphql.parser.antlr.GraphqlLexer` this typically indicates a classpath conflict.
-If this happens, please change the ordering of the plugins in your build script.
-ANTLR is typically backwards, but not forwards, compatible.
+The generated types are POJOs with both a non-arg constructor, a constructor for all fields, and implementations for hashCode/equals/toString.
+You also get a builder class to easily create instances.
+The types are typically used used as return types for your datafetchers and input arguments for your datafetchers. 
 
-For multi-module projects means you need to declare the Codegen plugin in the root build file, without applying it:
+The following are some examples of using generated types for the example schema below.
 
-```groovy
-plugins {
-    id("com.netflix.dgs.codegen") version "[REPLACE_WITH_CODEGEN_PLUGIN_VERSION]" apply false
+```graphql
+type Query {
+    events: [Event]
+}
+
+type Event {
+    id: ID
+    name: String
+    location: String
+    keywords: [String]
+    website: String
+    date: Date
+}
+
+type Mutation {
+    update(event: EventInput): String
+}
+
+input EventInput {
+    id: ID
+    name: String
+    location: String
+    keywords: [String]
+    website: String
+    date: Date
+}
+```
+
+```java
+@DgsQuery
+public List<Event> events() {
+    return List.of(
+            Event.newBuilder()
+                    .name("JavaOne")
+                    .location("Redwood City")
+                    .build()
+    );
+}
+
+@DgsMutation
+public String update(@InputArgument EventInput event) {
+    LOGGER.info("Storing event: {}", event.getName());
     
-    //other plugins
+    return "Stored event with id " + event.getId();
 }
 ```
 
-In the module where the plugin should be applied, you specify the plugin in the plugins block again, but without the version.
+### Sparse updates
+
+Use the `trackInputFieldSet` flag to enable tracking which fields are set on input types.
+This is useful for sparse updates; just sending the fields in a mutation that you want to update, and leave other fields untouched.
+Codegen creates the POJOs with each field value wrapped in an `Optional`, and a `has[FieldName]` method to check if the optional was set.
+In a mutation datafetcher you can check the input type for which fields were explicitly set.
 
 ```groovy
-plugins {
-    id("com.netflix.dgs.codegen")
+generateJava {
+    trackInputFieldSet = true
 }
 ```
 
-If you're using the old `buildscript` syntax, you add the plugin dependency to the root `buildscript`, but only `apply` in the module.
+```java
+@DgsMutation
+public String update(@InputArgument EventInput event) {
 
-### Generating code from external schemas in JARs
+    LOGGER.info("Storing event: {}", event.getName());
+
+    var updated = new HashSet<String>();
+
+    if(event.hasName()) {
+        LOGGER.info("Update name to: {}", event.getName());
+        updated.add("name=" + event.getName());
+    }
+
+    if(event.hasLocation()) {
+        LOGGER.info("Update location to: {}", event.getLocation());
+        updated.add("location=" + event.getLocation());
+    }
+
+    if(event.hasWebsite()) {
+        LOGGER.info("Update website to: {}", event.getWebsite());
+        updated.add("website=" + event.getWebsite());
+    }
+
+    if(event.hasDate()) {
+        LOGGER.info("Update date to: {}", event.getDate());
+        updated.add("date=" + event.getDate());
+    }
+
+    if(event.hasKeywords()) {
+        LOGGER.info("Update keywords to: {}", event.getKeywords());
+        updated.add("keywords=" + event.getKeywords());
+    }
+
+    return String.join(", ", updated);
+
+}
+```
+
+<div style="position: relative; padding-bottom: 55.55555555555556%; height: 0;"><iframe src="https://www.loom.com/embed/b41be952bfc3466d84e0cc8a07760a1d?sid=b4ff9f10-a2c8-4a8a-b6d7-379e13008e0a" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+
+## Generating code from external schemas in JARs
 You can also specify external dependencies containing schemas to use for generation by declaring it as a dependency in the `dgsCodegen` configuration.
 The plugin will scan all `.graphql` and `.graphqls` files and generate those classes under the `build/generated` directory.
 This is useful if you have external dependencies containing some shared types that you want to add to your schema for code generation. 
@@ -105,7 +177,7 @@ For libraries that are looking to export [type mappings](#mapping-existing-types
 For a project that is consuming schemas from an external JAR, codegen will also scan `dgs.codegen.typemappings` to automatically map types to corresponding Java classes.
 This avoids the need to explicitly specify type mappings by every consumer of the JAR.
 
-### Mapping existing types
+## Mapping existing types
 
 Codegen tries to generate a type for each type it finds in the schema, with a few exceptions.
 
@@ -126,7 +198,7 @@ generateJava{
 ## Generating Client APIs
 
 The code generator can also create client API classes.
-You can use these classes to query data from a GraphQL endpoint using Java, or in unit tests using the `QueryExecutor`.
+You can use these classes to query data from a GraphQL endpoint using Java, or in unit tests using the `DgsQueryExecutor`.
 The Java GraphQL Client is useful for server-to-server communication.
 A GraphQL Java Client is [available](advanced/java-client.md) as part of the framework.
 
@@ -135,107 +207,115 @@ The <code>\*GraphQLQuery</code> query class contains fields for each parameter o
 For each type returned by a Query or Mutation, code generation creates a <code>\*ProjectionRoot</code>.
 A projection is a builder class that specifies which fields get returned.
 
-The following is an example usage of a generated API:
-
-```java
-GraphQLQueryRequest graphQLQueryRequest =
-        new GraphQLQueryRequest(
-            new TicksGraphQLQuery.Builder()
-                .first(first)
-                .after(after)
-                .build(),
-            new TicksConnectionProjectionRoot<>()
-                .edges()
-                    .node()
-                        .date()
-                        .route()
-                            .name()
-                            .votes()
-                                .starRating()
-                                .parent()
-                            .grade());
-
-```
-
-This API was generated based on the following schema.
-The `edges` and `node` types are because the schema uses pagination.
-The API allows for a fluent style of writing queries, with almost the same feel of writing the query as a String, but with the added benefit of code completion and type safety.
+The following is an example usage of a generated API.
 
 ```graphql
-type Query @extends {
-    ticks(first: Int, after: Int, allowCached: Boolean): TicksConnection
+type Query {
+    events(filter: EventFilter): [Event]
 }
 
-type Tick {
-    id: ID
-    route: Route
-    date: LocalDate
-    userStars: Int
-    userRating: String
-    leadStyle: LeadStyle
-    comments: String
-}
-
-type Votes {
-    starRating: Float
-    nrOfVotes: Int
-}
-
-type Route {
-    routeId: ID
+input EventFilter {
     name: String
-    grade: String
-    style: Style
-    pitches: Int
-    votes: Votes
-    location: [String]
+    location: String
 }
 
-type TicksConnection {
-    edges: [TickEdge]
-}
-
-type TickEdge {
-    cursor: String!
-    node: Tick
+type Event {
+    id: ID
+    name(uppercase: Boolean): String
+    location: String
+    keywords: [String]
+    website: String
 }
 ```
 
-### Client API v2
-
-We introduced a new client API in codegen v5.7.0. The ```generateClientv2``` Gradle configuration option was created to allow users to opt into the v2 API.
-
-As of v6.0.1, the v1 API has been deprecated. Setting either ```generateClient``` or ```generateClientv2``` to true will result in the v2 API being generated.
-
-The newer version relies on the use of generics and solves:
-1) Not being able to handle cycles in the schema, and
-2) Not being able to generate on larger schemas due to too many classes getting generated and out of memory errors. We only generate one class per type in the new implementation.
-
-To migrate to v2, projection root instantiations need to be slightly modified. Note the ```<>``` in v2.
-
-v1 API:
 ```java
-String query = new GraphQLQueryRequest(
-        new MoviesGraphQLQuery(),
-        new MoviesProjectionRoot().movieId()).serialize();
+@SpringBootTest(classes = QueryDatafetcher.class)
+@EnableDgsTest
+class QueryDatafetcherTest {
+
+    @Autowired
+    DgsQueryExecutor queryExecutor;
+
+    @Test
+    public void clientApi() {
+        var query = EventsGraphQLQuery.newRequest()
+                .queryName("ExampleQuery")
+                .filter(EventFilter.newBuilder().name("JavaOne").build())
+                .build();
+
+        var projection = new EventsProjectionRoot<>().name(true).parent().location();
+        var request = new GraphQLQueryRequest(query, projection);
+
+        var serializeQuery = request.serialize();
+        var result = queryExecutor.execute(serializeQuery);
+
+        System.out.println(serializeQuery);
+        assertThat(result.isDataPresent()).isTrue();
+    }
+
+}
 ```
 
-v2 API:
+Creating a query has three parts:
+1. The query - `EventsGraphQLQuery` in this example, generated by Codegen. 
+2. The projection (the fields you want to retrieve) - `EventsProjectionRoot` in this example, generated by Codegen.
+3. The `GraphQLQueryRequest` which is part of the DGS API.
+
+The `GraphQLQueryRequest` lets you `serialize()`, which gives the String representation of the request.
+For this example this results in the following request.
+
+```graphql
+query ExampleQuery {
+    events(filter: {name : "JavaOne"}) {
+        name(uppercase: true)
+        location
+    }
+}
+```
+
+### Using query variables
+In the previous examples the input arguments to the query (the  `filter`), and the input argument to the `name` field (`uppercase`) where provided in-line.
+This is the easiest way to write a query and has the benefit of the arguments being typed.
+However, creating queries this way can come with a downside.
+Advanced GraphQL features such as persisted queries require queries to be written with variables.
+This is a bit more cumbersome because you lose typing, but it's sometimes required.
+Codegen creates `[fieldName]Reference` and `[fieldName]WithVariableReferences` (for projections) for this purpose.
+
+The following is an example of the same query as above, but with using variables.
+
 ```java
-String query = new GraphQLQueryRequest(
-        new MoviesGraphQLQuery(),
-        new MoviesProjectionRoot<>().movieId()).serialize();
+@SpringBootTest(classes = QueryDatafetcher.class)
+@EnableDgsTest
+class QueryDatafetcherTest {
+
+    @Autowired
+    DgsQueryExecutor queryExecutor;
+
+    @Test
+    public void clientApi() {
+        var query = EventsGraphQLQuery.newRequest()
+                .queryName("ExampleQuery")
+                .filterReference("eventFilter")
+                .build();
+
+        var projection = new EventsProjectionRoot<>()
+                .nameWithVariableReferences("uppercase").parent()
+                .location();
+
+        var request = new GraphQLQueryRequest(query, projection);
+
+        var serializeQuery = request.serialize();
+        var result = queryExecutor.execute(serializeQuery,
+                Map.of("eventFilter", Map.of("name", "JavaOne"),
+                        "uppercase", true));
+
+        System.out.println(serializeQuery);
+        assertThat(result.isDataPresent()).isTrue();
+    }
+
+}
 ```
 
-Kotlin Projects: 
-Kotlin does not support the Java diamond operator (<>) for inferring type arguments. Instead, pass in [Nothing](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing.html) as both arguments.
-
-v2 API Kotlin:
-```kotlin
-val query = GraphQLQueryRequest(
-    MoviesGraphQLQuery.Builder().build(),
-    MoviesProjectionRoot<Nothing, Nothing>().movieID()).serialize()
-```
 
 ### Generating Query APIs for external services
 
@@ -563,3 +643,4 @@ The following table shows the Gradle configuration options, but the same options
 | generateCustomAnnotations | Enable/disable generation of custom annotation                                                                                                                                              | false                                                 |
 | addGeneratedAnnotation | Add `jakarta.annotation.Generated` and application specific `@Generated` annotation to generated types | false |
 | disableDatesInGeneratedAnnotation | Don't add a date to the `jakarta.annotation.Generated` annotation | false |
+| trackInputFieldSet | Generate `has[FieldName]` methods keeping track of what fields are explicitly set on input types | false |
