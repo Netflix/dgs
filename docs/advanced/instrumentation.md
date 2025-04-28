@@ -440,6 +440,8 @@ You can customize the tags applied to the metrics above by providing *beans* tha
 | `DgsExecutionTagCustomizer`  | Used to add tags specific to the [ExecutionResult] of the query. The [SimpleGqlOutcomeTagCustomizer] is an example of this.|
 | `DgsFieldFetchTagCustomizer` | Used to add tags specific to the execution of _data fetchers_. The [SimpleGqlOutcomeTagCustomizer] is an example of this as well.|             |
 
+!!! important
+    Note that backend metrics systems commonly have cardinality limits for additional tags. Please check with your backend metrics provider to ensure additional tag customizations do not exceed tag limits.
 
 ### Additional Metrics Configuration
 
