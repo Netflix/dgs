@@ -162,4 +162,4 @@ For this reason, we recommend using either the DGS programming model or Spring f
 Known limitations include data loader specific features, such as [Scheduled Dispatch](https://netflix.github.io/dgs/data-loaders/#scheduled-data-loaders-with-dispatch-predicates) and data loader specific metrics that won't work with Spring for GraphQL data loaders.
 You should be able to use new Spring for GraphQL features with the framework, such as schema inspection and any new integrations that are compatible with Spring for GraphQL.
 
-We intend iteratively improve the state of teh integration in the coming releases based on usage patterns. 
+We intend iteratively improve the state of the integration in the coming releases based on usage patterns. 
