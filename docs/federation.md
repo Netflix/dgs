@@ -237,7 +237,7 @@ class ReviewssDatafetcherTest {
 }
 ```
 
-For more details on the API and how to set it up for tests, please refer to our documentation [here](./advanced/federated-testing.md#Using-the-Entities-Query-Builder-API).
+For more details on the API and how to set it up for tests, please refer to our documentation [here](./advanced/federated-testing.md#using-the-entities-query-builder-api).
 
 ## Customizing the Default Federation Resolver
 
