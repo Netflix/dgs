@@ -342,6 +342,10 @@ body {
   position: relative;
   z-index: 10;
 }
+.dgs-header.md-header--shadow {
+  /* no header shadow for our custom design */
+  box-shadow: none !important;
+}
 .md-container {
   overflow: hidden;
   z-index: 2;
@@ -476,7 +480,6 @@ body {
   /* transition: opacity 750ms; */
 }
 
-
 .md-nav__title .md-nav__button.md-logo img,
 .md-nav__title .md-nav__button.md-logo svg {
   height: 2rem;
@@ -484,6 +487,25 @@ body {
   width: auto;
 }
 
+@media screen and (min-width: 60em) {
+  .md-nav--secondary .md-nav__title {
+    background: none !important;
+    box-shadow: none !important;
+    padding-bottom: 1em;
+    position: static !important;
+  }
+}
+@media screen and (min-width: 76.25em) {
+  .md-sidebar--primary {
+    top: 0 !important;
+  }
+  .md-nav--primary .md-nav__title {
+    background: none !important;
+    box-shadow: none !important;
+    padding-bottom: 1em;
+    position: static !important;
+  }
+}
 
 .md-source__repository {
   max-width: none;
