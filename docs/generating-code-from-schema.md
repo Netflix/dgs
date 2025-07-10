@@ -540,7 +540,8 @@ public class Person {
   }
 }
 ```
-While using `@deprecated` following configuration is needed:
+While using `@deprecated`, the following configuration is needed to generate `@Deprecated` on the POJO in Java:
+
 ```
 generateJava {
     addDeprecatedAnnotation = true
