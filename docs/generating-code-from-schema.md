@@ -540,7 +540,7 @@ public class Person {
   }
 }
 ```
-While using `@deprecated` following configuration is needed
+While using `@deprecated` following configuration is needed:
 ```
 generateJava {
     addDeprecatedAnnotation = true
