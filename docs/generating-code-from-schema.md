@@ -639,10 +639,10 @@ The following table shows the Gradle configuration options, but the same options
 
 ## Client Generation
 
-| Configuration property | Description                                                                    | Default value |
-|------------------------|--------------------------------------------------------------------------------|---------------|
-| generateClient         | Generate a query API. This property does the same thing as `generateClientv2`. | false         |
-| generateClientv2       | Generate a Query API. This property does the same thing as `generateClient`.   | false         |
+| Configuration property | Description           | Default value |
+|------------------------|-----------------------|---------------|
+| generateClient         | Generate a Query API. | false         |
+| generateClientv2       | Generate a Query API. | false         |
 
 ## Data Type Generation
 
@@ -688,23 +688,19 @@ The following table shows the Gradle configuration options, but the same options
 
 ## Annotations
 
-| Configuration property            | Description                                                                                            | Default value |
-|-----------------------------------|--------------------------------------------------------------------------------------------------------|---------------|
-| addGeneratedAnnotation            | Add `jakarta.annotation.Generated` and application specific `@Generated` annotation to generated types | false         |
-| disableDatesInGeneratedAnnotation | Don't add a date to the `jakarta.annotation.Generated` annotation                                      | false         |
-| addDeprecatedAnnotation           | Add `@Deprecated` annotation for deprecated schema elements                                            | false         |
-| generateCustomAnnotations         | Enable generation of custom annotation                                                                 | false         |
+| Configuration property            | Description                                                                                                                     | Default value |
+|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------|---------------|
+| addGeneratedAnnotation            | Add `jakarta.annotation.Generated` and application specific `@Generated` annotation to generated types                          | false         |
+| disableDatesInGeneratedAnnotation | Don't add a date to the `jakarta.annotation.Generated` annotation                                                               | false         |
+| addDeprecatedAnnotation           | Add `@Deprecated` annotation for deprecated schema elements                                                                     | false         |
+| generateCustomAnnotations         | Enable generation of custom annotations on generated types and fields using `@annotate` directive in schema                     | false         |
+| includeImports                    | Maps the custom annotation type to the package, the annotations belong to. Only used when generateCustomAnnotations is enabled. |               |
+| includeEnumImports                | Maps the custom annotation and enum argument names to the enum packages. Only used when generateCustomAnnotations is enabled.   |               |
+| includeClassImports               | Maps the custom annotation and class names to the class packages. Only used when generateCustomAnnotations is enabled.          |               |
+
 
 ## Additional Features
 
 | Configuration property | Description                                                                                      | Default value |
 |------------------------|--------------------------------------------------------------------------------------------------|---------------|
 | trackInputFieldSet     | Generate `has[FieldName]` methods keeping track of what fields are explicitly set on input types | false         |
-
-## Custom Imports
-
-| Configuration property | Description                                                                                                                     | Default value |
-|------------------------|---------------------------------------------------------------------------------------------------------------------------------|---------------|
-| includeImports         | Maps the custom annotation type to the package, the annotations belong to. Only used when generateCustomAnnotations is enabled. |               |
-| includeEnumImports     | Maps the custom annotation and enum argument names to the enum packages. Only used when generateCustomAnnotations is enabled.   |               |
-| includeClassImports    | Maps the custom annotation and class names to the class packages. Only used when generateCustomAnnotations is enabled.          |               |
