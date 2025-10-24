@@ -160,6 +160,361 @@ public String update(@InputArgument EventInput event) {
 
 <div style="position: relative; padding-bottom: 55.55555555555556%; height: 0;"><iframe src="https://www.loom.com/embed/b41be952bfc3466d84e0cc8a07760a1d?sid=b4ff9f10-a2c8-4a8a-b6d7-379e13008e0a" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
+### JSpecify Null-Safety Annotations
+
+You can generate [JSpecify](https://jspecify.dev/) annotations for null-safety on Java types using the `generateJSpecifyAnnotations` flag.
+
+```groovy
+generateJava {
+    generateJSpecifyAnnotations = true
+}
+```
+
+These annotations enable static analysis tools like [NullAway](https://github.com/uber/NullAway) to detect potential null pointer exceptions at compile time.
+To compile generated sources with these annotations **and** use them in your own code, add the following to your project's `build.gradle`:
+
+```groovy
+dependencies {
+    implementation "org.jspecify:jspecify:1.0.0"
+}
+```
+
+!!! tip "Learn more"
+    Check out the [Nullness User Guide](https://jspecify.dev/docs/user-guide/) for more information on using JSpecify annotations.
+
+When enabled, the following are added to the generated Java code:
+
+* `@NullMarked` annotations on classes and interfaces so generated types are [non-null by default](https://jspecify.dev/docs/user-guide/#nullmarked)
+* `@Nullable` annotations on nullable fields, getters, setters, and constructor parameters
+* `Objects.requireNonNull()` validation in the generated builder's `build()` method for non-null fields
+
+!!! note "Where is @NonNull?"
+    Due to the presence of `@NullMarked` at the type level, we can omit the use of `@NonNull` annotations.
+
+For example, given the following schema:
+
+```graphql
+type Event {
+    id: ID!
+    name: String!
+    location: String
+    attendees: [Attendee!]
+    organizer: Person
+}
+
+interface Person {
+    name: String!
+    email: String
+}
+
+type Attendee implements Person {
+    name: String!
+    email: String
+    ticketNumber: String!
+}
+
+input EventInput {
+    id: ID
+    name: String!
+    location: String
+    attendeeNames: [String]
+}
+```
+
+The generator produces the following (shown with `javaGenerateAllConstructor = true`):
+
+```java
+@NullMarked
+public class Event {
+	private String id;
+
+	private String name;
+
+	@Nullable
+	private String location;
+
+	@Nullable
+	private List<Attendee> attendees;
+
+	@Nullable
+	private Person organizer;
+
+	private Event() {
+	}
+
+	public Event(String id, String name, @Nullable String location,
+			@Nullable List<Attendee> attendees, @Nullable Person organizer) {
+		this.id = id;
+		this.name = name;
+		this.location = location;
+		this.attendees = attendees;
+		this.organizer = organizer;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Nullable
+	public List<Attendee> getAttendees() {
+		return attendees;
+	}
+
+	public void setAttendees(@Nullable List<Attendee> attendees) {
+		this.attendees = attendees;
+	}
+
+	// Other methods omitted for brevity...
+
+	public static class Builder {
+		@Nullable
+		private String id;
+
+		@Nullable
+		private String name;
+
+		@Nullable
+		private String location;
+
+		@Nullable
+		private List<Attendee> attendees;
+
+		@Nullable
+		private Person organizer;
+
+		public Event build() {
+			Event result = new Event();
+			result.id = Objects.requireNonNull(this.id, "id cannot be null");
+			result.name = Objects.requireNonNull(this.name, "name cannot be null");
+			result.location = this.location;
+			result.attendees = this.attendees;
+			result.organizer = this.organizer;
+			return result;
+		}
+
+		public Builder id(String id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder location(@Nullable String location) {
+			this.location = location;
+			return this;
+		}
+
+		public Builder attendees(@Nullable List<Attendee> attendees) {
+			this.attendees = attendees;
+			return this;
+		}
+
+		public Builder organizer(@Nullable Person organizer) {
+			this.organizer = organizer;
+			return this;
+		}
+	}
+}
+```
+
+```java
+@NullMarked
+public interface Person {
+	String getName();
+
+	void setName(String name);
+
+	@Nullable
+	String getEmail();
+
+	void setEmail(@Nullable String email);
+}
+```
+
+```java
+@NullMarked
+public class Attendee implements Person {
+	private String name;
+
+	@Nullable
+	private String email;
+
+	private String ticketNumber;
+
+	private Attendee() {
+    }
+
+	public Attendee(String name, @Nullable String email, String ticketNumber) {
+		this.name = name;
+		this.email = email;
+		this.ticketNumber = ticketNumber;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Nullable
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(@Nullable String email) {
+		this.email = email;
+	}
+
+	// Other methods omitted for brevity...
+
+	public static class Builder {
+		@Nullable
+		private String name;
+
+		@Nullable
+		private String email;
+
+		@Nullable
+		private String ticketNumber;
+
+		public Attendee build() {
+			Attendee result = new Attendee();
+			result.name = Objects.requireNonNull(this.name, "name cannot be null");
+			result.email = this.email;
+			result.ticketNumber = Objects.requireNonNull(this.ticketNumber, "ticketNumber cannot be null");
+			return result;
+		}
+
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder email(@Nullable String email) {
+			this.email = email;
+			return this;
+		}
+
+		public Builder ticketNumber(String ticketNumber) {
+			this.ticketNumber = ticketNumber;
+			return this;
+		}
+	}
+}
+```
+
+```java
+@NullMarked
+public class EventInput {
+	@Nullable
+	private String id;
+
+	private String name;
+
+	@Nullable
+	private String location;
+
+	@Nullable
+	private List<@Nullable String> attendeeNames;
+
+	private EventInput() {
+    }
+
+	public EventInput(@Nullable String id, String name, @Nullable String location,
+			@Nullable List<@Nullable String> attendeeNames) {
+		this.id = id;
+		this.name = name;
+		this.location = location;
+		this.attendeeNames = attendeeNames;
+	}
+
+	@Nullable
+	public String getId() {
+		return id;
+	}
+
+	public void setId(@Nullable String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	// Other methods omitted for brevity...
+
+	public static class Builder {
+		@Nullable
+		private String id;
+
+		@Nullable
+		private String name;
+
+		@Nullable
+		private String location;
+
+		@Nullable
+		private List<@Nullable String> attendeeNames;
+
+		public EventInput build() {
+			EventInput result = new EventInput();
+			result.id = this.id;
+			result.name = Objects.requireNonNull(this.name, "name cannot be null");
+			result.location = this.location;
+			result.attendeeNames = this.attendeeNames;
+			return result;
+		}
+
+		public Builder id(@Nullable String id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder location(@Nullable String location) {
+			this.location = location;
+			return this;
+		}
+
+		public Builder attendeeNames(@Nullable List<@Nullable String> attendeeNames) {
+			this.attendeeNames = attendeeNames;
+			return this;
+		}
+	}
+}
+```
+
+!!! note
+    When `generateJSpecifyAnnotations` is enabled, a `private` no-arg constructor is generated instead of a `public` one to prevent bypassing null-checks.
+
+!!! tip
+    It is _recommended_ to also set `javaGenerateAllConstructor = true` for direct instantiation using an all-args constructor.
+
 ## Generating code from external schemas in JARs
 You can also specify external dependencies containing schemas to use for generation by declaring it as a dependency in the `dgsCodegen` configuration.
 The plugin will scan all `.graphql` and `.graphqls` files and generate those classes under the `build/generated` directory.
@@ -694,6 +1049,7 @@ The following table shows the Gradle configuration options, but the same options
 | disableDatesInGeneratedAnnotation | Don't add a date to the `jakarta.annotation.Generated` annotation                                                               | false         |
 | addDeprecatedAnnotation           | Add `@Deprecated` annotation for deprecated schema elements                                                                     | false         |
 | generateCustomAnnotations         | Enable generation of custom annotations on generated types and fields using `@annotate` directive in schema                     | false         |
+| generateJSpecifyAnnotations       | Enable/disable generation of JSpecify annotations (`@NullMarked` for types, `@Nullable` for fields/getters/setters/parameters). | false         |
 | includeImports                    | Maps the custom annotation type to the package, the annotations belong to. Only used when generateCustomAnnotations is enabled. |               |
 | includeEnumImports                | Maps the custom annotation and enum argument names to the enum packages. Only used when generateCustomAnnotations is enabled.   |               |
 | includeClassImports               | Maps the custom annotation and class names to the class packages. Only used when generateCustomAnnotations is enabled.          |               |
