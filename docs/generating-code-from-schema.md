@@ -515,6 +515,36 @@ public class EventInput {
 !!! tip
     It is _recommended_ to also set `javaGenerateAllConstructor = true` for direct instantiation using an all-args constructor.
 
+### Skipping code generation for fields or types
+
+You can skip generating code for entire types or specific fields in types using the `@skipcodegen` directive in your schema.
+
+To exclude an entire type from being generated, add `@skipcodegen` after the type name:
+
+```graphql
+type Person {
+    name: String
+}
+
+type Car @skipcodegen {
+    make: String
+}
+```
+In this case, codegen will not generate a `Car` type.
+
+To exclude a field in a type (concrete or interface), add `@skipcodegen` after the field:
+
+```graphql
+type Person {
+    name: String
+    email: String @skipcodegen
+}
+```
+
+The generated `Person` type will have a `name` field and a setter/getter for `name`, but the `email` field and its associated setters/getters will be excluded.
+
+Excluding fields during code generation can be useful for [child datafetchers](https://netflix.github.io/dgs/datafetching/#child-datafetchers) when you want to retrieve some fields in the parent resolver and others through child resolvers. 
+
 ## Generating code from external schemas in JARs
 You can also specify external dependencies containing schemas to use for generation by declaring it as a dependency in the `dgsCodegen` configuration.
 The plugin will scan all `.graphql` and `.graphqls` files and generate those classes under the `build/generated` directory.
