@@ -1,0 +1,1958 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://netflix.github.io/dgs/configuration/">
+      
+      
+        <link rel="prev" href="../announcements/">
+      
+      
+        <link rel="next" href="../datafetching/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Configuration - DGS Framework</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../stylesheets/dgs_theme.css?v=3.0.13">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#configuration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Mitigate bug: https://github.com/mkdocs/mkdocs/issues/2191 -->
+
+
+
+<div class="sash" data-no-interact></div>
+
+<!-- Application header -->
+<header class="md-header dgs-header" data-md-component="header">
+
+  <!-- Top-level navigation -->
+  <nav class="md-header-nav md-grid dgs-header-nav" aria-label="header.title">
+
+    <!-- Link to home -->
+    <a
+      href="https://netflix.github.io/dgs/"
+      title="DGS Framework"
+      class="md-header-nav__button dgs-header-nav__button md-logo dgs-logo"
+      aria-label="DGS Framework"
+    >
+      
+  <img src="../images/logo--blue.svg" alt="logo">
+
+    </a>
+
+    <!-- Header title -->
+    <div class="md-header-nav__title dgs-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis sr-only">
+          <span class="md-header-nav__topic md-ellipsis">
+            DGS Framework
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Configuration
+            
+          </span>
+        </div>
+      
+    </div>
+
+    <!-- Repository containing source -->
+    
+      <div class="md-header-nav__source dgs-header-nav__source">
+        <a href="https://github.com/netflix/dgs-framework" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.01 8.01 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27s-1.36.09-2 .27c-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+
+     <!-- Color palette -->
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: light)"
+            data-md-color-scheme="default"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_1"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to dark mode"
+            for="__palette_2"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+          </label>
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: dark)"
+            data-md-color-scheme="slate"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_2"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to light mode"
+            for="__palette_1"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+          </label>
+        
+      </form>
+    
+
+    <!-- Button to open drawer -->
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+
+    <!-- Button to open search dialogue -->
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__search">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+    </label>
+
+    <!-- Search interface -->
+    <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Search interface -->
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input
+        type="text"
+        class="md-search__input"
+        name="query"
+        aria-label="Search"
+        placeholder="Search"
+        autocapitalize="off"
+        autocorrect="off"
+        autocomplete="off"
+        spellcheck="false"
+        data-md-component="search-query"
+        data-md-state="active"
+        required
+      />
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <button
+        type="reset"
+        class="md-search__icon md-icon"
+        aria-label="Clear"
+        data-md-component="search-reset"
+        tabindex="-1"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-search-decoration" data-no-interact></div>
+</div>
+
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="DGS Framework" class="md-nav__button md-logo" aria-label="DGS Framework" data-md-component="logo">
+      
+  <img src="../images/logo--blue.svg" alt="logo">
+
+    </a>
+    DGS Framework
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/netflix/dgs-framework" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.01 8.01 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27s-1.36.09-2 .27c-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spring-graphql-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring GraphQL Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../announcements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    New and Noteworthy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Properties
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-configure-the-location-of-the-graphql-schema-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Configure the location of the GraphQL Schema Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dgs-extended-scalars-graphql-dgs-extended-scalars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DGS Extended Scalars: graphql-dgs-extended-scalars
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dgs-extended-validation-graphql-dgs-extended-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DGS Extended Validation: graphql-dgs-extended-validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dgs-metrics-graphql-dgs-spring-boot-micrometer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DGS Metrics: graphql-dgs-spring-boot-micrometer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../datafetching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data fetching
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-execution-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mutations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mutations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generating-code-from-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-loaders/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Loaders (N+1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error-handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../federation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Federation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Videos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/platform-bom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Using the Platform BOM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/context-passing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nested data fetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/virtual-threads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Using Virtual Threads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/schema-reloading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hot reloading schemas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/java-client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java GraphQL Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/kotlin-codegen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kotlin CodeGen (Experimental)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/file-uploads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    File Uploads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/subscriptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subscriptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/type-resolvers-for-abstract-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interfaces and Unions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/instrumentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instrumentation (Tracing, Metrics)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/intercepting-http-request-response/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intercepting Http request and Response for MVC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/graphqlcontext-leveraging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQLContext
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/custom-datafetcher-context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Fetching Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/federated-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Federated Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/dynamic-schemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic schemas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/relay-pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Relay Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/operation-caching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operation Caching
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scalars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding Custom Scalars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/custom-directives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding Custom Directives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/custom-object-mapper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Object Mapper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Properties
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-configure-the-location-of-the-graphql-schema-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Configure the location of the GraphQL Schema Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dgs-extended-scalars-graphql-dgs-extended-scalars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DGS Extended Scalars: graphql-dgs-extended-scalars
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dgs-extended-validation-graphql-dgs-extended-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DGS Extended Validation: graphql-dgs-extended-validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dgs-metrics-graphql-dgs-spring-boot-micrometer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DGS Metrics: graphql-dgs-spring-boot-micrometer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>Configuration</h1>
+
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<h3 id="core-properties">Core Properties<a class="headerlink" href="#core-properties" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dgs.graphql.path</td>
+<td>String</td>
+<td><code>"/graphql"</code></td>
+<td>Path to the endpoint that will serve GraphQL requests.</td>
+</tr>
+<tr>
+<td>dgs.graphql.introspection.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Enables graphql introspection functionality.</td>
+</tr>
+<tr>
+<td>dgs.graphql.introspection.show-sdl-comments</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Toggles showing graphql SDL comments in introspection query results.</td>
+</tr>
+<tr>
+<td>dgs.graphql.schema-json.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Enables schema-json endpoint functionality. <br/> If you are using Spring GraphQL, use <a href="https://netflix.github.io/dgs/spring-graphql-integration/#schema-resource">spring.graphql.schema.printer.enabled</a> instead.</td>
+</tr>
+<tr>
+<td>dgs.graphql.schema-json.path</td>
+<td>String</td>
+<td><code>"/schema.json"</code></td>
+<td>Path to the schema-json endpoint without trailing slash.</td>
+</tr>
+<tr>
+<td>dgs.graphql.schema-locations</td>
+<td>[String]</td>
+<td><code>"classpath*:schema/**/*.graphql*"</code></td>
+<td>Location of the GraphQL schema files.</td>
+</tr>
+<tr>
+<td>dgs.graphql.graphiql.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Enables GraphiQL functionality.</td>
+</tr>
+<tr>
+<td>dgs.graphql.graphiql.path</td>
+<td>String</td>
+<td><code>"/graphiql"</code></td>
+<td>Path to the GraphiQL endpoint without trailing slash.</td>
+</tr>
+<tr>
+<td>dgs.graphql.graphiql.title</td>
+<td>String</td>
+<td><code>"Simple GraphiQL Example"</code></td>
+<td>Title of the GraphiQL page</td>
+</tr>
+<tr>
+<td>dgs.graphql.enable-entity-fetcher-custom-scalar-parsing</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>Enables the bug fix for entity fetcher custom scalar parsing. This will eventually be enabled by default.</td>
+</tr>
+<tr>
+<td>dgs.graphql.dataloader.ticker-mode-enabled</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>Enables the ticker mode for scheduling data loader dispatches.</td>
+</tr>
+<tr>
+<td>dgs.graphql.dataloader.schedule-duration</td>
+<td>String</td>
+<td><code>10ms</code></td>
+<td>Set the schedule for scheduling dispatch predicate checks.</td>
+</tr>
+<tr>
+<td>dgs.graphql.preparsed-document-provider.enabled</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>Enables a Caffiene-cache backed implementation of a PreparsedDocumentProvider.</td>
+</tr>
+<tr>
+<td>dgs.graphql.preparsed-document-provider.maximum-cache-size</td>
+<td>Long</td>
+<td><code>2000</code></td>
+<td>Sets the maximum size of the PreparsedDocumentProvider Caffiene-cache.</td>
+</tr>
+<tr>
+<td>dgs.graphql.preparsed-document-provider.cache-validity-duration</td>
+<td>String</td>
+<td><code>PT1H</code></td>
+<td>How long a cached entry in the PreparsedDocumentProvider Caffiene-cache is valid for. Specified as an ISO-8601 duration string.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="example-configure-the-location-of-the-graphql-schema-files">Example: Configure the location of the GraphQL Schema Files<a class="headerlink" href="#example-configure-the-location-of-the-graphql-schema-files" title="Permanent link">&para;</a></h4>
+<p>You can configure the location of your GraphQL schema files via the <code>dgs.graphql.schema-locations</code> property.
+By default it will attempt to load them from the <code>schema</code> directory via the <em>Classpath</em>, i.e. using <code>classpath*:schema/**/*.graphql*</code>.
+Let's go through an example, let's say you want to change the directory from being <code>schema</code> to <code>graphql-schemas</code>,
+you would define your configuration as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="nt">dgs</span><span class="p">:</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">  </span><span class="nt">graphql</span><span class="p">:</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="nt">schema-locations</span><span class="p">:</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">classpath*:graphql-schemas/**/*.graphql*</span>
+</code></pre></div>
+<p>Now, if you want to add additional locations to look for the GraphQL Schema files you add them to the list.
+For example, let's say we want to also look into your <code>graphql-experimental-schemas</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="nt">dgs</span><span class="p">:</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">  </span><span class="nt">graphql</span><span class="p">:</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="nt">schema-locations</span><span class="p">:</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">classpath*:graphql-schemas/**/*.graphql*</span>
+<span class="linenos" data-linenos="5 "></span><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">classpath*:graphql-experimental-schemas/**/*.graphql*</span>
+</code></pre></div>
+<h3 id="dgs-extended-scalars-graphql-dgs-extended-scalars">DGS Extended Scalars: graphql-dgs-extended-scalars<a class="headerlink" href="#dgs-extended-scalars-graphql-dgs-extended-scalars" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dgs.graphql.extensions.scalars.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Registered the Scalar Extensions available in <a href="https://github.com/graphql-java/graphql-java-extended-scalars">graphql-java-extended-scalars</a> for the DGS Framework.</td>
+</tr>
+<tr>
+<td>dgs.graphql.extensions.scalars.chars.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Will register the Char scalar extension.</td>
+</tr>
+<tr>
+<td>dgs.graphql.extensions.scalars.numbers.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Will register all numeric scalar extensions (PositiveInt, NegativeInt, NonPositiveInt, NonNegativeInt, PositiveFloat, NegativeFloat, NonPositiveFloat, NonNegativeFloat, Long, Short, Byte, BigDecimal, BigInteger).</td>
+</tr>
+<tr>
+<td>dgs.graphql.extensions.scalars.objects.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Will register the Object, Json, Url, and Locale scalar extensions.</td>
+</tr>
+<tr>
+<td>dgs.graphql.extensions.scalars.time-dates.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Will register the DateTime, Date, Time and LocalTime scalar extensions.</td>
+</tr>
+<tr>
+<td>dgs.graphql.extensions.scalars.ids.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Will register the UUID scalar extension.</td>
+</tr>
+<tr>
+<td>dgs.graphql.extensions.scalars.country</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Will register the CountryCode scalar extension.</td>
+</tr>
+<tr>
+<td>dgs.graphql.extensions.scalars.currency</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Will register the Currency scalar extension.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dgs-extended-validation-graphql-dgs-extended-validation">DGS Extended Validation: graphql-dgs-extended-validation<a class="headerlink" href="#dgs-extended-validation-graphql-dgs-extended-validation" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dgs.graphql.extensions.validation.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Registered the Validation Schema Directive Extensions available in <a href="https://github.com/graphql-java/graphql-java-extended-validation">graphql-java-extended-validation</a> for the DGS Framework.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dgs-metrics-graphql-dgs-spring-boot-micrometer">DGS Metrics: graphql-dgs-spring-boot-micrometer<a class="headerlink" href="#dgs-metrics-graphql-dgs-spring-boot-micrometer" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>management.metrics.dgs-graphql.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Enables DGS' GraphQL metrics, via micrometer.</td>
+</tr>
+<tr>
+<td>management.metrics.dgs-graphql.instrumentation.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Enables DGS' GraphQL's base instrumentation; emits <code>gql.query</code>, <code>gql.resolver</code>, and <code>gql.error</code> meters.</td>
+</tr>
+<tr>
+<td>management.metrics.dgs-graphql.data-loader-instrumentation.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Enables DGS' instrumentation for DataLoader; emits <code>gql.dataLoader</code> meters.</td>
+</tr>
+<tr>
+<td>management.metrics.dgs-graphql.tag-customizers.outcome.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Enables DGS' GraphQL Outcome tag customizer. This adds an OUTCOME tag that is ether SUCCESS or ERROR to the emitted gql meters.</td>
+</tr>
+<tr>
+<td>management.metrics.dgs-graphql.query-signature.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Enables DGS' <code>QuerySignatureRepository</code>; if available metrics will be tagged with the <code>gql.query.sig.hash</code>.</td>
+</tr>
+<tr>
+<td>management.metrics.dgs-graphql.query-signature.caching.enabled</td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Enables DGS' <code>QuerySignature</code> caching; if set to false the signature will always be calculated on each request.</td>
+</tr>
+<tr>
+<td>management.metrics.dgs-graphql.tags.limiter.limit</td>
+<td>Integer</td>
+<td>100</td>
+<td>The limit that will apply for this tag. The interpretation of this limit depends on the cardinality limiter itself.</td>
+</tr>
+<tr>
+<td>management.metrics.dgs-graphql.autotime.percentiles</td>
+<td>[Double]</td>
+<td>[]</td>
+<td>DGS Micrometer Timers percentiles, e.g. <code>[0.95, 0.99, 0.50]</code>. <sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></td>
+</tr>
+<tr>
+<td>management.metrics.dgs-graphql.autotime.percentiles-histogram</td>
+<td>Boolean</td>
+<td><code>false</code></td>
+<td>Enables publishing percentile histograms for the DGS Micrometer Timers. <sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>You can configure percentiles, and enable percentile histograms, directly via the per-meter customizations available
+out of the box in Spring Boot. For example, to enable percentile histograms for all <code>gql.*</code> meters you can
+set the following property:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>management.metrics.distribution.percentiles-histogram.gql=true
+</code></pre></div>
+<p>For more information please refer to <a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.metrics.customizing.per-meter-properties">Spring Boot's Per Meter Properties</a>.</p>
+</div>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p><a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator.metrics.customizing.per-meter-properties">Spring Boot's Per Meter Properties</a> can be used to configure percentiles, and histograms, out of the box.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../js/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

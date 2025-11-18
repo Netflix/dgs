@@ -1,0 +1,3266 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://netflix.github.io/dgs/generating-code-from-schema/">
+      
+      
+        <link rel="prev" href="../mutations/">
+      
+      
+        <link rel="next" href="../data-loaders/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Code Generation - DGS Framework</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../stylesheets/dgs_theme.css?v=3.0.13">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#quick-start" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Mitigate bug: https://github.com/mkdocs/mkdocs/issues/2191 -->
+
+
+
+<div class="sash" data-no-interact></div>
+
+<!-- Application header -->
+<header class="md-header dgs-header" data-md-component="header">
+
+  <!-- Top-level navigation -->
+  <nav class="md-header-nav md-grid dgs-header-nav" aria-label="header.title">
+
+    <!-- Link to home -->
+    <a
+      href="https://netflix.github.io/dgs/"
+      title="DGS Framework"
+      class="md-header-nav__button dgs-header-nav__button md-logo dgs-logo"
+      aria-label="DGS Framework"
+    >
+      
+  <img src="../images/logo--blue.svg" alt="logo">
+
+    </a>
+
+    <!-- Header title -->
+    <div class="md-header-nav__title dgs-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis sr-only">
+          <span class="md-header-nav__topic md-ellipsis">
+            DGS Framework
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Code Generation
+            
+          </span>
+        </div>
+      
+    </div>
+
+    <!-- Repository containing source -->
+    
+      <div class="md-header-nav__source dgs-header-nav__source">
+        <a href="https://github.com/netflix/dgs-framework" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.01 8.01 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27s-1.36.09-2 .27c-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+
+     <!-- Color palette -->
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: light)"
+            data-md-color-scheme="default"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_1"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to dark mode"
+            for="__palette_2"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+          </label>
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: dark)"
+            data-md-color-scheme="slate"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_2"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to light mode"
+            for="__palette_1"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+          </label>
+        
+      </form>
+    
+
+    <!-- Button to open drawer -->
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+
+    <!-- Button to open search dialogue -->
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__search">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+    </label>
+
+    <!-- Search interface -->
+    <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Search interface -->
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input
+        type="text"
+        class="md-search__input"
+        name="query"
+        aria-label="Search"
+        placeholder="Search"
+        autocapitalize="off"
+        autocorrect="off"
+        autocomplete="off"
+        spellcheck="false"
+        data-md-component="search-query"
+        data-md-state="active"
+        required
+      />
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <button
+        type="reset"
+        class="md-search__icon md-icon"
+        aria-label="Clear"
+        data-md-component="search-reset"
+        tabindex="-1"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-search-decoration" data-no-interact></div>
+</div>
+
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="DGS Framework" class="md-nav__button md-logo" aria-label="DGS Framework" data-md-component="logo">
+      
+  <img src="../images/logo--blue.svg" alt="logo">
+
+    </a>
+    DGS Framework
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/netflix/dgs-framework" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.01 8.01 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27s-1.36.09-2 .27c-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spring-graphql-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring GraphQL Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../announcements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    New and Noteworthy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../datafetching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data fetching
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-execution-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mutations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mutations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Generation
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Start
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-the-generated-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using the generated types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sparse-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sparse updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jspecify-null-safety-annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSpecify Null-Safety Annotations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skipping-code-generation-for-fields-or-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipping code generation for fields or types
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-code-from-external-schemas-in-jars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generating code from external schemas in JARs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mapping-existing-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping existing types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-client-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generating Client APIs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generating Client APIs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-query-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using query variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-query-apis-for-external-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generating Query APIs for external services
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limiting-generated-code-for-client-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limiting generated code for Client API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-classes-with-custom-annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generating classes with Custom Annotations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuring-code-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuring code generation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuring code generation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-package-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File &amp; Package Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#language-type-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language &amp; Type Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#client-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Client Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-type-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Type Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#java-specific-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Java-Specific Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kotlin-specific-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kotlin-Specific Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#querymutationsubscription-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query/Mutation/Subscription Filtering
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#naming-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naming Conventions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Annotations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-loaders/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Loaders (N+1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error-handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../federation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Federation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Videos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/platform-bom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Using the Platform BOM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/context-passing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nested data fetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/virtual-threads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Using Virtual Threads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/schema-reloading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hot reloading schemas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/java-client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java GraphQL Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/kotlin-codegen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kotlin CodeGen (Experimental)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/file-uploads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    File Uploads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/subscriptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subscriptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/type-resolvers-for-abstract-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interfaces and Unions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/instrumentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instrumentation (Tracing, Metrics)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/intercepting-http-request-response/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intercepting Http request and Response for MVC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/graphqlcontext-leveraging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQLContext
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/custom-datafetcher-context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Fetching Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/federated-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Federated Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/dynamic-schemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic schemas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/relay-pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Relay Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/operation-caching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operation Caching
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scalars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding Custom Scalars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/custom-directives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding Custom Directives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/custom-object-mapper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Object Mapper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Start
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-the-generated-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using the generated types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sparse-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sparse updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jspecify-null-safety-annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSpecify Null-Safety Annotations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skipping-code-generation-for-fields-or-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipping code generation for fields or types
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-code-from-external-schemas-in-jars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generating code from external schemas in JARs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mapping-existing-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mapping existing types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-client-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generating Client APIs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generating Client APIs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-query-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using query variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-query-apis-for-external-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generating Query APIs for external services
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limiting-generated-code-for-client-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limiting generated code for Client API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generating-classes-with-custom-annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generating classes with Custom Annotations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuring-code-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuring code generation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuring code generation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-package-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File &amp; Package Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#language-type-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language &amp; Type Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#client-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Client Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-type-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Type Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#java-specific-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Java-Specific Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kotlin-specific-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kotlin-Specific Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#querymutationsubscription-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query/Mutation/Subscription Filtering
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#naming-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naming Conventions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Annotations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<p>The DGS Code Generation plugin generates code during your project’s build process based on your Domain Graph Service’s GraphQL schema file.
+The plugin generates the following:</p>
+<ul>
+<li>Data types for types, input types, enums and interfaces.</li>
+<li>A <code>DgsConstants</code> class containing the names of types and fields</li>
+<li>A type safe query API that represents your queries</li>
+</ul>
+<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
+<p>Code generation is typically integrated in the build.
+This project provides a Gradle plugin, and a Maven plugin was made <a href="https://github.com/deweyjose/graphqlcodegen">available</a> by the community, built on the same core.</p>
+<p>To apply the plugin, update your project’s <code>build.gradle</code> file to include the following:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="c1">// Using plugins DSL</span>
+<span class="linenos" data-linenos="2 "></span><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;com.netflix.dgs.codegen&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;[REPLACE_WITH_CODEGEN_PLUGIN_VERSION]&quot;</span>
+<span class="linenos" data-linenos="4 "></span><span class="o">}</span>
+</code></pre></div></p>
+<p>Alternatively, you can set up classpath dependencies in your buildscript:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">buildscript</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">   </span><span class="n">dependencies</span><span class="o">{</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">      </span><span class="n">classpath</span><span class="w"> </span><span class="s1">&#39;com.netflix.graphql.dgs.codegen:graphql-dgs-codegen-gradle:[REPLACE_WITH_CODEGEN_PLUGIN_VERSION]&#39;</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">   </span><span class="o">}</span>
+<span class="linenos" data-linenos="5 "></span><span class="o">}</span>
+<span class="linenos" data-linenos="6 "></span>
+<span class="linenos" data-linenos="7 "></span><span class="n">apply</span><span class="w"> </span><span class="nl">plugin:</span><span class="w"> </span><span class="s1">&#39;com.netflix.dgs.codegen&#39;</span>
+</code></pre></div></p>
+<p>Next, you need to add the task configuration as shown here:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">   </span><span class="n">schemaPaths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;${projectDir}/src/main/resources/schema&quot;</span><span class="o">]</span><span class="w"> </span><span class="c1">// List of directories containing schema files</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">   </span><span class="n">packageName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;com.example.packagename&#39;</span><span class="w"> </span><span class="c1">// The package name to use to generate sources</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">   </span><span class="n">generateClient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c1">// Enable generating the type safe query API</span>
+<span class="linenos" data-linenos="5 "></span><span class="o">}</span>
+</code></pre></div>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;">
+ NOTE: Please use the latest version of the plugin, available <a href="https://github.com/Netflix/dgs-codegen/releases">here</a>
+</div>
+
+<p>The plugin adds a <code>generateJava</code> Gradle task that runs as part of your project’s build.
+<code>generateJava</code> generates the code in the project’s <code>build/generated</code> directory.
+Note that on a Kotlin project, the <code>generateJava</code> task generates Kotlin code by default (yes the name is confusing).
+This folder is automatically added to the project's classpath.
+Types are available as part of the package specified by the <code><var>packageName</var>.types</code>, where you specify the value of <var>packageName</var> as a configuration in your <code>build.gradle</code> file.
+Please ensure that your project’s sources refer to the generated code using the specified package name.</p>
+<p>You can exclude parts of the schema from code-generation by placing them in a different schema directory that is not specified<!-- http://go/pv --> as part of the <code>schemaPaths</code> for the plugin.</p>
+<h3 id="using-the-generated-types">Using the generated types<a class="headerlink" href="#using-the-generated-types" title="Permanent link">&para;</a></h3>
+<p>The generated types are POJOs with both a non-arg constructor, a constructor for all fields, and implementations for hashCode/equals/toString.
+You also get a builder class to easily create instances.
+The types are typically used used as return types for your datafetchers and input arguments for your datafetchers. </p>
+<p>The following are some examples of using generated types for the example schema below.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="k">type</span><span class="w"> </span><span class="err">Query</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="w">    </span><span class="nl">events</span><span class="p">:</span><span class="w"> </span><span class="err">[</span><span class="n">Event</span><span class="err">]</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="p">}</span>
+<span class="linenos" data-linenos=" 4 "></span>
+<span class="linenos" data-linenos=" 5 "></span><span class="k">type</span><span class="w"> </span><span class="err">Event</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="nl">id</span><span class="p">:</span><span class="w"> </span><span class="n">ID</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">    </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="nl">location</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">    </span><span class="nl">keywords</span><span class="p">:</span><span class="w"> </span><span class="err">[</span><span class="n">String</span><span class="err">]</span>
+<span class="linenos" data-linenos="10 "></span><span class="w">    </span><span class="nl">website</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="11 "></span><span class="w">    </span><span class="nl">date</span><span class="p">:</span><span class="w"> </span><span class="n">Date</span>
+<span class="linenos" data-linenos="12 "></span><span class="p">}</span>
+<span class="linenos" data-linenos="13 "></span>
+<span class="linenos" data-linenos="14 "></span><span class="k">type</span><span class="w"> </span><span class="err">Mutation</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="15 "></span><span class="w">    </span><span class="n">update</span><span class="p">(</span><span class="n">event</span><span class="p">:</span><span class="w"> </span><span class="no">EventInput</span><span class="p">)</span><span class="err">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="16 "></span><span class="p">}</span>
+<span class="linenos" data-linenos="17 "></span>
+<span class="linenos" data-linenos="18 "></span><span class="k">input</span><span class="w"> </span><span class="err">EventInput</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="19 "></span><span class="w">    </span><span class="nl">id</span><span class="p">:</span><span class="w"> </span><span class="n">ID</span>
+<span class="linenos" data-linenos="20 "></span><span class="w">    </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="21 "></span><span class="w">    </span><span class="nl">location</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="22 "></span><span class="w">    </span><span class="nl">keywords</span><span class="p">:</span><span class="w"> </span><span class="err">[</span><span class="n">String</span><span class="err">]</span>
+<span class="linenos" data-linenos="23 "></span><span class="w">    </span><span class="nl">website</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="24 "></span><span class="w">    </span><span class="nl">date</span><span class="p">:</span><span class="w"> </span><span class="n">Date</span>
+<span class="linenos" data-linenos="25 "></span><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@DgsQuery</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Event</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">events</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">List</span><span class="p">.</span><span class="na">of</span><span class="p">(</span>
+<span class="linenos" data-linenos=" 4 "></span><span class="w">            </span><span class="n">Event</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">                    </span><span class="p">.</span><span class="na">name</span><span class="p">(</span><span class="s">&quot;JavaOne&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">                    </span><span class="p">.</span><span class="na">location</span><span class="p">(</span><span class="s">&quot;Redwood City&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">                    </span><span class="p">.</span><span class="na">build</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="p">);</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="p">}</span>
+<span class="linenos" data-linenos="10 "></span>
+<span class="linenos" data-linenos="11 "></span><span class="nd">@DgsMutation</span>
+<span class="linenos" data-linenos="12 "></span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="nd">@InputArgument</span><span class="w"> </span><span class="n">EventInput</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="13 "></span><span class="w">    </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Storing event: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getName</span><span class="p">());</span>
+<span class="linenos" data-linenos="14 "></span>
+<span class="linenos" data-linenos="15 "></span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;Stored event with id &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getId</span><span class="p">();</span>
+<span class="linenos" data-linenos="16 "></span><span class="p">}</span>
+</code></pre></div>
+<h3 id="sparse-updates">Sparse updates<a class="headerlink" href="#sparse-updates" title="Permanent link">&para;</a></h3>
+<p>Use the <code>trackInputFieldSet</code> flag to enable tracking which fields are set on input types.
+This is useful for sparse updates; just sending the fields in a mutation that you want to update, and leave other fields untouched.
+Codegen creates the POJOs with each field value wrapped in an <code>Optional</code>, and a <code>has[FieldName]</code> method to check if the optional was set.
+In a mutation datafetcher you can check the input type for which fields were explicitly set.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="n">trackInputFieldSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="3 "></span><span class="o">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@DgsMutation</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="nd">@InputArgument</span><span class="w"> </span><span class="n">EventInput</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span>
+<span class="linenos" data-linenos=" 4 "></span><span class="w">    </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Storing event: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getName</span><span class="p">());</span>
+<span class="linenos" data-linenos=" 5 "></span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">updated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashSet</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="linenos" data-linenos=" 7 "></span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">hasName</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">        </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Update name to: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getName</span><span class="p">());</span>
+<span class="linenos" data-linenos="10 "></span><span class="w">        </span><span class="n">updated</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&quot;name=&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getName</span><span class="p">());</span>
+<span class="linenos" data-linenos="11 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="12 "></span>
+<span class="linenos" data-linenos="13 "></span><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">hasLocation</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="14 "></span><span class="w">        </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Update location to: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getLocation</span><span class="p">());</span>
+<span class="linenos" data-linenos="15 "></span><span class="w">        </span><span class="n">updated</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&quot;location=&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getLocation</span><span class="p">());</span>
+<span class="linenos" data-linenos="16 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="17 "></span>
+<span class="linenos" data-linenos="18 "></span><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">hasWebsite</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="19 "></span><span class="w">        </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Update website to: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getWebsite</span><span class="p">());</span>
+<span class="linenos" data-linenos="20 "></span><span class="w">        </span><span class="n">updated</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&quot;website=&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getWebsite</span><span class="p">());</span>
+<span class="linenos" data-linenos="21 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="22 "></span>
+<span class="linenos" data-linenos="23 "></span><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">hasDate</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="24 "></span><span class="w">        </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Update date to: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getDate</span><span class="p">());</span>
+<span class="linenos" data-linenos="25 "></span><span class="w">        </span><span class="n">updated</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&quot;date=&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getDate</span><span class="p">());</span>
+<span class="linenos" data-linenos="26 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="27 "></span>
+<span class="linenos" data-linenos="28 "></span><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">hasKeywords</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="29 "></span><span class="w">        </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Update keywords to: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getKeywords</span><span class="p">());</span>
+<span class="linenos" data-linenos="30 "></span><span class="w">        </span><span class="n">updated</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&quot;keywords=&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getKeywords</span><span class="p">());</span>
+<span class="linenos" data-linenos="31 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="32 "></span>
+<span class="linenos" data-linenos="33 "></span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">String</span><span class="p">.</span><span class="na">join</span><span class="p">(</span><span class="s">&quot;, &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">updated</span><span class="p">);</span>
+<span class="linenos" data-linenos="34 "></span>
+<span class="linenos" data-linenos="35 "></span><span class="p">}</span>
+</code></pre></div>
+<div style="position: relative; padding-bottom: 55.55555555555556%; height: 0;"><iframe src="https://www.loom.com/embed/b41be952bfc3466d84e0cc8a07760a1d?sid=b4ff9f10-a2c8-4a8a-b6d7-379e13008e0a" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+
+<h3 id="jspecify-null-safety-annotations">JSpecify Null-Safety Annotations<a class="headerlink" href="#jspecify-null-safety-annotations" title="Permanent link">&para;</a></h3>
+<p>You can generate <a href="https://jspecify.dev/">JSpecify</a> annotations for null-safety on Java types using the <code>generateJSpecifyAnnotations</code> flag.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="n">generateJSpecifyAnnotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="3 "></span><span class="o">}</span>
+</code></pre></div>
+<p>These annotations enable static analysis tools like <a href="https://github.com/uber/NullAway">NullAway</a> to detect potential null pointer exceptions at compile time.
+To compile generated sources with these annotations <strong>and</strong> use them in your own code, add the following to your project's <code>build.gradle</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s2">&quot;org.jspecify:jspecify:1.0.0&quot;</span>
+<span class="linenos" data-linenos="3 "></span><span class="o">}</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Learn more</p>
+<p>Check out the <a href="https://jspecify.dev/docs/user-guide/">Nullness User Guide</a> for more information on using JSpecify annotations.</p>
+</div>
+<p>When enabled, the following are added to the generated Java code:</p>
+<ul>
+<li><code>@NullMarked</code> annotations on classes and interfaces so generated types are <a href="https://jspecify.dev/docs/user-guide/#nullmarked">non-null by default</a></li>
+<li><code>@Nullable</code> annotations on nullable fields, getters, setters, and constructor parameters</li>
+<li><code>Objects.requireNonNull()</code> validation in the generated builder's <code>build()</code> method for non-null fields</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Where is @NonNull?</p>
+<p>Due to the presence of <code>@NullMarked</code> at the type level, we can omit the use of <code>@NonNull</code> annotations.</p>
+</div>
+<p>For example, given the following schema:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="k">type</span><span class="w"> </span><span class="err">Event</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="w">    </span><span class="nl">id</span><span class="p">:</span><span class="w"> </span><span class="n">ID</span><span class="err">!</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="w">    </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">String</span><span class="err">!</span>
+<span class="linenos" data-linenos=" 4 "></span><span class="w">    </span><span class="nl">location</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">    </span><span class="nl">attendees</span><span class="p">:</span><span class="w"> </span><span class="err">[</span><span class="n">Attendee</span><span class="err">!]</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="nl">organizer</span><span class="p">:</span><span class="w"> </span><span class="n">Person</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="p">}</span>
+<span class="linenos" data-linenos=" 8 "></span>
+<span class="linenos" data-linenos=" 9 "></span><span class="k">interface</span><span class="w"> </span><span class="err">Person</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="10 "></span><span class="w">    </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">String</span><span class="err">!</span>
+<span class="linenos" data-linenos="11 "></span><span class="w">    </span><span class="nl">email</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="12 "></span><span class="p">}</span>
+<span class="linenos" data-linenos="13 "></span>
+<span class="linenos" data-linenos="14 "></span><span class="k">type</span><span class="w"> </span><span class="err">Attendee</span><span class="w"> </span><span class="k">implements</span><span class="w"> </span><span class="err">Person</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="15 "></span><span class="w">    </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">String</span><span class="err">!</span>
+<span class="linenos" data-linenos="16 "></span><span class="w">    </span><span class="nl">email</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="17 "></span><span class="w">    </span><span class="nl">ticketNumber</span><span class="p">:</span><span class="w"> </span><span class="n">String</span><span class="err">!</span>
+<span class="linenos" data-linenos="18 "></span><span class="p">}</span>
+<span class="linenos" data-linenos="19 "></span>
+<span class="linenos" data-linenos="20 "></span><span class="k">input</span><span class="w"> </span><span class="err">EventInput</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="21 "></span><span class="w">    </span><span class="nl">id</span><span class="p">:</span><span class="w"> </span><span class="n">ID</span>
+<span class="linenos" data-linenos="22 "></span><span class="w">    </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">String</span><span class="err">!</span>
+<span class="linenos" data-linenos="23 "></span><span class="w">    </span><span class="nl">location</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="24 "></span><span class="w">    </span><span class="nl">attendeeNames</span><span class="p">:</span><span class="w"> </span><span class="err">[</span><span class="n">String</span><span class="err">]</span>
+<span class="linenos" data-linenos="25 "></span><span class="p">}</span>
+</code></pre></div>
+<p>The generator produces the following (shown with <code>javaGenerateAllConstructor = true</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="  1 "></span><span class="nd">@NullMarked</span>
+<span class="linenos" data-linenos="  2 "></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Event</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="  3 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos="  4 "></span>
+<span class="linenos" data-linenos="  5 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos="  6 "></span>
+<span class="linenos" data-linenos="  7 "></span><span class="w">    </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos="  8 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">location</span><span class="p">;</span>
+<span class="linenos" data-linenos="  9 "></span>
+<span class="linenos" data-linenos=" 10 "></span><span class="w">    </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 11 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Attendee</span><span class="o">&gt;</span><span class="w"> </span><span class="n">attendees</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 12 "></span>
+<span class="linenos" data-linenos=" 13 "></span><span class="w">    </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 14 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">organizer</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 15 "></span>
+<span class="linenos" data-linenos=" 16 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="nf">Event</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 17 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 18 "></span>
+<span class="linenos" data-linenos=" 19 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Event</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">location</span><span class="p">,</span>
+<span class="linenos" data-linenos=" 20 "></span><span class="w">            </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Attendee</span><span class="o">&gt;</span><span class="w"> </span><span class="n">attendees</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">organizer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 21 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 22 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 23 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">location</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 24 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">attendees</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">attendees</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 25 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">organizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">organizer</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 26 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 27 "></span>
+<span class="linenos" data-linenos=" 28 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getId</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 29 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 30 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 31 "></span>
+<span class="linenos" data-linenos=" 32 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setId</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 33 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 34 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 35 "></span>
+<span class="linenos" data-linenos=" 36 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getName</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 37 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 38 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 39 "></span>
+<span class="linenos" data-linenos=" 40 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setName</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 41 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 42 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 43 "></span>
+<span class="linenos" data-linenos=" 44 "></span><span class="w">    </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 45 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Attendee</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getAttendees</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 46 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">attendees</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 47 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 48 "></span>
+<span class="linenos" data-linenos=" 49 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setAttendees</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Attendee</span><span class="o">&gt;</span><span class="w"> </span><span class="n">attendees</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 50 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">attendees</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">attendees</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 51 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 52 "></span>
+<span class="linenos" data-linenos=" 53 "></span><span class="w">    </span><span class="c1">// Other methods omitted for brevity...</span>
+<span class="linenos" data-linenos=" 54 "></span>
+<span class="linenos" data-linenos=" 55 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Builder</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 56 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 57 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 58 "></span>
+<span class="linenos" data-linenos=" 59 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 60 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 61 "></span>
+<span class="linenos" data-linenos=" 62 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 63 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">location</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 64 "></span>
+<span class="linenos" data-linenos=" 65 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 66 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Attendee</span><span class="o">&gt;</span><span class="w"> </span><span class="n">attendees</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 67 "></span>
+<span class="linenos" data-linenos=" 68 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 69 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">organizer</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 70 "></span>
+<span class="linenos" data-linenos=" 71 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Event</span><span class="w"> </span><span class="nf">build</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 72 "></span><span class="w">            </span><span class="n">Event</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Event</span><span class="p">();</span>
+<span class="linenos" data-linenos=" 73 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Objects</span><span class="p">.</span><span class="na">requireNonNull</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">id</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;id cannot be null&quot;</span><span class="p">);</span>
+<span class="linenos" data-linenos=" 74 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Objects</span><span class="p">.</span><span class="na">requireNonNull</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name cannot be null&quot;</span><span class="p">);</span>
+<span class="linenos" data-linenos=" 75 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">location</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 76 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">attendees</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">attendees</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 77 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">organizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">organizer</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 78 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 79 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 80 "></span>
+<span class="linenos" data-linenos=" 81 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">id</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 82 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 83 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 84 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 85 "></span>
+<span class="linenos" data-linenos=" 86 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 87 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 88 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 89 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 90 "></span>
+<span class="linenos" data-linenos=" 91 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">location</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">location</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 92 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">location</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 93 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 94 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 95 "></span>
+<span class="linenos" data-linenos=" 96 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">attendees</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Attendee</span><span class="o">&gt;</span><span class="w"> </span><span class="n">attendees</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 97 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">attendees</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">attendees</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 98 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 99 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="100 "></span>
+<span class="linenos" data-linenos="101 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">organizer</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">organizer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="102 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">organizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">organizer</span><span class="p">;</span>
+<span class="linenos" data-linenos="103 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos="104 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="105 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="106 "></span><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@NullMarked</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">Person</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="nf">getName</span><span class="p">();</span>
+<span class="linenos" data-linenos=" 4 "></span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setName</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">);</span>
+<span class="linenos" data-linenos=" 6 "></span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">    </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="nf">getEmail</span><span class="p">();</span>
+<span class="linenos" data-linenos=" 9 "></span>
+<span class="linenos" data-linenos="10 "></span><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setEmail</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">email</span><span class="p">);</span>
+<span class="linenos" data-linenos="11 "></span><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@NullMarked</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Attendee</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 4 "></span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">    </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">email</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 7 "></span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">ticketNumber</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 9 "></span>
+<span class="linenos" data-linenos="10 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="nf">Attendee</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="11 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="12 "></span>
+<span class="linenos" data-linenos="13 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Attendee</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">email</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">ticketNumber</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="14 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos="15 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">email</span><span class="p">;</span>
+<span class="linenos" data-linenos="16 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">ticketNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ticketNumber</span><span class="p">;</span>
+<span class="linenos" data-linenos="17 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="18 "></span>
+<span class="linenos" data-linenos="19 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getName</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="20 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos="21 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="22 "></span>
+<span class="linenos" data-linenos="23 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setName</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="24 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos="25 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="26 "></span>
+<span class="linenos" data-linenos="27 "></span><span class="w">    </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos="28 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getEmail</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="29 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">email</span><span class="p">;</span>
+<span class="linenos" data-linenos="30 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="31 "></span>
+<span class="linenos" data-linenos="32 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setEmail</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">email</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="33 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">email</span><span class="p">;</span>
+<span class="linenos" data-linenos="34 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="35 "></span>
+<span class="linenos" data-linenos="36 "></span><span class="w">    </span><span class="c1">// Other methods omitted for brevity...</span>
+<span class="linenos" data-linenos="37 "></span>
+<span class="linenos" data-linenos="38 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Builder</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="39 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos="40 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos="41 "></span>
+<span class="linenos" data-linenos="42 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos="43 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">email</span><span class="p">;</span>
+<span class="linenos" data-linenos="44 "></span>
+<span class="linenos" data-linenos="45 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos="46 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">ticketNumber</span><span class="p">;</span>
+<span class="linenos" data-linenos="47 "></span>
+<span class="linenos" data-linenos="48 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Attendee</span><span class="w"> </span><span class="nf">build</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="49 "></span><span class="w">            </span><span class="n">Attendee</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Attendee</span><span class="p">();</span>
+<span class="linenos" data-linenos="50 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Objects</span><span class="p">.</span><span class="na">requireNonNull</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name cannot be null&quot;</span><span class="p">);</span>
+<span class="linenos" data-linenos="51 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">email</span><span class="p">;</span>
+<span class="linenos" data-linenos="52 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">ticketNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Objects</span><span class="p">.</span><span class="na">requireNonNull</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">ticketNumber</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ticketNumber cannot be null&quot;</span><span class="p">);</span>
+<span class="linenos" data-linenos="53 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="linenos" data-linenos="54 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="55 "></span>
+<span class="linenos" data-linenos="56 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="57 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos="58 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos="59 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="60 "></span>
+<span class="linenos" data-linenos="61 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">email</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">email</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="62 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">email</span><span class="p">;</span>
+<span class="linenos" data-linenos="63 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos="64 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="65 "></span>
+<span class="linenos" data-linenos="66 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">ticketNumber</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">ticketNumber</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="67 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">ticketNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ticketNumber</span><span class="p">;</span>
+<span class="linenos" data-linenos="68 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos="69 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="70 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="71 "></span><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@NullMarked</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EventInput</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="w">    </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 4 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 5 "></span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 7 "></span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">location</span><span class="p">;</span>
+<span class="linenos" data-linenos="10 "></span>
+<span class="linenos" data-linenos="11 "></span><span class="w">    </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos="12 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">attendeeNames</span><span class="p">;</span>
+<span class="linenos" data-linenos="13 "></span>
+<span class="linenos" data-linenos="14 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="nf">EventInput</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="15 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="16 "></span>
+<span class="linenos" data-linenos="17 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">EventInput</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">location</span><span class="p">,</span>
+<span class="linenos" data-linenos="18 "></span><span class="w">            </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">attendeeNames</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="19 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos="20 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos="21 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">location</span><span class="p">;</span>
+<span class="linenos" data-linenos="22 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">attendeeNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">attendeeNames</span><span class="p">;</span>
+<span class="linenos" data-linenos="23 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="24 "></span>
+<span class="linenos" data-linenos="25 "></span><span class="w">    </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos="26 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getId</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="27 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos="28 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="29 "></span>
+<span class="linenos" data-linenos="30 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setId</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="31 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos="32 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="33 "></span>
+<span class="linenos" data-linenos="34 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getName</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="35 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos="36 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="37 "></span>
+<span class="linenos" data-linenos="38 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setName</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="39 "></span><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos="40 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="41 "></span>
+<span class="linenos" data-linenos="42 "></span><span class="w">    </span><span class="c1">// Other methods omitted for brevity...</span>
+<span class="linenos" data-linenos="43 "></span>
+<span class="linenos" data-linenos="44 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Builder</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="45 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos="46 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos="47 "></span>
+<span class="linenos" data-linenos="48 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos="49 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos="50 "></span>
+<span class="linenos" data-linenos="51 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos="52 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">location</span><span class="p">;</span>
+<span class="linenos" data-linenos="53 "></span>
+<span class="linenos" data-linenos="54 "></span><span class="w">        </span><span class="nd">@Nullable</span>
+<span class="linenos" data-linenos="55 "></span><span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">attendeeNames</span><span class="p">;</span>
+<span class="linenos" data-linenos="56 "></span>
+<span class="linenos" data-linenos="57 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">EventInput</span><span class="w"> </span><span class="nf">build</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="58 "></span><span class="w">            </span><span class="n">EventInput</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EventInput</span><span class="p">();</span>
+<span class="linenos" data-linenos="59 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">id</span><span class="p">;</span>
+<span class="linenos" data-linenos="60 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Objects</span><span class="p">.</span><span class="na">requireNonNull</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name cannot be null&quot;</span><span class="p">);</span>
+<span class="linenos" data-linenos="61 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">location</span><span class="p">;</span>
+<span class="linenos" data-linenos="62 "></span><span class="w">            </span><span class="n">result</span><span class="p">.</span><span class="na">attendeeNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">attendeeNames</span><span class="p">;</span>
+<span class="linenos" data-linenos="63 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="linenos" data-linenos="64 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="65 "></span>
+<span class="linenos" data-linenos="66 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">id</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="67 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="linenos" data-linenos="68 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos="69 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="70 "></span>
+<span class="linenos" data-linenos="71 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="72 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="linenos" data-linenos="73 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos="74 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="75 "></span>
+<span class="linenos" data-linenos="76 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">location</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">location</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="77 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">location</span><span class="p">;</span>
+<span class="linenos" data-linenos="78 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos="79 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="80 "></span>
+<span class="linenos" data-linenos="81 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Builder</span><span class="w"> </span><span class="nf">attendeeNames</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">attendeeNames</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="82 "></span><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">attendeeNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">attendeeNames</span><span class="p">;</span>
+<span class="linenos" data-linenos="83 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="linenos" data-linenos="84 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="85 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="86 "></span><span class="p">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <code>generateJSpecifyAnnotations</code> is enabled, a <code>private</code> no-arg constructor is generated instead of a <code>public</code> one to prevent bypassing null-checks.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>It is <em>recommended</em> to also set <code>javaGenerateAllConstructor = true</code> for direct instantiation using an all-args constructor.</p>
+</div>
+<h3 id="skipping-code-generation-for-fields-or-types">Skipping code generation for fields or types<a class="headerlink" href="#skipping-code-generation-for-fields-or-types" title="Permanent link">&para;</a></h3>
+<p>You can skip generating code for entire types or specific fields in types using the <code>@skipcodegen</code> directive in your schema.</p>
+<p>To exclude an entire type from being generated, add <code>@skipcodegen</code> after the type name:</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="k">type</span><span class="w"> </span><span class="err">Person</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="w">    </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="w">    </span><span class="nl">email</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos=" 4 "></span><span class="p">}</span>
+<span class="linenos" data-linenos=" 5 "></span>
+<span class="linenos" data-linenos=" 6 "></span><span class="k">type</span><span class="w"> </span><span class="err">Car</span><span class="w"> </span><span class="err">@skipcodegen</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">    </span><span class="nl">make</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="nl">model</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">    </span><span class="nl">year</span><span class="p">:</span><span class="w"> </span><span class="n">Int</span>
+<span class="linenos" data-linenos="10 "></span><span class="p">}</span>
+</code></pre></div>
+In this case, the generator will not generate a <code>Car</code> type.</p>
+<p>To exclude a field in a type (either concrete or interface), add <code>@skipcodegen</code> after the field:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="k">type</span><span class="w"> </span><span class="err">Person</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="nl">email</span><span class="p">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nd">@skipcodegen</span>
+<span class="linenos" data-linenos="4 "></span><span class="err">}</span>
+</code></pre></div>
+<p>The generated <code>Person</code> type will have a <code>name</code> field and a setter/getter for <code>name</code>, but the <code>email</code> field and its setters/getters will be excluded.</p>
+<p>Excluding fields during code generation can be useful for <a href="https://netflix.github.io/dgs/datafetching/#child-datafetchers">child datafetchers</a> when you want to retrieve some fields in the parent resolver and others through child resolvers. </p>
+<h2 id="generating-code-from-external-schemas-in-jars">Generating code from external schemas in JARs<a class="headerlink" href="#generating-code-from-external-schemas-in-jars" title="Permanent link">&para;</a></h2>
+<p>You can also specify external dependencies containing schemas to use for generation by declaring it as a dependency in the <code>dgsCodegen</code> configuration.
+The plugin will scan all <code>.graphql</code> and <code>.graphqls</code> files and generate those classes under the <code>build/generated</code> directory.
+This is useful if you have external dependencies containing some shared types that you want to add to your schema for code generation. 
+Not that this does NOT affect your project's schema, and is only for code generation.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="c1">// other dependencies</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">dgsCodegen</span><span class="w"> </span><span class="s1">&#39;com.netflix.graphql.dgs:example-schema:x.x.x&#39;</span>
+<span class="linenos" data-linenos="4 "></span><span class="o">}</span>
+</code></pre></div>
+<p>For libraries that are looking to export <a href="#mapping-existing-types">type mappings</a> for their schemas (see next section), you can also add a <code>dgs.codegen.typemappings</code> file as a resource under META-INF.
+For a project that is consuming schemas from an external JAR, codegen will also scan <code>dgs.codegen.typemappings</code> to automatically map types to corresponding Java classes.
+This avoids the need to explicitly specify type mappings by every consumer of the JAR.</p>
+<h2 id="mapping-existing-types">Mapping existing types<a class="headerlink" href="#mapping-existing-types" title="Permanent link">&para;</a></h2>
+<p>Codegen tries to generate a type for each type it finds in the schema, with a few exceptions.</p>
+<ol>
+<li>Basic scalar types - are mapped to corresponding Java/Kotlin types (String, Integer etc.)</li>
+<li>Date and time types - are mapped to corresponding <code>java.time</code> classes</li>
+<li>PageInfo and RelayPageInfo - are mapped to <code>graphql.relay</code> classes</li>
+<li>Types mapped with a <code>typeMapping</code> configuration</li>
+</ol>
+<p>When you have existing classes that you want to use instead of generating a class for a certain type, you can configure the plugin to do so using a <code>typeMapping</code>.
+The <code>typeMapping</code> configuration is a <code>Map</code> where each key is a GraphQL type and each value is a fully qualified Java/Kotlin type.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">   </span><span class="n">typeMapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;MyGraphQLType&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;com.mypackage.MyJavaType&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos="3 "></span><span class="o">}</span>
+</code></pre></div>
+<h2 id="generating-client-apis">Generating Client APIs<a class="headerlink" href="#generating-client-apis" title="Permanent link">&para;</a></h2>
+<p>The code generator can also create client API classes.
+You can use these classes to query data from a GraphQL endpoint using Java, or in unit tests using the <code>DgsQueryExecutor</code>.
+The Java GraphQL Client is useful for server-to-server communication.
+A GraphQL Java Client is <a href="../advanced/java-client/">available</a> as part of the framework.</p>
+<p>Code generation creates a <code><var>field-name</var>GraphQLQuery</code> for each Query and Mutation field.
+The <code>*GraphQLQuery</code> query class contains fields for each parameter of the field.
+For each type returned by a Query or Mutation, code generation creates a <code>*ProjectionRoot</code>.
+A projection is a builder class that specifies which fields get returned.</p>
+<p>The following is an example usage of a generated API.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="k">type</span><span class="w"> </span><span class="err">Query</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="w">    </span><span class="n">events</span><span class="p">(</span><span class="n">filter</span><span class="p">:</span><span class="w"> </span><span class="no">EventFilter</span><span class="p">)</span><span class="err">:</span><span class="w"> </span><span class="err">[</span><span class="n">Event</span><span class="err">]</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="p">}</span>
+<span class="linenos" data-linenos=" 4 "></span>
+<span class="linenos" data-linenos=" 5 "></span><span class="k">input</span><span class="w"> </span><span class="err">EventFilter</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">    </span><span class="nl">location</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="p">}</span>
+<span class="linenos" data-linenos=" 9 "></span>
+<span class="linenos" data-linenos="10 "></span><span class="k">type</span><span class="w"> </span><span class="err">Event</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="11 "></span><span class="w">    </span><span class="nl">id</span><span class="p">:</span><span class="w"> </span><span class="n">ID</span>
+<span class="linenos" data-linenos="12 "></span><span class="w">    </span><span class="n">name</span><span class="p">(</span><span class="n">uppercase</span><span class="p">:</span><span class="w"> </span><span class="no">Boolean</span><span class="p">)</span><span class="err">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="13 "></span><span class="w">    </span><span class="nl">location</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="14 "></span><span class="w">    </span><span class="nl">keywords</span><span class="p">:</span><span class="w"> </span><span class="err">[</span><span class="n">String</span><span class="err">]</span>
+<span class="linenos" data-linenos="15 "></span><span class="w">    </span><span class="nl">website</span><span class="p">:</span><span class="w"> </span><span class="n">String</span>
+<span class="linenos" data-linenos="16 "></span><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@SpringBootTest</span><span class="p">(</span><span class="n">classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QueryDatafetcher</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="nd">@EnableDgsTest</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="kd">class</span> <span class="nc">QueryDatafetcherTest</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 4 "></span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">    </span><span class="nd">@Autowired</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="n">DgsQueryExecutor</span><span class="w"> </span><span class="n">queryExecutor</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 7 "></span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="nd">@Test</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">clientApi</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="10 "></span><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EventsGraphQLQuery</span><span class="p">.</span><span class="na">newRequest</span><span class="p">()</span>
+<span class="linenos" data-linenos="11 "></span><span class="w">                </span><span class="p">.</span><span class="na">queryName</span><span class="p">(</span><span class="s">&quot;ExampleQuery&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos="12 "></span><span class="w">                </span><span class="p">.</span><span class="na">filter</span><span class="p">(</span><span class="n">EventFilter</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">().</span><span class="na">name</span><span class="p">(</span><span class="s">&quot;JavaOne&quot;</span><span class="p">).</span><span class="na">build</span><span class="p">())</span>
+<span class="linenos" data-linenos="13 "></span><span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
+<span class="linenos" data-linenos="14 "></span>
+<span class="linenos" data-linenos="15 "></span><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">projection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EventsProjectionRoot</span><span class="o">&lt;&gt;</span><span class="p">().</span><span class="na">name</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="na">parent</span><span class="p">().</span><span class="na">location</span><span class="p">();</span>
+<span class="linenos" data-linenos="16 "></span><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">GraphQLQueryRequest</span><span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">projection</span><span class="p">);</span>
+<span class="linenos" data-linenos="17 "></span>
+<span class="linenos" data-linenos="18 "></span><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">serializeQuery</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="na">serialize</span><span class="p">();</span>
+<span class="linenos" data-linenos="19 "></span><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queryExecutor</span><span class="p">.</span><span class="na">execute</span><span class="p">(</span><span class="n">serializeQuery</span><span class="p">);</span>
+<span class="linenos" data-linenos="20 "></span>
+<span class="linenos" data-linenos="21 "></span><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">serializeQuery</span><span class="p">);</span>
+<span class="linenos" data-linenos="22 "></span><span class="w">        </span><span class="n">assertThat</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="na">isDataPresent</span><span class="p">()).</span><span class="na">isTrue</span><span class="p">();</span>
+<span class="linenos" data-linenos="23 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="24 "></span>
+<span class="linenos" data-linenos="25 "></span><span class="p">}</span>
+</code></pre></div>
+<p>Creating a query has three parts:
+1. The query - <code>EventsGraphQLQuery</code> in this example, generated by Codegen. 
+2. The projection (the fields you want to retrieve) - <code>EventsProjectionRoot</code> in this example, generated by Codegen.
+3. The <code>GraphQLQueryRequest</code> which is part of the DGS API.</p>
+<p>The <code>GraphQLQueryRequest</code> lets you <code>serialize()</code>, which gives the String representation of the request.
+For this example this results in the following request.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="k">query</span><span class="w"> </span><span class="nf">ExampleQuery</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="n">events</span><span class="p">(</span><span class="n">filter</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="n">name</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;JavaOne&quot;</span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">        </span><span class="n">name</span><span class="p">(</span><span class="n">uppercase</span><span class="p">:</span><span class="w"> </span><span class="nb">true</span><span class="p">)</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">        </span><span class="n">location</span>
+<span class="linenos" data-linenos="5 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="6 "></span><span class="p">}</span>
+</code></pre></div>
+<h3 id="using-query-variables">Using query variables<a class="headerlink" href="#using-query-variables" title="Permanent link">&para;</a></h3>
+<p>In the previous examples the input arguments to the query (the  <code>filter</code>), and the input argument to the <code>name</code> field (<code>uppercase</code>) where provided in-line.
+This is the easiest way to write a query and has the benefit of the arguments being typed.
+However, creating queries this way can come with a downside.
+Advanced GraphQL features such as persisted queries require queries to be written with variables.
+This is a bit more cumbersome because you lose typing, but it's sometimes required.
+Codegen creates <code>[fieldName]Reference</code> and <code>[fieldName]WithVariableReferences</code> (for projections) for this purpose.</p>
+<p>The following is an example of the same query as above, but with using variables.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@SpringBootTest</span><span class="p">(</span><span class="n">classes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QueryDatafetcher</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="nd">@EnableDgsTest</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="kd">class</span> <span class="nc">QueryDatafetcherTest</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 4 "></span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">    </span><span class="nd">@Autowired</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="n">DgsQueryExecutor</span><span class="w"> </span><span class="n">queryExecutor</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 7 "></span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="nd">@Test</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">clientApi</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="10 "></span><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EventsGraphQLQuery</span><span class="p">.</span><span class="na">newRequest</span><span class="p">()</span>
+<span class="linenos" data-linenos="11 "></span><span class="w">                </span><span class="p">.</span><span class="na">queryName</span><span class="p">(</span><span class="s">&quot;ExampleQuery&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos="12 "></span><span class="w">                </span><span class="p">.</span><span class="na">filterReference</span><span class="p">(</span><span class="s">&quot;eventFilter&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos="13 "></span><span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
+<span class="linenos" data-linenos="14 "></span>
+<span class="linenos" data-linenos="15 "></span><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">projection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EventsProjectionRoot</span><span class="o">&lt;&gt;</span><span class="p">()</span>
+<span class="linenos" data-linenos="16 "></span><span class="w">                </span><span class="p">.</span><span class="na">nameWithVariableReferences</span><span class="p">(</span><span class="s">&quot;uppercase&quot;</span><span class="p">).</span><span class="na">parent</span><span class="p">()</span>
+<span class="linenos" data-linenos="17 "></span><span class="w">                </span><span class="p">.</span><span class="na">location</span><span class="p">();</span>
+<span class="linenos" data-linenos="18 "></span>
+<span class="linenos" data-linenos="19 "></span><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">GraphQLQueryRequest</span><span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="w"> </span><span class="n">projection</span><span class="p">);</span>
+<span class="linenos" data-linenos="20 "></span>
+<span class="linenos" data-linenos="21 "></span><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">serializeQuery</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="na">serialize</span><span class="p">();</span>
+<span class="linenos" data-linenos="22 "></span><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queryExecutor</span><span class="p">.</span><span class="na">execute</span><span class="p">(</span><span class="n">serializeQuery</span><span class="p">,</span>
+<span class="linenos" data-linenos="23 "></span><span class="w">                </span><span class="n">Map</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="s">&quot;eventFilter&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Map</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;JavaOne&quot;</span><span class="p">),</span>
+<span class="linenos" data-linenos="24 "></span><span class="w">                        </span><span class="s">&quot;uppercase&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">));</span>
+<span class="linenos" data-linenos="25 "></span>
+<span class="linenos" data-linenos="26 "></span><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">serializeQuery</span><span class="p">);</span>
+<span class="linenos" data-linenos="27 "></span><span class="w">        </span><span class="n">assertThat</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="na">isDataPresent</span><span class="p">()).</span><span class="na">isTrue</span><span class="p">();</span>
+<span class="linenos" data-linenos="28 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="29 "></span>
+<span class="linenos" data-linenos="30 "></span><span class="p">}</span>
+</code></pre></div>
+<h3 id="generating-query-apis-for-external-services">Generating Query APIs for external services<a class="headerlink" href="#generating-query-apis-for-external-services" title="Permanent link">&para;</a></h3>
+<p>Generating a Query API like above is very useful for testing your own DGS.
+The same type of API can also be useful when interacting with another GraphQL service, where your code is a client of that service.
+This is typically done using the <a href="https://netflix.github.io/dgs/advanced/java-client/">DGS Client</a>.</p>
+<p>When you use code generation both for your own schema, and an internal schema, you might want different code generation configuration for both.
+The recommendation is to create a separate module in your project containing the schema of the external service and the codegen configuration to just generate a Query API.
+The following is example configuration that <em>only</em> generates a Query API.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="w">    </span><span class="n">schemaPaths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;${projectDir}/composed-schema.graphqls&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="w">    </span><span class="n">packageName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;some.other.service&quot;</span>
+<span class="linenos" data-linenos=" 4 "></span><span class="w">    </span><span class="n">generateClientv2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">    </span><span class="n">generateDataTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="n">skipEntityQueries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">    </span><span class="n">includeQueries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;hello&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="n">includeMutations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">    </span><span class="n">shortProjectionNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="10 "></span><span class="o">}</span>
+</code></pre></div>
+<h3 id="limiting-generated-code-for-client-api">Limiting generated code for Client API<a class="headerlink" href="#limiting-generated-code-for-client-api" title="Permanent link">&para;</a></h3>
+<p>If your schema is large or has a lot of cycles, it is not ideal to generate client APIs for the entire schema, since you will end up with a large number of projections.
+This can cause code generation to slow down significantly, or run out of memory depending on your schema.
+We have a few configuration parameters that help tune this so you can limit the generation of client API to only what is required.</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="o">...</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">generateClientv2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">    </span><span class="n">skipEntityQueries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="5 "></span><span class="w">    </span><span class="n">includeQueries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;hello&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos="6 "></span><span class="w">    </span><span class="n">includeMutations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos="7 "></span><span class="w">    </span><span class="n">includeSubscriptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos="8 "></span><span class="o">}</span>
+</code></pre></div>
+Firstly, you can specify exactly which queries/mutation/subscriptions to generate for via <code>includeQueries</code>, <code>includeMutations</code>, and <code>includeSubscriptions</code>.
+<code>skipEntityQueries</code> is only used if you are constructing federated <code>_entities</code> queries for testing purposes, so you can also set that to restrict the amount of generated code.</p>
+<h3 id="generating-classes-with-custom-annotations">Generating classes with Custom Annotations<a class="headerlink" href="#generating-classes-with-custom-annotations" title="Permanent link">&para;</a></h3>
+<p>This feature provides the ability to support any custom annotation on the generated POJOs using the @annotate directive in graphQL.
+The <code>@annotate</code> directive can be placed on type, input or fields in the graphQL. This feature is turned off by default and can be enabled by setting generateCustomAnnotation to true in build.gradle.</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="o">...</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">generateCustomAnnotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="4 "></span><span class="o">}</span>
+</code></pre></div>
+@annotate contains 4 fields:</p>
+<ul>
+<li>name - Mandatory field. Name of the annotation. Eg: ValidPerson. You can have the package along with the annotation name. eg: <code>com.test.ValidPerson</code>. The package value given with the annotation name takes precedence over the mapped package in build.gradle.</li>
+<li>type - Optional field. This variable is used to map the annotation package in build.gradle. The package if given with annotation name will take precedence over this value. But if neither are given an empty string is used.</li>
+<li>inputs - Optional field. Contains the inputs to the annotation in key-value pairs. Eg: <code>inputs: {types: [HUSBAND, WIFE]}</code>. Inputs can be of types: String, int, float, enums, list, map, class, etc. For class inputs, refer to <em>Example with Class Object</em> </li>
+<li>target - Optional field. Refers to the site targets for the annotations. Refer to <a href="https://kotlinlang.org/docs/annotations.html#annotation-use-site-targets">use target site doc</a> for the target site available values.</li>
+</ul>
+<p>@annotate definition in the graphQL:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>&quot;Custom Annotation&quot;
+<span class="linenos" data-linenos="2 "></span>directive @annotate(
+<span class="linenos" data-linenos="3 "></span>    name: String!
+<span class="linenos" data-linenos="4 "></span>    type: String
+<span class="linenos" data-linenos="5 "></span>    inputs: JSON
+<span class="linenos" data-linenos="6 "></span>    target: String
+<span class="linenos" data-linenos="7 "></span>) repeatable on OBJECT | FIELD_DEFINITION | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+</code></pre></div>
+Custom annotations specified in the schema will require corresponding implementations by the resolvers to avoid runtime errors.
+Some examples:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>type Person @annotate(name: &quot;ValidPerson&quot;, type: &quot;validator&quot;, inputs: {types: [HUSBAND, WIFE]}) {
+<span class="linenos" data-linenos="2 "></span>       name: String @annotate(name: &quot;com.test.anotherValidator.ValidName&quot;)
+<span class="linenos" data-linenos="3 "></span>       type: String @annotate(name: &quot;ValidType&quot;, type: &quot;personType&quot;, inputs: {types: [PRIMARY, SECONDARY]}) 
+<span class="linenos" data-linenos="4 "></span>}
+</code></pre></div>
+The package mapping for the annotation and enums can be provided in the build.gradle file.
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="o">...</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">generateCustomAnnotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">    </span><span class="n">includeImports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;validator&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;com.test.validator&quot;</span><span class="o">]</span>
+<span class="linenos" data-linenos="5 "></span><span class="w">    </span><span class="n">includeEnumImports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;ValidPerson&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;types&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;com.enums&quot;</span><span class="o">]]</span>
+<span class="linenos" data-linenos="6 "></span><span class="o">}</span>
+</code></pre></div>
+Generated POJO in Java. <strong>Please note that this feature is also available in Kotlin.</strong>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>package com.netflix.graphql.dgs.codegen.tests.generated.types;
+<span class="linenos" data-linenos=" 2 "></span>
+<span class="linenos" data-linenos=" 3 "></span>import com.test.anotherValidator.ValidName;
+<span class="linenos" data-linenos=" 4 "></span>import com.test.validator.ValidPerson;
+<span class="linenos" data-linenos=" 5 "></span>import java.lang.Object;
+<span class="linenos" data-linenos=" 6 "></span>import java.lang.Override;
+<span class="linenos" data-linenos=" 7 "></span>import java.lang.String;
+<span class="linenos" data-linenos=" 8 "></span>
+<span class="linenos" data-linenos=" 9 "></span>@ValidPerson(
+<span class="linenos" data-linenos="10 "></span>    types = [com.enums.HUSBAND, com.enums.WIFE]
+<span class="linenos" data-linenos="11 "></span>)
+<span class="linenos" data-linenos="12 "></span>public class Person {
+<span class="linenos" data-linenos="13 "></span>  @ValidName
+<span class="linenos" data-linenos="14 "></span>  private String name;
+<span class="linenos" data-linenos="15 "></span>
+<span class="linenos" data-linenos="16 "></span>  @ValidType(
+<span class="linenos" data-linenos="17 "></span>      types = [com.personType.enum.PRIMARY, com.personType.enum.SECONDARY]
+<span class="linenos" data-linenos="18 "></span>  )
+<span class="linenos" data-linenos="19 "></span>  private String type;
+<span class="linenos" data-linenos="20 "></span>
+<span class="linenos" data-linenos="21 "></span>  public Person() {
+<span class="linenos" data-linenos="22 "></span>  }
+<span class="linenos" data-linenos="23 "></span>
+<span class="linenos" data-linenos="24 "></span>  public Person(String name, String type) {
+<span class="linenos" data-linenos="25 "></span>    this.name = name;
+<span class="linenos" data-linenos="26 "></span>    this.type = type;
+<span class="linenos" data-linenos="27 "></span>  }
+<span class="linenos" data-linenos="28 "></span>
+<span class="linenos" data-linenos="29 "></span>  public String getName() {
+<span class="linenos" data-linenos="30 "></span>    return name;
+<span class="linenos" data-linenos="31 "></span>  }
+<span class="linenos" data-linenos="32 "></span>
+<span class="linenos" data-linenos="33 "></span>  public void setName(String name) {
+<span class="linenos" data-linenos="34 "></span>    this.name = name;
+<span class="linenos" data-linenos="35 "></span>  }
+<span class="linenos" data-linenos="36 "></span>
+<span class="linenos" data-linenos="37 "></span>  public String getType() {
+<span class="linenos" data-linenos="38 "></span>    return type;
+<span class="linenos" data-linenos="39 "></span>  }
+<span class="linenos" data-linenos="40 "></span>
+<span class="linenos" data-linenos="41 "></span>  public void setType(String type) {
+<span class="linenos" data-linenos="42 "></span>    this.type = type;
+<span class="linenos" data-linenos="43 "></span>  }
+<span class="linenos" data-linenos="44 "></span>
+<span class="linenos" data-linenos="45 "></span>  @Override
+<span class="linenos" data-linenos="46 "></span>  public String toString() {
+<span class="linenos" data-linenos="47 "></span>    return &quot;Person{&quot; + &quot;name=&#39;&quot; + name + &quot;&#39;,&quot; +&quot;type=&#39;&quot; + type + &quot;&#39;&quot; +&quot;}&quot;;
+<span class="linenos" data-linenos="48 "></span>  }
+<span class="linenos" data-linenos="49 "></span>
+<span class="linenos" data-linenos="50 "></span>  @Override
+<span class="linenos" data-linenos="51 "></span>  public boolean equals(Object o) {
+<span class="linenos" data-linenos="52 "></span>    if (this == o) return true;
+<span class="linenos" data-linenos="53 "></span>        if (o == null || getClass() != o.getClass()) return false;
+<span class="linenos" data-linenos="54 "></span>        Person that = (Person) o;
+<span class="linenos" data-linenos="55 "></span>        return java.util.Objects.equals(name, that.name) &amp;&amp;
+<span class="linenos" data-linenos="56 "></span>                            java.util.Objects.equals(type, that.type);
+<span class="linenos" data-linenos="57 "></span>  }
+<span class="linenos" data-linenos="58 "></span>
+<span class="linenos" data-linenos="59 "></span>  @Override
+<span class="linenos" data-linenos="60 "></span>  public int hashCode() {
+<span class="linenos" data-linenos="61 "></span>    return java.util.Objects.hash(name, type);
+<span class="linenos" data-linenos="62 "></span>  }
+<span class="linenos" data-linenos="63 "></span>}
+</code></pre></div></p>
+<p>Example with Class Object:</p>
+<p>Since GraphQL parser does not have built-in support for class objects, a class is represented as a string ending with ".class" in the schema</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>type Person @annotate(name: &quot;ValidPerson&quot;, type: &quot;validator&quot;, inputs: {groups: &quot;BasicValidation.class&quot;}) {
+<span class="linenos" data-linenos="2 "></span>    name: String @annotate(name: &quot;com.test.anotherValidator.ValidName&quot;)
+<span class="linenos" data-linenos="3 "></span>}
+</code></pre></div>
+The package mapping for the annotation and classes can be provided in the build.gradle file. If mapping is not provided, input will be treated as a string.</p>
+<p><div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">generateJava</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="o">...</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">    </span><span class="n">generateCustomAnnotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="o">,</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">    </span><span class="n">includeImports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapOf</span><span class="o">(</span><span class="n">Pair</span><span class="o">(</span><span class="s2">&quot;validator&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;com.test.validator&quot;</span><span class="o">)),</span>
+<span class="linenos" data-linenos="5 "></span><span class="w">    </span><span class="n">includeClassImports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapOf</span><span class="o">(</span><span class="s2">&quot;ValidPerson&quot;</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">mapOf</span><span class="o">(</span><span class="n">Pair</span><span class="o">(</span><span class="s2">&quot;BasicValidation&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;com.test.validator.groups&quot;</span><span class="o">)))</span>
+<span class="linenos" data-linenos="6 "></span><span class="o">}</span>
+</code></pre></div>
+Generated POJO in Java. <em>Note: In Kotlin, using the same schema above will generate <code>BasicValidation::class</code></em>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>package com.netflix.graphql.dgs.codegen.tests.generated.types;
+<span class="linenos" data-linenos=" 2 "></span>
+<span class="linenos" data-linenos=" 3 "></span>import com.test.anotherValidator.ValidName;
+<span class="linenos" data-linenos=" 4 "></span>import com.test.validator.ValidPerson;
+<span class="linenos" data-linenos=" 5 "></span>import com.test.validator.groups.BasicValidation;
+<span class="linenos" data-linenos=" 6 "></span>import java.lang.Object;
+<span class="linenos" data-linenos=" 7 "></span>import java.lang.Override;
+<span class="linenos" data-linenos=" 8 "></span>import java.lang.String;
+<span class="linenos" data-linenos=" 9 "></span>
+<span class="linenos" data-linenos="10 "></span>@ValidPerson(
+<span class="linenos" data-linenos="11 "></span>    groups = BasicValidation.class
+<span class="linenos" data-linenos="12 "></span>)
+<span class="linenos" data-linenos="13 "></span>public class Person {
+<span class="linenos" data-linenos="14 "></span>  @ValidName
+<span class="linenos" data-linenos="15 "></span>  private String name;
+<span class="linenos" data-linenos="16 "></span>
+<span class="linenos" data-linenos="17 "></span>  public Person() {
+<span class="linenos" data-linenos="18 "></span>  }
+<span class="linenos" data-linenos="19 "></span>
+<span class="linenos" data-linenos="20 "></span>  public Person(String name) {
+<span class="linenos" data-linenos="21 "></span>    this.name = name;
+<span class="linenos" data-linenos="22 "></span>  }
+<span class="linenos" data-linenos="23 "></span>
+<span class="linenos" data-linenos="24 "></span>  public String getName() {
+<span class="linenos" data-linenos="25 "></span>    return name;
+<span class="linenos" data-linenos="26 "></span>  }
+<span class="linenos" data-linenos="27 "></span>
+<span class="linenos" data-linenos="28 "></span>  public void setName(String name) {
+<span class="linenos" data-linenos="29 "></span>    this.name = name;
+<span class="linenos" data-linenos="30 "></span>  }
+<span class="linenos" data-linenos="31 "></span>
+<span class="linenos" data-linenos="32 "></span>  @Override
+<span class="linenos" data-linenos="33 "></span>  public String toString() {
+<span class="linenos" data-linenos="34 "></span>    return &quot;Person{&quot; + &quot;name=&#39;&quot; + name + &quot;&#39;&quot; +&quot;}&quot;;
+<span class="linenos" data-linenos="35 "></span>  }
+<span class="linenos" data-linenos="36 "></span>
+<span class="linenos" data-linenos="37 "></span>  @Override
+<span class="linenos" data-linenos="38 "></span>  public boolean equals(Object o) {
+<span class="linenos" data-linenos="39 "></span>    if (this == o) return true;
+<span class="linenos" data-linenos="40 "></span>        if (o == null || getClass() != o.getClass()) return false;
+<span class="linenos" data-linenos="41 "></span>        Person that = (Person) o;
+<span class="linenos" data-linenos="42 "></span>        return java.util.Objects.equals(name, that.name);
+<span class="linenos" data-linenos="43 "></span>  }
+<span class="linenos" data-linenos="44 "></span>
+<span class="linenos" data-linenos="45 "></span>  @Override
+<span class="linenos" data-linenos="46 "></span>  public int hashCode() {
+<span class="linenos" data-linenos="47 "></span>    return java.util.Objects.hash(name);
+<span class="linenos" data-linenos="48 "></span>  }
+<span class="linenos" data-linenos="49 "></span>}
+</code></pre></div>
+While using <code>@deprecated</code>, the following configuration is needed to generate <code>@Deprecated</code> on the POJO in Java:</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>generateJava {
+<span class="linenos" data-linenos="2 "></span>    addDeprecatedAnnotation = true
+<span class="linenos" data-linenos="3 "></span>}
+</code></pre></div>
+<p>Example with target site:
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>type Person @deprecated(reason: &quot;This is going bye bye&quot;) @annotate(name: &quot;ValidPerson&quot;, type: &quot;validator&quot;, inputs: {types: [HUSBAND, WIFE]}) {
+<span class="linenos" data-linenos="2 "></span>    name: String @annotate(name: &quot;com.test.anotherValidator.ValidName&quot;, target: &quot;field&quot;) @annotate(name: &quot;com.test.nullValidator.NullValue&quot;)
+<span class="linenos" data-linenos="3 "></span>}
+</code></pre></div>
+Generated POJO in Java.
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>package com.netflix.graphql.dgs.codegen.tests.generated.types;
+<span class="linenos" data-linenos=" 2 "></span>
+<span class="linenos" data-linenos=" 3 "></span>import com.test.anotherValidator.ValidName;
+<span class="linenos" data-linenos=" 4 "></span>import com.test.nullValidator.NullValue;
+<span class="linenos" data-linenos=" 5 "></span>import com.test.validator.ValidPerson;
+<span class="linenos" data-linenos=" 6 "></span>import java.lang.Deprecated;
+<span class="linenos" data-linenos=" 7 "></span>import java.lang.Object;
+<span class="linenos" data-linenos=" 8 "></span>import java.lang.Override;
+<span class="linenos" data-linenos=" 9 "></span>import java.lang.String;
+<span class="linenos" data-linenos="10 "></span>
+<span class="linenos" data-linenos="11 "></span>/**
+<span class="linenos" data-linenos="12 "></span> * This is going bye bye
+<span class="linenos" data-linenos="13 "></span> */
+<span class="linenos" data-linenos="14 "></span>@Deprecated
+<span class="linenos" data-linenos="15 "></span>@ValidPerson(
+<span class="linenos" data-linenos="16 "></span>    types = [com.enums.HUSBAND, com.enums.WIFE]
+<span class="linenos" data-linenos="17 "></span>)
+<span class="linenos" data-linenos="18 "></span>public class Person {
+<span class="linenos" data-linenos="19 "></span>  @ValidName
+<span class="linenos" data-linenos="20 "></span>  @NullValue
+<span class="linenos" data-linenos="21 "></span>  private String name;
+<span class="linenos" data-linenos="22 "></span>
+<span class="linenos" data-linenos="23 "></span>  public Person() {
+<span class="linenos" data-linenos="24 "></span>  }
+<span class="linenos" data-linenos="25 "></span>
+<span class="linenos" data-linenos="26 "></span>  public Person(String name) {
+<span class="linenos" data-linenos="27 "></span>    this.name = name;
+<span class="linenos" data-linenos="28 "></span>  }
+<span class="linenos" data-linenos="29 "></span>
+<span class="linenos" data-linenos="30 "></span>  public String getName() {
+<span class="linenos" data-linenos="31 "></span>    return name;
+<span class="linenos" data-linenos="32 "></span>  }
+<span class="linenos" data-linenos="33 "></span>
+<span class="linenos" data-linenos="34 "></span>  public void setName(String name) {
+<span class="linenos" data-linenos="35 "></span>    this.name = name;
+<span class="linenos" data-linenos="36 "></span>  }
+<span class="linenos" data-linenos="37 "></span>
+<span class="linenos" data-linenos="38 "></span>  @Override
+<span class="linenos" data-linenos="39 "></span>  public String toString() {
+<span class="linenos" data-linenos="40 "></span>    return &quot;Person{&quot; + &quot;name=&#39;&quot; + name + &quot;&#39;&quot; +&quot;}&quot;;
+<span class="linenos" data-linenos="41 "></span>  }
+<span class="linenos" data-linenos="42 "></span>
+<span class="linenos" data-linenos="43 "></span>  @Override
+<span class="linenos" data-linenos="44 "></span>  public boolean equals(Object o) {
+<span class="linenos" data-linenos="45 "></span>    if (this == o) return true;
+<span class="linenos" data-linenos="46 "></span>        if (o == null || getClass() != o.getClass()) return false;
+<span class="linenos" data-linenos="47 "></span>        Person that = (Person) o;
+<span class="linenos" data-linenos="48 "></span>        return java.util.Objects.equals(name, that.name);
+<span class="linenos" data-linenos="49 "></span>  }
+<span class="linenos" data-linenos="50 "></span>
+<span class="linenos" data-linenos="51 "></span>  @Override
+<span class="linenos" data-linenos="52 "></span>  public int hashCode() {
+<span class="linenos" data-linenos="53 "></span>    return java.util.Objects.hash(name);
+<span class="linenos" data-linenos="54 "></span>  }
+<span class="linenos" data-linenos="55 "></span>}
+</code></pre></div></p>
+<h1 id="configuring-code-generation">Configuring code generation<a class="headerlink" href="#configuring-code-generation" title="Permanent link">&para;</a></h1>
+<p>Code generation has many configuration switches.
+The following table shows the Gradle configuration options, but the same options are available command line and in Maven as well.</p>
+<h2 id="file-package-configuration">File &amp; Package Configuration<a class="headerlink" href="#file-package-configuration" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Description</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>generatedSourcesDir</td>
+<td>Build directory for Gradle</td>
+<td>build</td>
+</tr>
+<tr>
+<td>schemaPaths</td>
+<td>List of files/directories containing schemas</td>
+<td>src/main/resources/schema</td>
+</tr>
+<tr>
+<td>packageName</td>
+<td>Base package name of generated code</td>
+<td>com.netflix.dgs.codegen.generated</td>
+</tr>
+<tr>
+<td>subPackageNameClient</td>
+<td>Sub package name for generated Query API</td>
+<td>client</td>
+</tr>
+<tr>
+<td>subPackageNameDatafetchers</td>
+<td>Sub package name for generated data fetchers</td>
+<td>datafetchers</td>
+</tr>
+<tr>
+<td>subPackageNameTypes</td>
+<td>Sub package name for generated data types</td>
+<td>types</td>
+</tr>
+</tbody>
+</table>
+<h2 id="language-type-configuration">Language &amp; Type Configuration<a class="headerlink" href="#language-type-configuration" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Description</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>language</td>
+<td>Target language: <code>java</code> or <code>kotlin</code></td>
+<td>Autodetected from project</td>
+</tr>
+<tr>
+<td>typeMapping</td>
+<td>A Map where each key is a GraphQL type, and the value the FQN of a Java class</td>
+<td></td>
+</tr>
+<tr>
+<td>generateBoxedTypes</td>
+<td>Always use boxed types (Integer, Boolean) for primitives</td>
+<td>false (boxed types are used only for nullable fields)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="client-generation">Client Generation<a class="headerlink" href="#client-generation" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Description</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>generateClient</td>
+<td>Generate a Query API.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>generateClientv2</td>
+<td>Generate a Query API.</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<h2 id="data-type-generation">Data Type Generation<a class="headerlink" href="#data-type-generation" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Description</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>generateDataTypes</td>
+<td>Generate data types. Useful for only generating a Query API. Input types are still generated when <code>generateClientv2</code> is true.</td>
+<td>true</td>
+</tr>
+<tr>
+<td>generateInterfaces</td>
+<td>Generate interfaces for data classes. This is useful if you would like to extend the generated POJOs for more context and use interfaces instead of the data classes in your data fetchers.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>generateInterfaceSetters</td>
+<td>Generate setter methods in interfaces.</td>
+<td>true</td>
+</tr>
+<tr>
+<td>generateInterfaceMethodsForInterfaceFields</td>
+<td>Generate setter methods in interfaces for fields that are interfaces. Getter methods in interfaces for fields that are interfaces are generated by default even without this option.</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<h2 id="java-specific-options">Java-Specific Options<a class="headerlink" href="#java-specific-options" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Description</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>generateIsGetterForPrimitiveBooleanFields</td>
+<td>Use "is" prefix for primitive boolean getters</td>
+<td>false</td>
+</tr>
+<tr>
+<td>generateDocs</td>
+<td>Generate JavaDoc from schema descriptions</td>
+<td>false</td>
+</tr>
+<tr>
+<td>implementSerializable</td>
+<td>Make generated classes implement Serializable</td>
+<td>false</td>
+</tr>
+<tr>
+<td>javaGenerateAllConstructor</td>
+<td>Generate all-args constructor in Java classes</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kotlin-specific-options">Kotlin-Specific Options<a class="headerlink" href="#kotlin-specific-options" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Description</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>generateKotlinNullableClasses</td>
+<td>Generate nullable types in Kotlin</td>
+<td>false</td>
+</tr>
+<tr>
+<td>generateKotlinClosureProjections</td>
+<td>Use closure syntax for projections in Kotlin</td>
+<td>false</td>
+</tr>
+<tr>
+<td>kotlinAllFieldsOptional</td>
+<td>Make all fields optional in Kotlin</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<h2 id="querymutationsubscription-filtering">Query/Mutation/Subscription Filtering<a class="headerlink" href="#querymutationsubscription-filtering" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Description</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>includeQueries</td>
+<td>Generate Query API only for the given list of Query fields</td>
+<td>All queries defined in schema</td>
+</tr>
+<tr>
+<td>includeMutations</td>
+<td>Generate Query API only for the given list of Mutation fields</td>
+<td>All mutations defined in schema</td>
+</tr>
+<tr>
+<td>includeSubscriptions</td>
+<td>Generate Query API only for the given list of Subscription fields</td>
+<td>All subscriptions defined in schema</td>
+</tr>
+<tr>
+<td>skipEntityQueries</td>
+<td>Disable generating Entity queries for federated types</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<h2 id="naming-conventions">Naming Conventions<a class="headerlink" href="#naming-conventions" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Description</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>shortProjectionNames</td>
+<td>Shorten class names of projection types. These types are not visible to the developer.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>snakeCaseConstantNames</td>
+<td>Use snake_case for constant names</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<h2 id="annotations">Annotations<a class="headerlink" href="#annotations" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Description</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>addGeneratedAnnotation</td>
+<td>Add <code>jakarta.annotation.Generated</code> and application specific <code>@Generated</code> annotation to generated types</td>
+<td>false</td>
+</tr>
+<tr>
+<td>disableDatesInGeneratedAnnotation</td>
+<td>Don't add a date to the <code>jakarta.annotation.Generated</code> annotation</td>
+<td>false</td>
+</tr>
+<tr>
+<td>addDeprecatedAnnotation</td>
+<td>Add <code>@Deprecated</code> annotation for deprecated schema elements</td>
+<td>false</td>
+</tr>
+<tr>
+<td>generateCustomAnnotations</td>
+<td>Enable generation of custom annotations on generated types and fields using <code>@annotate</code> directive in schema</td>
+<td>false</td>
+</tr>
+<tr>
+<td>generateJSpecifyAnnotations</td>
+<td>Enable/disable generation of JSpecify annotations (<code>@NullMarked</code> for types, <code>@Nullable</code> for fields/getters/setters/parameters).</td>
+<td>false</td>
+</tr>
+<tr>
+<td>includeImports</td>
+<td>Maps the custom annotation type to the package, the annotations belong to. Only used when generateCustomAnnotations is enabled.</td>
+<td></td>
+</tr>
+<tr>
+<td>includeEnumImports</td>
+<td>Maps the custom annotation and enum argument names to the enum packages. Only used when generateCustomAnnotations is enabled.</td>
+<td></td>
+</tr>
+<tr>
+<td>includeClassImports</td>
+<td>Maps the custom annotation and class names to the class packages. Only used when generateCustomAnnotations is enabled.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="additional-features">Additional Features<a class="headerlink" href="#additional-features" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Configuration property</th>
+<th>Description</th>
+<th>Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>trackInputFieldSet</td>
+<td>Generate <code>has[FieldName]</code> methods keeping track of what fields are explicitly set on input types</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../js/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

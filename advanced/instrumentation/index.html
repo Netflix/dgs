@@ -1,0 +1,2337 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://netflix.github.io/dgs/advanced/instrumentation/">
+      
+      
+        <link rel="prev" href="../type-resolvers-for-abstract-types/">
+      
+      
+        <link rel="next" href="../intercepting-http-request-response/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Instrumentation (Tracing, Metrics) - DGS Framework</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/dgs_theme.css?v=3.0.13">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#adding-instrumentation-for-tracing-and-logging" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Mitigate bug: https://github.com/mkdocs/mkdocs/issues/2191 -->
+
+
+
+<div class="sash" data-no-interact></div>
+
+<!-- Application header -->
+<header class="md-header dgs-header" data-md-component="header">
+
+  <!-- Top-level navigation -->
+  <nav class="md-header-nav md-grid dgs-header-nav" aria-label="header.title">
+
+    <!-- Link to home -->
+    <a
+      href="https://netflix.github.io/dgs/"
+      title="DGS Framework"
+      class="md-header-nav__button dgs-header-nav__button md-logo dgs-logo"
+      aria-label="DGS Framework"
+    >
+      
+  <img src="../../images/logo--blue.svg" alt="logo">
+
+    </a>
+
+    <!-- Header title -->
+    <div class="md-header-nav__title dgs-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis sr-only">
+          <span class="md-header-nav__topic md-ellipsis">
+            DGS Framework
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Instrumentation (Tracing, Metrics)
+            
+          </span>
+        </div>
+      
+    </div>
+
+    <!-- Repository containing source -->
+    
+      <div class="md-header-nav__source dgs-header-nav__source">
+        <a href="https://github.com/netflix/dgs-framework" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.01 8.01 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27s-1.36.09-2 .27c-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+
+     <!-- Color palette -->
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: light)"
+            data-md-color-scheme="default"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_1"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to dark mode"
+            for="__palette_2"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+          </label>
+        
+          
+          
+          <input
+            class="md-option"
+            data-md-color-media="(prefers-color-scheme: dark)"
+            data-md-color-scheme="slate"
+            data-md-color-primary="blue"
+            data-md-color-accent="light-green"
+            type="radio"
+            name="__palette"
+            id="__palette_2"
+          />
+          <label
+            class="md-header__button md-icon"
+            title="Switch to light mode"
+            for="__palette_1"
+            hidden
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+          </label>
+        
+      </form>
+    
+
+    <!-- Button to open drawer -->
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+
+    <!-- Button to open search dialogue -->
+    <label class="md-header-nav__button md-icon dgs-header-nav__button" for="__search">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+    </label>
+
+    <!-- Search interface -->
+    <!--
+  Copyright (c) 2016-2020 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Search interface -->
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input
+        type="text"
+        class="md-search__input"
+        name="query"
+        aria-label="Search"
+        placeholder="Search"
+        autocapitalize="off"
+        autocorrect="off"
+        autocomplete="off"
+        spellcheck="false"
+        data-md-component="search-query"
+        data-md-state="active"
+        required
+      />
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <button
+        type="reset"
+        class="md-search__icon md-icon"
+        aria-label="Clear"
+        data-md-component="search-reset"
+        tabindex="-1"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-search-decoration" data-no-interact></div>
+</div>
+
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DGS Framework" class="md-nav__button md-logo" aria-label="DGS Framework" data-md-component="logo">
+      
+  <img src="../../images/logo--blue.svg" alt="logo">
+
+    </a>
+    DGS Framework
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/netflix/dgs-framework" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.01 8.01 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27s-1.36.09-2 .27c-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spring-graphql-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring GraphQL Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../announcements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    New and Noteworthy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datafetching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data fetching
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../query-execution-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mutations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mutations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generating-code-from-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-loaders/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Loaders (N+1)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../error-handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../federation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Federation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../videos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Videos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../platform-bom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Using the Platform BOM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../context-passing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nested data fetchers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../virtual-threads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Using Virtual Threads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../schema-reloading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hot reloading schemas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../java-client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java GraphQL Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kotlin-codegen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kotlin CodeGen (Experimental)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../file-uploads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    File Uploads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../subscriptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subscriptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../type-resolvers-for-abstract-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interfaces and Unions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instrumentation (Tracing, Metrics)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instrumentation (Tracing, Metrics)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#enabling-apollo-tracing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enabling Apollo Tracing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics-out-of-the-box" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metrics Out of The Box
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metrics Out of The Box">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shared-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared Tags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Shared Tags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#graphql-query-complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GraphQL Query Complexity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graphql-query-signature-hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GraphQL Query Signature Hash
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cardinality-limiter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cardinality Limiter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#query-timer-gqlquery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query Timer: gql.query
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-counter-gqlerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Counter: gql.error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-loader-timer-gqldataloader" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Loader Timer: gql.dataLoader
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-fetcher-timer-gqlresolver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Fetcher Timer: gql.resolver
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Fetcher Timer: gql.resolver">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-fetcher-timer-as-a-counter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Fetcher Timer as a Counter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#further-tag-customization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Further Tag Customization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-metrics-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Metrics Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intercepting-http-request-response/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intercepting Http request and Response for MVC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graphqlcontext-leveraging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GraphQLContext
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom-datafetcher-context/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Fetching Context
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../federated-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Federated Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dynamic-schemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic schemas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../relay-pagination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Relay Pagination
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operation-caching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operation Caching
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scalars/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding Custom Scalars
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom-directives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding Custom Directives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom-object-mapper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Object Mapper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#enabling-apollo-tracing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enabling Apollo Tracing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics-out-of-the-box" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metrics Out of The Box
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metrics Out of The Box">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shared-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared Tags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Shared Tags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#graphql-query-complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GraphQL Query Complexity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graphql-query-signature-hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GraphQL Query Signature Hash
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cardinality-limiter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cardinality Limiter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#query-timer-gqlquery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query Timer: gql.query
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-counter-gqlerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Counter: gql.error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-loader-timer-gqldataloader" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Loader Timer: gql.dataLoader
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-fetcher-timer-gqlresolver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Fetcher Timer: gql.resolver
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Fetcher Timer: gql.resolver">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-fetcher-timer-as-a-counter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Fetcher Timer as a Counter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#further-tag-customization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Further Tag Customization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-metrics-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Metrics Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="adding-instrumentation-for-tracing-and-logging">Adding instrumentation for tracing and logging<a class="headerlink" href="#adding-instrumentation-for-tracing-and-logging" title="Permanent link">&para;</a></h1>
+<p>It can be extremely valuable to add tracing, metrics and logging to your GraphQL API.
+At Netflix we publish tracing spans and metrics for each datafetcher to our distributed tracing/metrics backends, and log queries and query results to our logging backend.
+The implementations we use at Netflix are highly specific for our infrastructure, but it's easy to add your own to the framework!</p>
+<p>Internally the DGS framework uses <a href="https://www.graphql-java.com">GraphQL Java</a>.
+GraphQL Java supports the concept of <code>instrumentation</code>.
+In the DGS framework we can easily add one or more instrumentation classes by implementing the <code>graphql.execution.instrumentation.Instrumentation</code> interface and register the class as <code>@Component</code>.
+The easiest way to implement the <code>Instrumentation</code> interface is to extend <code>graphql.execution.instrumentation.SimpleInstrumentation</code>.</p>
+<p>The following is an example of an implementation that outputs the execution time for each data fetcher, and the total query execution time, to the logs.
+Most likely you would want to replace the log output with writing to your tracing/metrics backend.
+Note that the code example accounts for async data fetchers.
+If we wouldn't do this, the result for an async data fetcher would always be 0, because the actual processing happens later.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Java</label><label for="__tabbed_1_2">Kotlin</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@Component</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ExampleTracingInstrumentation</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">SimpleInstrumentation</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Logger</span><span class="w"> </span><span class="n">LOGGER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoggerFactory</span><span class="p">.</span><span class="na">getLogger</span><span class="p">(</span><span class="n">ExampleTracingInstrumentation</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+<span class="linenos" data-linenos=" 4 "></span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">    </span><span class="nd">@Override</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">InstrumentationState</span><span class="w"> </span><span class="nf">createState</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TracingState</span><span class="p">();</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 9 "></span>
+<span class="linenos" data-linenos="10 "></span><span class="w">    </span><span class="nd">@Override</span>
+<span class="linenos" data-linenos="11 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">InstrumentationContext</span><span class="o">&lt;</span><span class="n">ExecutionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">beginExecution</span><span class="p">(</span><span class="n">InstrumentationExecutionParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="12 "></span><span class="w">        </span><span class="n">TracingState</span><span class="w"> </span><span class="n">tracingState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="na">getInstrumentationState</span><span class="p">();</span>
+<span class="linenos" data-linenos="13 "></span><span class="w">        </span><span class="n">tracingState</span><span class="p">.</span><span class="na">startTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">();</span>
+<span class="linenos" data-linenos="14 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kd">super</span><span class="p">.</span><span class="na">beginExecution</span><span class="p">(</span><span class="n">parameters</span><span class="p">);</span>
+<span class="linenos" data-linenos="15 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="16 "></span>
+<span class="linenos" data-linenos="17 "></span><span class="w">    </span><span class="nd">@Override</span>
+<span class="linenos" data-linenos="18 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">DataFetcher</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="nf">instrumentDataFetcher</span><span class="p">(</span><span class="n">DataFetcher</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">dataFetcher</span><span class="p">,</span><span class="w"> </span><span class="n">InstrumentationFieldFetchParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="19 "></span><span class="w">        </span><span class="c1">// We only care about user code</span>
+<span class="linenos" data-linenos="20 "></span><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="p">.</span><span class="na">isTrivialDataFetcher</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="21 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">dataFetcher</span><span class="p">;</span>
+<span class="linenos" data-linenos="22 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="23 "></span>
+<span class="linenos" data-linenos="24 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="25 "></span><span class="w">            </span><span class="kt">long</span><span class="w"> </span><span class="n">startTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">();</span>
+<span class="linenos" data-linenos="26 "></span><span class="w">            </span><span class="n">Object</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataFetcher</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">environment</span><span class="p">);</span>
+<span class="linenos" data-linenos="27 "></span><span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">CompletableFuture</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="28 "></span><span class="w">                </span><span class="p">((</span><span class="n">CompletableFuture</span><span class="o">&lt;?&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">result</span><span class="p">).</span><span class="na">whenComplete</span><span class="p">((</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="29 "></span><span class="w">                    </span><span class="kt">long</span><span class="w"> </span><span class="n">totalTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">startTime</span><span class="p">;</span>
+<span class="linenos" data-linenos="30 "></span><span class="w">                    </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Async datafetcher {} took {}ms&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">findDatafetcherTag</span><span class="p">(</span><span class="n">parameters</span><span class="p">),</span><span class="w"> </span><span class="n">totalTime</span><span class="p">);</span>
+<span class="linenos" data-linenos="31 "></span><span class="w">                </span><span class="p">});</span>
+<span class="linenos" data-linenos="32 "></span><span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="33 "></span><span class="w">                </span><span class="kt">long</span><span class="w"> </span><span class="n">totalTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">startTime</span><span class="p">;</span>
+<span class="linenos" data-linenos="34 "></span><span class="w">                </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Datafetcher {} took {}ms&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">findDatafetcherTag</span><span class="p">(</span><span class="n">parameters</span><span class="p">),</span><span class="w"> </span><span class="n">totalTime</span><span class="p">);</span>
+<span class="linenos" data-linenos="35 "></span><span class="w">            </span><span class="p">}</span>
+<span class="linenos" data-linenos="36 "></span>
+<span class="linenos" data-linenos="37 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="linenos" data-linenos="38 "></span><span class="w">        </span><span class="p">};</span>
+<span class="linenos" data-linenos="39 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="40 "></span>
+<span class="linenos" data-linenos="41 "></span><span class="w">    </span><span class="nd">@Override</span>
+<span class="linenos" data-linenos="42 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">CompletableFuture</span><span class="o">&lt;</span><span class="n">ExecutionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">instrumentExecutionResult</span><span class="p">(</span><span class="n">ExecutionResult</span><span class="w"> </span><span class="n">executionResult</span><span class="p">,</span><span class="w"> </span><span class="n">InstrumentationExecutionParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="43 "></span><span class="w">        </span><span class="n">TracingState</span><span class="w"> </span><span class="n">tracingState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="na">getInstrumentationState</span><span class="p">();</span>
+<span class="linenos" data-linenos="44 "></span><span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">totalTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tracingState</span><span class="p">.</span><span class="na">startTime</span><span class="p">;</span>
+<span class="linenos" data-linenos="45 "></span><span class="w">        </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Total execution time: {}ms&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">totalTime</span><span class="p">);</span>
+<span class="linenos" data-linenos="46 "></span>
+<span class="linenos" data-linenos="47 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kd">super</span><span class="p">.</span><span class="na">instrumentExecutionResult</span><span class="p">(</span><span class="n">executionResult</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">);</span>
+<span class="linenos" data-linenos="48 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="49 "></span>
+<span class="linenos" data-linenos="50 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">findDatafetcherTag</span><span class="p">(</span><span class="n">InstrumentationFieldFetchParameters</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="51 "></span><span class="w">        </span><span class="n">GraphQLOutputType</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="na">getExecutionStepInfo</span><span class="p">().</span><span class="na">getParent</span><span class="p">().</span><span class="na">getType</span><span class="p">();</span>
+<span class="linenos" data-linenos="52 "></span><span class="w">        </span><span class="n">GraphQLObjectType</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span>
+<span class="linenos" data-linenos="53 "></span><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">GraphQLNonNull</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="54 "></span><span class="w">            </span><span class="n">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">GraphQLObjectType</span><span class="p">)</span><span class="w"> </span><span class="p">((</span><span class="n">GraphQLNonNull</span><span class="p">)</span><span class="w"> </span><span class="n">type</span><span class="p">).</span><span class="na">getWrappedType</span><span class="p">();</span>
+<span class="linenos" data-linenos="55 "></span><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="56 "></span><span class="w">            </span><span class="n">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">GraphQLObjectType</span><span class="p">)</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="linenos" data-linenos="57 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="58 "></span>
+<span class="linenos" data-linenos="59 "></span><span class="w">        </span><span class="k">return</span><span class="w">  </span><span class="n">parent</span><span class="p">.</span><span class="na">getName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="na">getExecutionStepInfo</span><span class="p">().</span><span class="na">getPath</span><span class="p">().</span><span class="na">getSegmentName</span><span class="p">();</span>
+<span class="linenos" data-linenos="60 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="61 "></span>
+<span class="linenos" data-linenos="62 "></span><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TracingState</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">InstrumentationState</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="63 "></span><span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">startTime</span><span class="p">;</span>
+<span class="linenos" data-linenos="64 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="65 "></span><span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@Component</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">class</span><span class="w"> </span><span class="nc">ExampleTracingInstrumentation</span><span class="p">:</span><span class="w"> </span><span class="n">SimpleInstrumentation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span>
+<span class="linenos" data-linenos=" 4 "></span><span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">logger</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LoggerFactory</span><span class="p">.</span><span class="na">getLogger</span><span class="p">(</span><span class="n">ExampleTracingInstrumentation</span><span class="o">::</span><span class="n">class</span><span class="p">.</span><span class="na">java</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 5 "></span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">createState</span><span class="p">():</span><span class="w"> </span><span class="n">InstrumentationState</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">TraceState</span><span class="p">()</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 9 "></span>
+<span class="linenos" data-linenos="10 "></span><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">beginExecution</span><span class="p">(</span><span class="n">parameters</span><span class="p">:</span><span class="w"> </span><span class="n">InstrumentationExecutionParameters</span><span class="p">):</span><span class="w"> </span><span class="n">InstrumentationContext</span><span class="o">&lt;</span><span class="n">ExecutionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="11 "></span><span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">state</span><span class="p">:</span><span class="w"> </span><span class="n">TraceState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="na">getInstrumentationState</span><span class="p">()</span>
+<span class="linenos" data-linenos="12 "></span><span class="w">        </span><span class="n">state</span><span class="p">.</span><span class="na">traceStartTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">()</span>
+<span class="linenos" data-linenos="13 "></span>
+<span class="linenos" data-linenos="14 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">super</span><span class="p">.</span><span class="na">beginExecution</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+<span class="linenos" data-linenos="15 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="16 "></span>
+<span class="linenos" data-linenos="17 "></span><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">instrumentDataFetcher</span><span class="p">(</span><span class="n">dataFetcher</span><span class="p">:</span><span class="w"> </span><span class="n">DataFetcher</span><span class="o">&lt;*&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">:</span><span class="w"> </span><span class="n">InstrumentationFieldFetchParameters</span><span class="p">):</span><span class="w"> </span><span class="n">DataFetcher</span><span class="o">&lt;*&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="18 "></span><span class="w">        </span><span class="c1">// We only care about user code</span>
+<span class="linenos" data-linenos="19 "></span><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="p">.</span><span class="na">isTrivialDataFetcher</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="20 "></span><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">dataFetcher</span>
+<span class="linenos" data-linenos="21 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="22 "></span>
+<span class="linenos" data-linenos="23 "></span><span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">dataFetcherName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">findDatafetcherTag</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+<span class="linenos" data-linenos="24 "></span>
+<span class="linenos" data-linenos="25 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">DataFetcher</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="linenos" data-linenos="26 "></span><span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">startTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">()</span>
+<span class="linenos" data-linenos="27 "></span><span class="w">            </span><span class="kd">val</span><span class="w"> </span><span class="nv">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataFetcher</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">environment</span><span class="p">)</span>
+<span class="linenos" data-linenos="28 "></span><span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">CompletableFuture</span><span class="o">&lt;*&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="29 "></span><span class="w">                </span><span class="n">result</span><span class="p">.</span><span class="na">whenComplete</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="linenos" data-linenos="30 "></span><span class="w">                    </span><span class="kd">val</span><span class="w"> </span><span class="nv">totalTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">startTime</span>
+<span class="linenos" data-linenos="31 "></span><span class="w">                    </span><span class="n">logger</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Async datafetcher &#39;</span><span class="si">$</span><span class="n">dataFetcherName</span><span class="s">&#39; took </span><span class="si">${</span><span class="n">totalTime</span><span class="si">}</span><span class="s">ms&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos="32 "></span><span class="w">                </span><span class="p">}</span>
+<span class="linenos" data-linenos="33 "></span><span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="34 "></span><span class="w">                </span><span class="kd">val</span><span class="w"> </span><span class="nv">totalTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">startTime</span>
+<span class="linenos" data-linenos="35 "></span><span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Datafetcher &#39;</span><span class="si">$</span><span class="n">dataFetcherName</span><span class="s">&#39;: </span><span class="si">${</span><span class="n">totalTime</span><span class="si">}</span><span class="s">ms&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos="36 "></span><span class="w">            </span><span class="p">}</span>
+<span class="linenos" data-linenos="37 "></span>
+<span class="linenos" data-linenos="38 "></span><span class="w">            </span><span class="n">result</span>
+<span class="linenos" data-linenos="39 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="40 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="41 "></span>
+<span class="linenos" data-linenos="42 "></span><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">instrumentExecutionResult</span><span class="p">(</span><span class="n">executionResult</span><span class="p">:</span><span class="w"> </span><span class="n">ExecutionResult</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">:</span><span class="w"> </span><span class="n">InstrumentationExecutionParameters</span><span class="p">):</span><span class="w"> </span><span class="n">CompletableFuture</span><span class="o">&lt;</span><span class="n">ExecutionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="43 "></span><span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">state</span><span class="p">:</span><span class="w"> </span><span class="n">TraceState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="na">getInstrumentationState</span><span class="p">()</span>
+<span class="linenos" data-linenos="44 "></span><span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">totalTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="na">traceStartTime</span>
+<span class="linenos" data-linenos="45 "></span><span class="w">        </span><span class="n">logger</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&quot;Total execution time: </span><span class="si">${</span><span class="n">totalTime</span><span class="si">}</span><span class="s">ms&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos="46 "></span>
+<span class="linenos" data-linenos="47 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">super</span><span class="p">.</span><span class="na">instrumentExecutionResult</span><span class="p">(</span><span class="n">executionResult</span><span class="p">,</span><span class="w"> </span><span class="n">parameters</span><span class="p">)</span>
+<span class="linenos" data-linenos="48 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="49 "></span>
+<span class="linenos" data-linenos="50 "></span><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">findDatafetcherTag</span><span class="p">(</span><span class="n">parameters</span><span class="p">:</span><span class="w"> </span><span class="n">InstrumentationFieldFetchParameters</span><span class="p">):</span><span class="w"> </span><span class="kt">String</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="51 "></span><span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parameters</span><span class="p">.</span><span class="na">executionStepInfo</span><span class="p">.</span><span class="na">parent</span><span class="p">.</span><span class="na">type</span>
+<span class="linenos" data-linenos="52 "></span><span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">parentType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">GraphQLNonNull</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="53 "></span><span class="w">            </span><span class="n">type</span><span class="p">.</span><span class="na">wrappedType</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">GraphQLObjectType</span>
+<span class="linenos" data-linenos="54 "></span><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="55 "></span><span class="w">            </span><span class="n">type</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">GraphQLObjectType</span>
+<span class="linenos" data-linenos="56 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="57 "></span>
+<span class="linenos" data-linenos="58 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;</span><span class="si">${</span><span class="n">parentType</span><span class="p">.</span><span class="na">name</span><span class="si">}</span><span class="s">.</span><span class="si">${</span><span class="n">parameters</span><span class="p">.</span><span class="na">executionStepInfo</span><span class="p">.</span><span class="na">path</span><span class="p">.</span><span class="na">segmentName</span><span class="si">}</span><span class="s">&quot;</span>
+<span class="linenos" data-linenos="59 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="60 "></span>
+<span class="linenos" data-linenos="61 "></span><span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">TraceState</span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nv">traceStartTime</span><span class="p">:</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">):</span><span class="w"> </span><span class="n">InstrumentationState</span>
+<span class="linenos" data-linenos="62 "></span><span class="p">}</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Datafetcher 'Query.shows': 0ms</p>
+<p>Total execution time: 3ms</p>
+<h2 id="enabling-apollo-tracing">Enabling Apollo Tracing<a class="headerlink" href="#enabling-apollo-tracing" title="Permanent link">&para;</a></h2>
+<p>If you want to leverage <a href="https://github.com/apollographql/apollo-tracing">Apollo Tracing</a>, as supported by <code>graphql-java</code>, you can create a bean of type <code>TracingInstrumentation</code>.
+In this example, we added a conditional property on the bean to enable/disable the Apollo Tracing.
+This property is enabled by default, but you can turn it off by setting <code>graphql.tracing.enabled=false</code> in your application properties.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="kn">import</span><span class="w"> </span><span class="nn">graphql.execution.instrumentation.tracing.TracingInstrumentation</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 2 "></span>
+<span class="linenos" data-linenos=" 3 "></span><span class="nd">@SpringBootApplication</span>
+<span class="linenos" data-linenos=" 4 "></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReviewsDgs</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">    </span><span class="nd">@Bean</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">    </span><span class="nd">@ConditionalOnProperty</span><span class="p">(</span><span class="w"> </span><span class="n">prefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;graphql.tracing&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;enabled&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">matchIfMissing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Instrumentation</span><span class="w"> </span><span class="nf">tracingInstrumentation</span><span class="p">(){</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TracingInstrumentation</span><span class="p">();</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="10 "></span>
+<span class="linenos" data-linenos="11 "></span><span class="p">}</span>
+</code></pre></div>
+<p>For federated tracing, you will need to use the instrumentation provided by <a href="https://github.com/apollographql/federation-jvm#federated-tracing">Apollo's jvm federation library</a>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="kn">import</span><span class="w"> </span><span class="nn">com.apollographql.federation.graphqljava.tracing.FederatedTracingInstrumentation</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 2 "></span>
+<span class="linenos" data-linenos=" 3 "></span><span class="nd">@SpringBootApplication</span>
+<span class="linenos" data-linenos=" 4 "></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReviewsDgs</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 5 "></span>
+<span class="linenos" data-linenos=" 6 "></span><span class="nd">@Bean</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="nd">@ConditionalOnProperty</span><span class="p">(</span><span class="w"> </span><span class="n">prefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;graphql.tracing&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;enabled&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">matchIfMissing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<span class="linenos" data-linenos=" 8 "></span><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Instrumentation</span><span class="w"> </span><span class="nf">tracingInstrumentation</span><span class="p">(){</span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FederatedTracingInstrumentation</span><span class="p">();</span>
+<span class="linenos" data-linenos="10 "></span><span class="w">    </span><span class="p">}</span>
+<span class="linenos" data-linenos="11 "></span><span class="p">}</span>
+</code></pre></div></p>
+<p>It's important to note that the default behavior in Apollo's JVM federation library is to trace requests, even if the federated gateway does not request it (i.e. the gateway does not add <code>FEDERATED_TRACING_HEADER_NAME</code> when forwarding the request). Including the following component in your DGS project will explicitly ask Apollo's JVM federation library to not trace a request in the event that the gateway does not request it.</p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span><span class="nd">@Component</span>
+<span class="linenos" data-linenos=" 2 "></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ApolloFederatedTracingHeaderForwarder</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">GraphQLContextContributor</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 3 "></span><span class="w">        </span><span class="nd">@Override</span>
+<span class="linenos" data-linenos=" 4 "></span><span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">contribute</span><span class="p">(</span><span class="nd">@NotNull</span><span class="w"> </span><span class="n">GraphQLContext</span><span class="p">.</span><span class="na">Builder</span><span class="w"> </span><span class="n">builder</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="o">?&gt;</span><span class="w"> </span><span class="n">extensions</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">DgsRequestData</span><span class="w"> </span><span class="n">dgsRequestData</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 5 "></span><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dgsRequestData</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">dgsRequestData</span><span class="p">.</span><span class="na">getHeaders</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos=" 6 "></span><span class="w">                </span><span class="k">return</span><span class="p">;</span>
+<span class="linenos" data-linenos=" 7 "></span><span class="w">            </span><span class="p">}</span>
+<span class="linenos" data-linenos=" 8 "></span>
+<span class="linenos" data-linenos=" 9 "></span><span class="w">            </span><span class="kd">final</span><span class="w"> </span><span class="n">HttpHeaders</span><span class="w"> </span><span class="n">headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dgsRequestData</span><span class="p">.</span><span class="na">getHeaders</span><span class="p">();</span>
+<span class="linenos" data-linenos="10 "></span>
+<span class="linenos" data-linenos="11 "></span><span class="w">            </span><span class="c1">// if the header exists, we should just forward it.</span>
+<span class="linenos" data-linenos="12 "></span><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">headers</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">FederatedTracingInstrumentation</span><span class="p">.</span><span class="na">FEDERATED_TRACING_HEADER_NAME</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="13 "></span><span class="w">                </span><span class="n">builder</span><span class="p">.</span><span class="na">put</span><span class="p">(</span>
+<span class="linenos" data-linenos="14 "></span><span class="w">                        </span><span class="n">FederatedTracingInstrumentation</span><span class="p">.</span><span class="na">FEDERATED_TRACING_HEADER_NAME</span><span class="p">,</span>
+<span class="linenos" data-linenos="15 "></span><span class="w">                        </span><span class="n">headers</span>
+<span class="linenos" data-linenos="16 "></span><span class="w">                                </span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">FederatedTracingInstrumentation</span><span class="p">.</span><span class="na">FEDERATED_TRACING_HEADER_NAME</span><span class="p">)</span>
+<span class="linenos" data-linenos="17 "></span><span class="w">                                </span><span class="p">.</span><span class="na">stream</span><span class="p">()</span>
+<span class="linenos" data-linenos="18 "></span><span class="w">                                </span><span class="p">.</span><span class="na">findFirst</span><span class="p">()</span>
+<span class="linenos" data-linenos="19 "></span><span class="w">                                </span><span class="p">.</span><span class="na">get</span><span class="p">()</span>
+<span class="linenos" data-linenos="20 "></span><span class="w">                </span><span class="p">);</span>
+<span class="linenos" data-linenos="21 "></span><span class="w">            </span><span class="p">}</span><span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="22 "></span><span class="w">                </span><span class="c1">//otherwise, place a value != &quot;ftv1&quot; so when it gets checked for == ftv1 it fails</span>
+<span class="linenos" data-linenos="23 "></span><span class="w">                </span><span class="c1">// and trace does not happen.</span>
+<span class="linenos" data-linenos="24 "></span><span class="w">                </span><span class="n">builder</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">FederatedTracingInstrumentation</span><span class="p">.</span><span class="na">FEDERATED_TRACING_HEADER_NAME</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DO_NOT_TRACE&quot;</span><span class="p">);</span>
+<span class="linenos" data-linenos="25 "></span><span class="w">            </span><span class="p">}</span>
+<span class="linenos" data-linenos="26 "></span><span class="w">        </span><span class="p">}</span>
+<span class="linenos" data-linenos="27 "></span><span class="p">}</span>
+</code></pre></div>
+<h2 id="metrics-out-of-the-box">Metrics Out of The Box<a class="headerlink" href="#metrics-out-of-the-box" title="Permanent link">&para;</a></h2>
+<div class="admonition abstract">
+<p class="admonition-title">tl;dr</p>
+<ul>
+<li>Supported via the opt-in <code>graphql-dgs-spring-boot-micrometer</code> module.</li>
+<li>Provides specific GraphQL metrics such as <code>gql.query</code>, <code>gql.error</code>, and <code>gql.dataLoader</code>.</li>
+<li>Supports several backend implementations since it's implemented via <a href="https://micrometer.io/">Micrometer</a>.</li>
+</ul>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Gradle Groovy</label><label for="__tabbed_2_2">Gradle Kotlin</label><label for="__tabbed_2_3">Maven</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer&#39;</span>
+<span class="linenos" data-linenos="3 "></span><span class="o">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="n">dependencies</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="n">implementation</span><span class="p">(</span><span class="s">&quot;com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer&quot;</span><span class="p">)</span>
+<span class="linenos" data-linenos="3 "></span><span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span><span class="nt">&lt;dependencies&gt;</span>
+<span class="linenos" data-linenos="2 "></span><span class="w">    </span><span class="nt">&lt;dependency&gt;</span>
+<span class="linenos" data-linenos="3 "></span><span class="w">        </span><span class="nt">&lt;groupId&gt;</span>com.netflix.graphql.dgs<span class="nt">&lt;/groupId&gt;</span>
+<span class="linenos" data-linenos="4 "></span><span class="w">        </span><span class="nt">&lt;artifactId&gt;</span>graphql-dgs-spring-boot-micrometer<span class="nt">&lt;/artifactId&gt;</span>
+<span class="linenos" data-linenos="5 "></span><span class="w">    </span><span class="nt">&lt;/dependency&gt;</span>
+<span class="linenos" data-linenos="6 "></span><span class="nt">&lt;/dependencies&gt;</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Note that the version is missing since we assume you are using the latest BOM.
+We recommend you <a href="../platform-bom/">use the DGS Platform BOM</a> to handle such versions.</p>
+</div>
+<h3 id="shared-tags">Shared Tags<a class="headerlink" href="#shared-tags" title="Permanent link">&para;</a></h3>
+<p>The following are tags shared across most of the meters.</p>
+<p><strong>Tags:</strong></p>
+<table>
+<thead>
+<tr>
+<th>tag name</th>
+<th>values</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gql.operation</code></td>
+<td>QUERY, MUTATION, SUBSCRIPTION are the possible values. These represent the GraphQL operation that is executed.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>gql.operation.name</code></td>
+<td>GraphQL operation name if any, else <code>anonymous</code>. Since the cardinality of the value is high it will be <a href="#cardinality-limiter">limited</a>.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>gql.query.complexity</code></td>
+<td>one in [5, 10, 20, 50, 100, 200, 500, 1000]</td>
+<td>The total number of nodes in the query. Refer to <a href="#graphql-query-complexity">Query Complexity section</a>. for additional information.</td>
+</tr>
+<tr>
+<td><code>gql.query.sig.hash</code></td>
+<td><a href="#graphql-query-signature-hash">Query Signature Hash</a> of the query that was executed. Since the cardinality of the value is high it will be <a href="#cardinality-limiter">limited</a>.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="graphql-query-complexity">GraphQL Query Complexity<a class="headerlink" href="#graphql-query-complexity" title="Permanent link">&para;</a></h4>
+<p>The <code>gql.query.complexity</code> is typically calculated as 1 + Child's Complexity. The query complexity is valuable to calculate
+the cost of a query as this can vary based on input arguments to the query.
+The computed value is represented as one of the bucketed values to reduce the cardinality of the metric.</p>
+<p><strong>Example Query:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos=" 1 "></span>query {
+<span class="linenos" data-linenos=" 2 "></span>  viewer {
+<span class="linenos" data-linenos=" 3 "></span>    repositories(first: 50) {
+<span class="linenos" data-linenos=" 4 "></span>      edges {
+<span class="linenos" data-linenos=" 5 "></span>        repository:node {
+<span class="linenos" data-linenos=" 6 "></span>          name
+<span class="linenos" data-linenos=" 7 "></span>
+<span class="linenos" data-linenos=" 8 "></span>          issues(first: 10) {
+<span class="linenos" data-linenos=" 9 "></span>            totalCount
+<span class="linenos" data-linenos="10 "></span>            edges {
+<span class="linenos" data-linenos="11 "></span>              node {
+<span class="linenos" data-linenos="12 "></span>                title
+<span class="linenos" data-linenos="13 "></span>                bodyHTML
+<span class="linenos" data-linenos="14 "></span>              }
+<span class="linenos" data-linenos="15 "></span>            }
+<span class="linenos" data-linenos="16 "></span>          }
+<span class="linenos" data-linenos="17 "></span>        }
+<span class="linenos" data-linenos="18 "></span>      }
+<span class="linenos" data-linenos="19 "></span>    }
+<span class="linenos" data-linenos="20 "></span>  }
+<span class="linenos" data-linenos="21 "></span>}
+</code></pre></div>
+<p><strong>Example Calculation:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="linenos" data-linenos="1 "></span>50          = 50 repositories
+<span class="linenos" data-linenos="2 "></span>+
+<span class="linenos" data-linenos="3 "></span>50 x 10     = 500 repository issues
+<span class="linenos" data-linenos="4 "></span>
+<span class="linenos" data-linenos="5 "></span>            = 550 total nodes
+</code></pre></div>
+<h4 id="graphql-query-signature-hash">GraphQL Query Signature Hash<a class="headerlink" href="#graphql-query-signature-hash" title="Permanent link">&para;</a></h4>
+<p>The <strong>Query Signature</strong> is defined as the tuple of the <em>GraphQL AST Signature</em> of the <em>GraphQL Document</em> and the <em>GraphQL
+AST Signature Hash</em>. The <em>GraphQL AST Signature</em> of a <em>GraphQL Document</em> is defined as follows:</p>
+<blockquote>
+<p>A canonical AST which removes excess operations, removes any field aliases,
+hides literal values and sorts the result into a canonical query
+Ref <a href="https://github.com/graphql-java/graphql-java/blob/master/src/main/java/graphql/language/AstSignature.java#L35-L41">graphql-java</a></p>
+</blockquote>
+<p>The <strong>GraphQL AST Signature Hash</strong> is the Hex 256 SHA string produced by encoding the <em>AST Signature</em>.
+While we can't tag a metric by its signature, due its length, we can use the <em>hash</em>, as now expressed by the
+<code>gql.query.sig.hash</code> tag.</p>
+<p>There are a few configuration parameters that can change the behavior of the <code>gql.query.sig.hash</code> tag.</p>
+<ul>
+<li><code>management.metrics.dgs-graphql.query-signature.enabled</code>:
+   Defaulting to <code>true</code>, it enables the calculation of the  <em>GQL Query Signature</em>. The <code>gql.query.sig.hash</code> will express the <em>GQL Query Signature Hash</em>.</li>
+<li><code>management.metrics.dgs-graphql.query-signature.caching.enabled</code>:
+   Defaulting to <code>true</code>, it will cache the <em>GQL Query Signature</em>. If set to <code>false</code> it will just disable the cache but will
+   not turn the calculation of the signature off. If you want to turn such calculation off use the
+   <code>management.metrics.dgs-graphql.query-signature.enabled</code> property.</li>
+</ul>
+<h4 id="cardinality-limiter">Cardinality Limiter<a class="headerlink" href="#cardinality-limiter" title="Permanent link">&para;</a></h4>
+<p>The <em>cardinality</em> of a given tag, the number of different values that a tag can express, can be problematic to
+servers supporting metrics. In order to prevent the cardinality of some of the tags supported out of the box there
+are some limiters by default. The limited tag values will only <em>see</em> the first 100 different values by default,
+from there new values will be expressed as <code>--others--</code>.</p>
+<p>You can change the limiter via the following configuration:</p>
+<ul>
+<li><code>management.metrics.dgs-graphql.tags.limiter.limit</code>: Defaults to<code>100</code>, sets the number of different values expressed per limited tag.</li>
+</ul>
+<p>Not all tags are limited, currently, only following are:</p>
+<ul>
+<li><code>gql.operation.name</code></li>
+<li><code>gql.query.sig.hash</code></li>
+</ul>
+<h3 id="query-timer-gqlquery">Query Timer: gql.query<a class="headerlink" href="#query-timer-gqlquery" title="Permanent link">&para;</a></h3>
+<p>Captures the elapsed time that a given GraphQL query, or mutation, takes.</p>
+<p><strong>Name:</strong> <code>gql.query</code></p>
+<p><strong>Tags:</strong></p>
+<table>
+<thead>
+<tr>
+<th>tag name</th>
+<th>values</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>outcome</code></td>
+<td><code>success</code> or <code>failure</code></td>
+<td>Result of the operation, as defined by the <a href="https://github.com/graphql-java/graphql-java/blob/master/src/main/java/graphql/ExecutionResult.java">ExecutionResult</a>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="error-counter-gqlerror">Error Counter: gql.error<a class="headerlink" href="#error-counter-gqlerror" title="Permanent link">&para;</a></h3>
+<p>Captures the number of GraphQL errors encountered during query execution of a query or mutation.
+Remember that one <em>graphql</em> request can have multiple errors.</p>
+<p><strong>Name:</strong> <code>gql.error</code></p>
+<p><strong>Tags:</strong></p>
+<table>
+<thead>
+<tr>
+<th>tag name</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gql.errorCode</code></td>
+<td>The GraphQL error code, such as <code>VALIDATION</code>, <code>INTERNAL</code>, etc.</td>
+</tr>
+<tr>
+<td><code>gql.path</code></td>
+<td>The sanitized query path that resulted in the error.</td>
+</tr>
+<tr>
+<td><code>gql.errorDetail</code></td>
+<td>Optional flag containing additional details, if present.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-loader-timer-gqldataloader">Data Loader Timer: gql.dataLoader<a class="headerlink" href="#data-loader-timer-gqldataloader" title="Permanent link">&para;</a></h3>
+<p>Captures the elapsed time for a data loader invocation for a batch of queries.
+This is useful if you want to find data loaders that might be responsible for poor query performance.</p>
+<p><strong>Name:</strong> <code>gql.dataLoader</code></p>
+<p><strong>Tags:</strong></p>
+<table>
+<thead>
+<tr>
+<th>tag name</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gql.loaderName</code></td>
+<td>The name of the data loader, may or may not be the same as the type of entity.</td>
+</tr>
+<tr>
+<td><code>gql.loaderBatchSize</code></td>
+<td>The number of queries executed in the batch.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-fetcher-timer-gqlresolver">Data Fetcher Timer: gql.resolver<a class="headerlink" href="#data-fetcher-timer-gqlresolver" title="Permanent link">&para;</a></h3>
+<p>Captures the elapsed time of each data fetcher invocation.
+This is useful if you want to find data fetchers that might be responsible for poor query performance.
+That said, there might be times where you want to remove a <em>data fetcher</em> from being measured/included in this meter.
+You can do so by annotating the method with <code>@DgsEnableDataFetcherInstrumentation(false)</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>This metric is not available if:</p>
+<ul>
+<li>The data is resolved via a Batch Loader.</li>
+<li>The method is annotated with <code>@DgsEnableDataFetcherInstrumentation(false)</code>.</li>
+<li>The DataFetcher is <a href="https://github.com/graphql-java/graphql-java/blob/master/src/main/java/graphql/TrivialDataFetcher.java">TrivialDataFetcher</a>. A <em>trivial DataFetcher</em> is one that simply maps data from an object to a field.
+  This is defined directly in <code>graphql-java</code>.</li>
+</ul>
+</div>
+<p><strong>Name:</strong> <code>gql.resolver</code></p>
+<p><strong>Tags:</strong></p>
+<table>
+<thead>
+<tr>
+<th>tag name</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gql.field</code></td>
+<td>Name of the data fetcher. This has the <code>${parentType}.${field}</code> format as specified in the <code>@DgsData</code> annotation.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="data-fetcher-timer-as-a-counter">Data Fetcher Timer as a Counter<a class="headerlink" href="#data-fetcher-timer-as-a-counter" title="Permanent link">&para;</a></h4>
+<p>The data fetcher, or resolver, timer can be used as a counter as well.
+If used in this manner it will reflect the number of invocations of each data fetcher.
+This is useful if you want to find out which data fetchers are used often.</p>
+<h3 id="further-tag-customization">Further Tag Customization<a class="headerlink" href="#further-tag-customization" title="Permanent link">&para;</a></h3>
+<p>You can customize the tags applied to the metrics above by providing <em>beans</em> that implement the following functional interfaces.</p>
+<table>
+<thead>
+<tr>
+<th>Interface</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DgsContextualTagCustomizer</code></td>
+<td>Used to add common, contextual tags. Example of these could be used to describe the deployment environment, application profile, application version, etc</td>
+</tr>
+<tr>
+<td><code>DgsExecutionTagCustomizer</code></td>
+<td>Used to add tags specific to the <a href="https://github.com/graphql-java/graphql-java/blob/master/src/main/java/graphql/ExecutionResult.java">ExecutionResult</a> of the query. The <a href="https://github.com/Netflix/dgs-framework/blob/master/graphql-dgs-spring-boot-micrometer/src/main/kotlin/com/netflix/graphql/dgs/metrics/micrometer/tagging/SimpleGqlOutcomeTagCustomizer.kt">SimpleGqlOutcomeTagCustomizer</a> is an example of this.</td>
+</tr>
+<tr>
+<td><code>DgsFieldFetchTagCustomizer</code></td>
+<td>Used to add tags specific to the execution of <em>data fetchers</em>. The <a href="https://github.com/Netflix/dgs-framework/blob/master/graphql-dgs-spring-boot-micrometer/src/main/kotlin/com/netflix/graphql/dgs/metrics/micrometer/tagging/SimpleGqlOutcomeTagCustomizer.kt">SimpleGqlOutcomeTagCustomizer</a> is an example of this as well.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Note that backend metrics systems commonly have cardinality limits for additional tags. Please check with your backend metrics provider to ensure additional tag customizations do not exceed tag limits.</p>
+</div>
+<h3 id="additional-metrics-configuration">Additional Metrics Configuration<a class="headerlink" href="#additional-metrics-configuration" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>management.metrics.dgs-graphql.enabled</code>: Enables the metrics provided out of the box; <strong>defaults</strong> to <code>true</code>.</li>
+<li><code>management.metrics.dgs-graphql.tag-customizers.outcome.enabled</code>: Enables the <em>tag customizer</em> that will label the <code>gql.query</code> and <code>gql.resolver</code> timers with an <code>outcome</code> reflecting
+   the result of the GraphQL outcome, either <code>success</code> or <code>failure</code>; <strong>defaults</strong> to <code>true</code>.</li>
+<li><code>management.metrics.dgs-graphql.data-loader-instrumentation.enabled</code>: Enables instrumentation of <em>data loaders</em>; <strong>defaults</strong> to <code>true</code>.</li>
+<li><code>management.metrics.dgs-graphql.resolver.enabled</code>: Enables instrumentation of graphql resolvers; <strong>defaults</strong> to <code>true</code>.</li>
+<li><code>management.metrics.dgs-graphql.query.enabled</code>: Enables instrumentation of graphql query; <strong>defaults</strong> to <code>true</code>.</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../js/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
