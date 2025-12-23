@@ -3,7 +3,7 @@ Data loaders solve the [N+1 problem](https://stackoverflow.com/q/97197/8237967) 
 ## The N+1 Problem Explained
 Say you query for a list of movies, and each movie includes some data about the director of the movie.
 Also assume that the Movie and Director entities are owned by two different services.
-In a naïve implementation, to load 50 movies, you would have to call the Director service 50 times: once for each movie.
+In a naïve implementation, to load 50 directors, you would have to call the Director service 50 times: once for each movie.
 This totals 51 queries: one query to get the list of movies, and 50 queries to get the director data for each movie.
 This obviously wouldn’t perform very well.
 
