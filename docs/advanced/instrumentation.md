@@ -18,28 +18,28 @@ If we wouldn't do this, the result for an async data fetcher would always be 0, 
     ```java
 
     @Component
-    public class ExampleTracingInstrumentation extends SimpleInstrumentation {
+    public class ExampleTracingInstrumentation extends SimplePerformantInstrumentation {
         private final static Logger LOGGER = LoggerFactory.getLogger(ExampleTracingInstrumentation.class);
 
         @Override
-        public InstrumentationState createState() {
+        public @Nullable InstrumentationState createState(InstrumentationCreateStateParameters parameters) {
             return new TracingState();
         }
-
+    
         @Override
-        public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
-            TracingState tracingState = parameters.getInstrumentationState();
+        public @Nullable InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters, InstrumentationState state) {
+            TracingState tracingState = (TracingState) state;
             tracingState.startTime = System.currentTimeMillis();
-            return super.beginExecution(parameters);
+            return super.beginExecution(parameters, state);
         }
-
+    
         @Override
-        public DataFetcher<?> instrumentDataFetcher(DataFetcher<?> dataFetcher, InstrumentationFieldFetchParameters parameters) {
+        public @NotNull DataFetcher<?> instrumentDataFetcher(DataFetcher<?> dataFetcher, InstrumentationFieldFetchParameters parameters, InstrumentationState state) {
             // We only care about user code
             if(parameters.isTrivialDataFetcher()) {
                 return dataFetcher;
             }
-
+    
             return environment -> {
                 long startTime = System.currentTimeMillis();
                 Object result = dataFetcher.get(environment);
@@ -52,20 +52,20 @@ If we wouldn't do this, the result for an async data fetcher would always be 0, 
                     long totalTime = System.currentTimeMillis() - startTime;
                     LOGGER.info("Datafetcher {} took {}ms", findDatafetcherTag(parameters), totalTime);
                 }
-
+    
                 return result;
             };
         }
-
+    
         @Override
-        public CompletableFuture<ExecutionResult> instrumentExecutionResult(ExecutionResult executionResult, InstrumentationExecutionParameters parameters) {
-            TracingState tracingState = parameters.getInstrumentationState();
+        public @NotNull CompletableFuture<ExecutionResult> instrumentExecutionResult(ExecutionResult executionResult, InstrumentationExecutionParameters parameters, InstrumentationState state) {
+            TracingState tracingState = (TracingState) state;
             long totalTime = System.currentTimeMillis() - tracingState.startTime;
             LOGGER.info("Total execution time: {}ms", totalTime);
-
-            return super.instrumentExecutionResult(executionResult, parameters);
+    
+            return super.instrumentExecutionResult(executionResult, parameters, state);
         }
-
+    
         private String findDatafetcherTag(InstrumentationFieldFetchParameters parameters) {
             GraphQLOutputType type = parameters.getExecutionStepInfo().getParent().getType();
             GraphQLObjectType parent;
@@ -74,10 +74,10 @@ If we wouldn't do this, the result for an async data fetcher would always be 0, 
             } else {
                 parent = (GraphQLObjectType) type;
             }
-
+    
             return  parent.getName() + "." + parameters.getExecutionStepInfo().getPath().getSegmentName();
         }
-
+    
         static class TracingState implements InstrumentationState {
             long startTime;
         }
@@ -86,66 +86,67 @@ If we wouldn't do this, the result for an async data fetcher would always be 0, 
 === "Kotlin"
     ```kotlin
     @Component
-    class ExampleTracingInstrumentation: SimpleInstrumentation() {
-
-        val logger : Logger = LoggerFactory.getLogger(ExampleTracingInstrumentation::class.java)
-
-        override fun createState(): InstrumentationState {
-            return TraceState()
+    class ExampleTracingInstrumentation: SimplePerformantInstrumentation() {
+    
+    val logger : Logger = LoggerFactory.getLogger(ExampleTracingInstrumentation::class.java)
+    
+    override fun createState(parameters: InstrumentationCreateStateParameters): InstrumentationState {
+        return TraceState()
+    }
+    
+    override fun beginExecution(parameters: InstrumentationExecutionParameters, state: InstrumentationState): InstrumentationContext<ExecutionResult>? {
+        require(state is TraceState)
+        state.traceStartTime = System.currentTimeMillis()
+    
+        return super.beginExecution(parameters, state)
+    }
+    
+    override fun instrumentDataFetcher(dataFetcher: DataFetcher<*>, parameters: InstrumentationFieldFetchParameters, state: InstrumentationState): DataFetcher<*> {
+    
+        // We only care about user code
+        if(parameters.isTrivialDataFetcher || parameters.executionStepInfo.path.toString().startsWith("/__schema")) {
+            return dataFetcher
         }
-
-        override fun beginExecution(parameters: InstrumentationExecutionParameters): InstrumentationContext<ExecutionResult> {
-            val state: TraceState = parameters.getInstrumentationState()
-            state.traceStartTime = System.currentTimeMillis()
-
-            return super.beginExecution(parameters)
-        }
-
-        override fun instrumentDataFetcher(dataFetcher: DataFetcher<*>, parameters: InstrumentationFieldFetchParameters): DataFetcher<*> {
-            // We only care about user code
-            if(parameters.isTrivialDataFetcher) {
-                return dataFetcher
-            }
-
-            val dataFetcherName = findDatafetcherTag(parameters)
-
-            return DataFetcher { environment ->
-                val startTime = System.currentTimeMillis()
-                val result = dataFetcher.get(environment)
-                if(result is CompletableFuture<*>) {
-                    result.whenComplete { _,_ ->
-                        val totalTime = System.currentTimeMillis() - startTime
-                        logger.info("Async datafetcher '$dataFetcherName' took ${totalTime}ms")
-                    }
-                } else {
+    
+        val dataFetcherName = findDatafetcherTag(parameters)
+    
+        return DataFetcher { environment ->
+            val startTime = System.currentTimeMillis()
+            val result = dataFetcher.get(environment)
+            if(result is CompletableFuture<*>) {
+                result.whenComplete { _,_ ->
                     val totalTime = System.currentTimeMillis() - startTime
-                    logger.info("Datafetcher '$dataFetcherName': ${totalTime}ms")
+                    logger.info("Async datafetcher '$dataFetcherName' took ${totalTime}ms")
                 }
-
-                result
-            }
-        }
-
-        override fun instrumentExecutionResult(executionResult: ExecutionResult, parameters: InstrumentationExecutionParameters): CompletableFuture<ExecutionResult> {
-            val state: TraceState = parameters.getInstrumentationState()
-            val totalTime = System.currentTimeMillis() - state.traceStartTime
-            logger.info("Total execution time: ${totalTime}ms")
-
-            return super.instrumentExecutionResult(executionResult, parameters)
-        }
-
-        private fun findDatafetcherTag(parameters: InstrumentationFieldFetchParameters): String {
-            val type = parameters.executionStepInfo.parent.type
-            val parentType = if (type is GraphQLNonNull) {
-                type.wrappedType as GraphQLObjectType
             } else {
-                type as GraphQLObjectType
+                val totalTime = System.currentTimeMillis() - startTime
+                logger.info("Datafetcher '$dataFetcherName': ${totalTime}ms")
             }
-
-            return "${parentType.name}.${parameters.executionStepInfo.path.segmentName}"
+    
+            result
         }
-
-        data class TraceState(var traceStartTime: Long = 0): InstrumentationState
+    }
+    
+    override fun instrumentExecutionResult(executionResult: ExecutionResult, parameters: InstrumentationExecutionParameters, state: InstrumentationState): CompletableFuture<ExecutionResult> {
+        require(state is TraceState)
+        val totalTime = System.currentTimeMillis() - state.traceStartTime
+        logger.info("Total execution time: ${totalTime}ms")
+    
+        return super.instrumentExecutionResult(executionResult, parameters, state)
+    }
+    
+    private fun findDatafetcherTag(parameters: InstrumentationFieldFetchParameters): String {
+        val type = parameters.executionStepInfo.parent.type
+        val parentType = if (type is GraphQLNonNull) {
+            type.wrappedType as GraphQLObjectType
+        } else {
+            type as GraphQLObjectType
+        }
+    
+        return "${parentType.name}.${parameters.executionStepInfo.path.segmentName}"
+    }
+    
+    data class TraceState(var traceStartTime: Long = 0): InstrumentationState
     }
     ```
 
