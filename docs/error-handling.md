@@ -107,6 +107,31 @@ Querying the `hello` field results in the following response.
 }
 ```
 
+## Handling Subscription Exceptions
+
+Exception handling for subscriptions requires a different approach than queries and mutations.
+The `DataFetcherExceptionHandler` cannot resolve errors from a subscription `Publisher` because the data fetcher only creates the `Publisher` initially.
+After that, the transport subscribes to the `Publisher` which may then complete with an error.
+
+To handle converting subscription exceptions to GraphQL errors, implement the `SubscriptionExceptionResolver` interface from Spring GraphQL.
+The following is an example.
+```java
+@Component
+public class MySubscriptionExceptionResolver implements SubscriptionExceptionResolver {
+
+    @Override
+    public Mono<List<GraphQLError>> resolveException(Throwable exception) {
+        if (exception instanceof MyCustomSubscriptionException) {
+            return Mono.just(List.of(GraphQLError.newError()
+                    .message("My custom error: " + exception.getMessage())
+                    .errorType(ErrorType.INTERNAL)
+                    .build()));
+        }
+        return Mono.just(List.of(GraphqlErrorBuilder.newError().message(exception.getMessage()).build()));
+    }
+}
+```
+
 # Error specification
 There are two families of errors we typically encounter for GraphQL:
 
