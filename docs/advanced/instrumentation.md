@@ -434,12 +434,58 @@ This is useful if you want to find out which data fetchers are used often.
 ### Further Tag Customization
 
 You can customize the tags applied to the metrics above by providing *beans* that implement the following functional interfaces.
+Each customizer targets a different scope of the GraphQL execution lifecycle, and tags from the applicable customizers are combined on each metric.
 
-| Interface                    | Description |
-| ---------------------------- | ----------- |
-| `DgsContextualTagCustomizer` | Used to add common, contextual tags. Example of these could be used to describe the deployment environment, application profile, application version, etc |
-| `DgsExecutionTagCustomizer`  | Used to add tags specific to the [ExecutionResult] of the query. The [SimpleGqlOutcomeTagCustomizer] is an example of this.|
-| `DgsFieldFetchTagCustomizer` | Used to add tags specific to the execution of _data fetchers_. The [SimpleGqlOutcomeTagCustomizer] is an example of this as well.|             |
+#### DgsContextualTagCustomizer
+
+Contextual tags are common tags that apply to many GraphQL metrics (`gql.query`, `gql.error`, and `gql.resolver`), regardless of the specific operation or field being executed.
+Because they are not tied to a particular execution or field being fetched, the interface takes no parameters. It simply returns a set of tags.
+
+```java
+@FunctionalInterface
+public interface DgsContextualTagCustomizer {
+    Iterable<Tag> getContextualTags();
+}
+```
+
+This can be used to add common contextual tags. For example, these could be used for describing the deployment environment, application profile, application version, etc.
+
+#### DgsExecutionTagCustomizer
+
+Execution tags apply to query/mutation/subscription execution-level metrics (`gql.query` and `gql.error`).
+This customizer has access to the execution result and any exception that occurred, enabling outcome-based tagging.
+
+```java
+@FunctionalInterface
+public interface DgsExecutionTagCustomizer {
+    Iterable<Tag> getExecutionTags(
+        MetricsInstrumentationState state,
+        InstrumentationExecutionParameters parameters,
+        ExecutionResult result,
+        Throwable exception
+    );
+}
+```
+
+The [SimpleGqlOutcomeTagCustomizer] is an example implementation of this interface. It adds an `outcome` tag with a value of `SUCCESS` or `FAILURE` based on whether the `ExecutionResult` contains errors or an exception was thrown.
+
+#### DgsFieldFetchTagCustomizer
+
+Field fetch tags apply to individual field/resolver metrics (`gql.resolver`), enabling fine-grained tagging at the data fetcher level.
+This customizer has access to the field fetch parameters and any error that occurred during data fetcher execution.
+
+```java
+@FunctionalInterface
+public interface DgsFieldFetchTagCustomizer {
+    Iterable<Tag> getFieldFetchTags(
+        MetricsInstrumentationState state,
+        InstrumentationFieldFetchParameters parameters,
+        Throwable error
+    );
+}
+```
+
+The [SimpleGqlOutcomeTagCustomizer] example also implements this interface, adding an `outcome` tag of `SUCCESS` or `FAILURE` based on whether an error was thrown during field resolution.
 
 !!! important
     Note that backend metrics systems commonly have cardinality limits for additional tags. Please check with your backend metrics provider to ensure additional tag customizations do not exceed tag limits.
