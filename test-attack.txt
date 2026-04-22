@@ -1,0 +1,2 @@
+# Test file for PR attack
+echo "If this executes in a PR workflow, we have code execution"
