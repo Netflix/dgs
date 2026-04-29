@@ -1076,16 +1076,17 @@ The following table shows the Gradle configuration options, but the same options
 
 ## Annotations
 
-| Configuration property            | Description                                                                                                                     | Default value |
-|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------|---------------|
-| addGeneratedAnnotation            | Add `jakarta.annotation.Generated` and application specific `@Generated` annotation to generated types                          | false         |
-| disableDatesInGeneratedAnnotation | Don't add a date to the `jakarta.annotation.Generated` annotation                                                               | false         |
-| addDeprecatedAnnotation           | Add `@Deprecated` annotation for deprecated schema elements                                                                     | false         |
-| generateCustomAnnotations         | Enable generation of custom annotations on generated types and fields using `@annotate` directive in schema                     | false         |
-| generateJSpecifyAnnotations       | Enable/disable generation of JSpecify annotations (`@NullMarked` for types, `@Nullable` for fields/getters/setters/parameters). | false         |
-| includeImports                    | Maps the custom annotation type to the package, the annotations belong to. Only used when generateCustomAnnotations is enabled. |               |
-| includeEnumImports                | Maps the custom annotation and enum argument names to the enum packages. Only used when generateCustomAnnotations is enabled.   |               |
-| includeClassImports               | Maps the custom annotation and class names to the class packages. Only used when generateCustomAnnotations is enabled.          |               |
+| Configuration property            | Description                                                                                                                                                | Default value |
+|-----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| addGeneratedAnnotation            | Add application specific `@Generated` annotation to generated types                                                                                        | true          |
+| generatedAnnotationType           | Fully qualified class name of the `Generated` annotation to add, e.g. `"jakarta.annotation.Generated"`. Replaces application specific `@Generated` if set. |               | 
+| disableDatesInGeneratedAnnotation | Don't add a date to the `jakarta.annotation.Generated` annotation                                                                                          | true          |
+| addDeprecatedAnnotation           | Add `@Deprecated` annotation for deprecated schema elements                                                                                                | false         |
+| generateCustomAnnotations         | Enable generation of custom annotations on generated types and fields using `@annotate` directive in schema                                                | false         |
+| generateJSpecifyAnnotations       | Enable/disable generation of JSpecify annotations (`@NullMarked` for types, `@Nullable` for fields/getters/setters/parameters).                            | false         |
+| includeImports                    | Maps the custom annotation type to the package, the annotations belong to. Only used when generateCustomAnnotations is enabled.                            |               |
+| includeEnumImports                | Maps the custom annotation and enum argument names to the enum packages. Only used when generateCustomAnnotations is enabled.                              |               |
+| includeClassImports               | Maps the custom annotation and class names to the class packages. Only used when generateCustomAnnotations is enabled.                                     |               |
 
 
 ## Additional Features
