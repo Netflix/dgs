@@ -146,7 +146,7 @@ This implies servlet filters, tests etc. need to be also async aware.
 You can turn on async behavior by setting the `dgs.graphql.spring.webmvc.asyncdispatch.enabled` to true. 
 
 It is worth noting that with the Spring for GraphQL integration, your MockMVC test set up does need to be updated.
-Since web request processing is now based on async dispatching mechanism, we now [require explicit handling for this](https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework/async-requests.html) in the test setup.
+Since web request processing is now based on async dispatching mechanism, we now [require explicit handling for this](https://docs.spring.io/spring-framework/reference/testing/mockmvc/hamcrest/async-requests.html) in the test setup.
 
 ### Modifying Response headers
 Previously, the DGS Framework offered a mechanism to add custom response headers based on the result of processing the GraphQL query using a special `DgsRestController.DGS_RESPONSE_HEADERS_KEY` key.
