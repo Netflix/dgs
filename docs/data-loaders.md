@@ -257,7 +257,7 @@ The `v8.1.0` release introduces a new feature to [enable ticker mode](https://gi
 This allows you to schedule the dispatch checks instead of manually calling dispatch in your data loaders.
 By default, the checks will occur every 10ms but can be configured via `dgs.graphql.dataloader.scheduleDuration`.
 To enable ticker mode in the DGS framework, you can set `dgs.graphql.dataloader.ticker-mode-enabled` to true.
-In addition, you can also specify [dispatch predicates](## Scheduled Data Loaders with Dispatch Predicates) per dataloader vi a`@DgsDispatchPredicate`to better control the batching.
+In addition, you can also specify [dispatch predicates](#scheduled-data-loaders-with-dispatch-predicates) per dataloader vi a`@DgsDispatchPredicate`to better control the batching.
 
 With ticker mode enabled, you can eliminate calls to manually dispatch and rely on the scheduler to periodically check and dispatch any batches as needed.
 This should result in better batching behavior overall.
