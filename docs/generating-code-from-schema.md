@@ -186,7 +186,6 @@ When enabled, the following are added to the generated Java code:
 
 * `@NullMarked` annotations on classes and interfaces so generated types are [non-null by default](https://jspecify.dev/docs/user-guide/#nullmarked)
 * `@Nullable` annotations on nullable fields, getters, setters, and constructor parameters
-* `Objects.requireNonNull()` validation in the generated builder's `build()` method for non-null fields
 
 !!! note "Where is @NonNull?"
     Due to the presence of `@NullMarked` at the type level, we can omit the use of `@NonNull` annotations.
@@ -296,8 +295,8 @@ public class Event {
 
 		public Event build() {
 			Event result = new Event();
-			result.id = Objects.requireNonNull(this.id, "id cannot be null");
-			result.name = Objects.requireNonNull(this.name, "name cannot be null");
+			result.id = this.id;
+			result.name = this.name;
 			result.location = this.location;
 			result.attendees = this.attendees;
 			result.organizer = this.organizer;
@@ -396,9 +395,9 @@ public class Attendee implements Person {
 
 		public Attendee build() {
 			Attendee result = new Attendee();
-			result.name = Objects.requireNonNull(this.name, "name cannot be null");
+			result.name = this.name;
 			result.email = this.email;
-			result.ticketNumber = Objects.requireNonNull(this.ticketNumber, "ticketNumber cannot be null");
+			result.ticketNumber = this.ticketNumber;
 			return result;
 		}
 
@@ -480,7 +479,7 @@ public class EventInput {
 		public EventInput build() {
 			EventInput result = new EventInput();
 			result.id = this.id;
-			result.name = Objects.requireNonNull(this.name, "name cannot be null");
+			result.name = this.name;
 			result.location = this.location;
 			result.attendeeNames = this.attendeeNames;
 			return result;
