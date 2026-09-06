@@ -132,6 +132,14 @@ To do so you will have to leverage the `@DgsData.List` annotation, for example:
     )
     ```
 
+Using repeating annotations:
+
+=== "Java"
+    ```java
+    @DgsData(parentType = "Query", field = "movies")
+    @DgsData(parentType = "Query", field = "shows")
+    ```
+
 !!! tip
     Both `@DgsQuery` and `@DgsMutation` can't be defined multiple times in a single method. Please use `@DgsData`
     instead and explicitly define the `parentType` to match either `Query` or `Mutation`.
