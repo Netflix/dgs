@@ -1,4 +1,3 @@
-
 Federation is based on the [Federation spec](https://www.apollographql.com/docs/apollo-server/federation/federation-spec/).
 
 A DGS is federation-compatible out of the box with the ability to reference and extend federated types.
@@ -6,7 +5,6 @@ A DGS is federation-compatible out of the box with the ability to reference and 
 !!!tip "There is more federation documentation available"
     * Read the [Federation Spec](https://www.apollographql.com/docs/graphos/reference/federation/subgraph-spec/).
     * Check out [Federated Testing](./advanced/federated-testing.md) to learn how to write tests for federated queries.
-
 
 ## Federation Example DGS
 
@@ -20,16 +18,17 @@ The example project has the following set up:
 2. The [Shows DGS](https://github.com/Netflix/dgs-federation-example/tree/master/shows-dgs) defines and owns the `Show` type.
 3. The [Reviews DGS](https://github.com/Netflix/dgs-federation-example/tree/master/reviews-dgs) adds a `reviews` field to the `Show` type.
 
-
 !!!info
     If you are completely new to the DGS framework, please take a look at the [DGS Getting Started](./index.md) guide, which also contains an introduction video.
     The remainder of the guide on this page assumes basic GraphQL and DGS knowledge, and focuses on more advanced use cases.
 
 ### Defining a federated type
-The Shows DGS defines the `Show` type with fields id, title and releaseYear. 
-Note that the `id` field is marked as the key. 
+
+The Shows DGS defines the `Show` type with fields id, title and releaseYear.
+Note that the `id` field is marked as the key.
 The example has one key, but you can have multiple keys as well `@key(fields:"fieldA fieldB")`
 This indicates to the gateway that the `id` field will be used for identifying the corresponding Show in the Shows DGS and must be specified for federated types.
+
 ```graphql
 type Query {
   shows(titleFilter: String): [Show]
@@ -58,6 +57,7 @@ type Review {
   starRating: Int
 }
 ```
+
 When redefining a type, only the id field, and the fields you're adding need to be listed.
 Other fields, such as `title` for `Show` type are provided by the Shows DGS and do not need to be specified unless you are using it in the schema.
 Federation makes sure the fields provided by all DGSs are combined into a single type for returning the results of a query.
@@ -66,12 +66,15 @@ Federation makes sure the fields provided by all DGSs are combined into a single
     Don't forget to use the @external directive if you define a field that doesn't belong to your DGS, but you need to reference it.
 
 ## Implementing a Federated Type
+
 The very first step to get started is to generate Java types that represent the schema.
 This is configured in `build.gradle` as described in the [manual](./generating-code-from-schema.md).
 When running `./gradlew build` the Java types are generated into the `build/generated` folder, which are then automatically added to the classpath.
 
 ### Provide an Entity Fetcher
+
 Let's go through an example of the following query sent to the gateway:
+
 ```graphql
 query {
   shows {
@@ -84,6 +87,7 @@ query {
 ```
 
 The gateway first fetches the list of all the shows from the Shows DGS containing the title and id fields.
+
 ```graphql
 query {
   shows {
@@ -92,10 +96,10 @@ query {
     title
   }
 }
-
 ```
 
 Next, the gateway sends the following `_entities` query to the Reviews DGS using the list of `id`s from the first query:
+
 ```graphql
 query($representations: [_Any!]!) {
   _entities(representations: $representations) {
@@ -105,14 +109,15 @@ query($representations: [_Any!]!) {
       }
     }
   }
-}  
+}
 ```
 
 This query comes with the following variables:
+
 ```json
 {
-  "representations": [    
-    {          
+  "representations": [
+    {
       "__typename": "Show",
       "id": 1
     },
@@ -133,21 +138,40 @@ This query comes with the following variables:
       "__typename": "Show",
       "id": 5
     }
-  ]        
-} 
+  ]
+}
 ```
 
-The Reviews DGS needs to implement an `entity fetcher` to handle this query.
-An entity fetcher is responsible for creating an instance of a `Show` based on the representation in the `_entities` query above.
-The DGS framework does most of the heavy lifting, and all we have to do is provide the following:
+The Reviews DGS needs to implement an entity fetcher to handle this query.
+
+- **Entity fetcher**: A method annotated with [`@DgsEntityFetcher`](https://javadoc.io/doc/com.netflix.graphql.dgs/graphql-dgs/latest/com/netflix/graphql/dgs/DgsEntityFetcher.html) that takes a key and returns a single instance of the entity or null.
+
+Our entity fetcher gets the `id` field and returns a `Show` instance:
 
 [Full code](https://github.com/Netflix/dgs-federation-example/blob/master/reviews-dgs/src/main/java/com/example/demo/datafetchers/ReviewsDatafetcher.java)
+
 ```java
 @DgsEntityFetcher(name = "Show")
 public Show movie(Map<String, Object> values) {
-        return new Show((String) values.get("id"), null);
+    String showId = (String) values.get("id")
+    return new Show(showId, null);
 }
 ```
+
+In this case, we're not doing any data fetching: our `Show` instance only has an `id` field, and we implement a `Show.reviews` datafetcher in the [next section](#providing-data-with-a-data-fetcher). 
+
+However, we could instead fetch data in the entity fetcher. If our DGS served multiple fields, and they all came from the same data source, we could fetch them all at once in the entity fetcher instead of writing separate datafetchers for each field:
+
+```java
+@DgsEntityFetcher(name = "Show")
+public Show movie(Map<String, Object> values, DataFetchingEnvironment env) {
+    DataLoader<String, Show> dataLoader = env.getDataLoader("shows");
+    String showId = (String) values.get("id")
+    return dataLoader.load(showId);
+}
+```
+
+If there is no such Show with the given id in the database, the entity fetcher should return `null`.
 
 !!!tip
     Remember that the Show Java type here is generated by codegen.
@@ -163,6 +187,7 @@ public Show movie(Map<String, Object> values) {
 Now the DGS knows how to create a Show instance when an `_entities` query is received, we can specify how to hydrate data for the reviews field.
 
 [Full code](https://github.com/Netflix/dgs-federation-example/blob/master/reviews-dgs/src/main/java/com/example/demo/datafetchers/ReviewsDatafetcher.java#L37)
+
 ```java
 @DgsData(parentType = "Show", field = "reviews")
 public List<Review> reviews(DgsDataFetchingEnvironment dataFetchingEnvironment)  {
@@ -173,7 +198,7 @@ public List<Review> reviews(DgsDataFetchingEnvironment dataFetchingEnvironment) 
 
 ### Testing a Federated Query
 
-You can always manually test federated queries by running the gateway and your DGS locally. 
+You can always manually test federated queries by running the gateway and your DGS locally.
 You can also manually test a federated query against just your DGS, without the gateway, using the `_entities` query to replicate the call made to your DGS by the gateway.
 
 For automated tests, the [QueryExecutor](./query-execution-testing.md) gives a way to run queries from unit tests, with very little startup overhead (in the order of 500ms).
@@ -257,7 +282,7 @@ public class FederationResolver extends DefaultDgsFederationResolver {
         //The Show type is represented by the ShowId class.
         types.put(ShowId.class, "Show");
     }
-    
+
     @Override
     public Map<Class<?>, String> typeMapping() {
         return types;
