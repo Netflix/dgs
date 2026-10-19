@@ -192,7 +192,7 @@ In Spring WebMVC it's common to store request information such as SSO data on `T
 Spring Security uses `ThreadLocal` for example to store its `SecurityContext`.
 
 While creating and extending an `Executor` with the correct context propagation goes beyond the scope of this documentation, a good place to start is the `DelegatingSecurityContextExecutor` from Spring Security.
-A relevant howto guide is available [here](https://www.baeldung.com/spring-security-async-principal-propagation). 
+For details, see the [Spring Security documentation on concurrency support](https://docs.spring.io/spring-security/reference/features/integrations/concurrency.html#_delegatingsecuritycontextexecutor), which explains how `DelegatingSecurityContextExecutor` wraps tasks to propagate the `SecurityContext`.
 
 
 ## Scheduled Data Loaders with Dispatch Predicates
